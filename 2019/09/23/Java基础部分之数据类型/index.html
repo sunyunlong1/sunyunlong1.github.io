@@ -31,5 +31,5 @@
 <p>int values between -128 and 127</p>
 <p>char in the range \u0000 to \u007F</p>
 <p>在使用这些基本类型对应的包装类型时，如果该数值范围在缓冲池范围内，就可以直接使用缓冲池中的对象。</p>
-<p>在jdk1.8所有的数值类缓冲池中，Integer的缓冲池IntegerCache很特殊，这个缓冲池的下届是-128，上届默认是127，但是这个上届是可调的，在启动jvm的时候，通过-XX:AutoBoxCache=<size>来指定这个缓冲池的大小，该选项在JVM初始化的时候会设定一个名为java.lang.IntegerCache.high系统属性，然后IntegerCache初始化的时候就会读取该系统属性来决定上届。</size></p>
+<p>在jdk1.8所有的数值类缓冲池中，Integer的缓冲池IntegerCache很特殊，这个缓冲池的下届是-128，上届默认是127，但是这个上届是可调的，在启动jvm的时候，通过-XX:AutoBoxCache=<size>来指定这个缓冲池的大小，该选项在JVM初始化的时候会设定一个名为java.lang.IntegerCache.high系统属性，然后IntegerCache初始化的时候就会读取该系统属性来决定上界。</size></p>
 </div></header></article><section class="reward"><a class="btn-reward" href="#">打赏</a><div class="reward-wrapper clearfix"><img src="/img/wechat.png" title="微信"><img src="/img/alipay.png" title="支付宝"></div></section></main><footer class="foot"><div class="foot-copy">&copy; 2016 - 2019 Gavin</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
