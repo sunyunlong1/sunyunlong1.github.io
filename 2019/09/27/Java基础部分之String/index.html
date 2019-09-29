@@ -21,7 +21,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
 
 <p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h4 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h4><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<h4 id="new-String-“abc”-a"><a href="#new-String-“abc”-a" class="headerlink" title="new String(“abc”)a"></a>new String(“abc”)a</h4><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
 <p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
 <p>而使用new的方式会在堆中创建一个字符串对象。</p>
 <p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
