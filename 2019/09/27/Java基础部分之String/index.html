@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Gavin"><link rel="alternative" href="/atom.xml" title="孙云龙的技术博客" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>Java基础部分之String - 孙云龙的技术博客</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">孙云龙的技术博客</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">目录</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"><time class="post__time" datetime="2019-09-27T10:01:53.000Z">2019 - 09 - 27 18:01:53</time><h1 class="post__title"><a href="/2019/09/27/Java基础部分之String/">Java基础部分之String</a></h1><div class="post__main echo"><p>##String</p>
-<p>####概览</p>
-<p>String被声明为final，因此它不可被继承。</p>
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Gavin"><link rel="alternative" href="/atom.xml" title="孙云龙的技术博客" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>Java基础部分之String - 孙云龙的技术博客</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">孙云龙的技术博客</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">目录</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"><time class="post__time" datetime="2019-09-27T10:01:53.000Z">2019 - 09 - 27 18:01:53</time><h1 class="post__title"><a href="/2019/09/27/Java基础部分之String/">Java基础部分之String</a></h1><div class="post__main echo"><h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><h4 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h4><p>String被声明为final，因此它不可被继承。</p>
 <p>在Java8中，String内部使用char数组存储数据。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -8,22 +6,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<p>####不可变的好处</p>
-<p>#####1.可以缓存hash值</p>
-<p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<p>#####2.String Pool的需要</p>
-<p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<p>#####3.安全性</p>
-<p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<p>#####4.线程安全</p>
-<p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<p>####String，StringBuffer and StringBuilder</p>
-<p>#####1.可变性</p>
-<p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<p>#####2.线程安全</p>
-<p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<p>####String Pool</p>
-<p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<h4 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h4><h5 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h5><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h5 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h5><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h5 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h5><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h5 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h5><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h4 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h4><h5 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h5><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h5 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h5><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h4 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h4><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
 <p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
 <p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
@@ -32,8 +21,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
 
 <p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<p>####new String(“abc”)</p>
-<p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<h4 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h4><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
 <p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
 <p>而使用new的方式会在堆中创建一个字符串对象。</p>
 <p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
