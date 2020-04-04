@@ -1,4 +1,105 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Gavin"><link rel="alternative" href="/atom.xml" title="孙云龙的技术博客" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>彻底搞懂ThreadLocal - 孙云龙的技术博客</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">孙云龙的技术博客</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">目录</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"><time class="post__time" datetime="2020-03-10T15:51:45.000Z">2020 - 03 - 10 23:51:45</time><h1 class="post__title"><a href="/2020/03/10/彻底搞懂ThreadLocal/">彻底搞懂ThreadLocal</a></h1><div class="post__main echo"><h3 id="1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"><a href="#1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？" class="headerlink" title="1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"></a>1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？</h3><p>答：</p>
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    彻底搞懂ThreadLocal |  孙云龙的技术博客
+  </title>
+  <meta name="generator" content="hexo-theme-yilia-plus">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  <link rel="stylesheet" href="/dist/main.css">
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+  
+  
+
+  
+
+<link rel="alternate" href="/atom.xml" title="孙云龙的技术博客" type="application/atom+xml">
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    <main class="content on">
+      <section class="outer">
+  <article id="blog-彻底搞懂ThreadLocal" class="article article-type-blog" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  彻底搞懂ThreadLocal
+</h1>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/03/10/彻底搞懂ThreadLocal/" class="article-date">
+  <time datetime="2020-03-10T15:51:45.000Z" itemprop="datePublished">2020-03-10</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/高并发系列/">高并发系列</a>
+  </div>
+
+      
+      
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">4.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">15 min</span>
+        </span>
+    </span>
+</div>
+
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h3 id="1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"><a href="#1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？" class="headerlink" title="1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"></a>1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？</h3><p>答：</p>
 <p>从JAVA官方对ThreadLocal类的说明定义（定义在示例代码中）：ThreadLocal类用来提供线程内部的局部变量。这种变量在多线程环境下访问（通过get和set方法访问）时能保证各个线程的变量相对独立于其他线程内的变量。ThreadLocal实例通常来说都是private static类型的，用于关联线程和线程上下文。</p>
 <p>我们可以得知ThreadLocal的作用是：ThreadLocal的作用是提供线程内的局部变量，不同的线程之间不会相互干扰，这种变量在线程的生命周期内起作用，减少同一个线程内多个函数或组件之间一些公共变量的传递的复杂度。</p>
 <p>上述可以概述为：ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。</p>
@@ -48,4 +149,464 @@
 <p>我们知道在一般情况下，只有无状态的Bean才可以在多线程环境下共享，在Spring中，绝大部分Bean都可以声明为singleton作用域。就是因为Spring对一些Bean（如RequestContextHolder、TransactionSynchronizationManager、LocaleContextHolder等）中非线程安全状态采用ThreadLocal进行处理，让它们也成为线程安全的状态，因为有状态的Bean就可以在多线程中共享了。</p>
 <p>一般的Web应用划分为展现层、服务层和持久层三个层次，在不同的层中编写对应的逻辑，下层通过接口向上层开放功能调用。在一般情况下，从接收请求到返回响应所经过的所有程序调用都同属于一个线程ThreadLocal是解决线程安全问题一个很好的思路，它通过为每个线程提供一个独立的变量副本解决了变量并发访问的冲突问题。在很多情况下，ThreadLocal比直接使用synchronized同步机制解决线程安全问题更简单，更方便，且结果程序拥有更高的并发性。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="1-ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。"><a href="#1-ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。" class="headerlink" title="1.ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。"></a>1.ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。</h3><h3 id="2-ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。"><a href="#2-ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。" class="headerlink" title="2.ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。"></a>2.ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。</h3><h3 id="3-对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。"><a href="#3-对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。" class="headerlink" title="3.对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。"></a>3.对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。</h3><h3 id="4-ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold-底层哈希表table的长度-len-2-3，当实际存储元素个数size-大于或等于-阈值threshold的-3-4-时size-gt-threshold-3-4，则对底层哈希表数组table进行扩容操作。"><a href="#4-ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold-底层哈希表table的长度-len-2-3，当实际存储元素个数size-大于或等于-阈值threshold的-3-4-时size-gt-threshold-3-4，则对底层哈希表数组table进行扩容操作。" class="headerlink" title="4.ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold = 底层哈希表table的长度 len * 2 / 3，当实际存储元素个数size 大于或等于 阈值threshold的 3/4 时size &gt;= threshold*3/4，则对底层哈希表数组table进行扩容操作。"></a>4.ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold = 底层哈希表table的长度 len * 2 / 3，当实际存储元素个数size 大于或等于 阈值threshold的 3/4 时size &gt;= threshold*3/4，则对底层哈希表数组table进行扩容操作。</h3><h3 id="5-ThreadLocalMap中的哈希表Entry-table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal-对应储存的值value。需要注意的是，此Entry继承了弱引用-WeakReference，所以在使用ThreadLocalMap时，发现key-null，则意味着此key-ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。"><a href="#5-ThreadLocalMap中的哈希表Entry-table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal-对应储存的值value。需要注意的是，此Entry继承了弱引用-WeakReference，所以在使用ThreadLocalMap时，发现key-null，则意味着此key-ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。" class="headerlink" title="5.ThreadLocalMap中的哈希表Entry[] table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal 对应储存的值value。需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key  ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。"></a>5.ThreadLocalMap中的哈希表Entry[] table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal 对应储存的值value。需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key  ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。</h3><h3 id="6-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统-GC-的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get-set-remove-的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。"><a href="#6-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统-GC-的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get-set-remove-的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。" class="headerlink" title="6.ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。"></a>6.ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。</h3><h3 id="7-为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove-来清理无用的Entry。这在操作在使用线程池时尤为重要。"><a href="#7-为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove-来清理无用的Entry。这在操作在使用线程池时尤为重要。" class="headerlink" title="7.为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。这在操作在使用线程池时尤为重要。"></a>7.为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。这在操作在使用线程池时尤为重要。</h3><h3 id="8-ThreadLocal和synchronized的区别：同步机制-synchronized关键字-采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。"><a href="#8-ThreadLocal和synchronized的区别：同步机制-synchronized关键字-采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。" class="headerlink" title="8.ThreadLocal和synchronized的区别：同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。"></a>8.ThreadLocal和synchronized的区别：同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。</h3><h3 id="9-ThreadLocal主要是解决2种类型的问题：A-解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B-解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。"><a href="#9-ThreadLocal主要是解决2种类型的问题：A-解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B-解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。" class="headerlink" title="9.ThreadLocal主要是解决2种类型的问题：A. 解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B. 解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。"></a>9.ThreadLocal主要是解决2种类型的问题：A. 解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B. 解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。</h3><p>作者：liangzzz<br>链接：<a href="https://juejin.im/post/5a0e985df265da430e4ebb92" target="_blank" rel="noopener">https://juejin.im/post/5a0e985df265da430e4ebb92</a><br>来源：掘金<br>中间加上了自己的理解</p>
-</div></header></article><section class="reward"><a class="btn-reward" href="#">打赏</a><div class="reward-wrapper clearfix"><img src="/img/wechat.png" title="微信"><img src="/img/alipay.png" title="支付宝"></div></section></main><footer class="foot"><div class="foot-copy">&copy; 2016 - 2020 Gavin</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
+
+      
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Reward
+      </div>
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+        <div class="declare">
+          <ul class="post-copyright">
+            <li>
+              <i class="ri-copyright-line"></i>
+              <strong>Copyright： </strong>
+              Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+            </li>
+          </ul>
+        </div>
+        
+    <footer class="article-footer">
+      
+          
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2020/03/10/彻底搞懂ThreadLocal/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高并发/">高并发</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/2020/03/11/volatile关键字/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            volatile关键字
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/03/09/不得不说的Java‘锁’事/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">不得不说的Java‘锁’事</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+<!-- valine评论 -->
+<div id="vcomments-box">
+    <div id="vcomments">
+    </div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        app_id: '',
+        app_key: '',
+        path: window.location.pathname,
+        notify: 'false',
+        verify: 'false',
+        avatar: 'mp',
+        placeholder: '给我的文章加点评论吧~',
+        recordIP: true
+    });
+    const infoEle = document.querySelector('#vcomments .info');
+    if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+        infoEle.childNodes.forEach(function (item) {
+            item.parentNode.removeChild(item);
+        });
+    }
+</script>
+<style>
+    #vcomments-box {
+        padding: 5px 30px;
+    }
+
+    @media screen and (max-width: 800px) {
+        #vcomments-box {
+            padding: 5px 0px;
+        }
+    }
+
+    #vcomments-box #vcomments {
+        background-color: #fff;
+    }
+
+    .v .vlist .vcard .vh {
+        padding-right: 20px;
+    }
+
+    .v .vlist .vcard {
+        padding-left: 10px;
+    }
+</style>
+
+  
+
+  
+  
+  
+
+</article>
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>
+        &copy;
+        2015-2020
+        Gavin
+      </li>
+      <li>
+        
+        Powered by
+        
+        
+        <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul class="list-inline">
+      <li>
+        
+        
+        <span>
+  <i>PV:<span id="busuanzi_value_page_pv"></span></i>
+  <i>UV:<span id="busuanzi_value_site_uv"></span></i>
+</span>
+        
+      </li>
+      
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="孙云龙的技术博客"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+
+<script>
+  try {
+    var typed = new Typed("#subtitle", {
+      strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
+      startDelay: 0,
+      typeSpeed: 200,
+      loop: true,
+      backSpeed: 100,
+      showCursor: true
+    });
+  } catch (err) {
+  }
+
+</script>
+
+
+
+<script src="/js/tocbot.min.js"></script>
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+<script src="/dist/main.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<script type="text/javascript" src="https://js.users.51.la/20544303.js"></script>
+
+
+    
+  </div>
+</body>
+
+</html>
