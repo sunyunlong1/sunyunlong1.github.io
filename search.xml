@@ -1,45 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>一路走来，即将毕业。</title>
-    <url>/2019/09/12/Sentiment/</url>
-    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
-<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
-<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
-<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
-<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
-<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
-<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
-<p>祝我自己前途似锦，万事胜意。</p>
-<p>2019-03-27 20:44更</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>毕业感悟</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BigDecimal比较大小</title>
-    <url>/2019/09/16/BigDecimal%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/</url>
-    <content><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TestBigDecimal &#123;</span><br><span class="line">     public static void main(String[] args) &#123;</span><br><span class="line">        BigDecimal b1 = BigDecimal.valueOf(0.00);</span><br><span class="line">        BigDecimal b2 = new BigDecimal(0.00);</span><br><span class="line">        BigDecimal b3 = new BigDecimal(&quot;0.00&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(b1);</span><br><span class="line">        System.out.println(b2);</span><br><span class="line">        System.out.println(b3);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line">        System.out.println(&quot;equals比较&quot;);</span><br><span class="line">        System.out.println(contrast1(b1,b2));</span><br><span class="line">        System.out.println(contrast1(b1,b3));</span><br><span class="line">        System.out.println(contrast1(b2,b3));</span><br><span class="line">        System.out.println(contrast1(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;compareTo比较&quot;);</span><br><span class="line">        System.out.println(contrast2(b1,b2));</span><br><span class="line">        System.out.println(contrast2(b1,b3));</span><br><span class="line">        System.out.println(contrast2(b2,b3));</span><br><span class="line">        System.out.println(contrast2(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static boolean contrast1(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.equals(b2);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static int contrast2(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.compareTo(b2);</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p> 运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0.0</span><br><span class="line">0</span><br><span class="line">0.00</span><br><span class="line">--------------</span><br><span class="line">equals比较</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">--------------</span><br><span class="line">compareTo比较</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
-
-<p><img src="../image/equals.png" alt="equals.png" title="equals"><br>清楚的看到比较了小数位，小数位不同直接返回false<br>在看一下compareTo源码：<br><img src="../image/compareTo.png" alt="compareTo.png" title="compareTo"><br>可以看到比较逻辑是先判断小数位是否相同，相同则比较有效值，不同先比较正负，正负相同在比较数值大小<br>结论：在进行需要忽略小数位比较时需要用compareTo()，不忽略小数位比较时用equals()</p>
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>BigDecimal</tag>
-        <tag>Java基础</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之String</title>
     <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
     <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
@@ -79,8 +40,283 @@
         <category>Java基础</category>
       </categories>
       <tags>
-        <tag>Java基础</tag>
         <tag>String</tag>
+        <tag>Java基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BigDecimal比较大小</title>
+    <url>/2019/09/16/BigDecimal%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/</url>
+    <content><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TestBigDecimal &#123;</span><br><span class="line">     public static void main(String[] args) &#123;</span><br><span class="line">        BigDecimal b1 = BigDecimal.valueOf(0.00);</span><br><span class="line">        BigDecimal b2 = new BigDecimal(0.00);</span><br><span class="line">        BigDecimal b3 = new BigDecimal(&quot;0.00&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(b1);</span><br><span class="line">        System.out.println(b2);</span><br><span class="line">        System.out.println(b3);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line">        System.out.println(&quot;equals比较&quot;);</span><br><span class="line">        System.out.println(contrast1(b1,b2));</span><br><span class="line">        System.out.println(contrast1(b1,b3));</span><br><span class="line">        System.out.println(contrast1(b2,b3));</span><br><span class="line">        System.out.println(contrast1(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;compareTo比较&quot;);</span><br><span class="line">        System.out.println(contrast2(b1,b2));</span><br><span class="line">        System.out.println(contrast2(b1,b3));</span><br><span class="line">        System.out.println(contrast2(b2,b3));</span><br><span class="line">        System.out.println(contrast2(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static boolean contrast1(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.equals(b2);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static int contrast2(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.compareTo(b2);</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p> 运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0.0</span><br><span class="line">0</span><br><span class="line">0.00</span><br><span class="line">--------------</span><br><span class="line">equals比较</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">--------------</span><br><span class="line">compareTo比较</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p><img src="../image/equals.png" alt="equals.png" title="equals"><br>清楚的看到比较了小数位，小数位不同直接返回false<br>在看一下compareTo源码：<br><img src="../image/compareTo.png" alt="compareTo.png" title="compareTo"><br>可以看到比较逻辑是先判断小数位是否相同，相同则比较有效值，不同先比较正负，正负相同在比较数值大小<br>结论：在进行需要忽略小数位比较时需要用compareTo()，不忽略小数位比较时用equals()</p>
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>BigDecimal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础部分之数据类型</title>
+    <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
+    <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
+<p>char/16</p>
+<p>short/16</p>
+<p>int/32</p>
+<p>float/32</p>
+<p>long/64</p>
+<p>double/64</p>
+<p>boolean/~</p>
+<p>boolean只有两个值，ture，false可以使用1bit来存储，但是具体大小没有明确规定，JVM会在编译期将boolean类型的数据转换为int，使用1来表示true，0表示false，JVM支持boolean数组，但是是通过读写byte数组来实现的。</p>
+<h4 id="包装类型"><a href="#包装类型" class="headerlink" title="包装类型"></a>包装类型</h4><p>基本类型都有对应的包装类型，基本类型与其对应的包装类型之间的赋值使用自动装箱与拆箱完成。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer x = 2; //装箱</span><br><span class="line"></span><br><span class="line">int y = x; //拆箱</span><br></pre></td></tr></table></figure>
+
+<h4 id="缓存池"><a href="#缓存池" class="headerlink" title="缓存池"></a>缓存池</h4><p>new Integer(123)与Integer.valueOf(123)的区别在于：</p>
+<p>new Integer(123)每次都会新建一个对象</p>
+<p>Integer.valueOf(123)会使用缓存池中的对象，多次调用会取得同一个对象的引用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer x = new Integer(123);</span><br><span class="line">Integer y = new Integer(123);</span><br><span class="line">System.out.println(x == y); //false</span><br><span class="line">Integer z = Integer.valueOf(123);</span><br><span class="line">Integer k = Integer.valueOf(123);</span><br><span class="line">System.out.println(z == k); //true</span><br></pre></td></tr></table></figure>
+
+<p>valueOf()方法的实现比较简单，就是先判断是否在缓存池中，如果在的话就直接返回缓存池的内容。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static Integer valueOf(int i) &#123;</span><br><span class="line">	if(i &gt;= IntegerCahe.low &amp;&amp; i &lt;= IntegerCahe.high)</span><br><span class="line">		return IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">	return new Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java8中，Integer缓存池的大小默认为-128-127.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static final int low = -128;</span><br><span class="line">static final int high;</span><br><span class="line">static final Integer cache[];</span><br><span class="line"></span><br><span class="line">static &#123;</span><br><span class="line">	//high value may be configured by property</span><br><span class="line">	int h = 127;</span><br><span class="line">	String integerCacheHighPropValue = </span><br><span class="line">		sum.misc.VM.getSaveProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">	if(integerCacheHighPropValue != null) &#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			int i = parseInt(integerCacheHighPropValue)</span><br><span class="line">			i = Math.max(i,127);</span><br><span class="line">			//Maximum array size is Integer.MAX_VALUE</span><br><span class="line">			h = Math.min(i,Integer.MAX_VALUE - (-low) - 1);</span><br><span class="line">		&#125; catch( NumberFormatException nfe)&#123;</span><br><span class="line">		//If the property cannot be parsed into an int,ignore it.</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	high = h;</span><br><span class="line">	</span><br><span class="line">	cache = new Integer[(high - low) + 1];</span><br><span class="line">	int j = low;</span><br><span class="line">	for(int k = 0; k&lt;cache.length; k++)</span><br><span class="line">		cache[k] = new Integer(j++);</span><br><span class="line">	// range [-128,127] must be interned (JLS7 5.1.7)</span><br><span class="line">	assert IntegerCache.high &gt;= 127;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译器会在自动装箱过程调用valueOf()方法，因此多个值相同且值在缓存池范围内的Integer实例使用自动装箱来创建，那么就会引用相同的对象。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer m = 123;</span><br><span class="line">Integer n = 123;</span><br><span class="line">System.out.println(m == n); //true</span><br></pre></td></tr></table></figure>
+
+<p>基本类型对应的缓冲池如下：</p>
+<p>boolean values true and false</p>
+<p>all byte values</p>
+<p>short values between -128 and 127</p>
+<p>int values between -128 and 127</p>
+<p>char in the range \u0000 to \u007F</p>
+<p>在使用这些基本类型对应的包装类型时，如果该数值范围在缓冲池范围内，就可以直接使用缓冲池中的对象。</p>
+<p>在jdk1.8所有的数值类缓冲池中，Integer的缓冲池IntegerCache很特殊，这个缓冲池的下届是-128，上届默认是127，但是这个上届是可调的，在启动jvm的时候，通过-XX:AutoBoxCache=<size>来指定这个缓冲池的大小，该选项在JVM初始化的时候会设定一个名为java.lang.IntegerCache.high系统属性，然后IntegerCache初始化的时候就会读取该系统属性来决定上界。</size></p>
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>Java基本类型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一路走来，即将毕业。</title>
+    <url>/2019/09/12/Sentiment/</url>
+    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
+<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
+<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
+<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
+<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
+<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
+<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
+<p>祝我自己前途似锦，万事胜意。</p>
+<p>2019-03-27 20:44更</p>
+]]></content>
+      <categories>
+        <category>个人经历</category>
+      </categories>
+      <tags>
+        <tag>个人经历</tag>
+        <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home</title>
+    <url>/2020/03/16/go%20big%20or%20go%20home/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>early birld</td>
+<td>早起的鸟儿</td>
+<td>Early birld gets the worm</td>
+</tr>
+<tr>
+<td>happiness</td>
+<td>开心幸福</td>
+<td>I often share happiness and sorrows with my friends</td>
+</tr>
+<tr>
+<td>jail</td>
+<td>监狱</td>
+<td>He may be jailed for killing</td>
+</tr>
+<tr>
+<td>breaks the law</td>
+<td>打破法律</td>
+<td>He was jailed for breaking the law</td>
+</tr>
+<tr>
+<td>chemical reaction</td>
+<td>化学反应</td>
+<td>When you smiling,you will experience a chemical reaction</td>
+</tr>
+<tr>
+<td>produces good-feeling chemicals</td>
+<td>同上</td>
+<td>When you smiling,you produces good-feeling chemicals</td>
+</tr>
+<tr>
+<td>fake simle</td>
+<td>假笑</td>
+<td>I may be fake simle when I together with my boss</td>
+</tr>
+<tr>
+<td>relax</td>
+<td>放松</td>
+<td>I want to keep relaxing in holiday</td>
+</tr>
+<tr>
+<td>look younger</td>
+<td>看起来年轻</td>
+<td>You look younger than your age</td>
+</tr>
+<tr>
+<td>sick</td>
+<td>生病</td>
+<td>The little girl may be sick</td>
+</tr>
+<tr>
+<td>pressure</td>
+<td>压力</td>
+<td>Post-90s pressure</td>
+</tr>
+<tr>
+<td>mortgage</td>
+<td>房贷</td>
+<td>He feel pressure beacuse of the mortgage</td>
+</tr>
+<tr>
+<td>get sick</td>
+<td>生病</td>
+<td>I don’t want to get sick</td>
+</tr>
+<tr>
+<td>vocabulary</td>
+<td>词汇</td>
+<td>Chinese vocabulary</td>
+</tr>
+<tr>
+<td>busy with</td>
+<td>忙于工作</td>
+<td>I’m too busy with my work</td>
+</tr>
+<tr>
+<td>crying</td>
+<td>哭</td>
+<td>The little girl is crying</td>
+</tr>
+<tr>
+<td>get lost</td>
+<td>走丢</td>
+<td>She got lost</td>
+</tr>
+<tr>
+<td>toothache</td>
+<td>牙痛</td>
+<td>Doctor,I have a toothache</td>
+</tr>
+<tr>
+<td>glass</td>
+<td>杯子</td>
+<td>The glass is broken</td>
+</tr>
+<tr>
+<td>stomachache</td>
+<td>胃痛</td>
+<td>The boy has a stomachache</td>
+</tr>
+<tr>
+<td>live</td>
+<td>注意读音[lɪv , laɪv]</td>
+<td>I live in Beijing；live Spring gala</td>
+</tr>
+<tr>
+<td>farther</td>
+<td>更远</td>
+<td>The higher you climb,The farther you can see</td>
+</tr>
+<tr>
+<td>suffer</td>
+<td>伤害</td>
+<td>The longer the war lasts,the more the people there will suffer</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-11</title>
+    <url>/2020/03/26/go-big-or-go-home-11/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>broad</td>
+<td>宽的</td>
+<td>This road is broad enough for many cars to drive on</td>
+</tr>
+<tr>
+<td>accomplish</td>
+<td>完成</td>
+<td>She is so happy to have accomplished her weight-loss goal</td>
+</tr>
+<tr>
+<td>case</td>
+<td>箱子</td>
+<td>He carried all of his important things in a black case</td>
+</tr>
+<tr>
+<td>normal</td>
+<td>正常的</td>
+<td>A normal human foot should be like the one in the middle</td>
+</tr>
+<tr>
+<td>organ</td>
+<td>器官</td>
+<td>Every organ plays an important role in our body</td>
+</tr>
+<tr>
+<td>ceremony</td>
+<td>典礼</td>
+<td>The student was awarded her certificate during the graduation ceremony</td>
+</tr>
+<tr>
+<td>miserable</td>
+<td>悲惨的</td>
+<td>It’s miserable out</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
       </tags>
   </entry>
   <entry>
@@ -254,307 +490,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础部分之数据类型</title>
-    <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
-    <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
-<p>char/16</p>
-<p>short/16</p>
-<p>int/32</p>
-<p>float/32</p>
-<p>long/64</p>
-<p>double/64</p>
-<p>boolean/~</p>
-<p>boolean只有两个值，ture，false可以使用1bit来存储，但是具体大小没有明确规定，JVM会在编译期将boolean类型的数据转换为int，使用1来表示true，0表示false，JVM支持boolean数组，但是是通过读写byte数组来实现的。</p>
-<h4 id="包装类型"><a href="#包装类型" class="headerlink" title="包装类型"></a>包装类型</h4><p>基本类型都有对应的包装类型，基本类型与其对应的包装类型之间的赋值使用自动装箱与拆箱完成。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer x = 2; //装箱</span><br><span class="line"></span><br><span class="line">int y = x; //拆箱</span><br></pre></td></tr></table></figure>
-
-<h4 id="缓存池"><a href="#缓存池" class="headerlink" title="缓存池"></a>缓存池</h4><p>new Integer(123)与Integer.valueOf(123)的区别在于：</p>
-<p>new Integer(123)每次都会新建一个对象</p>
-<p>Integer.valueOf(123)会使用缓存池中的对象，多次调用会取得同一个对象的引用</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer x = new Integer(123);</span><br><span class="line">Integer y = new Integer(123);</span><br><span class="line">System.out.println(x == y); //false</span><br><span class="line">Integer z = Integer.valueOf(123);</span><br><span class="line">Integer k = Integer.valueOf(123);</span><br><span class="line">System.out.println(z == k); //true</span><br></pre></td></tr></table></figure>
-
-<p>valueOf()方法的实现比较简单，就是先判断是否在缓存池中，如果在的话就直接返回缓存池的内容。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static Integer valueOf(int i) &#123;</span><br><span class="line">	if(i &gt;= IntegerCahe.low &amp;&amp; i &lt;= IntegerCahe.high)</span><br><span class="line">		return IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">	return new Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java8中，Integer缓存池的大小默认为-128-127.</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static final int low = -128;</span><br><span class="line">static final int high;</span><br><span class="line">static final Integer cache[];</span><br><span class="line"></span><br><span class="line">static &#123;</span><br><span class="line">	//high value may be configured by property</span><br><span class="line">	int h = 127;</span><br><span class="line">	String integerCacheHighPropValue = </span><br><span class="line">		sum.misc.VM.getSaveProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">	if(integerCacheHighPropValue != null) &#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			int i = parseInt(integerCacheHighPropValue)</span><br><span class="line">			i = Math.max(i,127);</span><br><span class="line">			//Maximum array size is Integer.MAX_VALUE</span><br><span class="line">			h = Math.min(i,Integer.MAX_VALUE - (-low) - 1);</span><br><span class="line">		&#125; catch( NumberFormatException nfe)&#123;</span><br><span class="line">		//If the property cannot be parsed into an int,ignore it.</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	high = h;</span><br><span class="line">	</span><br><span class="line">	cache = new Integer[(high - low) + 1];</span><br><span class="line">	int j = low;</span><br><span class="line">	for(int k = 0; k&lt;cache.length; k++)</span><br><span class="line">		cache[k] = new Integer(j++);</span><br><span class="line">	// range [-128,127] must be interned (JLS7 5.1.7)</span><br><span class="line">	assert IntegerCache.high &gt;= 127;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>编译器会在自动装箱过程调用valueOf()方法，因此多个值相同且值在缓存池范围内的Integer实例使用自动装箱来创建，那么就会引用相同的对象。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer m = 123;</span><br><span class="line">Integer n = 123;</span><br><span class="line">System.out.println(m == n); //true</span><br></pre></td></tr></table></figure>
-
-<p>基本类型对应的缓冲池如下：</p>
-<p>boolean values true and false</p>
-<p>all byte values</p>
-<p>short values between -128 and 127</p>
-<p>int values between -128 and 127</p>
-<p>char in the range \u0000 to \u007F</p>
-<p>在使用这些基本类型对应的包装类型时，如果该数值范围在缓冲池范围内，就可以直接使用缓冲池中的对象。</p>
-<p>在jdk1.8所有的数值类缓冲池中，Integer的缓冲池IntegerCache很特殊，这个缓冲池的下届是-128，上届默认是127，但是这个上届是可调的，在启动jvm的时候，通过-XX:AutoBoxCache=<size>来指定这个缓冲池的大小，该选项在JVM初始化的时候会设定一个名为java.lang.IntegerCache.high系统属性，然后IntegerCache初始化的时候就会读取该系统属性来决定上界。</size></p>
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>Java基本类型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-11</title>
-    <url>/2020/03/26/go-big-or-go-home-11/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>broad</td>
-<td>宽的</td>
-<td>This road is broad enough for many cars to drive on</td>
-</tr>
-<tr>
-<td>accomplish</td>
-<td>完成</td>
-<td>She is so happy to have accomplished her weight-loss goal</td>
-</tr>
-<tr>
-<td>case</td>
-<td>箱子</td>
-<td>He carried all of his important things in a black case</td>
-</tr>
-<tr>
-<td>normal</td>
-<td>正常的</td>
-<td>A normal human foot should be like the one in the middle</td>
-</tr>
-<tr>
-<td>organ</td>
-<td>器官</td>
-<td>Every organ plays an important role in our body</td>
-</tr>
-<tr>
-<td>ceremony</td>
-<td>典礼</td>
-<td>The student was awarded her certificate during the graduation ceremony</td>
-</tr>
-<tr>
-<td>miserable</td>
-<td>悲惨的</td>
-<td>It’s miserable out</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home</title>
-    <url>/2020/03/16/go%20big%20or%20go%20home/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>early birld</td>
-<td>早起的鸟儿</td>
-<td>Early birld gets the worm</td>
-</tr>
-<tr>
-<td>happiness</td>
-<td>开心幸福</td>
-<td>I often share happiness and sorrows with my friends</td>
-</tr>
-<tr>
-<td>jail</td>
-<td>监狱</td>
-<td>He may be jailed for killing</td>
-</tr>
-<tr>
-<td>breaks the law</td>
-<td>打破法律</td>
-<td>He was jailed for breaking the law</td>
-</tr>
-<tr>
-<td>chemical reaction</td>
-<td>化学反应</td>
-<td>When you smiling,you will experience a chemical reaction</td>
-</tr>
-<tr>
-<td>produces good-feeling chemicals</td>
-<td>同上</td>
-<td>When you smiling,you produces good-feeling chemicals</td>
-</tr>
-<tr>
-<td>fake simle</td>
-<td>假笑</td>
-<td>I may be fake simle when I together with my boss</td>
-</tr>
-<tr>
-<td>relax</td>
-<td>放松</td>
-<td>I want to keep relaxing in holiday</td>
-</tr>
-<tr>
-<td>look younger</td>
-<td>看起来年轻</td>
-<td>You look younger than your age</td>
-</tr>
-<tr>
-<td>sick</td>
-<td>生病</td>
-<td>The little girl may be sick</td>
-</tr>
-<tr>
-<td>pressure</td>
-<td>压力</td>
-<td>Post-90s pressure</td>
-</tr>
-<tr>
-<td>mortgage</td>
-<td>房贷</td>
-<td>He feel pressure beacuse of the mortgage</td>
-</tr>
-<tr>
-<td>get sick</td>
-<td>生病</td>
-<td>I don’t want to get sick</td>
-</tr>
-<tr>
-<td>vocabulary</td>
-<td>词汇</td>
-<td>Chinese vocabulary</td>
-</tr>
-<tr>
-<td>busy with</td>
-<td>忙于工作</td>
-<td>I’m too busy with my work</td>
-</tr>
-<tr>
-<td>crying</td>
-<td>哭</td>
-<td>The little girl is crying</td>
-</tr>
-<tr>
-<td>get lost</td>
-<td>走丢</td>
-<td>She got lost</td>
-</tr>
-<tr>
-<td>toothache</td>
-<td>牙痛</td>
-<td>Doctor,I have a toothache</td>
-</tr>
-<tr>
-<td>glass</td>
-<td>杯子</td>
-<td>The glass is broken</td>
-</tr>
-<tr>
-<td>stomachache</td>
-<td>胃痛</td>
-<td>The boy has a stomachache</td>
-</tr>
-<tr>
-<td>live</td>
-<td>注意读音[lɪv , laɪv]</td>
-<td>I live in Beijing；live Spring gala</td>
-</tr>
-<tr>
-<td>farther</td>
-<td>更远</td>
-<td>The higher you climb,The farther you can see</td>
-</tr>
-<tr>
-<td>suffer</td>
-<td>伤害</td>
-<td>The longer the war lasts,the more the people there will suffer</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-13</title>
-    <url>/2020/03/29/go-big-or-go-home-13/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>dismiss</td>
-<td>开除</td>
-<td>The boss was anrgy and dismissed the staff</td>
-</tr>
-<tr>
-<td>protection</td>
-<td>保护</td>
-<td>Everyone should get involved in enviromental protection</td>
-</tr>
-<tr>
-<td>feed</td>
-<td>喂养</td>
-<td>My mother would feed me when I was hungry</td>
-</tr>
-<tr>
-<td>ought to</td>
-<td>应该</td>
-<td>When you study，you ought to sit up straight</td>
-</tr>
-<tr>
-<td>rapid</td>
-<td>迅速的</td>
-<td>The rabbit ran at a rapid speed</td>
-</tr>
-<tr>
-<td>cure</td>
-<td>治愈</td>
-<td>These pills will cure your sickness</td>
-</tr>
-<tr>
-<td>outer</td>
-<td>外面的</td>
-<td>The outer part of this ball is green</td>
-</tr>
-<tr>
-<td>dinosaur</td>
-<td>恐龙</td>
-<td>Two dinosaurs are fighting against each other</td>
-</tr>
-<tr>
-<td>spicy</td>
-<td>辣的</td>
-<td>I like spicy hot pot</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-12</title>
     <url>/2020/03/27/go-big-or-go-home-12/</url>
     <content><![CDATA[<table>
@@ -715,6 +650,71 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-13</title>
+    <url>/2020/03/29/go-big-or-go-home-13/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dismiss</td>
+<td>开除</td>
+<td>The boss was anrgy and dismissed the staff</td>
+</tr>
+<tr>
+<td>protection</td>
+<td>保护</td>
+<td>Everyone should get involved in enviromental protection</td>
+</tr>
+<tr>
+<td>feed</td>
+<td>喂养</td>
+<td>My mother would feed me when I was hungry</td>
+</tr>
+<tr>
+<td>ought to</td>
+<td>应该</td>
+<td>When you study，you ought to sit up straight</td>
+</tr>
+<tr>
+<td>rapid</td>
+<td>迅速的</td>
+<td>The rabbit ran at a rapid speed</td>
+</tr>
+<tr>
+<td>cure</td>
+<td>治愈</td>
+<td>These pills will cure your sickness</td>
+</tr>
+<tr>
+<td>outer</td>
+<td>外面的</td>
+<td>The outer part of this ball is green</td>
+</tr>
+<tr>
+<td>dinosaur</td>
+<td>恐龙</td>
+<td>Two dinosaurs are fighting against each other</td>
+</tr>
+<tr>
+<td>spicy</td>
+<td>辣的</td>
+<td>I like spicy hot pot</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-14</title>
     <url>/2020/03/29/go-big-or-go-home-14/</url>
     <content><![CDATA[<table>
@@ -769,6 +769,71 @@
 <td>hug</td>
 <td>拥抱</td>
 <td>The happy couple hug in front of their new home</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-15</title>
+    <url>/2020/03/30/go-big-or-go-home-15/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>development</td>
+<td>发展</td>
+<td>This picture shows the development of phones over time</td>
+</tr>
+<tr>
+<td>work out</td>
+<td>计算出</td>
+<td>He worked out the math problem on the blackboard</td>
+</tr>
+<tr>
+<td>take the place of</td>
+<td>取代</td>
+<td>Gradually,robots have taken the place of manual workers</td>
+</tr>
+<tr>
+<td>pardon</td>
+<td>原谅</td>
+<td>The king pardoned the prisoner</td>
+</tr>
+<tr>
+<td>strap</td>
+<td>绑住</td>
+<td>The man is driving a jeep with luggage strapped to the roof</td>
+</tr>
+<tr>
+<td>fur</td>
+<td>毛皮</td>
+<td>A fur coat is very warm,bur very expensive</td>
+</tr>
+<tr>
+<td>yet</td>
+<td>尚/还</td>
+<td>I’m tired,but I haven’t finished studying yet</td>
+</tr>
+<tr>
+<td>jet</td>
+<td>喷气式</td>
+<td>Nowadays most long-distance travel is by jet plane</td>
+</tr>
+<tr>
+<td>bacterium</td>
+<td>细菌</td>
+<td>This kind of bacterium can cause a very dangerous disease</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -970,8 +1035,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-15</title>
-    <url>/2020/03/30/go-big-or-go-home-15/</url>
+    <title>go big or go home-19</title>
+    <url>/2020/04/03/go-big-or-go-home-19/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -981,49 +1046,49 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>development</td>
-<td>发展</td>
-<td>This picture shows the development of phones over time</td>
+<td>pilot</td>
+<td>飞行员</td>
+<td>The heroic pilot managed to land the damaged plane safely</td>
 </tr>
 <tr>
-<td>work out</td>
-<td>计算出</td>
-<td>He worked out the math problem on the blackboard</td>
+<td>mustard</td>
+<td>芥末</td>
+<td>Would you like some mustard on your sandwich?</td>
 </tr>
 <tr>
-<td>take the place of</td>
-<td>取代</td>
-<td>Gradually,robots have taken the place of manual workers</td>
+<td>agriculture</td>
+<td>农业</td>
+<td>We depend on agriculture to give us food</td>
 </tr>
 <tr>
-<td>pardon</td>
-<td>原谅</td>
-<td>The king pardoned the prisoner</td>
+<td>proposal</td>
+<td>建议</td>
+<td>He’s against the teacher’s proposal</td>
 </tr>
 <tr>
-<td>strap</td>
-<td>绑住</td>
-<td>The man is driving a jeep with luggage strapped to the roof</td>
+<td>mailbox</td>
+<td>邮箱</td>
+<td>Hey！You’ve got a leeter in your mailbox</td>
 </tr>
 <tr>
-<td>fur</td>
-<td>毛皮</td>
-<td>A fur coat is very warm,bur very expensive</td>
+<td>cap</td>
+<td>帽子</td>
+<td>This is a blue police cap</td>
 </tr>
 <tr>
-<td>yet</td>
-<td>尚/还</td>
-<td>I’m tired,but I haven’t finished studying yet</td>
+<td>straight</td>
+<td>直的</td>
+<td>How did you get your hair so straight?</td>
 </tr>
 <tr>
-<td>jet</td>
-<td>喷气式</td>
-<td>Nowadays most long-distance travel is by jet plane</td>
+<td>restaurant</td>
+<td>饭馆</td>
+<td>The happy family are dining together at a restaurant</td>
 </tr>
 <tr>
-<td>bacterium</td>
-<td>细菌</td>
-<td>This kind of bacterium can cause a very dangerous disease</td>
+<td>shrimp</td>
+<td>虾肉</td>
+<td>-</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1109,91 +1174,6 @@
 <td>beach</td>
 <td>海边</td>
 <td>The girl took a vacation on the beach</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-2</title>
-    <url>/2020/03/17/go-big-or-go-home-2/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stadium</td>
-<td>体育场</td>
-<td>I often play football in the stadium</td>
-</tr>
-<tr>
-<td>reply</td>
-<td>回复</td>
-<td>I’m waiting for your reply</td>
-</tr>
-<tr>
-<td>standard</td>
-<td>标准</td>
-<td>Such a standard figure</td>
-</tr>
-<tr>
-<td>honour</td>
-<td>荣誉</td>
-<td>It’s an honour to graduate from this school</td>
-</tr>
-<tr>
-<td>village</td>
-<td>乡村</td>
-<td>I like village life</td>
-</tr>
-<tr>
-<td>ever since</td>
-<td>自从…时起</td>
-<td>They lived there ever since they married</td>
-</tr>
-<tr>
-<td>turn up</td>
-<td>调高</td>
-<td>Turn up the TV volume</td>
-</tr>
-<tr>
-<td>volume</td>
-<td>音量</td>
-<td>Turn on the volume</td>
-</tr>
-<tr>
-<td>get on with</td>
-<td>与…相处</td>
-<td>She likes get on with animals</td>
-</tr>
-<tr>
-<td>tourism</td>
-<td>旅游</td>
-<td>I like tourism around the world</td>
-</tr>
-<tr>
-<td>industry</td>
-<td>行业</td>
-<td>The tourism industry is getting worse</td>
-</tr>
-<tr>
-<td>experience</td>
-<td>经验</td>
-<td>He has five years of programming experience</td>
-</tr>
-<tr>
-<td>sorrows</td>
-<td>悲伤</td>
-<td>I often share happiness and sorrows with my friends</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1435,8 +1415,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-19</title>
-    <url>/2020/04/03/go-big-or-go-home-19/</url>
+    <title>go big or go home-20</title>
+    <url>/2020/04/04/go-big-or-go-home-20/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -1446,49 +1426,134 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>pilot</td>
-<td>飞行员</td>
-<td>The heroic pilot managed to land the damaged plane safely</td>
+<td>plate</td>
+<td>盘子</td>
+<td>I can put much food on this big plate</td>
 </tr>
 <tr>
-<td>mustard</td>
-<td>芥末</td>
-<td>Would you like some mustard on your sandwich?</td>
+<td>so that</td>
+<td>太…以至于</td>
+<td>Its so hot that I’m going to melt</td>
 </tr>
 <tr>
-<td>agriculture</td>
-<td>农业</td>
-<td>We depend on agriculture to give us food</td>
+<td>discovery</td>
+<td>发现</td>
+<td>She makes a discovery in the field of flowers</td>
 </tr>
 <tr>
-<td>proposal</td>
-<td>建议</td>
-<td>He’s against the teacher’s proposal</td>
+<td>outline</td>
+<td>外形</td>
+<td>The girl drew an outline of the model</td>
 </tr>
 <tr>
-<td>mailbox</td>
-<td>邮箱</td>
-<td>Hey！You’ve got a leeter in your mailbox</td>
+<td>zip code</td>
+<td>邮政编码</td>
+<td>You must write a zip code on the envelope before mailing a letter</td>
 </tr>
 <tr>
-<td>cap</td>
-<td>帽子</td>
-<td>This is a blue police cap</td>
+<td>lip</td>
+<td>嘴唇</td>
+<td>Her lips are the most beautiful part of her face</td>
 </tr>
 <tr>
-<td>straight</td>
-<td>直的</td>
-<td>How did you get your hair so straight?</td>
+<td>weed</td>
+<td>杂草</td>
+<td>The worker is cutting the weeds</td>
 </tr>
 <tr>
-<td>restaurant</td>
-<td>饭馆</td>
-<td>The happy family are dining together at a restaurant</td>
+<td>稍微长一点的文本</td>
+<td>短文本</td>
+<td>中等文本</td>
 </tr>
 <tr>
-<td>shrimp</td>
-<td>虾肉</td>
-<td>-</td>
+<td>稍微长一点的文本</td>
+<td>短文本</td>
+<td>中等文本</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-2</title>
+    <url>/2020/03/17/go-big-or-go-home-2/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stadium</td>
+<td>体育场</td>
+<td>I often play football in the stadium</td>
+</tr>
+<tr>
+<td>reply</td>
+<td>回复</td>
+<td>I’m waiting for your reply</td>
+</tr>
+<tr>
+<td>standard</td>
+<td>标准</td>
+<td>Such a standard figure</td>
+</tr>
+<tr>
+<td>honour</td>
+<td>荣誉</td>
+<td>It’s an honour to graduate from this school</td>
+</tr>
+<tr>
+<td>village</td>
+<td>乡村</td>
+<td>I like village life</td>
+</tr>
+<tr>
+<td>ever since</td>
+<td>自从…时起</td>
+<td>They lived there ever since they married</td>
+</tr>
+<tr>
+<td>turn up</td>
+<td>调高</td>
+<td>Turn up the TV volume</td>
+</tr>
+<tr>
+<td>volume</td>
+<td>音量</td>
+<td>Turn on the volume</td>
+</tr>
+<tr>
+<td>get on with</td>
+<td>与…相处</td>
+<td>She likes get on with animals</td>
+</tr>
+<tr>
+<td>tourism</td>
+<td>旅游</td>
+<td>I like tourism around the world</td>
+</tr>
+<tr>
+<td>industry</td>
+<td>行业</td>
+<td>The tourism industry is getting worse</td>
+</tr>
+<tr>
+<td>experience</td>
+<td>经验</td>
+<td>He has five years of programming experience</td>
+</tr>
+<tr>
+<td>sorrows</td>
+<td>悲伤</td>
+<td>I often share happiness and sorrows with my friends</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1945,6 +2010,247 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-8</title>
+    <url>/2020/03/23/go-big-or-go-home-8/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fit</td>
+<td>匹配</td>
+<td>They two are a perfect fit and I’m sure they are good friends</td>
+</tr>
+<tr>
+<td>insure</td>
+<td>为…投保</td>
+<td>He insures the car against traffic accidents</td>
+</tr>
+<tr>
+<td>ring sb. back</td>
+<td>回电话</td>
+<td>Oh,I missed a call from my mother.I’ll ring her back</td>
+</tr>
+<tr>
+<td>try sth. out</td>
+<td>试验</td>
+<td>I’m going to try out my new experiment on some mice</td>
+</tr>
+<tr>
+<td>come off</td>
+<td>从…掉下</td>
+<td>She looks surprised when her facial mask comes off her face</td>
+</tr>
+<tr>
+<td>postbox</td>
+<td>邮箱</td>
+<td>I take letters out from the postbox everyday</td>
+</tr>
+<tr>
+<td>over and over again</td>
+<td>重复多次</td>
+<td>He said no over and over again</td>
+</tr>
+<tr>
+<td>questionnaire</td>
+<td>调查问卷</td>
+<td>Please complete this questionnaire</td>
+</tr>
+<tr>
+<td>savage</td>
+<td>野蛮人</td>
+<td>Their wordy conversion made me feel like a total savage</td>
+</tr>
+<tr>
+<td>wallet</td>
+<td>口袋</td>
+<td>He takes out some money from his wallet</td>
+</tr>
+<tr>
+<td>platform</td>
+<td>平台</td>
+<td>Bigger platform</td>
+</tr>
+<tr>
+<td>says</td>
+<td>说的话</td>
+<td>The bird is repeating what the girl says</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-9</title>
+    <url>/2020/03/24/go-big-or-go-home-9/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>actual</td>
+<td>实际的</td>
+<td>The actual fact is that crocodiles walk underwater instead of swimming</td>
+</tr>
+<tr>
+<td>master</td>
+<td>主人</td>
+<td>The dog and its master are close to each other</td>
+</tr>
+<tr>
+<td>fridge</td>
+<td>电冰箱</td>
+<td>I opened the fridge to get some food</td>
+</tr>
+<tr>
+<td>bone</td>
+<td>骨头</td>
+<td>“I really want to eat some bones” the dog said</td>
+</tr>
+<tr>
+<td>represent</td>
+<td>代表</td>
+<td>This hand gesture represents love</td>
+</tr>
+<tr>
+<td>modest</td>
+<td>谦虚的</td>
+<td>These two businssmen may be rich,but they’re still very modest</td>
+</tr>
+<tr>
+<td>ox</td>
+<td>牛/公牛</td>
+<td>The strong ox is angry now</td>
+</tr>
+<tr>
+<td>nut</td>
+<td>坚果</td>
+<td>Nuts are a source of vitamin E for the body</td>
+</tr>
+<tr>
+<td>facial</td>
+<td>面部</td>
+<td>She looks surprized when her facial mask comes off her face</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode208</title>
+    <url>/2019/10/20/leetcode208/</url>
+    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Trie trie = new Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(&quot;apple&quot;);</span><br><span class="line">trie.search(&quot;apple&quot;);   // 返回 true</span><br><span class="line">trie.search(&quot;app&quot;);     // 返回 false</span><br><span class="line">trie.startsWith(&quot;app&quot;); // 返回 true</span><br><span class="line">trie.insert(&quot;app&quot;);   </span><br><span class="line">trie.search(&quot;app&quot;);     // 返回 true</span><br></pre></td></tr></table></figure>
+
+<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TrieNode &#123;</span><br><span class="line"></span><br><span class="line">    public char val;</span><br><span class="line"></span><br><span class="line">    public TrieNode[] children = new TrieNode[26];</span><br><span class="line"></span><br><span class="line">    public boolean isWord;</span><br><span class="line"></span><br><span class="line">    public TrieNode() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public TrieNode(char c) &#123;</span><br><span class="line">        TrieNode node = new TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Trie &#123;</span><br><span class="line">    private TrieNode root;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Initialize your data structure here.</span><br><span class="line">     */</span><br><span class="line">    public Trie() &#123;</span><br><span class="line">        root = new TrieNode();</span><br><span class="line">        root.val = &apos; &apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Inserts a word into the trie.</span><br><span class="line">     */</span><br><span class="line">    public void insert(String word) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            char c = word.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null) &#123;</span><br><span class="line">                t.children[c - &apos;a&apos;] = new TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns if the word is in the trie.</span><br><span class="line">     */</span><br><span class="line">    public boolean search(String word) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            char c = word.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null) &#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        return t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns if there is any word in the trie that starts with the given prefix.</span><br><span class="line">     */</span><br><span class="line">    public boolean startsWith(String prefix) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            char c = prefix.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null)&#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = new Trie();</span><br><span class="line">        obj.insert(&quot;trie&quot;);</span><br><span class="line">        boolean param_2 = obj.search(&quot;trie&quot;);</span><br><span class="line">        boolean param_3 = obj.startsWith(&quot;trie&quot;);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>Trie树</tag>
+        <tag>leetcode208</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode338</title>
+    <url>/2019/10/20/leetcode338/</url>
+    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
+
+<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode338</tag>
+        <tag>二进制数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode79</title>
+    <url>/2019/10/20/leetcode79/</url>
+    <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
+<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],</span><br><span class="line">  [&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],</span><br><span class="line">  [&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = &quot;ABCCED&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;SEE&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;ABCB&quot;, 返回 false.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line"></span><br><span class="line">    static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">    static int[] column = &#123;1,0,-1,0&#125;;</span><br><span class="line"></span><br><span class="line">    public  boolean exist(char[][] board, String word) &#123;</span><br><span class="line"></span><br><span class="line">        for (int i =0,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            for (int j=0,columnLen = board[0].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                if (dfs(board,word,i,j,0)) return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean dfs(char[][] board,String word,int x,int y,int index)&#123;</span><br><span class="line">        if (x&lt;0 || x&gt;=board.length || y&lt;0 || y&gt;=board[0].length) return false;</span><br><span class="line"></span><br><span class="line">        if(board[x][y] != word.charAt(index)) return false;</span><br><span class="line"></span><br><span class="line">        if(index == word.length() - 1) return true;</span><br><span class="line"></span><br><span class="line">        board[x][y] = &apos;#&apos;;</span><br><span class="line"></span><br><span class="line">        for (int i = 0 ; i&lt;4;i++)&#123;</span><br><span class="line">            if (dfs(board,word,x+row[i],y+column[i],index+1)) return true;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        char[][] borad = &#123;&#123;&apos;F&apos;,&apos;Y&apos;,&apos;C&apos;,&apos;E&apos;,&apos;N&apos;,&apos;R&apos;,&apos;D&apos;&#125;,&#123;&apos;K&apos;,&apos;L&apos;,&apos;N&apos;,&apos;F&apos;,&apos;I&apos;,&apos;N&apos;,&apos;U&apos;&#125;,&#123;&apos;A&apos;,&apos;A&apos;,&apos;A&apos;,&apos;R&apos;,&apos;A&apos;,&apos;H&apos;,&apos;R&apos;&#125;,&#123;&apos;N&apos;,&apos;D&apos;,&apos;K&apos;,&apos;L&apos;,&apos;P&apos;,&apos;N&apos;,&apos;E&apos;&#125;,&#123;&apos;A&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;S&apos;,&apos;A&apos;,&apos;P&apos;&#125;,&#123;&apos;O&apos;,&apos;O&apos;,&apos;G&apos;,&apos;O&apos;,&apos;T&apos;,&apos;P&apos;,&apos;N&apos;&#125;,&#123;&apos;H&apos;,&apos;P&apos;,&apos;O&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;O&apos;&#125;&#125;;</span><br><span class="line">        String word= &quot;poland&quot;;</span><br><span class="line">        System.out.println(new Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里主要说明一下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board[x][y] = &apos;#&apos;;</span><br></pre></td></tr></table></figure>
+
+<p>是将已经查找过的做一个标记，以及</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">static int[] column = &#123;1,0,-1,0&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>二维网格</tag>
+        <tag>leetcode79</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL一条sql查询语句是如何执行的?</title>
+    <url>/2019/10/20/mysql%E4%B8%80%E6%9D%A1sql%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/</url>
+    <content><![CDATA[<p>[2019-10-13，2019-10-20]周计划：</p>
+<p>1⃣️三道leetcode中等难度算法题<br>2⃣️MySQL实战45讲-基础篇1，2，3讲<br>3⃣️周六，日总结，写博客</p>
+<p>本周学习了极客时间的MySQL实战45讲一课，本篇做一个总结。<br>先看一个普通的查询语句  </p>
+<p><code>select * from user where id = 1</code>  </p>
+<p>这条语句的执行过程是什么样的呢？废话不多说先上图：<br><img src="../image/MySQL.png" alt="MySQL.png" title="MySQL"><br>大体来说MySQL可以分为server层和引擎层两部分，server层包括连接器，查询缓存，分析器，优化器，查询器等，覆盖MySQL的绝大多数核心服务功能，包括内置函数，存储过程，触发器，视图等都是在这一层实现的。<br>而引擎层则是负责数据的存储和提取，其架构模式是插件式的，比如InnoDB，MyISAM，Memory等多个存储引擎，现在最常用的是InnoDB，在MySQL5.5.5版本成为了默认引擎。接下来具体介绍一下每一个部分的作用：  </p>
+<h3 id="1⃣️连接器："><a href="#1⃣️连接器：" class="headerlink" title="1⃣️连接器："></a>1⃣️连接器：</h3><p>如果要使用MySQL首先要做的事与MySQL建立连接，输入账户密码MySQL会到连接器中对该账号进行权限的验证，以后的所有操作都基于此时的权限，及时在这段时间管理员对你的账号修改了权限也不会影响到本次连接的其他操作。同时这里涉及到了长链接与短链接，大家知道与数据库的连接是比较消耗资源的，所以要尽可能的在一次连接做尽量多的事，不让资源浪费，这就是长链接，客户端如果太长时间没有操作，连接器会自动将它断开，这是wait_timeout控制的，默认是8个小时，当然可以根据自己的业务场景进行修改，综上所述更推荐使用长链接。  </p>
+<h3 id="2⃣️查询缓存："><a href="#2⃣️查询缓存：" class="headerlink" title="2⃣️查询缓存："></a>2⃣️查询缓存：</h3><p>通过了连接器就可以到下一步，也就是查询缓存了，大多数情况下并不推荐使用查询缓存，为什么呢？<br>我们先来了解下查询缓存的工作原理，其实MySQL会把执行过的查询语句以key-value的形式储存起来，key是查询语句，value是结果，如果在查询缓存中可以找到匹配的key那么直接返回value，但有人说这不是很方便吗提高了查询速度，为什么不推荐使用呢？因为不仅仅存储这些语句和结果需要占用空间，还有个最关键的原因是当有任何对某张表的更新那么基于这张表的所有查询缓存全部清空，除非你是有一张静态表，很长时间不更新那么可以使用查询缓存。<br>使用方式？只需要设置参数query_cache_type（0—&gt;关闭，1—&gt;开始，2—&gt;只有在执行查询语句时，显示指定开始如下例子）</p>
+<p><code>select SQL_CACHE * form user where id = 1</code>  </p>
+<h3 id="3⃣️分析器："><a href="#3⃣️分析器：" class="headerlink" title="3⃣️分析器："></a>3⃣️分析器：</h3><p>如果没有命中查询缓存就要真正开始执行语句了，首先MySQL要知道你执行的是什么操作，分析器会先做词法分析，你输入的是一串字符串，MySQL会识别出关键词比如select，那么MySQL会知道这是一条查询语句，在把user识别为表名，当然也会有写错的时候，那么语法错误就是在这一层做的。</p>
+<h3 id="4⃣️优化器："><a href="#4⃣️优化器：" class="headerlink" title="4⃣️优化器："></a>4⃣️优化器：</h3><p>通过了分析器证明sql语句写的没有问题，那么MySQL会根据你写的语句在内部做一个优化，是在有多个索引的时候进行比较，提到索引，可能大家都知道最左前缀原则，比如user表有联合索引 ‘A_B’ 当查询语句为下面这样时：  </p>
+<p><code>select name from user where B = 10</code>  </p>
+<p>这样写的话并不会命中索引是因为没有满足最左前缀原则，但如果我把语句改成：  </p>
+<p><code>select name from user where B = 10 and A = 15</code><br>如果这样写msyql会通过分析器来去寻找索引，发现你的where条件里有A = 15那么MySQL会先执行A = 15这样就会命中索引。  </p>
+<h3 id="5⃣️执行器："><a href="#5⃣️执行器：" class="headerlink" title="5⃣️执行器："></a>5⃣️执行器：</h3><p>终于通过重重关卡可以真正去执行语句了，执行的时候会先判断一下是否有这张表的权限（如果命中查询索引，那么会在返回结果是做权限验证），如果有权限就打开表继续执行，拿最开始语句举个例子：<br>(1)默认引擎是InnoDB，调用InnoDB引擎接口取user表的第一行，判断id是不是等于1，如果不是则跳过，如果是则将这行存在结果集中<br>(2)调用引擎接口“下一行”,重复(1)，直到user表的最后一行。<br>(3)执行器将上述遍历过程中所有满足条件的行组成记录集作为结果集返回给客户端。  </p>
+<p>至此这个语句就执行完成了。</p>
+<h3 id="1⃣️课后问题："><a href="#1⃣️课后问题：" class="headerlink" title="1⃣️课后问题："></a>1⃣️课后问题：</h3><p>比如执行 <code>select * form user where t = 10</code> 如果不存在t这一列，那么一定会报错，这个报错是在哪个阶段报出的？</p>
+<p>答：在分析器，MySQL其实很大程度上受了oracle的影响。</p>
+<h3 id="2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？"><a href="#2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？" class="headerlink" title="2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？"></a>2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？</h3><p>答：有些时候，SQL要操作的表不仅仅是字面上那些，比如有个触发器，得在执行器阶段(过程中)才能确定，优化器前是无能为力的。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>mysql查询语句执行</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-7</title>
     <url>/2020/03/22/go-big-or-go-home-7/</url>
     <content><![CDATA[<table>
@@ -2100,247 +2406,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-9</title>
-    <url>/2020/03/24/go-big-or-go-home-9/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>actual</td>
-<td>实际的</td>
-<td>The actual fact is that crocodiles walk underwater instead of swimming</td>
-</tr>
-<tr>
-<td>master</td>
-<td>主人</td>
-<td>The dog and its master are close to each other</td>
-</tr>
-<tr>
-<td>fridge</td>
-<td>电冰箱</td>
-<td>I opened the fridge to get some food</td>
-</tr>
-<tr>
-<td>bone</td>
-<td>骨头</td>
-<td>“I really want to eat some bones” the dog said</td>
-</tr>
-<tr>
-<td>represent</td>
-<td>代表</td>
-<td>This hand gesture represents love</td>
-</tr>
-<tr>
-<td>modest</td>
-<td>谦虚的</td>
-<td>These two businssmen may be rich,but they’re still very modest</td>
-</tr>
-<tr>
-<td>ox</td>
-<td>牛/公牛</td>
-<td>The strong ox is angry now</td>
-</tr>
-<tr>
-<td>nut</td>
-<td>坚果</td>
-<td>Nuts are a source of vitamin E for the body</td>
-</tr>
-<tr>
-<td>facial</td>
-<td>面部</td>
-<td>She looks surprized when her facial mask comes off her face</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-8</title>
-    <url>/2020/03/23/go-big-or-go-home-8/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>fit</td>
-<td>匹配</td>
-<td>They two are a perfect fit and I’m sure they are good friends</td>
-</tr>
-<tr>
-<td>insure</td>
-<td>为…投保</td>
-<td>He insures the car against traffic accidents</td>
-</tr>
-<tr>
-<td>ring sb. back</td>
-<td>回电话</td>
-<td>Oh,I missed a call from my mother.I’ll ring her back</td>
-</tr>
-<tr>
-<td>try sth. out</td>
-<td>试验</td>
-<td>I’m going to try out my new experiment on some mice</td>
-</tr>
-<tr>
-<td>come off</td>
-<td>从…掉下</td>
-<td>She looks surprised when her facial mask comes off her face</td>
-</tr>
-<tr>
-<td>postbox</td>
-<td>邮箱</td>
-<td>I take letters out from the postbox everyday</td>
-</tr>
-<tr>
-<td>over and over again</td>
-<td>重复多次</td>
-<td>He said no over and over again</td>
-</tr>
-<tr>
-<td>questionnaire</td>
-<td>调查问卷</td>
-<td>Please complete this questionnaire</td>
-</tr>
-<tr>
-<td>savage</td>
-<td>野蛮人</td>
-<td>Their wordy conversion made me feel like a total savage</td>
-</tr>
-<tr>
-<td>wallet</td>
-<td>口袋</td>
-<td>He takes out some money from his wallet</td>
-</tr>
-<tr>
-<td>platform</td>
-<td>平台</td>
-<td>Bigger platform</td>
-</tr>
-<tr>
-<td>says</td>
-<td>说的话</td>
-<td>The bird is repeating what the girl says</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode208</title>
-    <url>/2019/10/20/leetcode208/</url>
-    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
-<p>示例:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Trie trie = new Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(&quot;apple&quot;);</span><br><span class="line">trie.search(&quot;apple&quot;);   // 返回 true</span><br><span class="line">trie.search(&quot;app&quot;);     // 返回 false</span><br><span class="line">trie.startsWith(&quot;app&quot;); // 返回 true</span><br><span class="line">trie.insert(&quot;app&quot;);   </span><br><span class="line">trie.search(&quot;app&quot;);     // 返回 true</span><br></pre></td></tr></table></figure>
-
-<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TrieNode &#123;</span><br><span class="line"></span><br><span class="line">    public char val;</span><br><span class="line"></span><br><span class="line">    public TrieNode[] children = new TrieNode[26];</span><br><span class="line"></span><br><span class="line">    public boolean isWord;</span><br><span class="line"></span><br><span class="line">    public TrieNode() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public TrieNode(char c) &#123;</span><br><span class="line">        TrieNode node = new TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Trie &#123;</span><br><span class="line">    private TrieNode root;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Initialize your data structure here.</span><br><span class="line">     */</span><br><span class="line">    public Trie() &#123;</span><br><span class="line">        root = new TrieNode();</span><br><span class="line">        root.val = &apos; &apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Inserts a word into the trie.</span><br><span class="line">     */</span><br><span class="line">    public void insert(String word) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            char c = word.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null) &#123;</span><br><span class="line">                t.children[c - &apos;a&apos;] = new TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns if the word is in the trie.</span><br><span class="line">     */</span><br><span class="line">    public boolean search(String word) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            char c = word.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null) &#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        return t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns if there is any word in the trie that starts with the given prefix.</span><br><span class="line">     */</span><br><span class="line">    public boolean startsWith(String prefix) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            char c = prefix.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null)&#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = new Trie();</span><br><span class="line">        obj.insert(&quot;trie&quot;);</span><br><span class="line">        boolean param_2 = obj.search(&quot;trie&quot;);</span><br><span class="line">        boolean param_3 = obj.startsWith(&quot;trie&quot;);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>Trie树</tag>
-        <tag>leetcode208</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode338</title>
-    <url>/2019/10/20/leetcode338/</url>
-    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
-
-<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode338</tag>
-        <tag>二进制数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL一条sql查询语句是如何执行的?</title>
-    <url>/2019/10/20/mysql%E4%B8%80%E6%9D%A1sql%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/</url>
-    <content><![CDATA[<p>[2019-10-13，2019-10-20]周计划：</p>
-<p>1⃣️三道leetcode中等难度算法题<br>2⃣️MySQL实战45讲-基础篇1，2，3讲<br>3⃣️周六，日总结，写博客</p>
-<p>本周学习了极客时间的MySQL实战45讲一课，本篇做一个总结。<br>先看一个普通的查询语句  </p>
-<p><code>select * from user where id = 1</code>  </p>
-<p>这条语句的执行过程是什么样的呢？废话不多说先上图：<br><img src="../image/MySQL.png" alt="MySQL.png" title="MySQL"><br>大体来说MySQL可以分为server层和引擎层两部分，server层包括连接器，查询缓存，分析器，优化器，查询器等，覆盖MySQL的绝大多数核心服务功能，包括内置函数，存储过程，触发器，视图等都是在这一层实现的。<br>而引擎层则是负责数据的存储和提取，其架构模式是插件式的，比如InnoDB，MyISAM，Memory等多个存储引擎，现在最常用的是InnoDB，在MySQL5.5.5版本成为了默认引擎。接下来具体介绍一下每一个部分的作用：  </p>
-<h3 id="1⃣️连接器："><a href="#1⃣️连接器：" class="headerlink" title="1⃣️连接器："></a>1⃣️连接器：</h3><p>如果要使用MySQL首先要做的事与MySQL建立连接，输入账户密码MySQL会到连接器中对该账号进行权限的验证，以后的所有操作都基于此时的权限，及时在这段时间管理员对你的账号修改了权限也不会影响到本次连接的其他操作。同时这里涉及到了长链接与短链接，大家知道与数据库的连接是比较消耗资源的，所以要尽可能的在一次连接做尽量多的事，不让资源浪费，这就是长链接，客户端如果太长时间没有操作，连接器会自动将它断开，这是wait_timeout控制的，默认是8个小时，当然可以根据自己的业务场景进行修改，综上所述更推荐使用长链接。  </p>
-<h3 id="2⃣️查询缓存："><a href="#2⃣️查询缓存：" class="headerlink" title="2⃣️查询缓存："></a>2⃣️查询缓存：</h3><p>通过了连接器就可以到下一步，也就是查询缓存了，大多数情况下并不推荐使用查询缓存，为什么呢？<br>我们先来了解下查询缓存的工作原理，其实MySQL会把执行过的查询语句以key-value的形式储存起来，key是查询语句，value是结果，如果在查询缓存中可以找到匹配的key那么直接返回value，但有人说这不是很方便吗提高了查询速度，为什么不推荐使用呢？因为不仅仅存储这些语句和结果需要占用空间，还有个最关键的原因是当有任何对某张表的更新那么基于这张表的所有查询缓存全部清空，除非你是有一张静态表，很长时间不更新那么可以使用查询缓存。<br>使用方式？只需要设置参数query_cache_type（0—&gt;关闭，1—&gt;开始，2—&gt;只有在执行查询语句时，显示指定开始如下例子）</p>
-<p><code>select SQL_CACHE * form user where id = 1</code>  </p>
-<h3 id="3⃣️分析器："><a href="#3⃣️分析器：" class="headerlink" title="3⃣️分析器："></a>3⃣️分析器：</h3><p>如果没有命中查询缓存就要真正开始执行语句了，首先MySQL要知道你执行的是什么操作，分析器会先做词法分析，你输入的是一串字符串，MySQL会识别出关键词比如select，那么MySQL会知道这是一条查询语句，在把user识别为表名，当然也会有写错的时候，那么语法错误就是在这一层做的。</p>
-<h3 id="4⃣️优化器："><a href="#4⃣️优化器：" class="headerlink" title="4⃣️优化器："></a>4⃣️优化器：</h3><p>通过了分析器证明sql语句写的没有问题，那么MySQL会根据你写的语句在内部做一个优化，是在有多个索引的时候进行比较，提到索引，可能大家都知道最左前缀原则，比如user表有联合索引 ‘A_B’ 当查询语句为下面这样时：  </p>
-<p><code>select name from user where B = 10</code>  </p>
-<p>这样写的话并不会命中索引是因为没有满足最左前缀原则，但如果我把语句改成：  </p>
-<p><code>select name from user where B = 10 and A = 15</code><br>如果这样写msyql会通过分析器来去寻找索引，发现你的where条件里有A = 15那么MySQL会先执行A = 15这样就会命中索引。  </p>
-<h3 id="5⃣️执行器："><a href="#5⃣️执行器：" class="headerlink" title="5⃣️执行器："></a>5⃣️执行器：</h3><p>终于通过重重关卡可以真正去执行语句了，执行的时候会先判断一下是否有这张表的权限（如果命中查询索引，那么会在返回结果是做权限验证），如果有权限就打开表继续执行，拿最开始语句举个例子：<br>(1)默认引擎是InnoDB，调用InnoDB引擎接口取user表的第一行，判断id是不是等于1，如果不是则跳过，如果是则将这行存在结果集中<br>(2)调用引擎接口“下一行”,重复(1)，直到user表的最后一行。<br>(3)执行器将上述遍历过程中所有满足条件的行组成记录集作为结果集返回给客户端。  </p>
-<p>至此这个语句就执行完成了。</p>
-<h3 id="1⃣️课后问题："><a href="#1⃣️课后问题：" class="headerlink" title="1⃣️课后问题："></a>1⃣️课后问题：</h3><p>比如执行 <code>select * form user where t = 10</code> 如果不存在t这一列，那么一定会报错，这个报错是在哪个阶段报出的？</p>
-<p>答：在分析器，MySQL其实很大程度上受了oracle的影响。</p>
-<h3 id="2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？"><a href="#2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？" class="headerlink" title="2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？"></a>2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？</h3><p>答：有些时候，SQL要操作的表不仅仅是字面上那些，比如有个触发器，得在执行器阶段(过程中)才能确定，优化器前是无能为力的。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>mysql查询语句执行</tag>
-        <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode79</title>
-    <url>/2019/10/20/leetcode79/</url>
-    <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
-<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
-<p>示例:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],</span><br><span class="line">  [&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],</span><br><span class="line">  [&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = &quot;ABCCED&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;SEE&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;ABCB&quot;, 返回 false.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line"></span><br><span class="line">    static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">    static int[] column = &#123;1,0,-1,0&#125;;</span><br><span class="line"></span><br><span class="line">    public  boolean exist(char[][] board, String word) &#123;</span><br><span class="line"></span><br><span class="line">        for (int i =0,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            for (int j=0,columnLen = board[0].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                if (dfs(board,word,i,j,0)) return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean dfs(char[][] board,String word,int x,int y,int index)&#123;</span><br><span class="line">        if (x&lt;0 || x&gt;=board.length || y&lt;0 || y&gt;=board[0].length) return false;</span><br><span class="line"></span><br><span class="line">        if(board[x][y] != word.charAt(index)) return false;</span><br><span class="line"></span><br><span class="line">        if(index == word.length() - 1) return true;</span><br><span class="line"></span><br><span class="line">        board[x][y] = &apos;#&apos;;</span><br><span class="line"></span><br><span class="line">        for (int i = 0 ; i&lt;4;i++)&#123;</span><br><span class="line">            if (dfs(board,word,x+row[i],y+column[i],index+1)) return true;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        char[][] borad = &#123;&#123;&apos;F&apos;,&apos;Y&apos;,&apos;C&apos;,&apos;E&apos;,&apos;N&apos;,&apos;R&apos;,&apos;D&apos;&#125;,&#123;&apos;K&apos;,&apos;L&apos;,&apos;N&apos;,&apos;F&apos;,&apos;I&apos;,&apos;N&apos;,&apos;U&apos;&#125;,&#123;&apos;A&apos;,&apos;A&apos;,&apos;A&apos;,&apos;R&apos;,&apos;A&apos;,&apos;H&apos;,&apos;R&apos;&#125;,&#123;&apos;N&apos;,&apos;D&apos;,&apos;K&apos;,&apos;L&apos;,&apos;P&apos;,&apos;N&apos;,&apos;E&apos;&#125;,&#123;&apos;A&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;S&apos;,&apos;A&apos;,&apos;P&apos;&#125;,&#123;&apos;O&apos;,&apos;O&apos;,&apos;G&apos;,&apos;O&apos;,&apos;T&apos;,&apos;P&apos;,&apos;N&apos;&#125;,&#123;&apos;H&apos;,&apos;P&apos;,&apos;O&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;O&apos;&#125;&#125;;</span><br><span class="line">        String word= &quot;poland&quot;;</span><br><span class="line">        System.out.println(new Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里主要说明一下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board[x][y] = &apos;#&apos;;</span><br></pre></td></tr></table></figure>
-
-<p>是将已经查找过的做一个标记，以及</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">static int[] column = &#123;1,0,-1,0&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>二维网格</tag>
-        <tag>leetcode79</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>不得不说的Java‘锁’事</title>
     <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
     <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
@@ -2397,32 +2462,6 @@
       </tags>
   </entry>
   <entry>
-    <title>volatile关键字</title>
-    <url>/2020/03/11/volatile%E5%85%B3%E9%94%AE%E5%AD%97/</url>
-    <content><![CDATA[<h3 id="本文还是以面试提问的方式来说一下volatile"><a href="#本文还是以面试提问的方式来说一下volatile" class="headerlink" title="本文还是以面试提问的方式来说一下volatile"></a>本文还是以面试提问的方式来说一下volatile</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.Java并发这块了解的怎么样？说说对volatile的理解？</span><br><span class="line">答:</span><br><span class="line">  (1).保证了不同线程对该变量操作的内存可见性</span><br><span class="line">  (2).禁止指令重排</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2.能不能详细说说什么是内存可见性，什么又是重排序呢？</span><br><span class="line">答：</span><br><span class="line">  这里先从Java内存模型说起。</span><br><span class="line">  Java虚拟机规范一种Java内存模型(JMM) 用来屏蔽各种硬件和操作系统的内存访问差异，让Java程序在各种平台上都能达到一致的内存访问效果。</span><br><span class="line">  JMM规定所有变量都是存在主存中的，每个线程又包含自己的工作内存，方便理解就可以看成CPU上的寄存器或者高速缓存，所以线程的操作都是以工作内存为主，它们只能访问自己的工作内存，且前后都要把值同步回主内存。</span><br><span class="line">  在线程执行时，首先会从主存中读变量值，在下载到工作内存的副本中，然后在传给处理器执行，执行完毕后再给工作内存中的副本赋值，随后工作内存再把值传回给主存，主存中的值才更新。</span><br><span class="line">  这就引出了一个问题，比如执行 i = i + 1或i++</span><br><span class="line">  假设初始i值为0，当只有一个线程执行它时，结果肯定得到1，当两个线程执行时，会得到结果2吗？可能会出现这种情况：</span><br><span class="line">  </span><br><span class="line">线程1： load i from 主存    // i = 0</span><br><span class="line">        i + 1  // i = 1</span><br><span class="line">线程2： load i from主存  // 因为线程1还没将i的值写回主存，所以i还是0</span><br><span class="line">        i +  1 //i = 1</span><br><span class="line">线程1:  save i to 主存</span><br><span class="line">线程2： save i to 主存</span><br><span class="line">  如果两个线程按照上面的执行流程，那么最后i的值会是1，如果最后的写回生效的慢，在读取i的值，都有可能是0，这就是缓存不一致问题。</span><br><span class="line">分析</span><br><span class="line">结合内存屏障这个概念对volatile的读写操作深入理解的话：</span><br><span class="line"></span><br><span class="line">第一步：读</span><br><span class="line">在第一步操作的指令后，会增加两个内存屏障：</span><br><span class="line"></span><br><span class="line">在Volatile读操作后插入LoadLoad屏障，防止前面的Volatile读与后面的普通读重排序</span><br><span class="line">在Volatile读操作后插入LoadStore屏障，防止前面的Volatile读与后面的普通写重排序</span><br><span class="line">因此第一个指令和它后续的普通读写操作会被保证没有重排序来捣乱。通常是去内存中去读。</span><br><span class="line"></span><br><span class="line">那么问题又来了，为什么通常去内存中读？</span><br><span class="line"></span><br><span class="line">其实这个问题要说细的话可以很细，大概就两个关键点吧：</span><br><span class="line"></span><br><span class="line">volatile的写操作的缓存失效机制</span><br><span class="line">最后一个对volatile变量执行写操作的CPU，由于在它对应的缓存中保有最新的值，因此可以不用再去主存里面获取</span><br><span class="line">具体看下面第三步的分析。</span><br><span class="line"></span><br><span class="line">第二步：自增</span><br><span class="line">这个步骤没什么特别的，就是在CPU自身的高速缓存(寄存器，L1-L3 Cache)中完成。不涉及到缓存和内存的交互。</span><br><span class="line"></span><br><span class="line">第三步：写</span><br><span class="line">volatile写算是一个重点。</span><br><span class="line"></span><br><span class="line">根据JMM对于volatile变量类型的语义规范：volatile在编译之后，会在变量写操作时添加LOCK前缀指令。这个LOCK前缀指令在多核处理器的环境中，有这样的作用：</span><br><span class="line"></span><br><span class="line">通知CPU将当前处理器缓存行的数据写回到系统主存中</span><br><span class="line">该写回操作将使其他CPU缓存了该内存地址的数据无效</span><br><span class="line">另外，内存屏障在volatile的写操作中起到了很大的作用，来保证上面两点能够实现：</span><br><span class="line"></span><br><span class="line">在Volatile写操作前插入StoreStore屏障，防止前面其他写与本次Volatile写重排序</span><br><span class="line">在Volatile写操作后插入StoreLoad屏障，防止本次的Volatile写与后面的读操作重排序</span><br><span class="line"></span><br><span class="line">JMM主要就是围绕着如何在并发过程中如何处理原子性，可见性和有序性这三个特征来建立的，通过解决着三个问题，可以接触缓存不一致的问题，而volatile跟可见性和有序性都有关。</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3.那你具体说说这三个特性呢？</span><br><span class="line">  (1).原子性：Java中，对基本数据类型的读取和赋值操作是原子性操作，也就是这些操作是不可中断的，要做一定做完。JMM只实现了基本的原子性，像上面i++那样的操作，必须借助synchronized和Lock来保证整块代码的原子性了，线程在锁释放之前，必然会把i的值刷回到主存的。</span><br><span class="line">  (2).可见性：可见性Java就是利用volatile来提供可见性的，当一个变量被volatile修饰时，那么对它的修改会立刻刷新到主存，当其他线程需要读取该变量时，会去内存中读取新值。而普通变量则不能保证这一点。</span><br><span class="line">  其实通过synchronized和Lock也能够保证可见性，线程在释放锁之前，会把共享变量值都刷回主存，但是synchronized和Lock的开销都更大。</span><br><span class="line">  (3).有序性：JMM是允许编译器和处理器对指令重排序的，但是规定了as-if-serial语义，即不管怎么重排序，程序的执行结果不能改变。比如下面的程序段：</span><br><span class="line">double pi = 3.14;    //A</span><br><span class="line">double r = 1;        //B</span><br><span class="line">double s= pi * r * r;//C</span><br><span class="line">上面的语句，可以按照A-&gt;B-&gt;C执行，结果为3.14,但是也可以按照B-&gt;A-&gt;C的顺序执行，因为A、B是两句独立的语句，而C则依赖于A、B，所以A、B可以重排序，但是C却不能排到A、B的前面。JMM保证了重排序不会影响到单线程的执行，但是在多线程中却容易出问题。</span><br><span class="line">比如这样的代码:</span><br><span class="line">int a = 0;</span><br><span class="line">bool flag = false;</span><br><span class="line"></span><br><span class="line">public void write() &#123;</span><br><span class="line">    a = 2;              //1</span><br><span class="line">    flag = true;        //2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void multiply() &#123;</span><br><span class="line">    if (flag) &#123;         //3</span><br><span class="line">        int ret = a * a;//4</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">write方法里的1和2做了重排序，线程1先对flag赋值为true，随后执行到线程2，ret直接计算出结果，再到线程1，这时候a才赋值为2,很明显迟了一步。</span><br><span class="line">这时候可以为flag加上volatile关键字，禁止重排序，可以确保程序的“有序性”，也可以上重量级的synchronized和Lock来保证有序性,它们能保证那一块区域里的代码都是一次性执行完毕的。</span><br><span class="line">ps：这里提一句：volatile的禁止指令重排是在jdk1.6之后才做了修复，这也是jdk1.6之前用双重锁校验的synchronized单例模式会有线程不安全的问题原因。</span><br><span class="line">另外，JMM具备一些先天的有序性,即不需要通过任何手段就可以保证的有序性，通常称为happens-before原则。具体如下：</span><br><span class="line">1.程序顺序规则： 一个线程中的每个操作，happens-before于该线程中的任意后续操作</span><br><span class="line">2.监视器锁规则：对一个线程的解锁，happens-before于随后对这个线程的加锁</span><br><span class="line">3.volatile变量规则： 对一个volatile域的写，happens-before于后续对这个volatile域的读</span><br><span class="line">4.传递性：如果A happens-before B ,且 B happens-before C, 那么 A happens-before C</span><br><span class="line">5.start()规则： 如果线程A执行操作ThreadB_start()(启动线程B) ,  那么A线程的ThreadB_start()happens-before 于B中的任意操作</span><br><span class="line">6.join()原则： 如果A执行ThreadB.join()并且成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。</span><br><span class="line">7.interrupt()原则： 对线程interrupt()方法的调用先行发生于被中断线程代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测是否有中断发生</span><br><span class="line">8.finalize()原则：一个对象的初始化完成先行发生于它的finalize()方法的开始</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4.volatile关键字如何满足并发编程的三大特性的？</span><br><span class="line">当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存</span><br><span class="line">当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效，线程接下来将从主存中读取共享变量。</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">5.volatile可以保证可见性和有序性，但是能保证原子性吗？</span><br><span class="line">  首先我回答是不能保证原子性，要是说能保证，也只是对单个volatile变量的读/写具有原子性，但是对于类似volatile++这样的复合操作就无能为力了，比如下面的例子：</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public volatile int inc = 0;</span><br><span class="line"> </span><br><span class="line">    public void increase() &#123;</span><br><span class="line">        inc++;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        final Test test = new Test();</span><br><span class="line">        for(int i=0;i&lt;10;i++)&#123;</span><br><span class="line">            new Thread()&#123;</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    for(int j=0;j&lt;1000;j++)</span><br><span class="line">                        test.increase();</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;.start();</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        while(Thread.activeCount()&gt;1)  //保证前面的线程都执行完</span><br><span class="line">            Thread.yield();</span><br><span class="line">        System.out.println(test.inc);</span><br><span class="line">    &#125;</span><br><span class="line">按道理来说结果是10000，但是运行下很可能是个小于10000的值。有人可能会说volatile不是保证了可见性啊，一个线程对inc的修改，另外一个线程应该立刻看到啊！可是这里的操作inc++是个复合操作啊，包括读取inc的值，对其自增，然后再写回主存。</span><br><span class="line">假设线程A，读取了inc的值为10，这时候被阻塞了，因为没有对变量进行修改，触发不了volatile规则。</span><br><span class="line">线程B此时也读读inc的值，主存里inc的值依旧为10，做自增，然后立刻就被写回主存了，为11。</span><br><span class="line">此时又轮到线程A执行，由于工作内存里保存的是10，所以继续做自增，再写回主存，11又被写了一遍。所以虽然两个线程执行了两次increase()，结果却只加了一次。</span><br><span class="line">有人说，volatile不是会使缓存行无效的吗？但是这里线程A读取到线程B也进行操作之前，并没有修改inc值，所以线程B读取的时候，还是读的10。</span><br><span class="line">又有人说，线程B将11写回主存，不会把线程A的缓存行设为无效吗？但是线程A的读取操作已经做过了啊，只有在做读取操作时，发现自己缓存行无效，才会去读主存的值，所以这里线程A只能继续做自增了。</span><br><span class="line">综上所述，在这种复合操作的情景下，原子性的功能是维持不了了。但是volatile在上面那种设置flag值的例子里，由于对flag的读/写操作都是单步的，所以还是能保证原子性的。</span><br><span class="line">要想保证原子性，只能借助于synchronized,Lock以及并发包下的atomic的原子操作类了，即对基本数据类型的 自增（加1操作），自减（减1操作）、以及加法操作（加一个数），减法操作（减一个数）进行了封装，保证这些操作是原子性操作。</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6.那你知道volatile的底层实现机制吗？</span><br><span class="line">如果把加入volatile关键字的代码和未加入volatile关键字的代码都生成汇编代码，会发现加入volatile关键字的代码会多出一个lock前缀指令。</span><br><span class="line">lock前缀指令实际相当于一个内存屏障，内存屏障提供了以下功能：</span><br><span class="line"></span><br><span class="line">1 . 重排序时不能把后面的指令重排序到内存屏障之前的位置</span><br><span class="line">2 . 使得本CPU的Cache写入内存</span><br><span class="line">3 . 写入动作也会引起别的CPU或者别的内核无效化其Cache，相当于让新写入的值对别的线程可见。</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">7.你在哪里会使用到volatile，举几个例子？</span><br><span class="line">  (1).状态量标记，true/false</span><br><span class="line">  (2).单例模式双重检查锁</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>高并发</tag>
-        <tag>volatile</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>事务隔离：为什么你改了我看不见？</title>
     <url>/2019/10/20/%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E6%94%B9%E4%BA%86%E6%88%91%E7%9C%8B%E4%B8%8D%E8%A7%81%EF%BC%9F/</url>
     <content><![CDATA[<p>这篇讲的是事务隔离，个人了解的还不够多，所以就把最基础的写上，后面的等搞懂了再重新更新下。<br>提到事务，你肯定不陌生，和数据库打交道的时候，我们总是会用到事务。最经典的例子就是转账，你要给朋友小王转 100 块钱，而此时你的银行卡只有 100 块钱。<br>转账过程具体到程序里会有一系列的操作，比如查询余额、做加减法、更新余额等，这些操作必须保证是一体的，不然等程序查完之后，还没做减法之前，你这 100 块钱，完全可以借着这个时间差再查一次，然后再给另外一个朋友转账，如果银行这么整，不就乱了么？这时就要用到“事务”这个概念了。<br>简单来说，事务就是要保证一组数据库操作，要么全部成功，要么全部失败。在 MySQL 中，事务支持是在引擎层实现的。你现在知道，MySQL 是一个支持多引擎的系统，但并不是所有的引擎都支持事务。比如 MySQL 原生的 MyISAM 引擎就不支持事务，这也是 MyISAM 被 InnoDB 取代的重要原因之一。  </p>
@@ -2451,31 +2490,6 @@
       <tags>
         <tag>数据库</tag>
         <tag>事务</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>日志系统：一条SQL更新语句是如何执行的？</title>
-    <url>/2019/10/20/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%EF%BC%9A%E4%B8%80%E6%9D%A1SQL%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%9F/</url>
-    <content><![CDATA[<h3 id="MySQL实战45讲-第二讲"><a href="#MySQL实战45讲-第二讲" class="headerlink" title="MySQL实战45讲-第二讲"></a>MySQL实战45讲-第二讲</h3><p>上一节讲了一条查询语句是如何执行的，这节讲述的是一条更新语句的执行过程。<br>常听DBA的同事说，MySQL可以恢复到半个月内任意一秒的状态，那么是如何做到的呢？<br>还是以一条SQL语句开始<br><code>create table user(ID int primary key,c int)</code><br>如果要将ID = 2这一行的值加1，SQL语句会这么写：<br><code>update user set c = c + 1 where ID = 2</code><br>之前说的查询的链路，在执行更新语句的时候也会走一遍，因为对某张表的更新，需要先找到这张表。<br>与查询流程不一样的是，更新流程还涉及两个重要的日志模块redolog(重做日志)和binlog(归档日志)。接下来详细讨论下。 </p>
-<h3 id="重要的日志模块：redo-log"><a href="#重要的日志模块：redo-log" class="headerlink" title="重要的日志模块：redo log"></a>重要的日志模块：redo log</h3><p>老师举了一个例子，是拿《孔乙己》里酒店掌柜有一个粉板，专门用来记录客人的赊帐记录。如果赊帐的人不多，那么他可以先讲顾客和账单记录在粉板上；但如果赊帐的人多了，就一定有一个专门记录赊帐的账本。<br>如果有人要赊帐或者还帐的话，掌柜有两种做法：<br>1⃣️：先讲顾客和账单记录在粉板上，等不忙的时候在去账本上更新一下。<br>2⃣️：有人来就拿出账本去找到顾客的记录来更新。<br>当店里生意红火的时候很明显的看出来是第一种方式更加的高效。<br>同样的MySQL里更新数据库的时候也会有同样的问题，如果每次更新操作都写入磁盘里，然后磁盘也要找到对应的那条记录，然后在更细，整个过程的IO成本，查询成本都很高，为了解决这个问题，MySQL的设计者，就用了类似酒店掌柜的粉板思路来提升更新效率。<br>而粉板和账本配合的过程中，就是MySQL说的WAL技术，WAL的全称是Write-Ahead Logging,简单解释就是先写日志，在写磁盘，也就是先写粉板，等不忙的时候在写磁盘。<br>具体来说，当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log(粉板)里，并更新内存，这个时候就算更新完成了，同时InnoDB引擎会在适当时候，讲这个操作更新到磁盘里，而这个更新往往是在系统比较空闲的时候做。<br>但如果某一天赊帐的人突然很多，粉板记录不下怎么办？这个时候掌柜只好停下手中的活儿，把粉板中的一部分赊帐记录更新到账本中，然后将这些记录从粉板上擦掉，为新账腾出空间。<br>与此类似，InnoDB的redo log大小是固定的，比如可以配置一组4个文件，每个文件的大小是1GB，所以这块粉板就可以存储4GB的操作，从头开始写，写到末尾就又从头开始写，如下面这个图一样  </p>
-<p><img src="../image/redolog.png" alt="redolog.png" title="redolog">  </p>
-<p>write pos是当前记录的位置，一边写一边后移，写到第3号文件末尾后就回到0号文件开头。checkpoint是当前要擦出的位置，也是往后推移并且循环的，擦出记录前要把记录更新到数据文件，<br>write pos和checkpoint之间的“粉板”上还空着的部分，可以用来记录新的操作，如果write pos追上checkpoint，表示“粉板”满了，这时候不能在执行新的更新，得停下来先擦掉一些记录，把checkpoint推进一下。<br>有了redo log，InnoDB就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为crash-safe。 </p>
-<h3 id="什么是crash-safe？"><a href="#什么是crash-safe？" class="headerlink" title="什么是crash-safe？"></a>什么是crash-safe？</h3><p>crash-safe是MySQL5.6版本的新特性，要理解crash-safe这个概念，可以想想我们前面赊帐记录的例子。只要赊帐记录记在了粉板或者写在了账本上，之后即便掌柜忘记了，比如突然停业几天，恢复生意后依然可以通过账本和粉板上的数据明确赊帐账目。  </p>
-<h3 id="crash-unsafe"><a href="#crash-unsafe" class="headerlink" title="crash-unsafe?"></a>crash-unsafe?</h3><p>在了解crash-safe前，先分析一下在MySQL5.6版本之前出现slave(从) crash-unsafe的原因。我们知道在一套主从结构体系中，slave包含两个线程：即IO thread和SQL thread。两个线程的执行进度（偏移量）都保存在文件中。<br><code>IO thread负责从master拉取binlog文件（下面会讲到）并保存到本地的relay-log文件中</code><br><code>SQL thread负责执行重复sql，执行relay-log记录的日志</code><br>IO thread的执行状态信息保存在master.info文件，SQL thread的执行状态信息保存在relay-log.info文件。salve运行正常的情况下，记录位点没有问题，但是每当系统发生crash，存储的偏移量可能是不准确的（需要注意的是这些文件被修改后不是同步写入磁盘的）。因为应用binlog和更新位点信息到文件不是原子操作，而是两个独立的步骤。比如SQL thread已经应用relay-log.01的4个事务<br><code>trx1(pos:10)</code><br><code>trx2(pos:20)</code><br><code>trx3(pos:30)</code><br><code>trx4(pos:40)</code><br>但是SQL thread更新位点（relay-log.01,30）到relay-log.info文件中，slave实例重启的时候sql thread会重复执行trx4。<br>看到这里我们大概了解了，发生crash-unsafe的主要原因是应用binlog和更新位点不是原子操作，所以MySQL的解决办法是将两个操作融合成一个事务，这样就保证了原子性。  </p>
-<h3 id="重要的日志模块：binlog"><a href="#重要的日志模块：binlog" class="headerlink" title="重要的日志模块：binlog"></a>重要的日志模块：binlog</h3><p>前面说过，MySQL整体来看，其实就有两大部分，一部分是server层，它主要做的是MySQL功能层面的事情，还有一块是引擎层，负责存储相关的具体事宜，上面我们聊到的粉板redo log是InnoDB引擎层特有日志，而Server层也有自己的日志，称为binlog（归档日志).<br>为什么会有两份日志呢？<br>因为最开始MySQL中并没有InnoDB引擎，MySQL自带的是MyISAM，但是MyISAM没有crash-safe的能力，binlog日志只能用于归档，而InnoDB是另一个公司以插件形式引入MySQL中的，既然只靠binlog是没有crash-safe能力的，所以InnoDB使用另外一套日志系统-也就是redo log来实现crash-safe能力。<br>这两种日志有以下三点不同。<br>1.redo log是InnoDB引擎特有的，binlog是MySQL的Server层实现的，所有引擎层都可以使用。<br>2.redo log是物理日志，记录的是“在某个数据页上做了什么修改”；binlog是逻辑日志，记录的是这个语句的原始逻辑，比如”给ID = 2这一行的c字段加1“<br>3.redo log是循环写的，空间固定会用完；binlog是可以追加写入的。”追加写“是指binlog文件写到一定大小后会切换到下一个，并不户覆盖以前的日志。<br>有了对这两个日志的概念性的理解，我们再来看执行器InnoDB引擎在执行这个简单的update语句时的内部流程。<br>(1).执行器先找引擎取ID = 2这一行，ID是主键，引擎直接用树搜索找到这一行，如果ID = 2这一行所在的数据页本来就在内存中，就直接返回给执行器，否则，需要先从磁盘读入内存，然后在返回。<br>(2).执行器拿到引擎给的行数据，把这个值加上1，比如原来是N，现在就是N+1，得到新的一行数据，在调用引擎接口写入这行新数据。<br>(3).引擎将这行新数据更新到内存中，同时将这个更新操作记录到redo log里，此时redo log处于prepare状态，然后告知执行器执行完成了，随时可以提交事务。<br>(4).执行器生成这个操作的binlog，并把binlog写入磁盘。<br>(5).执行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成。<br>下面给出的是课程中给出的流程图，浅色框表示实在InnoDB内部执行的，深色框表示是在执行器中执行的。   </p>
-<p><img src="../image/update%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png" alt="update执行流程.png" title="update执行流程">  </p>
-<p>后面三步为什么把redo log拆成两个步骤：prepare和commit，这就是“两阶段提交“  </p>
-<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>还记不记得开头的那个问题：怎样让数据库恢复到半个月内任意一秒的状态？<br>前面我们说过，binlog会记录所有的逻辑操作，并且是采用“追加写”的形式。如果你的DBA承诺说半个月内可以恢复，那么备份系统中一定会保存最近半个月内的所有binlog，同时系统会定期做整库备份。这里的“定期”取决于系统的重要性，可以是一天一备，也可以是一周一备。<br>当需要恢复到指定的某一秒时，比如某天下午两点发现中午十二点有一次误删表，需要找回数据，那你可以这么做：<br>首先，找到最近的一次全量备份，如果你运气好，可能就是昨天晚上的一个备份，从这个备份恢复到临时库；<br>然后，从备份的时间点开始，将备份的binlog依次取出来，重放到中午误删表之前的那个时刻。<br>这样你的临时库就喝误删之前的线上库一样了，然后你可以把表数据从临时库取出来，按需恢复到线上库去。说完了这个问题，再回过头来说为什么一定要有”两阶段提交“ ，为什么必须有”两阶段提交“呢？这是为了让两份日志之间的逻辑一致，如果不用两阶段提交看看会发生什么？<br>不使用两阶段提交无非两种情况：<br>1.先写redo log后写binlog。假设在redo写完，binlog还没有写完的时候，MySQL进程异常重启，由于前面说过，redo log写完之后，系统及时崩溃，仍然能够把数据恢复回来，所以恢复这一行c的值是1。<br>但是由于binlog没写完就crash了，这时候binlog里面就没有记录这个语句，因此，之后备份日志的时候，存起来的binlog里面就没有这条语句。然后你会发现，如果需要用这个binlog来恢复临时库的话，由于语句的binlog丢失，这个临时库就会少了一次更新，恢复出来的这一行c的值就是0，与原库的值不同。<br>2.先写binlog后写redo log。如果在binlog写完之后异常重启，由于redo log还没写，崩溃恢复以后这个事务无效，所以这一行c的值是0，但是binlog里面记录了“把c从0改成1”这个日志，所以，在之后用binlog恢复临时库的时候就多了一个事务出来，恢复出来的这一行c的值就是1，与原库的值不同。<br>可以看到如果不使用“两阶段提交”，那么数据库的状态就有可能和用它的日志恢复出来的库状态不一致。<br>可能会有疑问，这个概率是不是很低，平时也没有什么动不动就需要恢复临时库的场景呀？<br>其实不是，不只是误操作后需要用这个过程来恢复数据，当你需要扩容的时候，也就是需要再多搭建一些备库来增加系统的读能力的时候，现在常见的做法也是用全量备份加上应用binlog来实现的，这个“不一致”就会导致你的线上出现主从数据库不一致的情况。<br>简单说，redo log和binlog都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致。  </p>
-<p>其实redo log记录的就是数据，而binlog有两种模式，statement格式的话是记sql语句，row格式会记录行的内容，记两条，更新前和更新后都有。  </p>
-<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>一天一备和一周一备的对比？<br>好处是“最长恢复时间”更短。<br>在一天一备的模式里，最坏情况下需要应用一天的binlog，比如，每天0点做一次全量备份，而要恢复出一个到昨天晚上23点的备份。<br>一周一备的最坏情况就要应用一周的binlog了。系统对应指标就是RTO了。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>bin log</tag>
-        <tag>redo log</tag>
       </tags>
   </entry>
   <entry>
@@ -2582,6 +2596,57 @@
       <tags>
         <tag>数据库</tag>
         <tag>MVCC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>volatile关键字</title>
+    <url>/2020/03/11/volatile%E5%85%B3%E9%94%AE%E5%AD%97/</url>
+    <content><![CDATA[<h3 id="本文还是以面试提问的方式来说一下volatile"><a href="#本文还是以面试提问的方式来说一下volatile" class="headerlink" title="本文还是以面试提问的方式来说一下volatile"></a>本文还是以面试提问的方式来说一下volatile</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.Java并发这块了解的怎么样？说说对volatile的理解？</span><br><span class="line">答:</span><br><span class="line">  (1).保证了不同线程对该变量操作的内存可见性</span><br><span class="line">  (2).禁止指令重排</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2.能不能详细说说什么是内存可见性，什么又是重排序呢？</span><br><span class="line">答：</span><br><span class="line">  这里先从Java内存模型说起。</span><br><span class="line">  Java虚拟机规范一种Java内存模型(JMM) 用来屏蔽各种硬件和操作系统的内存访问差异，让Java程序在各种平台上都能达到一致的内存访问效果。</span><br><span class="line">  JMM规定所有变量都是存在主存中的，每个线程又包含自己的工作内存，方便理解就可以看成CPU上的寄存器或者高速缓存，所以线程的操作都是以工作内存为主，它们只能访问自己的工作内存，且前后都要把值同步回主内存。</span><br><span class="line">  在线程执行时，首先会从主存中读变量值，在下载到工作内存的副本中，然后在传给处理器执行，执行完毕后再给工作内存中的副本赋值，随后工作内存再把值传回给主存，主存中的值才更新。</span><br><span class="line">  这就引出了一个问题，比如执行 i = i + 1或i++</span><br><span class="line">  假设初始i值为0，当只有一个线程执行它时，结果肯定得到1，当两个线程执行时，会得到结果2吗？可能会出现这种情况：</span><br><span class="line">  </span><br><span class="line">线程1： load i from 主存    // i = 0</span><br><span class="line">        i + 1  // i = 1</span><br><span class="line">线程2： load i from主存  // 因为线程1还没将i的值写回主存，所以i还是0</span><br><span class="line">        i +  1 //i = 1</span><br><span class="line">线程1:  save i to 主存</span><br><span class="line">线程2： save i to 主存</span><br><span class="line">  如果两个线程按照上面的执行流程，那么最后i的值会是1，如果最后的写回生效的慢，在读取i的值，都有可能是0，这就是缓存不一致问题。</span><br><span class="line">分析</span><br><span class="line">结合内存屏障这个概念对volatile的读写操作深入理解的话：</span><br><span class="line"></span><br><span class="line">第一步：读</span><br><span class="line">在第一步操作的指令后，会增加两个内存屏障：</span><br><span class="line"></span><br><span class="line">在Volatile读操作后插入LoadLoad屏障，防止前面的Volatile读与后面的普通读重排序</span><br><span class="line">在Volatile读操作后插入LoadStore屏障，防止前面的Volatile读与后面的普通写重排序</span><br><span class="line">因此第一个指令和它后续的普通读写操作会被保证没有重排序来捣乱。通常是去内存中去读。</span><br><span class="line"></span><br><span class="line">那么问题又来了，为什么通常去内存中读？</span><br><span class="line"></span><br><span class="line">其实这个问题要说细的话可以很细，大概就两个关键点吧：</span><br><span class="line"></span><br><span class="line">volatile的写操作的缓存失效机制</span><br><span class="line">最后一个对volatile变量执行写操作的CPU，由于在它对应的缓存中保有最新的值，因此可以不用再去主存里面获取</span><br><span class="line">具体看下面第三步的分析。</span><br><span class="line"></span><br><span class="line">第二步：自增</span><br><span class="line">这个步骤没什么特别的，就是在CPU自身的高速缓存(寄存器，L1-L3 Cache)中完成。不涉及到缓存和内存的交互。</span><br><span class="line"></span><br><span class="line">第三步：写</span><br><span class="line">volatile写算是一个重点。</span><br><span class="line"></span><br><span class="line">根据JMM对于volatile变量类型的语义规范：volatile在编译之后，会在变量写操作时添加LOCK前缀指令。这个LOCK前缀指令在多核处理器的环境中，有这样的作用：</span><br><span class="line"></span><br><span class="line">通知CPU将当前处理器缓存行的数据写回到系统主存中</span><br><span class="line">该写回操作将使其他CPU缓存了该内存地址的数据无效</span><br><span class="line">另外，内存屏障在volatile的写操作中起到了很大的作用，来保证上面两点能够实现：</span><br><span class="line"></span><br><span class="line">在Volatile写操作前插入StoreStore屏障，防止前面其他写与本次Volatile写重排序</span><br><span class="line">在Volatile写操作后插入StoreLoad屏障，防止本次的Volatile写与后面的读操作重排序</span><br><span class="line"></span><br><span class="line">JMM主要就是围绕着如何在并发过程中如何处理原子性，可见性和有序性这三个特征来建立的，通过解决着三个问题，可以接触缓存不一致的问题，而volatile跟可见性和有序性都有关。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3.那你具体说说这三个特性呢？</span><br><span class="line">  (1).原子性：Java中，对基本数据类型的读取和赋值操作是原子性操作，也就是这些操作是不可中断的，要做一定做完。JMM只实现了基本的原子性，像上面i++那样的操作，必须借助synchronized和Lock来保证整块代码的原子性了，线程在锁释放之前，必然会把i的值刷回到主存的。</span><br><span class="line">  (2).可见性：可见性Java就是利用volatile来提供可见性的，当一个变量被volatile修饰时，那么对它的修改会立刻刷新到主存，当其他线程需要读取该变量时，会去内存中读取新值。而普通变量则不能保证这一点。</span><br><span class="line">  其实通过synchronized和Lock也能够保证可见性，线程在释放锁之前，会把共享变量值都刷回主存，但是synchronized和Lock的开销都更大。</span><br><span class="line">  (3).有序性：JMM是允许编译器和处理器对指令重排序的，但是规定了as-if-serial语义，即不管怎么重排序，程序的执行结果不能改变。比如下面的程序段：</span><br><span class="line">double pi = 3.14;    //A</span><br><span class="line">double r = 1;        //B</span><br><span class="line">double s= pi * r * r;//C</span><br><span class="line">上面的语句，可以按照A-&gt;B-&gt;C执行，结果为3.14,但是也可以按照B-&gt;A-&gt;C的顺序执行，因为A、B是两句独立的语句，而C则依赖于A、B，所以A、B可以重排序，但是C却不能排到A、B的前面。JMM保证了重排序不会影响到单线程的执行，但是在多线程中却容易出问题。</span><br><span class="line">比如这样的代码:</span><br><span class="line">int a = 0;</span><br><span class="line">bool flag = false;</span><br><span class="line"></span><br><span class="line">public void write() &#123;</span><br><span class="line">    a = 2;              //1</span><br><span class="line">    flag = true;        //2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void multiply() &#123;</span><br><span class="line">    if (flag) &#123;         //3</span><br><span class="line">        int ret = a * a;//4</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">write方法里的1和2做了重排序，线程1先对flag赋值为true，随后执行到线程2，ret直接计算出结果，再到线程1，这时候a才赋值为2,很明显迟了一步。</span><br><span class="line">这时候可以为flag加上volatile关键字，禁止重排序，可以确保程序的“有序性”，也可以上重量级的synchronized和Lock来保证有序性,它们能保证那一块区域里的代码都是一次性执行完毕的。</span><br><span class="line">ps：这里提一句：volatile的禁止指令重排是在jdk1.6之后才做了修复，这也是jdk1.6之前用双重锁校验的synchronized单例模式会有线程不安全的问题原因。</span><br><span class="line">另外，JMM具备一些先天的有序性,即不需要通过任何手段就可以保证的有序性，通常称为happens-before原则。具体如下：</span><br><span class="line">1.程序顺序规则： 一个线程中的每个操作，happens-before于该线程中的任意后续操作</span><br><span class="line">2.监视器锁规则：对一个线程的解锁，happens-before于随后对这个线程的加锁</span><br><span class="line">3.volatile变量规则： 对一个volatile域的写，happens-before于后续对这个volatile域的读</span><br><span class="line">4.传递性：如果A happens-before B ,且 B happens-before C, 那么 A happens-before C</span><br><span class="line">5.start()规则： 如果线程A执行操作ThreadB_start()(启动线程B) ,  那么A线程的ThreadB_start()happens-before 于B中的任意操作</span><br><span class="line">6.join()原则： 如果A执行ThreadB.join()并且成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。</span><br><span class="line">7.interrupt()原则： 对线程interrupt()方法的调用先行发生于被中断线程代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测是否有中断发生</span><br><span class="line">8.finalize()原则：一个对象的初始化完成先行发生于它的finalize()方法的开始</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4.volatile关键字如何满足并发编程的三大特性的？</span><br><span class="line">当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存</span><br><span class="line">当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效，线程接下来将从主存中读取共享变量。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">5.volatile可以保证可见性和有序性，但是能保证原子性吗？</span><br><span class="line">  首先我回答是不能保证原子性，要是说能保证，也只是对单个volatile变量的读/写具有原子性，但是对于类似volatile++这样的复合操作就无能为力了，比如下面的例子：</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public volatile int inc = 0;</span><br><span class="line"> </span><br><span class="line">    public void increase() &#123;</span><br><span class="line">        inc++;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        final Test test = new Test();</span><br><span class="line">        for(int i=0;i&lt;10;i++)&#123;</span><br><span class="line">            new Thread()&#123;</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    for(int j=0;j&lt;1000;j++)</span><br><span class="line">                        test.increase();</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;.start();</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        while(Thread.activeCount()&gt;1)  //保证前面的线程都执行完</span><br><span class="line">            Thread.yield();</span><br><span class="line">        System.out.println(test.inc);</span><br><span class="line">    &#125;</span><br><span class="line">按道理来说结果是10000，但是运行下很可能是个小于10000的值。有人可能会说volatile不是保证了可见性啊，一个线程对inc的修改，另外一个线程应该立刻看到啊！可是这里的操作inc++是个复合操作啊，包括读取inc的值，对其自增，然后再写回主存。</span><br><span class="line">假设线程A，读取了inc的值为10，这时候被阻塞了，因为没有对变量进行修改，触发不了volatile规则。</span><br><span class="line">线程B此时也读读inc的值，主存里inc的值依旧为10，做自增，然后立刻就被写回主存了，为11。</span><br><span class="line">此时又轮到线程A执行，由于工作内存里保存的是10，所以继续做自增，再写回主存，11又被写了一遍。所以虽然两个线程执行了两次increase()，结果却只加了一次。</span><br><span class="line">有人说，volatile不是会使缓存行无效的吗？但是这里线程A读取到线程B也进行操作之前，并没有修改inc值，所以线程B读取的时候，还是读的10。</span><br><span class="line">又有人说，线程B将11写回主存，不会把线程A的缓存行设为无效吗？但是线程A的读取操作已经做过了啊，只有在做读取操作时，发现自己缓存行无效，才会去读主存的值，所以这里线程A只能继续做自增了。</span><br><span class="line">综上所述，在这种复合操作的情景下，原子性的功能是维持不了了。但是volatile在上面那种设置flag值的例子里，由于对flag的读/写操作都是单步的，所以还是能保证原子性的。</span><br><span class="line">要想保证原子性，只能借助于synchronized,Lock以及并发包下的atomic的原子操作类了，即对基本数据类型的 自增（加1操作），自减（减1操作）、以及加法操作（加一个数），减法操作（减一个数）进行了封装，保证这些操作是原子性操作。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6.那你知道volatile的底层实现机制吗？</span><br><span class="line">如果把加入volatile关键字的代码和未加入volatile关键字的代码都生成汇编代码，会发现加入volatile关键字的代码会多出一个lock前缀指令。</span><br><span class="line">lock前缀指令实际相当于一个内存屏障，内存屏障提供了以下功能：</span><br><span class="line"></span><br><span class="line">1 . 重排序时不能把后面的指令重排序到内存屏障之前的位置</span><br><span class="line">2 . 使得本CPU的Cache写入内存</span><br><span class="line">3 . 写入动作也会引起别的CPU或者别的内核无效化其Cache，相当于让新写入的值对别的线程可见。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">7.你在哪里会使用到volatile，举几个例子？</span><br><span class="line">  (1).状态量标记，true/false</span><br><span class="line">  (2).单例模式双重检查锁</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>高并发</tag>
+        <tag>volatile</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>日志系统：一条SQL更新语句是如何执行的？</title>
+    <url>/2019/10/20/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%EF%BC%9A%E4%B8%80%E6%9D%A1SQL%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%9F/</url>
+    <content><![CDATA[<h3 id="MySQL实战45讲-第二讲"><a href="#MySQL实战45讲-第二讲" class="headerlink" title="MySQL实战45讲-第二讲"></a>MySQL实战45讲-第二讲</h3><p>上一节讲了一条查询语句是如何执行的，这节讲述的是一条更新语句的执行过程。<br>常听DBA的同事说，MySQL可以恢复到半个月内任意一秒的状态，那么是如何做到的呢？<br>还是以一条SQL语句开始<br><code>create table user(ID int primary key,c int)</code><br>如果要将ID = 2这一行的值加1，SQL语句会这么写：<br><code>update user set c = c + 1 where ID = 2</code><br>之前说的查询的链路，在执行更新语句的时候也会走一遍，因为对某张表的更新，需要先找到这张表。<br>与查询流程不一样的是，更新流程还涉及两个重要的日志模块redolog(重做日志)和binlog(归档日志)。接下来详细讨论下。 </p>
+<h3 id="重要的日志模块：redo-log"><a href="#重要的日志模块：redo-log" class="headerlink" title="重要的日志模块：redo log"></a>重要的日志模块：redo log</h3><p>老师举了一个例子，是拿《孔乙己》里酒店掌柜有一个粉板，专门用来记录客人的赊帐记录。如果赊帐的人不多，那么他可以先讲顾客和账单记录在粉板上；但如果赊帐的人多了，就一定有一个专门记录赊帐的账本。<br>如果有人要赊帐或者还帐的话，掌柜有两种做法：<br>1⃣️：先讲顾客和账单记录在粉板上，等不忙的时候在去账本上更新一下。<br>2⃣️：有人来就拿出账本去找到顾客的记录来更新。<br>当店里生意红火的时候很明显的看出来是第一种方式更加的高效。<br>同样的MySQL里更新数据库的时候也会有同样的问题，如果每次更新操作都写入磁盘里，然后磁盘也要找到对应的那条记录，然后在更细，整个过程的IO成本，查询成本都很高，为了解决这个问题，MySQL的设计者，就用了类似酒店掌柜的粉板思路来提升更新效率。<br>而粉板和账本配合的过程中，就是MySQL说的WAL技术，WAL的全称是Write-Ahead Logging,简单解释就是先写日志，在写磁盘，也就是先写粉板，等不忙的时候在写磁盘。<br>具体来说，当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log(粉板)里，并更新内存，这个时候就算更新完成了，同时InnoDB引擎会在适当时候，讲这个操作更新到磁盘里，而这个更新往往是在系统比较空闲的时候做。<br>但如果某一天赊帐的人突然很多，粉板记录不下怎么办？这个时候掌柜只好停下手中的活儿，把粉板中的一部分赊帐记录更新到账本中，然后将这些记录从粉板上擦掉，为新账腾出空间。<br>与此类似，InnoDB的redo log大小是固定的，比如可以配置一组4个文件，每个文件的大小是1GB，所以这块粉板就可以存储4GB的操作，从头开始写，写到末尾就又从头开始写，如下面这个图一样  </p>
+<p><img src="../image/redolog.png" alt="redolog.png" title="redolog">  </p>
+<p>write pos是当前记录的位置，一边写一边后移，写到第3号文件末尾后就回到0号文件开头。checkpoint是当前要擦出的位置，也是往后推移并且循环的，擦出记录前要把记录更新到数据文件，<br>write pos和checkpoint之间的“粉板”上还空着的部分，可以用来记录新的操作，如果write pos追上checkpoint，表示“粉板”满了，这时候不能在执行新的更新，得停下来先擦掉一些记录，把checkpoint推进一下。<br>有了redo log，InnoDB就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为crash-safe。 </p>
+<h3 id="什么是crash-safe？"><a href="#什么是crash-safe？" class="headerlink" title="什么是crash-safe？"></a>什么是crash-safe？</h3><p>crash-safe是MySQL5.6版本的新特性，要理解crash-safe这个概念，可以想想我们前面赊帐记录的例子。只要赊帐记录记在了粉板或者写在了账本上，之后即便掌柜忘记了，比如突然停业几天，恢复生意后依然可以通过账本和粉板上的数据明确赊帐账目。  </p>
+<h3 id="crash-unsafe"><a href="#crash-unsafe" class="headerlink" title="crash-unsafe?"></a>crash-unsafe?</h3><p>在了解crash-safe前，先分析一下在MySQL5.6版本之前出现slave(从) crash-unsafe的原因。我们知道在一套主从结构体系中，slave包含两个线程：即IO thread和SQL thread。两个线程的执行进度（偏移量）都保存在文件中。<br><code>IO thread负责从master拉取binlog文件（下面会讲到）并保存到本地的relay-log文件中</code><br><code>SQL thread负责执行重复sql，执行relay-log记录的日志</code><br>IO thread的执行状态信息保存在master.info文件，SQL thread的执行状态信息保存在relay-log.info文件。salve运行正常的情况下，记录位点没有问题，但是每当系统发生crash，存储的偏移量可能是不准确的（需要注意的是这些文件被修改后不是同步写入磁盘的）。因为应用binlog和更新位点信息到文件不是原子操作，而是两个独立的步骤。比如SQL thread已经应用relay-log.01的4个事务<br><code>trx1(pos:10)</code><br><code>trx2(pos:20)</code><br><code>trx3(pos:30)</code><br><code>trx4(pos:40)</code><br>但是SQL thread更新位点（relay-log.01,30）到relay-log.info文件中，slave实例重启的时候sql thread会重复执行trx4。<br>看到这里我们大概了解了，发生crash-unsafe的主要原因是应用binlog和更新位点不是原子操作，所以MySQL的解决办法是将两个操作融合成一个事务，这样就保证了原子性。  </p>
+<h3 id="重要的日志模块：binlog"><a href="#重要的日志模块：binlog" class="headerlink" title="重要的日志模块：binlog"></a>重要的日志模块：binlog</h3><p>前面说过，MySQL整体来看，其实就有两大部分，一部分是server层，它主要做的是MySQL功能层面的事情，还有一块是引擎层，负责存储相关的具体事宜，上面我们聊到的粉板redo log是InnoDB引擎层特有日志，而Server层也有自己的日志，称为binlog（归档日志).<br>为什么会有两份日志呢？<br>因为最开始MySQL中并没有InnoDB引擎，MySQL自带的是MyISAM，但是MyISAM没有crash-safe的能力，binlog日志只能用于归档，而InnoDB是另一个公司以插件形式引入MySQL中的，既然只靠binlog是没有crash-safe能力的，所以InnoDB使用另外一套日志系统-也就是redo log来实现crash-safe能力。<br>这两种日志有以下三点不同。<br>1.redo log是InnoDB引擎特有的，binlog是MySQL的Server层实现的，所有引擎层都可以使用。<br>2.redo log是物理日志，记录的是“在某个数据页上做了什么修改”；binlog是逻辑日志，记录的是这个语句的原始逻辑，比如”给ID = 2这一行的c字段加1“<br>3.redo log是循环写的，空间固定会用完；binlog是可以追加写入的。”追加写“是指binlog文件写到一定大小后会切换到下一个，并不户覆盖以前的日志。<br>有了对这两个日志的概念性的理解，我们再来看执行器InnoDB引擎在执行这个简单的update语句时的内部流程。<br>(1).执行器先找引擎取ID = 2这一行，ID是主键，引擎直接用树搜索找到这一行，如果ID = 2这一行所在的数据页本来就在内存中，就直接返回给执行器，否则，需要先从磁盘读入内存，然后在返回。<br>(2).执行器拿到引擎给的行数据，把这个值加上1，比如原来是N，现在就是N+1，得到新的一行数据，在调用引擎接口写入这行新数据。<br>(3).引擎将这行新数据更新到内存中，同时将这个更新操作记录到redo log里，此时redo log处于prepare状态，然后告知执行器执行完成了，随时可以提交事务。<br>(4).执行器生成这个操作的binlog，并把binlog写入磁盘。<br>(5).执行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成。<br>下面给出的是课程中给出的流程图，浅色框表示实在InnoDB内部执行的，深色框表示是在执行器中执行的。   </p>
+<p><img src="../image/update%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png" alt="update执行流程.png" title="update执行流程">  </p>
+<p>后面三步为什么把redo log拆成两个步骤：prepare和commit，这就是“两阶段提交“  </p>
+<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>还记不记得开头的那个问题：怎样让数据库恢复到半个月内任意一秒的状态？<br>前面我们说过，binlog会记录所有的逻辑操作，并且是采用“追加写”的形式。如果你的DBA承诺说半个月内可以恢复，那么备份系统中一定会保存最近半个月内的所有binlog，同时系统会定期做整库备份。这里的“定期”取决于系统的重要性，可以是一天一备，也可以是一周一备。<br>当需要恢复到指定的某一秒时，比如某天下午两点发现中午十二点有一次误删表，需要找回数据，那你可以这么做：<br>首先，找到最近的一次全量备份，如果你运气好，可能就是昨天晚上的一个备份，从这个备份恢复到临时库；<br>然后，从备份的时间点开始，将备份的binlog依次取出来，重放到中午误删表之前的那个时刻。<br>这样你的临时库就喝误删之前的线上库一样了，然后你可以把表数据从临时库取出来，按需恢复到线上库去。说完了这个问题，再回过头来说为什么一定要有”两阶段提交“ ，为什么必须有”两阶段提交“呢？这是为了让两份日志之间的逻辑一致，如果不用两阶段提交看看会发生什么？<br>不使用两阶段提交无非两种情况：<br>1.先写redo log后写binlog。假设在redo写完，binlog还没有写完的时候，MySQL进程异常重启，由于前面说过，redo log写完之后，系统及时崩溃，仍然能够把数据恢复回来，所以恢复这一行c的值是1。<br>但是由于binlog没写完就crash了，这时候binlog里面就没有记录这个语句，因此，之后备份日志的时候，存起来的binlog里面就没有这条语句。然后你会发现，如果需要用这个binlog来恢复临时库的话，由于语句的binlog丢失，这个临时库就会少了一次更新，恢复出来的这一行c的值就是0，与原库的值不同。<br>2.先写binlog后写redo log。如果在binlog写完之后异常重启，由于redo log还没写，崩溃恢复以后这个事务无效，所以这一行c的值是0，但是binlog里面记录了“把c从0改成1”这个日志，所以，在之后用binlog恢复临时库的时候就多了一个事务出来，恢复出来的这一行c的值就是1，与原库的值不同。<br>可以看到如果不使用“两阶段提交”，那么数据库的状态就有可能和用它的日志恢复出来的库状态不一致。<br>可能会有疑问，这个概率是不是很低，平时也没有什么动不动就需要恢复临时库的场景呀？<br>其实不是，不只是误操作后需要用这个过程来恢复数据，当你需要扩容的时候，也就是需要再多搭建一些备库来增加系统的读能力的时候，现在常见的做法也是用全量备份加上应用binlog来实现的，这个“不一致”就会导致你的线上出现主从数据库不一致的情况。<br>简单说，redo log和binlog都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致。  </p>
+<p>其实redo log记录的就是数据，而binlog有两种模式，statement格式的话是记sql语句，row格式会记录行的内容，记两条，更新前和更新后都有。  </p>
+<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>一天一备和一周一备的对比？<br>好处是“最长恢复时间”更短。<br>在一天一备的模式里，最坏情况下需要应用一天的binlog，比如，每天0点做一次全量备份，而要恢复出一个到昨天晚上23点的备份。<br>一周一备的最坏情况就要应用一周的binlog了。系统对应指标就是RTO了。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>bin log</tag>
+        <tag>redo log</tag>
       </tags>
   </entry>
   <entry>
