@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-04T16:30:11.326Z</updated>
+  <updated>2020-04-05T11:46:54.715Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>redis系列-夯实基础面试相关</title>
+    <link href="http://yoursite.com/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%A4%AF%E5%AE%9E%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E7%9B%B8%E5%85%B3/"/>
+    <id>http://yoursite.com/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%A4%AF%E5%AE%9E%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E7%9B%B8%E5%85%B3/</id>
+    <published>2020-04-05T10:51:36.000Z</published>
+    <updated>2020-04-05T11:46:54.715Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的&quot;&gt;&lt;a href=&quot;#最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="redis" scheme="http://yoursite.com/categories/redis/"/>
+    
+    
+      <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
+    
+      <category term="面试" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95/"/>
+    
+  </entry>
   
   <entry>
     <title>go big or go home-20</title>
@@ -716,44 +745,6 @@
 &lt;td&gt;output&lt;/td&gt;
 &lt;td&gt;生产&lt;/td&gt;
 &lt;td&gt;You need to have the
-        
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>go big or go home-2</title>
-    <link href="http://yoursite.com/2020/03/17/go-big-or-go-home-2/"/>
-    <id>http://yoursite.com/2020/03/17/go-big-or-go-home-2/</id>
-    <published>2020-03-17T14:03:22.000Z</published>
-    <updated>2020-04-04T11:01:01.250Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;单词/短语&lt;/th&gt;
-&lt;th&gt;中文&lt;/th&gt;
-&lt;th&gt;句子&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;stadium&lt;/td&gt;
-&lt;td&gt;体育场&lt;/td&gt;
-&lt;td&gt;I often play
         
       
     

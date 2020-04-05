@@ -19,50 +19,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础部分之String</title>
-    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
-    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
-<p>在Java8中，String内部使用char数组存储数据。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
-<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
-<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
-
-<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
-
-<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
-<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
-<p>而使用new的方式会在堆中创建一个字符串对象。</p>
-<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>String</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之数据类型</title>
     <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
@@ -127,6 +83,50 @@
       <tags>
         <tag>个人经历</tag>
         <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础部分之String</title>
+    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
+    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
+<p>在Java8中，String内部使用char数组存储数据。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
+<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
+
+<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
+
+<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
+<p>而使用new的方式会在堆中创建一个字符串对象。</p>
+<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>String</tag>
       </tags>
   </entry>
   <entry>
@@ -715,6 +715,71 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-14</title>
+    <url>/2020/03/29/go-big-or-go-home-14/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>humor</td>
+<td>幽默</td>
+<td>The performance that he was forced to eat corn showed his unique sense of humor</td>
+</tr>
+<tr>
+<td>ridiculous</td>
+<td>可笑的</td>
+<td>She looks ridiculous wearing this dress when walking in the street</td>
+</tr>
+<tr>
+<td>go ahead</td>
+<td>继续干下去</td>
+<td>The boy still went ahead with the race even after falling</td>
+</tr>
+<tr>
+<td>rare</td>
+<td>半熟的</td>
+<td>He likes eating rare steak,which is bloody and red in the middle</td>
+</tr>
+<tr>
+<td>fluency</td>
+<td>流畅</td>
+<td>He speaks with perfect fluency</td>
+</tr>
+<tr>
+<td>yawn</td>
+<td>打哈欠</td>
+<td>The cat yawned lying on the grass.So cute</td>
+</tr>
+<tr>
+<td>boycott</td>
+<td>抵制</td>
+<td>The office workers are putting up a boycott</td>
+</tr>
+<tr>
+<td>certificate</td>
+<td>证书</td>
+<td>I got my graduation certificate after finishing college</td>
+</tr>
+<tr>
+<td>hug</td>
+<td>拥抱</td>
+<td>The happy couple hug in front of their new home</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-15</title>
     <url>/2020/03/30/go-big-or-go-home-15/</url>
     <content><![CDATA[<table>
@@ -780,8 +845,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-19</title>
-    <url>/2020/04/03/go-big-or-go-home-19/</url>
+    <title>go big or go home-17</title>
+    <url>/2020/04/01/go-big-or-go-home-17/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -791,114 +856,69 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>pilot</td>
-<td>飞行员</td>
-<td>The heroic pilot managed to land the damaged plane safely</td>
+<td>shoulder</td>
+<td>肩膀</td>
+<td>The old man has pain in his shoulder</td>
 </tr>
 <tr>
-<td>mustard</td>
-<td>芥末</td>
-<td>Would you like some mustard on your sandwich?</td>
+<td>file</td>
+<td>文件</td>
+<td>She put those files on the desk</td>
 </tr>
 <tr>
-<td>agriculture</td>
-<td>农业</td>
-<td>We depend on agriculture to give us food</td>
-</tr>
-<tr>
-<td>proposal</td>
-<td>建议</td>
-<td>He’s against the teacher’s proposal</td>
-</tr>
-<tr>
-<td>mailbox</td>
-<td>邮箱</td>
-<td>Hey！You’ve got a leeter in your mailbox</td>
-</tr>
-<tr>
-<td>cap</td>
-<td>帽子</td>
-<td>This is a blue police cap</td>
-</tr>
-<tr>
-<td>straight</td>
-<td>直的</td>
-<td>How did you get your hair so straight?</td>
-</tr>
-<tr>
-<td>restaurant</td>
-<td>饭馆</td>
-<td>The happy family are dining together at a restaurant</td>
-</tr>
-<tr>
-<td>shrimp</td>
-<td>虾肉</td>
+<td>snacks</td>
+<td>零食</td>
 <td>-</td>
 </tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-14</title>
-    <url>/2020/03/29/go-big-or-go-home-14/</url>
-    <content><![CDATA[<table>
-<thead>
 <tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>humor</td>
-<td>幽默</td>
-<td>The performance that he was forced to eat corn showed his unique sense of humor</td>
+<td>unite</td>
+<td>团结</td>
+<td>We will unite with each other to finish the task</td>
 </tr>
 <tr>
-<td>ridiculous</td>
-<td>可笑的</td>
-<td>She looks ridiculous wearing this dress when walking in the street</td>
+<td>cleaner</td>
+<td>清洁工</td>
+<td>The cleaner needs different tools to do her job</td>
 </tr>
 <tr>
-<td>go ahead</td>
-<td>继续干下去</td>
-<td>The boy still went ahead with the race even after falling</td>
+<td>seminar</td>
+<td>研讨会</td>
+<td>A teacher and some students are attending a math seminar</td>
 </tr>
 <tr>
-<td>rare</td>
-<td>半熟的</td>
-<td>He likes eating rare steak,which is bloody and red in the middle</td>
+<td>sour</td>
+<td>酸的</td>
+<td>The lemon has such a sour taste</td>
 </tr>
 <tr>
-<td>fluency</td>
-<td>流畅</td>
-<td>He speaks with perfect fluency</td>
+<td>branch</td>
+<td>分支</td>
+<td>A bird is resting on the tree branch</td>
 </tr>
 <tr>
-<td>yawn</td>
-<td>打哈欠</td>
-<td>The cat yawned lying on the grass.So cute</td>
+<td>salute</td>
+<td>敬礼</td>
+<td>The policeman salutes me as I walk by</td>
 </tr>
 <tr>
-<td>boycott</td>
-<td>抵制</td>
-<td>The office workers are putting up a boycott</td>
+<td>material</td>
+<td>材料</td>
+<td>Many different materials are needed for construction work</td>
 </tr>
 <tr>
-<td>certificate</td>
-<td>证书</td>
-<td>I got my graduation certificate after finishing college</td>
+<td>pine</td>
+<td>松树</td>
+<td>The pine tree on HuangShan is very famous</td>
 </tr>
 <tr>
-<td>hug</td>
-<td>拥抱</td>
-<td>The happy couple hug in front of their new home</td>
+<td>laptop</td>
+<td>笔记本</td>
+<td>The girl has given up doing her homework on the laptop</td>
+</tr>
+<tr>
+<td>beach</td>
+<td>海边</td>
+<td>The girl took a vacation on the beach</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1089,6 +1109,211 @@
 <td>well done</td>
 <td>全熟</td>
 <td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-19</title>
+    <url>/2020/04/03/go-big-or-go-home-19/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pilot</td>
+<td>飞行员</td>
+<td>The heroic pilot managed to land the damaged plane safely</td>
+</tr>
+<tr>
+<td>mustard</td>
+<td>芥末</td>
+<td>Would you like some mustard on your sandwich?</td>
+</tr>
+<tr>
+<td>agriculture</td>
+<td>农业</td>
+<td>We depend on agriculture to give us food</td>
+</tr>
+<tr>
+<td>proposal</td>
+<td>建议</td>
+<td>He’s against the teacher’s proposal</td>
+</tr>
+<tr>
+<td>mailbox</td>
+<td>邮箱</td>
+<td>Hey！You’ve got a leeter in your mailbox</td>
+</tr>
+<tr>
+<td>cap</td>
+<td>帽子</td>
+<td>This is a blue police cap</td>
+</tr>
+<tr>
+<td>straight</td>
+<td>直的</td>
+<td>How did you get your hair so straight?</td>
+</tr>
+<tr>
+<td>restaurant</td>
+<td>饭馆</td>
+<td>The happy family are dining together at a restaurant</td>
+</tr>
+<tr>
+<td>shrimp</td>
+<td>虾肉</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-2</title>
+    <url>/2020/03/17/go-big-or-go-home-2/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stadium</td>
+<td>体育场</td>
+<td>I often play football in the stadium</td>
+</tr>
+<tr>
+<td>reply</td>
+<td>回复</td>
+<td>I’m waiting for your reply</td>
+</tr>
+<tr>
+<td>standard</td>
+<td>标准</td>
+<td>Such a standard figure</td>
+</tr>
+<tr>
+<td>honour</td>
+<td>荣誉</td>
+<td>It’s an honour to graduate from this school</td>
+</tr>
+<tr>
+<td>village</td>
+<td>乡村</td>
+<td>I like village life</td>
+</tr>
+<tr>
+<td>ever since</td>
+<td>自从…时起</td>
+<td>They lived there ever since they married</td>
+</tr>
+<tr>
+<td>turn up</td>
+<td>调高</td>
+<td>Turn up the TV volume</td>
+</tr>
+<tr>
+<td>volume</td>
+<td>音量</td>
+<td>Turn on the volume</td>
+</tr>
+<tr>
+<td>get on with</td>
+<td>与…相处</td>
+<td>She likes get on with animals</td>
+</tr>
+<tr>
+<td>tourism</td>
+<td>旅游</td>
+<td>I like tourism around the world</td>
+</tr>
+<tr>
+<td>industry</td>
+<td>行业</td>
+<td>The tourism industry is getting worse</td>
+</tr>
+<tr>
+<td>experience</td>
+<td>经验</td>
+<td>He has five years of programming experience</td>
+</tr>
+<tr>
+<td>sorrows</td>
+<td>悲伤</td>
+<td>I often share happiness and sorrows with my friends</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-20</title>
+    <url>/2020/04/04/go-big-or-go-home-20/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plate</td>
+<td>盘子</td>
+<td>I can put much food on this big plate</td>
+</tr>
+<tr>
+<td>so that</td>
+<td>太…以至于</td>
+<td>Its so hot that I’m going to melt</td>
+</tr>
+<tr>
+<td>discovery</td>
+<td>发现</td>
+<td>She makes a discovery in the field of flowers</td>
+</tr>
+<tr>
+<td>outline</td>
+<td>外形</td>
+<td>The girl drew an outline of the model</td>
+</tr>
+<tr>
+<td>zip code</td>
+<td>邮政编码</td>
+<td>You must write a zip code on the envelope before mailing a letter</td>
+</tr>
+<tr>
+<td>lip</td>
+<td>嘴唇</td>
+<td>Her lips are the most beautiful part of her face</td>
+</tr>
+<tr>
+<td>weed</td>
+<td>杂草</td>
+<td>The worker is cutting the weeds</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1319,231 +1544,6 @@
 <td>sentence</td>
 <td>句子</td>
 <td>Note the importance of this sentence</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-20</title>
-    <url>/2020/04/04/go-big-or-go-home-20/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>plate</td>
-<td>盘子</td>
-<td>I can put much food on this big plate</td>
-</tr>
-<tr>
-<td>so that</td>
-<td>太…以至于</td>
-<td>Its so hot that I’m going to melt</td>
-</tr>
-<tr>
-<td>discovery</td>
-<td>发现</td>
-<td>She makes a discovery in the field of flowers</td>
-</tr>
-<tr>
-<td>outline</td>
-<td>外形</td>
-<td>The girl drew an outline of the model</td>
-</tr>
-<tr>
-<td>zip code</td>
-<td>邮政编码</td>
-<td>You must write a zip code on the envelope before mailing a letter</td>
-</tr>
-<tr>
-<td>lip</td>
-<td>嘴唇</td>
-<td>Her lips are the most beautiful part of her face</td>
-</tr>
-<tr>
-<td>weed</td>
-<td>杂草</td>
-<td>The worker is cutting the weeds</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-17</title>
-    <url>/2020/04/01/go-big-or-go-home-17/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>shoulder</td>
-<td>肩膀</td>
-<td>The old man has pain in his shoulder</td>
-</tr>
-<tr>
-<td>file</td>
-<td>文件</td>
-<td>She put those files on the desk</td>
-</tr>
-<tr>
-<td>snacks</td>
-<td>零食</td>
-<td>-</td>
-</tr>
-<tr>
-<td>unite</td>
-<td>团结</td>
-<td>We will unite with each other to finish the task</td>
-</tr>
-<tr>
-<td>cleaner</td>
-<td>清洁工</td>
-<td>The cleaner needs different tools to do her job</td>
-</tr>
-<tr>
-<td>seminar</td>
-<td>研讨会</td>
-<td>A teacher and some students are attending a math seminar</td>
-</tr>
-<tr>
-<td>sour</td>
-<td>酸的</td>
-<td>The lemon has such a sour taste</td>
-</tr>
-<tr>
-<td>branch</td>
-<td>分支</td>
-<td>A bird is resting on the tree branch</td>
-</tr>
-<tr>
-<td>salute</td>
-<td>敬礼</td>
-<td>The policeman salutes me as I walk by</td>
-</tr>
-<tr>
-<td>material</td>
-<td>材料</td>
-<td>Many different materials are needed for construction work</td>
-</tr>
-<tr>
-<td>pine</td>
-<td>松树</td>
-<td>The pine tree on HuangShan is very famous</td>
-</tr>
-<tr>
-<td>laptop</td>
-<td>笔记本</td>
-<td>The girl has given up doing her homework on the laptop</td>
-</tr>
-<tr>
-<td>beach</td>
-<td>海边</td>
-<td>The girl took a vacation on the beach</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-2</title>
-    <url>/2020/03/17/go-big-or-go-home-2/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stadium</td>
-<td>体育场</td>
-<td>I often play football in the stadium</td>
-</tr>
-<tr>
-<td>reply</td>
-<td>回复</td>
-<td>I’m waiting for your reply</td>
-</tr>
-<tr>
-<td>standard</td>
-<td>标准</td>
-<td>Such a standard figure</td>
-</tr>
-<tr>
-<td>honour</td>
-<td>荣誉</td>
-<td>It’s an honour to graduate from this school</td>
-</tr>
-<tr>
-<td>village</td>
-<td>乡村</td>
-<td>I like village life</td>
-</tr>
-<tr>
-<td>ever since</td>
-<td>自从…时起</td>
-<td>They lived there ever since they married</td>
-</tr>
-<tr>
-<td>turn up</td>
-<td>调高</td>
-<td>Turn up the TV volume</td>
-</tr>
-<tr>
-<td>volume</td>
-<td>音量</td>
-<td>Turn on the volume</td>
-</tr>
-<tr>
-<td>get on with</td>
-<td>与…相处</td>
-<td>She likes get on with animals</td>
-</tr>
-<tr>
-<td>tourism</td>
-<td>旅游</td>
-<td>I like tourism around the world</td>
-</tr>
-<tr>
-<td>industry</td>
-<td>行业</td>
-<td>The tourism industry is getting worse</td>
-</tr>
-<tr>
-<td>experience</td>
-<td>经验</td>
-<td>He has five years of programming experience</td>
-</tr>
-<tr>
-<td>sorrows</td>
-<td>悲伤</td>
-<td>I often share happiness and sorrows with my friends</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2366,6 +2366,19 @@
       </tags>
   </entry>
   <entry>
+    <title>不得不说的Java‘锁’事</title>
+    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
+    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>锁</tag>
+        <tag>高并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL一条sql查询语句是如何执行的?</title>
     <url>/2019/10/20/mysql%E4%B8%80%E6%9D%A1sql%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/</url>
     <content><![CDATA[<p>[2019-10-13，2019-10-20]周计划：</p>
@@ -2393,19 +2406,6 @@
       <tags>
         <tag>mysql查询语句执行</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>不得不说的Java‘锁’事</title>
-    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
-    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>锁</tag>
-        <tag>高并发</tag>
       </tags>
   </entry>
   <entry>
@@ -2506,31 +2506,6 @@
       <tags>
         <tag>数据库</tag>
         <tag>事务</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>日志系统：一条SQL更新语句是如何执行的？</title>
-    <url>/2019/10/20/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%EF%BC%9A%E4%B8%80%E6%9D%A1SQL%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%9F/</url>
-    <content><![CDATA[<h3 id="MySQL实战45讲-第二讲"><a href="#MySQL实战45讲-第二讲" class="headerlink" title="MySQL实战45讲-第二讲"></a>MySQL实战45讲-第二讲</h3><p>上一节讲了一条查询语句是如何执行的，这节讲述的是一条更新语句的执行过程。<br>常听DBA的同事说，MySQL可以恢复到半个月内任意一秒的状态，那么是如何做到的呢？<br>还是以一条SQL语句开始<br><code>create table user(ID int primary key,c int)</code><br>如果要将ID = 2这一行的值加1，SQL语句会这么写：<br><code>update user set c = c + 1 where ID = 2</code><br>之前说的查询的链路，在执行更新语句的时候也会走一遍，因为对某张表的更新，需要先找到这张表。<br>与查询流程不一样的是，更新流程还涉及两个重要的日志模块redolog(重做日志)和binlog(归档日志)。接下来详细讨论下。 </p>
-<h3 id="重要的日志模块：redo-log"><a href="#重要的日志模块：redo-log" class="headerlink" title="重要的日志模块：redo log"></a>重要的日志模块：redo log</h3><p>老师举了一个例子，是拿《孔乙己》里酒店掌柜有一个粉板，专门用来记录客人的赊帐记录。如果赊帐的人不多，那么他可以先讲顾客和账单记录在粉板上；但如果赊帐的人多了，就一定有一个专门记录赊帐的账本。<br>如果有人要赊帐或者还帐的话，掌柜有两种做法：<br>1⃣️：先讲顾客和账单记录在粉板上，等不忙的时候在去账本上更新一下。<br>2⃣️：有人来就拿出账本去找到顾客的记录来更新。<br>当店里生意红火的时候很明显的看出来是第一种方式更加的高效。<br>同样的MySQL里更新数据库的时候也会有同样的问题，如果每次更新操作都写入磁盘里，然后磁盘也要找到对应的那条记录，然后在更细，整个过程的IO成本，查询成本都很高，为了解决这个问题，MySQL的设计者，就用了类似酒店掌柜的粉板思路来提升更新效率。<br>而粉板和账本配合的过程中，就是MySQL说的WAL技术，WAL的全称是Write-Ahead Logging,简单解释就是先写日志，在写磁盘，也就是先写粉板，等不忙的时候在写磁盘。<br>具体来说，当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log(粉板)里，并更新内存，这个时候就算更新完成了，同时InnoDB引擎会在适当时候，讲这个操作更新到磁盘里，而这个更新往往是在系统比较空闲的时候做。<br>但如果某一天赊帐的人突然很多，粉板记录不下怎么办？这个时候掌柜只好停下手中的活儿，把粉板中的一部分赊帐记录更新到账本中，然后将这些记录从粉板上擦掉，为新账腾出空间。<br>与此类似，InnoDB的redo log大小是固定的，比如可以配置一组4个文件，每个文件的大小是1GB，所以这块粉板就可以存储4GB的操作，从头开始写，写到末尾就又从头开始写，如下面这个图一样  </p>
-<p><img src="../image/redolog.png" alt="redolog.png" title="redolog">  </p>
-<p>write pos是当前记录的位置，一边写一边后移，写到第3号文件末尾后就回到0号文件开头。checkpoint是当前要擦出的位置，也是往后推移并且循环的，擦出记录前要把记录更新到数据文件，<br>write pos和checkpoint之间的“粉板”上还空着的部分，可以用来记录新的操作，如果write pos追上checkpoint，表示“粉板”满了，这时候不能在执行新的更新，得停下来先擦掉一些记录，把checkpoint推进一下。<br>有了redo log，InnoDB就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为crash-safe。 </p>
-<h3 id="什么是crash-safe？"><a href="#什么是crash-safe？" class="headerlink" title="什么是crash-safe？"></a>什么是crash-safe？</h3><p>crash-safe是MySQL5.6版本的新特性，要理解crash-safe这个概念，可以想想我们前面赊帐记录的例子。只要赊帐记录记在了粉板或者写在了账本上，之后即便掌柜忘记了，比如突然停业几天，恢复生意后依然可以通过账本和粉板上的数据明确赊帐账目。  </p>
-<h3 id="crash-unsafe"><a href="#crash-unsafe" class="headerlink" title="crash-unsafe?"></a>crash-unsafe?</h3><p>在了解crash-safe前，先分析一下在MySQL5.6版本之前出现slave(从) crash-unsafe的原因。我们知道在一套主从结构体系中，slave包含两个线程：即IO thread和SQL thread。两个线程的执行进度（偏移量）都保存在文件中。<br><code>IO thread负责从master拉取binlog文件（下面会讲到）并保存到本地的relay-log文件中</code><br><code>SQL thread负责执行重复sql，执行relay-log记录的日志</code><br>IO thread的执行状态信息保存在master.info文件，SQL thread的执行状态信息保存在relay-log.info文件。salve运行正常的情况下，记录位点没有问题，但是每当系统发生crash，存储的偏移量可能是不准确的（需要注意的是这些文件被修改后不是同步写入磁盘的）。因为应用binlog和更新位点信息到文件不是原子操作，而是两个独立的步骤。比如SQL thread已经应用relay-log.01的4个事务<br><code>trx1(pos:10)</code><br><code>trx2(pos:20)</code><br><code>trx3(pos:30)</code><br><code>trx4(pos:40)</code><br>但是SQL thread更新位点（relay-log.01,30）到relay-log.info文件中，slave实例重启的时候sql thread会重复执行trx4。<br>看到这里我们大概了解了，发生crash-unsafe的主要原因是应用binlog和更新位点不是原子操作，所以MySQL的解决办法是将两个操作融合成一个事务，这样就保证了原子性。  </p>
-<h3 id="重要的日志模块：binlog"><a href="#重要的日志模块：binlog" class="headerlink" title="重要的日志模块：binlog"></a>重要的日志模块：binlog</h3><p>前面说过，MySQL整体来看，其实就有两大部分，一部分是server层，它主要做的是MySQL功能层面的事情，还有一块是引擎层，负责存储相关的具体事宜，上面我们聊到的粉板redo log是InnoDB引擎层特有日志，而Server层也有自己的日志，称为binlog（归档日志).<br>为什么会有两份日志呢？<br>因为最开始MySQL中并没有InnoDB引擎，MySQL自带的是MyISAM，但是MyISAM没有crash-safe的能力，binlog日志只能用于归档，而InnoDB是另一个公司以插件形式引入MySQL中的，既然只靠binlog是没有crash-safe能力的，所以InnoDB使用另外一套日志系统-也就是redo log来实现crash-safe能力。<br>这两种日志有以下三点不同。<br>1.redo log是InnoDB引擎特有的，binlog是MySQL的Server层实现的，所有引擎层都可以使用。<br>2.redo log是物理日志，记录的是“在某个数据页上做了什么修改”；binlog是逻辑日志，记录的是这个语句的原始逻辑，比如”给ID = 2这一行的c字段加1“<br>3.redo log是循环写的，空间固定会用完；binlog是可以追加写入的。”追加写“是指binlog文件写到一定大小后会切换到下一个，并不户覆盖以前的日志。<br>有了对这两个日志的概念性的理解，我们再来看执行器InnoDB引擎在执行这个简单的update语句时的内部流程。<br>(1).执行器先找引擎取ID = 2这一行，ID是主键，引擎直接用树搜索找到这一行，如果ID = 2这一行所在的数据页本来就在内存中，就直接返回给执行器，否则，需要先从磁盘读入内存，然后在返回。<br>(2).执行器拿到引擎给的行数据，把这个值加上1，比如原来是N，现在就是N+1，得到新的一行数据，在调用引擎接口写入这行新数据。<br>(3).引擎将这行新数据更新到内存中，同时将这个更新操作记录到redo log里，此时redo log处于prepare状态，然后告知执行器执行完成了，随时可以提交事务。<br>(4).执行器生成这个操作的binlog，并把binlog写入磁盘。<br>(5).执行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成。<br>下面给出的是课程中给出的流程图，浅色框表示实在InnoDB内部执行的，深色框表示是在执行器中执行的。   </p>
-<p><img src="../image/update%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png" alt="update执行流程.png" title="update执行流程">  </p>
-<p>后面三步为什么把redo log拆成两个步骤：prepare和commit，这就是“两阶段提交“  </p>
-<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>还记不记得开头的那个问题：怎样让数据库恢复到半个月内任意一秒的状态？<br>前面我们说过，binlog会记录所有的逻辑操作，并且是采用“追加写”的形式。如果你的DBA承诺说半个月内可以恢复，那么备份系统中一定会保存最近半个月内的所有binlog，同时系统会定期做整库备份。这里的“定期”取决于系统的重要性，可以是一天一备，也可以是一周一备。<br>当需要恢复到指定的某一秒时，比如某天下午两点发现中午十二点有一次误删表，需要找回数据，那你可以这么做：<br>首先，找到最近的一次全量备份，如果你运气好，可能就是昨天晚上的一个备份，从这个备份恢复到临时库；<br>然后，从备份的时间点开始，将备份的binlog依次取出来，重放到中午误删表之前的那个时刻。<br>这样你的临时库就喝误删之前的线上库一样了，然后你可以把表数据从临时库取出来，按需恢复到线上库去。说完了这个问题，再回过头来说为什么一定要有”两阶段提交“ ，为什么必须有”两阶段提交“呢？这是为了让两份日志之间的逻辑一致，如果不用两阶段提交看看会发生什么？<br>不使用两阶段提交无非两种情况：<br>1.先写redo log后写binlog。假设在redo写完，binlog还没有写完的时候，MySQL进程异常重启，由于前面说过，redo log写完之后，系统及时崩溃，仍然能够把数据恢复回来，所以恢复这一行c的值是1。<br>但是由于binlog没写完就crash了，这时候binlog里面就没有记录这个语句，因此，之后备份日志的时候，存起来的binlog里面就没有这条语句。然后你会发现，如果需要用这个binlog来恢复临时库的话，由于语句的binlog丢失，这个临时库就会少了一次更新，恢复出来的这一行c的值就是0，与原库的值不同。<br>2.先写binlog后写redo log。如果在binlog写完之后异常重启，由于redo log还没写，崩溃恢复以后这个事务无效，所以这一行c的值是0，但是binlog里面记录了“把c从0改成1”这个日志，所以，在之后用binlog恢复临时库的时候就多了一个事务出来，恢复出来的这一行c的值就是1，与原库的值不同。<br>可以看到如果不使用“两阶段提交”，那么数据库的状态就有可能和用它的日志恢复出来的库状态不一致。<br>可能会有疑问，这个概率是不是很低，平时也没有什么动不动就需要恢复临时库的场景呀？<br>其实不是，不只是误操作后需要用这个过程来恢复数据，当你需要扩容的时候，也就是需要再多搭建一些备库来增加系统的读能力的时候，现在常见的做法也是用全量备份加上应用binlog来实现的，这个“不一致”就会导致你的线上出现主从数据库不一致的情况。<br>简单说，redo log和binlog都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致。  </p>
-<p>其实redo log记录的就是数据，而binlog有两种模式，statement格式的话是记sql语句，row格式会记录行的内容，记两条，更新前和更新后都有。  </p>
-<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>一天一备和一周一备的对比？<br>好处是“最长恢复时间”更短。<br>在一天一备的模式里，最坏情况下需要应用一天的binlog，比如，每天0点做一次全量备份，而要恢复出一个到昨天晚上23点的备份。<br>一周一备的最坏情况就要应用一周的binlog了。系统对应指标就是RTO了。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>bin log</tag>
-        <tag>redo log</tag>
       </tags>
   </entry>
   <entry>
@@ -2640,6 +2615,31 @@
       </tags>
   </entry>
   <entry>
+    <title>日志系统：一条SQL更新语句是如何执行的？</title>
+    <url>/2019/10/20/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%EF%BC%9A%E4%B8%80%E6%9D%A1SQL%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%9F/</url>
+    <content><![CDATA[<h3 id="MySQL实战45讲-第二讲"><a href="#MySQL实战45讲-第二讲" class="headerlink" title="MySQL实战45讲-第二讲"></a>MySQL实战45讲-第二讲</h3><p>上一节讲了一条查询语句是如何执行的，这节讲述的是一条更新语句的执行过程。<br>常听DBA的同事说，MySQL可以恢复到半个月内任意一秒的状态，那么是如何做到的呢？<br>还是以一条SQL语句开始<br><code>create table user(ID int primary key,c int)</code><br>如果要将ID = 2这一行的值加1，SQL语句会这么写：<br><code>update user set c = c + 1 where ID = 2</code><br>之前说的查询的链路，在执行更新语句的时候也会走一遍，因为对某张表的更新，需要先找到这张表。<br>与查询流程不一样的是，更新流程还涉及两个重要的日志模块redolog(重做日志)和binlog(归档日志)。接下来详细讨论下。 </p>
+<h3 id="重要的日志模块：redo-log"><a href="#重要的日志模块：redo-log" class="headerlink" title="重要的日志模块：redo log"></a>重要的日志模块：redo log</h3><p>老师举了一个例子，是拿《孔乙己》里酒店掌柜有一个粉板，专门用来记录客人的赊帐记录。如果赊帐的人不多，那么他可以先讲顾客和账单记录在粉板上；但如果赊帐的人多了，就一定有一个专门记录赊帐的账本。<br>如果有人要赊帐或者还帐的话，掌柜有两种做法：<br>1⃣️：先讲顾客和账单记录在粉板上，等不忙的时候在去账本上更新一下。<br>2⃣️：有人来就拿出账本去找到顾客的记录来更新。<br>当店里生意红火的时候很明显的看出来是第一种方式更加的高效。<br>同样的MySQL里更新数据库的时候也会有同样的问题，如果每次更新操作都写入磁盘里，然后磁盘也要找到对应的那条记录，然后在更细，整个过程的IO成本，查询成本都很高，为了解决这个问题，MySQL的设计者，就用了类似酒店掌柜的粉板思路来提升更新效率。<br>而粉板和账本配合的过程中，就是MySQL说的WAL技术，WAL的全称是Write-Ahead Logging,简单解释就是先写日志，在写磁盘，也就是先写粉板，等不忙的时候在写磁盘。<br>具体来说，当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log(粉板)里，并更新内存，这个时候就算更新完成了，同时InnoDB引擎会在适当时候，讲这个操作更新到磁盘里，而这个更新往往是在系统比较空闲的时候做。<br>但如果某一天赊帐的人突然很多，粉板记录不下怎么办？这个时候掌柜只好停下手中的活儿，把粉板中的一部分赊帐记录更新到账本中，然后将这些记录从粉板上擦掉，为新账腾出空间。<br>与此类似，InnoDB的redo log大小是固定的，比如可以配置一组4个文件，每个文件的大小是1GB，所以这块粉板就可以存储4GB的操作，从头开始写，写到末尾就又从头开始写，如下面这个图一样  </p>
+<p><img src="../image/redolog.png" alt="redolog.png" title="redolog">  </p>
+<p>write pos是当前记录的位置，一边写一边后移，写到第3号文件末尾后就回到0号文件开头。checkpoint是当前要擦出的位置，也是往后推移并且循环的，擦出记录前要把记录更新到数据文件，<br>write pos和checkpoint之间的“粉板”上还空着的部分，可以用来记录新的操作，如果write pos追上checkpoint，表示“粉板”满了，这时候不能在执行新的更新，得停下来先擦掉一些记录，把checkpoint推进一下。<br>有了redo log，InnoDB就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为crash-safe。 </p>
+<h3 id="什么是crash-safe？"><a href="#什么是crash-safe？" class="headerlink" title="什么是crash-safe？"></a>什么是crash-safe？</h3><p>crash-safe是MySQL5.6版本的新特性，要理解crash-safe这个概念，可以想想我们前面赊帐记录的例子。只要赊帐记录记在了粉板或者写在了账本上，之后即便掌柜忘记了，比如突然停业几天，恢复生意后依然可以通过账本和粉板上的数据明确赊帐账目。  </p>
+<h3 id="crash-unsafe"><a href="#crash-unsafe" class="headerlink" title="crash-unsafe?"></a>crash-unsafe?</h3><p>在了解crash-safe前，先分析一下在MySQL5.6版本之前出现slave(从) crash-unsafe的原因。我们知道在一套主从结构体系中，slave包含两个线程：即IO thread和SQL thread。两个线程的执行进度（偏移量）都保存在文件中。<br><code>IO thread负责从master拉取binlog文件（下面会讲到）并保存到本地的relay-log文件中</code><br><code>SQL thread负责执行重复sql，执行relay-log记录的日志</code><br>IO thread的执行状态信息保存在master.info文件，SQL thread的执行状态信息保存在relay-log.info文件。salve运行正常的情况下，记录位点没有问题，但是每当系统发生crash，存储的偏移量可能是不准确的（需要注意的是这些文件被修改后不是同步写入磁盘的）。因为应用binlog和更新位点信息到文件不是原子操作，而是两个独立的步骤。比如SQL thread已经应用relay-log.01的4个事务<br><code>trx1(pos:10)</code><br><code>trx2(pos:20)</code><br><code>trx3(pos:30)</code><br><code>trx4(pos:40)</code><br>但是SQL thread更新位点（relay-log.01,30）到relay-log.info文件中，slave实例重启的时候sql thread会重复执行trx4。<br>看到这里我们大概了解了，发生crash-unsafe的主要原因是应用binlog和更新位点不是原子操作，所以MySQL的解决办法是将两个操作融合成一个事务，这样就保证了原子性。  </p>
+<h3 id="重要的日志模块：binlog"><a href="#重要的日志模块：binlog" class="headerlink" title="重要的日志模块：binlog"></a>重要的日志模块：binlog</h3><p>前面说过，MySQL整体来看，其实就有两大部分，一部分是server层，它主要做的是MySQL功能层面的事情，还有一块是引擎层，负责存储相关的具体事宜，上面我们聊到的粉板redo log是InnoDB引擎层特有日志，而Server层也有自己的日志，称为binlog（归档日志).<br>为什么会有两份日志呢？<br>因为最开始MySQL中并没有InnoDB引擎，MySQL自带的是MyISAM，但是MyISAM没有crash-safe的能力，binlog日志只能用于归档，而InnoDB是另一个公司以插件形式引入MySQL中的，既然只靠binlog是没有crash-safe能力的，所以InnoDB使用另外一套日志系统-也就是redo log来实现crash-safe能力。<br>这两种日志有以下三点不同。<br>1.redo log是InnoDB引擎特有的，binlog是MySQL的Server层实现的，所有引擎层都可以使用。<br>2.redo log是物理日志，记录的是“在某个数据页上做了什么修改”；binlog是逻辑日志，记录的是这个语句的原始逻辑，比如”给ID = 2这一行的c字段加1“<br>3.redo log是循环写的，空间固定会用完；binlog是可以追加写入的。”追加写“是指binlog文件写到一定大小后会切换到下一个，并不户覆盖以前的日志。<br>有了对这两个日志的概念性的理解，我们再来看执行器InnoDB引擎在执行这个简单的update语句时的内部流程。<br>(1).执行器先找引擎取ID = 2这一行，ID是主键，引擎直接用树搜索找到这一行，如果ID = 2这一行所在的数据页本来就在内存中，就直接返回给执行器，否则，需要先从磁盘读入内存，然后在返回。<br>(2).执行器拿到引擎给的行数据，把这个值加上1，比如原来是N，现在就是N+1，得到新的一行数据，在调用引擎接口写入这行新数据。<br>(3).引擎将这行新数据更新到内存中，同时将这个更新操作记录到redo log里，此时redo log处于prepare状态，然后告知执行器执行完成了，随时可以提交事务。<br>(4).执行器生成这个操作的binlog，并把binlog写入磁盘。<br>(5).执行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成。<br>下面给出的是课程中给出的流程图，浅色框表示实在InnoDB内部执行的，深色框表示是在执行器中执行的。   </p>
+<p><img src="../image/update%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png" alt="update执行流程.png" title="update执行流程">  </p>
+<p>后面三步为什么把redo log拆成两个步骤：prepare和commit，这就是“两阶段提交“  </p>
+<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>还记不记得开头的那个问题：怎样让数据库恢复到半个月内任意一秒的状态？<br>前面我们说过，binlog会记录所有的逻辑操作，并且是采用“追加写”的形式。如果你的DBA承诺说半个月内可以恢复，那么备份系统中一定会保存最近半个月内的所有binlog，同时系统会定期做整库备份。这里的“定期”取决于系统的重要性，可以是一天一备，也可以是一周一备。<br>当需要恢复到指定的某一秒时，比如某天下午两点发现中午十二点有一次误删表，需要找回数据，那你可以这么做：<br>首先，找到最近的一次全量备份，如果你运气好，可能就是昨天晚上的一个备份，从这个备份恢复到临时库；<br>然后，从备份的时间点开始，将备份的binlog依次取出来，重放到中午误删表之前的那个时刻。<br>这样你的临时库就喝误删之前的线上库一样了，然后你可以把表数据从临时库取出来，按需恢复到线上库去。说完了这个问题，再回过头来说为什么一定要有”两阶段提交“ ，为什么必须有”两阶段提交“呢？这是为了让两份日志之间的逻辑一致，如果不用两阶段提交看看会发生什么？<br>不使用两阶段提交无非两种情况：<br>1.先写redo log后写binlog。假设在redo写完，binlog还没有写完的时候，MySQL进程异常重启，由于前面说过，redo log写完之后，系统及时崩溃，仍然能够把数据恢复回来，所以恢复这一行c的值是1。<br>但是由于binlog没写完就crash了，这时候binlog里面就没有记录这个语句，因此，之后备份日志的时候，存起来的binlog里面就没有这条语句。然后你会发现，如果需要用这个binlog来恢复临时库的话，由于语句的binlog丢失，这个临时库就会少了一次更新，恢复出来的这一行c的值就是0，与原库的值不同。<br>2.先写binlog后写redo log。如果在binlog写完之后异常重启，由于redo log还没写，崩溃恢复以后这个事务无效，所以这一行c的值是0，但是binlog里面记录了“把c从0改成1”这个日志，所以，在之后用binlog恢复临时库的时候就多了一个事务出来，恢复出来的这一行c的值就是1，与原库的值不同。<br>可以看到如果不使用“两阶段提交”，那么数据库的状态就有可能和用它的日志恢复出来的库状态不一致。<br>可能会有疑问，这个概率是不是很低，平时也没有什么动不动就需要恢复临时库的场景呀？<br>其实不是，不只是误操作后需要用这个过程来恢复数据，当你需要扩容的时候，也就是需要再多搭建一些备库来增加系统的读能力的时候，现在常见的做法也是用全量备份加上应用binlog来实现的，这个“不一致”就会导致你的线上出现主从数据库不一致的情况。<br>简单说，redo log和binlog都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致。  </p>
+<p>其实redo log记录的就是数据，而binlog有两种模式，statement格式的话是记sql语句，row格式会记录行的内容，记两条，更新前和更新后都有。  </p>
+<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>一天一备和一周一备的对比？<br>好处是“最长恢复时间”更短。<br>在一天一备的模式里，最坏情况下需要应用一天的binlog，比如，每天0点做一次全量备份，而要恢复出一个到昨天晚上23点的备份。<br>一周一备的最坏情况就要应用一周的binlog了。系统对应指标就是RTO了。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>bin log</tag>
+        <tag>redo log</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深入浅出索引</title>
     <url>/2019/10/26/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%B4%A2%E5%BC%95/</url>
     <content><![CDATA[<p>这节讲的是索引的相关知识，提到索引相信大家都不会陌生，在工作中或多或少都会接触过，建立索引主要是用来提升SQL查询速度的一种解决方案。<br>那么索引是什么？<br>一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。  </p>
@@ -2723,6 +2723,251 @@
       <tags>
         <tag>数据库</tag>
         <tag>索引</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>redis系列-夯实基础面试相关</title>
+    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%A4%AF%E5%AE%9E%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<h3 id="最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的"><a href="#最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的" class="headerlink" title="最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的"></a>最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的</h3><h3 id="1、使用Redis有哪些好处？"><a href="#1、使用Redis有哪些好处？" class="headerlink" title="1、使用Redis有哪些好处？"></a>1、使用Redis有哪些好处？</h3><ol>
+<li>基于内存的非关系型数据库，读取速度快</li>
+<li>支持多种数据结构，</li>
+<li>数据持久化</li>
+<li>支持事务</li>
+<li>支持主从复制</li>
+</ol>
+<h3 id="2、缺点："><a href="#2、缺点：" class="headerlink" title="2、缺点："></a>2、缺点：</h3><ol>
+<li>容易受到物理内存的限制</li>
+<li>不具备自动容错和恢复功能：主机从机宕机都会导致前端部分读写请求失败，需要等待机器重启或者手动切换前端IP才能恢复</li>
+<li>主机宕机，宕机前有部分数据未能及时同步到从机，切换IP后还会引入数据不一致的问题，降低了系统的可用性</li>
+<li>Redis较难支持在线扩容，在集群容量达到上限时在线扩容会变得很复杂，为避免这一问题，运维人员在系统上线时必须确保有足够的空间，这对资源造成了很大的浪费</li>
+</ol>
+<h3 id="3、Redis相比Memcached有哪些优势？"><a href="#3、Redis相比Memcached有哪些优势？" class="headerlink" title="3、Redis相比Memcached有哪些优势？"></a>3、Redis相比Memcached有哪些优势？</h3><ol>
+<li>Mencache把数据全部存于内存之中，不具备数据持久化</li>
+<li>Memcached数据结构单一</li>
+</ol>
+<h3 id="4、Redis常见性能问题和解决方案"><a href="#4、Redis常见性能问题和解决方案" class="headerlink" title="4、Redis常见性能问题和解决方案"></a>4、Redis常见性能问题和解决方案</h3><ol>
+<li>Master 最好不要做任何持久化工作，包括内存快照和 AOF 日志文件，特别是不要启用内存快照做持久化。</li>
+<li>如果数据比较关键，某个 Slave 开启 AOF 备份数据，策略为每秒同步一次。</li>
+<li>为了主从复制的速度和连接的稳定性，Slave 和 Master 最好在同一个局域网内。</li>
+<li>尽量避免在压力较大的主库上增加从库。</li>
+<li>Master 调用 BGREWRITEAOF 重写 AOF 文件，AOF 在重写的时候会占大量的 CPU 和内存资源，导致服务 load 过高，出现短暂服务暂停现象。</li>
+<li>为了 Master 的稳定性，主从复制不要用图状结构，用单向链表结构更稳定，即主从关系为：Master&lt;–Slave1&lt;–Slave2&lt;–Slave3…，这样的结构也方便解决单点故障问题，实现 Slave 对 Master 的替换，也即，如果 Master 挂了，可以立马启用 Slave1 做 Master，其他不变。</li>
+</ol>
+<h3 id="5、MySQL里有2000w数据，Redis中只存20w的数据，如何保证Redis中的数据都是热点数据？"><a href="#5、MySQL里有2000w数据，Redis中只存20w的数据，如何保证Redis中的数据都是热点数据？" class="headerlink" title="5、MySQL里有2000w数据，Redis中只存20w的数据，如何保证Redis中的数据都是热点数据？"></a>5、MySQL里有2000w数据，Redis中只存20w的数据，如何保证Redis中的数据都是热点数据？</h3><ol>
+<li>设置，淘汰策略：Redis的过期策略有定期删除+惰性删除两种，定期就是每隔固定时间去随机抽取一些设置了过期时间的key，去检查是否过期，如果没有随机抽取到，会采用惰性删除的方式，你来查了我就去检查是否过期，最后再不济，就是定期没检查，我也没去查，怎么办？这个时候引入内存淘汰机制，LRU方式，有很多种：比如尝试回收使用最少的键。</li>
+</ol>
+<h3 id="6、在什么样的场景下可以充分的利用Redis的特性，大大提高Redis的效率？"><a href="#6、在什么样的场景下可以充分的利用Redis的特性，大大提高Redis的效率？" class="headerlink" title="6、在什么样的场景下可以充分的利用Redis的特性，大大提高Redis的效率？"></a>6、在什么样的场景下可以充分的利用Redis的特性，大大提高Redis的效率？</h3><ol>
+<li>比如网站的首页信息</li>
+<li>排行榜的实现</li>
+<li>为用户推送相似的新闻</li>
+<li>短视频如何去重</li>
+<li>统计网站的UV</li>
+<li>保证接口的幂等性</li>
+</ol>
+<h3 id="7、Redis的缓存雪崩、穿透、击穿了解么？有什么异同点？分别怎么解决？"><a href="#7、Redis的缓存雪崩、穿透、击穿了解么？有什么异同点？分别怎么解决？" class="headerlink" title="7、Redis的缓存雪崩、穿透、击穿了解么？有什么异同点？分别怎么解决？"></a>7、Redis的缓存雪崩、穿透、击穿了解么？有什么异同点？分别怎么解决？</h3><ol>
+<li>缓存雪崩：统一时间大量key过期，导致大量请求打到数据库中，压力过大<ul>
+<li>解决方式：在设置key过期时间时，使用Random，将过期时间分散开</li>
+</ul>
+</li>
+<li>缓存穿透：请求的时缓存和数据库都没有的数据，比如id = -1,这时的用户可能是攻击者<ul>
+<li>解决方式：<ul>
+<li>(1)对请求参数做校验 </li>
+<li>(2)使用布隆过滤器(Bloom Filter):布隆过滤器的特点是：判断这个key存在不一定存在，但不存在一定不存在，因为是将key做了几个hash值，分散存储</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>缓存击穿：指的是某个热点数据，在失效的瞬间，持续的大并发就穿破缓存，直接请求数据库<ul>
+<li>解决方式：<ul>
+<li>(1)设置热点数据永不过期 </li>
+<li>(2)使用互斥锁</li>
+<li>这里插入互斥锁代码</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static String getData(String key) throws InterruptedException &#123;</span><br><span class="line">        //从redis中拿数据</span><br><span class="line">        String result = getDataByKV(key);</span><br><span class="line">        try &#123;</span><br><span class="line">            //参数校验</span><br><span class="line">            if (StringUtils.isBlank(result)) &#123;</span><br><span class="line">                //获取锁</span><br><span class="line">                if (reenLock.tryLock()) &#123;</span><br><span class="line">                    //去数据库中查询</span><br><span class="line">                    result = getDataByDB(key);</span><br><span class="line">                    //校验</span><br><span class="line">                    if (!StringUtils.isBlank(result)) &#123;</span><br><span class="line">                        //放进缓存</span><br><span class="line">                        setDataToKV(key, result);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                Thread.sleep(100L);</span><br><span class="line">                result = getData(key);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            log.info(&quot;异常:&#123;&#125;&quot;, e);</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            reenLock.unLock();</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8、Redis的基本类型有哪些？他们的使用场景了解么？比较高级的用法你使用过么？"><a href="#8、Redis的基本类型有哪些？他们的使用场景了解么？比较高级的用法你使用过么？" class="headerlink" title="8、Redis的基本类型有哪些？他们的使用场景了解么？比较高级的用法你使用过么？"></a>8、Redis的基本类型有哪些？他们的使用场景了解么？比较高级的用法你使用过么？</h3><ol>
+<li>String：<ul>
+<li>缓存功能：String字符串是最常用的数据类型，不仅仅是Redis，各个语言几乎都是最常用的</li>
+<li>计数器：许多系统都会使用Redis作为系统的实时计数器，可以快速实现计数和查询的功能。而且最终的数据结果可以按照特定的时间落地到数据库或者其他存储介质中永久保存</li>
+<li>共享用户session：用户重新刷新一次界面，可能需要访问一下数据进行重新登录，或者访问页面缓存Cookie，但是可以利用Redis将用户的Session集中管理</li>
+</ul>
+</li>
+<li>Hash:<ul>
+<li>一般是用来存储对象，可以比较方便的修改对象中某一个属性值，如果对象的值不经常改变用String较好</li>
+</ul>
+</li>
+<li>List:<ul>
+<li>List是有序列表，List可以存储例如粉丝列表，文章的评论之类的</li>
+<li>消息队列：Redis的连标结构，可以轻松实现阻塞队列，可以使用左进右出的命令组成来完成队列的设计，比如：数据的生产者可以通过Lpush命令从左边插入数据，多个数据消费者，可以使用pop命令阻塞的”抢”队尾的数据</li>
+<li>比如，我们常用的博客网站的文章列表，当用户量越来越多时，每一个用户都有自己的文章列表，而且当文章多时，都需要分页展示，这时可以考虑使用Redis的列表，列表不但有序同时还支持按照范围内获取元素，可以完美解决分页查询功能，大大提高查询效率。</li>
+</ul>
+</li>
+<li>Set:<ul>
+<li>set是无序集合，会自动去重，当然可以基于JVM的HashSet去重，但是一般系统都是部署在多台机器上的，所以基于JVM没办法保证数据一致，所以不如扔进set方便</li>
+<li>既然是去重集合，集合嘛，有一些交集，并集之类的，比如要找两个人的共同好友，一个intersect命令搞定</li>
+</ul>
+</li>
+<li>Sorted Set：<ul>
+<li>Sorted Set是排序的Set，去重但可以排序，通过设定的分数进行排序，这里有点向JVM中TreeSet创建时需要定义排序规则</li>
+<li>排行榜是最适合用Sorted Set,比如通过播放量，点击量进行排序</li>
+<li>也可以用来做带权重的队列，比如普通的消息score为1，重要的消息score为2</li>
+</ul>
+</li>
+<li>HyperLogLog:<ul>
+<li>常见的业务场景，需要统计每个网页的UV数据，会如何实现？<ul>
+<li>如果是PV非常好办，给每个网页一个独立的Redis计数器就可以了，key后缀加上当天的日期，请求一次incrby一次</li>
+<li>但是UV就不同了，需要去重，每个用户一天之内的多次访问只能计数一次，一般的解决方案是为每个页面设置一个独立的set，将用户的id放进去，然后统计set集合的大小，但是有没有想过，加入是一个访问量非常大的页面，比如淘宝，那么集合会非常大，占用内存，那么有没有更优质的解决办法呢？其实对于业务来说100W和101W其实影响并不大</li>
+<li>引入HyperLogLog，就是专门用来统计一些允许容错的数据结构，标准误差是0.81%，还是可以接受的</li>
+<li>有三个命令 pfadd,pfcount,pfmerge通过字面上意思很好理解，这个结构需要的内存大小为12k，这于上亿用户量的set来比简直是九牛一毛</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Bloom Filter:<ul>
+<li>应用场景非常多，比如防止缓存穿透，比如在对用户推送新闻或者短视频时，实现去重操作，如果存储在关 系型数据库上，需要经常的exists判断，而且如果内存占用也是很大的开销</li>
+<li>Bloom Filter可以理解为一个不怎么精确的set结构，当你使用contains方法是可能会误判，但是这个精确度是可以设置的，原则是 Bloom Filter说这个key存在那么有可能不存在，但Bloom Filter说这个key不存在，那么一定不存在。原理是对key进行hash运算，散列的保存在散列数组上，相比于JVM集合去存储整个元素，Bloom Filter存储的是hash值，非常节省空间</li>
+<li>注意的是redis版本的问题需要手动导入Bloom Filter</li>
+</ul>
+</li>
+<li>GeoHash：<ul>
+<li>只需要知道可以用来实现附近的人功能，附近的人问题是如何通过坐标判断与目标坐标的远近，GeoHash算法是将二维的经纬度数据映射到一维的整数，这样所有的元素都将挂载到一条直线上，距离越近映射到二维坐标上也会很接近</li>
+</ul>
+</li>
+<li>PubSub:<ul>
+<li>Redis可以使用zset或者List实现一个简单的消息队列结构，但是有不足之处，就是不支持消息的多播机制，何为消息的多播机制？</li>
+<li>消息多播指的是允许生产者生产一次消息，中间件负责将消息复制到多个消息队列，每个消息队列由相应的消费组进行消费，为了支持消息多播，Redis单独使用了一个模块来支持消息的多播，这个模块的就是PubSub<br>但我觉得PubSub了解一下就可以，目前没有很符合它的场景，因为他有不可避免的缺点<ul>
+<li>PubSub的生产者传递过来一个消息，Redis会直接找到相应的消费者传递过去，如果一个消费者都没有，那么消息直接丢弃。如果开始有三个消费者，一个消费者突然挂掉了，生产者会继续发送消息，另外两个消费者可以持续接收到消息。但是挂掉的消费者重新连上的时候，断链期间生产者发送的消息对于这个消费者来说就是彻底丢失了。如果Redis停机重启，PubSub的消息是不会持久化的，毕竟Redis宕机就相当于一个消费者都没有，所有的消息直接被丢弃。</li>
+<li>ps：近期Redis5.0新增了Stream数据结构，这个功能给Redis带来了持久化消息队列，从此PubSub感觉可以彻底离开Redis的舞台了(如果有大佬知道可以应用的场景，欢迎指正)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Stream5.0新发布—-需研究研究</li>
+</ol>
+<h3 id="9、Redis主从怎么同步数据的？集群的高可用怎么保证？持久化机制了解么？"><a href="#9、Redis主从怎么同步数据的？集群的高可用怎么保证？持久化机制了解么？" class="headerlink" title="9、Redis主从怎么同步数据的？集群的高可用怎么保证？持久化机制了解么？"></a>9、Redis主从怎么同步数据的？集群的高可用怎么保证？持久化机制了解么？</h3><ol>
+<li>主从同步：slaveod 127.0.0.1 6379 配从机不配主机，相当于认了个老大，此时只有主机可以执行写操作，从机默认只能执行读操作(如果想从机也可以写入数据将slave-read-only:改为no)，所谓主从复制，读写分离，那么数据如何同步的呢？<ul>
+<li>当建立一台slave时，会发送一个psync指令给master，如果是第一次链接到master，会触发一个全量复制。master会启动一个线程，生成RDB快照，将这个快照发送给slave，从机拿到快照后第一时间加载RDB文件，读取数据。<ul>
+<li>问题一：一主二从模式下，主机宕机，从机原地待命，主机回来还是主机</li>
+<li>问题二：从机宕机，每次与master断开，需要重新链接，除非配置进redis.conf文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>薪火相传：主机—&gt;从机—&gt;从机的从机  中间的从机的info replication：role是slave</li>
+<li>反客为主：使用slaveof no one 命令手动的将其中一个从机设置为主机，主机回来之后与新的从机没有关系</li>
+<li>哨兵模式：创建sentinel.conf文件，其中写入sentinel monitor host6379(名字) 127.0.0.1 6379 1(这个1代表主机挂了之后，谁得票数多余1票，谁就是新的master)，创建好了之后执行<pre><code>redis-sentinel sentinel.conf命令，执行之后</code></pre></li>
+</ol>
+<p><img src="../image/sentinel.png" alt="sentinel.png" title="sentinel"></p>
+<p>假设主机挂了</p>
+<p><img src="../image/after.png" alt="after.png" title="after"></p>
+<p>选举6380为主机。<br>  此时如果主机也就是6379回来了，会被哨兵监控到，作为6380的从机。<br>  可以看到哨兵模式是有缺点的：(1)经常主从复制，有延迟 (2)在选举主机时，服务不可用</p>
+<ol>
+<li>高可用保证：上面提到的一主二从，薪火相传，反客为主，哨兵模式(反客为主的加强版)</li>
+<li>持久化：AOF，RDB，通常都是AOF和RDB组合起来使用，用RDB恢复数据，AOF补全，因为RDB是每隔5分钟生成一个快照，但AOF是每个1s去以append-only的方式追加写数据。</li>
+</ol>
+<h3 id="10、为什么-redis-单线程却能支撑高并发？"><a href="#10、为什么-redis-单线程却能支撑高并发？" class="headerlink" title="10、为什么 redis 单线程却能支撑高并发？"></a>10、为什么 redis 单线程却能支撑高并发？</h3><ol>
+<li>非阻塞IO多路复用</li>
+<li>底层就是select poll epoll<ul>
+<li>select缺点<ul>
+<li>大小有限制，只有1024bit</li>
+<li>FDSet不可重用</li>
+<li>用户态到内核态有开销</li>
+<li>O(n)再次变量的时间复杂度</li>
+</ul>
+</li>
+<li>poll<ul>
+<li>通过数组的方式进行了扩展</li>
+<li>每次遍历将memset状态恢复</li>
+<li>还存在上述3，4问题</li>
+</ul>
+</li>
+<li>epoll(redis使用的方式)<ul>
+<li>使用户态和内核态共享一块内存</li>
+<li>不用占位，修改状态，采用重排的方式，每次只需遍历有数据的槽点，时间复杂度变味了O(1)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>事件处理机制，文件事件/时间事件</li>
+</ol>
+<h3 id="11、如何保证缓存和数据库数据的一致性？"><a href="#11、如何保证缓存和数据库数据的一致性？" class="headerlink" title="11、如何保证缓存和数据库数据的一致性？"></a>11、如何保证缓存和数据库数据的一致性？</h3><ol>
+<li>如果系统不是严格要求必须一致性的话，建议不要使用这个方案，将读请求和写请求串行化，串到一个内存队列中去，虽然这样可以保证一定不会出现不一致的情况，但会导致系统的吞吐量大幅度降低，并发量高了可能会导致队列阻塞，反而会成为整个系统的弱点。</li>
+</ol>
+<h3 id="12、redis分布式锁？"><a href="#12、redis分布式锁？" class="headerlink" title="12、redis分布式锁？"></a>12、redis分布式锁？</h3><ol>
+<li>先拿setnx来争抢锁，抢到之后，用expire给锁加一个过期时间方式锁忘记了释放。如果在setnx之后执行expire之前进程意外crash或者要重启维护了，那这个锁就永远得不到释放了，set指令有非常复杂的参数，可以把sentx和expire合成一条指令来用。</li>
+<li>也可以使用Redisson底层使用的是Lua脚本，下一章会有演示</li>
+</ol>
+<h3 id="13、redis中的事务？"><a href="#13、redis中的事务？" class="headerlink" title="13、redis中的事务？"></a>13、redis中的事务？</h3><ol>
+<li>用multi命令开启事务，中间执行的语句会被放入到队列中，为一个原子操作，exec结束事务，discard放弃事务</li>
+<li>事务中如果有一个不符合规范的语句，整个事务失效，称作全体连坐</li>
+<li>事务中如果有运行时才知道的错误，例如对一个字符串进行了incr命令，只有这条操作失败，其余的指令成功执行，称为源头债主，所以到这里应该知道redis的事务并不是严格意义上的满足原子性，仅仅是满足了隔离性，因为对其他操作并没有影响</li>
+<li>watch监控，乐观锁，比较并修改，如果失败发现修改用unwatch放弃观察，注意一点multi和exec中间不允许watch命令，需要在事务开启之前执行watch</li>
+</ol>
+<h3 id="14、说说哈希槽的概念"><a href="#14、说说哈希槽的概念" class="headerlink" title="14、说说哈希槽的概念"></a>14、说说哈希槽的概念</h3><ol>
+<li>先说下集群的概念：集群中的每一个 Redis 节点都 互相两两相连，客户端任意 直连 到集群中的 任意一台，就可以对其他 Redis 节点进行 读写 的操作。<ul>
+<li>集群的主要作用是数据分区和高可用(故障转移)</li>
+<li>集群如何数据分区？<ul>
+<li>哈希值取余，此方案主要问题是，当新增或删减节点时，节点数量发生变化，系统中所有数据都需要重新计算映射关系</li>
+<li>一致性哈希分区:将整个哈希值空间组织成一个圆环，增减节点的影响限制在相邻节点，但缺点是当节点数量较少时，增加或删除节点，对单个节点的影响可能比较大，造成数据的严重不平衡</li>
+<li>在一致性哈希分区的基础上，引入了虚拟节点的概念，虚拟节点称为槽，Redis集群没有使用一致性hash,而是引入了哈希槽的概念，Redis集群有16384个哈希槽，每个key通过CRC16校验后对16384取模来决定放置哪个槽，集群的每个节点负责一部分hash槽。</li>
+</ul>
+</li>
+<li>节点之间如何通信？<ul>
+<li>集群端口：在普通端口基础上+10000(固定值无法更改) 比如7000节点的集群端口为17000，集群端口只用于节点之间的通信</li>
+<li>Gossip协议：按照某种规则选择通信的节点，优点是去中心化，缺点是收敛速度慢(收敛是指集群内所有节点获得的集群信息是一致的)</li>
+<li>单对单</li>
+<li>广播：优点是：集群的收敛速度哭啊，缺点是每条消息都要一次性发送给所有节点，CPU带宽等消耗较大</li>
+<li>消息类型：meet(握手阶段)，ping，pong，fail(失败)，publish(广播)五种</li>
+</ul>
+</li>
+<li>集群数据如何存储？<ul>
+<li>clusterNode结构保存了一个节点的当前状态</li>
+<li>clusterState结构保存了在当前节点视角下，集群所处的状态</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="15、假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知前缀开头，如何将它们全部找出来？"><a href="#15、假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知前缀开头，如何将它们全部找出来？" class="headerlink" title="15、假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知前缀开头，如何将它们全部找出来？"></a>15、假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知前缀开头，如何将它们全部找出来？</h3><ol>
+<li>keys aaa*</li>
+<li>scan 0 match aaa*</li>
+<li>1的方式因为是单线程会造成阻塞，所以采用scan的方式，服务器不需要为游标保存状态，但返回的结果可能会有重复，而且如果遍历的过程中有数据修改，改动后的数据能不能遍历到是不确定的</li>
+</ol>
+<h3 id="17、Redis早期为什么选择单线程？"><a href="#17、Redis早期为什么选择单线程？" class="headerlink" title="17、Redis早期为什么选择单线程？"></a>17、Redis早期为什么选择单线程？</h3><ol>
+<li>官方解释：redis是基于内存的操作，CPU不是redis的瓶颈，Redis的瓶颈是机器内存大小或者网络带宽,既然CPU不是瓶颈，单线程容易实现，就顺理成章的采用单线程的方案了</li>
+<li>Redis为什么这么快？<ul>
+<li>纯内存操作，不需要进行磁盘IO</li>
+<li>单线程，没有锁竞争</li>
+<li>多路I/O复用模型，非阻塞IO    </li>
+<li>高效的数据结构</li>
+</ul>
+</li>
+</ol>
+<h3 id="18、五个基本结构的底层？"><a href="#18、五个基本结构的底层？" class="headerlink" title="18、五个基本结构的底层？"></a>18、五个基本结构的底层？</h3><ol>
+<li>String：int + SDS</li>
+<li>List：zipList + 双向链表</li>
+<li>hash：zipList + 字典（类似于Java中的HashMap,数组+链表的链地址法来解决部分hash冲突，字典内部包含了两个hashtable，通常只有一个hashtable有值，扩容是需要rehash，这时候两个hashtable分别存储旧的和新的hashtable，待搬迁结束后，旧的将被删除，新的hashtable取而代之，扩容条件是：当hash表中元素的个数等于第一纬数组长度时就会开始扩容，扩容的数组是原来的2倍，但如果Redis正在做bgsave(持久化命令)，为了减少内存过多分离，Redis尽量不去扩容，但如果hash表非常慢了，达到了第一纬数组的5倍，这个时候会强制扩容，缩容条件是：条件是元素个数低于数组长度的10%，缩容不会考虑Redis是否在做bgsave）</li>
+<li>set：intset + 字典（类似于Java中的HashMap）</li>
+<li>zset：zipList + 跳跃表(首先，因为 zset 要支持随机的插入和删除，所以它 不宜使用数组来实现，关于排序问题，我们也很容易就想到 红黑树/ 平衡树 这样的树形结构，为什么 Redis 不使用这样一些结构呢？<br>ⅰ. 性能考虑： 在高并发的情况下，树形结构需要执行一些类似于 rebalance 这样的可能涉及整棵树的操作，相对来说跳跃表的变化只涉及局部 ；<br>ⅱ. 实现考虑： 在复杂度与红黑树相同的情况下，跳跃表实现起来更简单，看起来也更加直观；) + 字典（类似于Java中的HashMap）</li>
+</ol>
+<h3 id="19、项目中是怎么用缓存的，用了缓存之后会带来什么问题？"><a href="#19、项目中是怎么用缓存的，用了缓存之后会带来什么问题？" class="headerlink" title="19、项目中是怎么用缓存的，用了缓存之后会带来什么问题？"></a>19、项目中是怎么用缓存的，用了缓存之后会带来什么问题？</h3><ol>
+<li>数据一致如何保证？</li>
+<li>会不会发生缓存雪崩，缓存击穿，缓存穿透，如何避免？</li>
+<li>缓存中的值更新，要先更新数据库，懒加载的方式再去更新缓存，缓存命中率怎么样，适不适合用，</li>
+<li>集群模式下数据如何保证一致，主从复制，哨兵模式，集群，</li>
+<li>balabala    </li>
+</ol>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+        <tag>面试</tag>
       </tags>
   </entry>
   <entry>
