@@ -19,50 +19,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础部分之String</title>
-    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
-    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
-<p>在Java8中，String内部使用char数组存储数据。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
-<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
-<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
-
-<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
-
-<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
-<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
-<p>而使用new的方式会在堆中创建一个字符串对象。</p>
-<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>String</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之数据类型</title>
     <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
@@ -265,6 +221,105 @@
       </tags>
   </entry>
   <entry>
+    <title>Java基础部分之String</title>
+    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
+    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
+<p>在Java8中，String内部使用char数组存储数据。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
+<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
+
+<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
+
+<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
+<p>而使用new的方式会在堆中创建一个字符串对象。</p>
+<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>String</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-11</title>
+    <url>/2020/03/26/go-big-or-go-home-11/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>broad</td>
+<td>宽的</td>
+<td>This road is broad enough for many cars to drive on</td>
+</tr>
+<tr>
+<td>accomplish</td>
+<td>完成</td>
+<td>She is so happy to have accomplished her weight-loss goal</td>
+</tr>
+<tr>
+<td>case</td>
+<td>箱子</td>
+<td>He carried all of his important things in a black case</td>
+</tr>
+<tr>
+<td>normal</td>
+<td>正常的</td>
+<td>A normal human foot should be like the one in the middle</td>
+</tr>
+<tr>
+<td>organ</td>
+<td>器官</td>
+<td>Every organ plays an important role in our body</td>
+</tr>
+<tr>
+<td>ceremony</td>
+<td>典礼</td>
+<td>The student was awarded her certificate during the graduation ceremony</td>
+</tr>
+<tr>
+<td>miserable</td>
+<td>悲惨的</td>
+<td>It’s miserable out</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-10</title>
     <url>/2020/03/25/go-big-or-go-home-10/</url>
     <content><![CDATA[<table>
@@ -424,61 +479,6 @@
 <td>优雅句子</td>
 <td>当你独自穿过了暴风雨,你就不再是原来那个人了</td>
 <td>Once you walk through the storm alone,You are no longer the same person as before</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-11</title>
-    <url>/2020/03/26/go-big-or-go-home-11/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>broad</td>
-<td>宽的</td>
-<td>This road is broad enough for many cars to drive on</td>
-</tr>
-<tr>
-<td>accomplish</td>
-<td>完成</td>
-<td>She is so happy to have accomplished her weight-loss goal</td>
-</tr>
-<tr>
-<td>case</td>
-<td>箱子</td>
-<td>He carried all of his important things in a black case</td>
-</tr>
-<tr>
-<td>normal</td>
-<td>正常的</td>
-<td>A normal human foot should be like the one in the middle</td>
-</tr>
-<tr>
-<td>organ</td>
-<td>器官</td>
-<td>Every organ plays an important role in our body</td>
-</tr>
-<tr>
-<td>ceremony</td>
-<td>典礼</td>
-<td>The student was awarded her certificate during the graduation ceremony</td>
-</tr>
-<tr>
-<td>miserable</td>
-<td>悲惨的</td>
-<td>It’s miserable out</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1920,86 +1920,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-6</title>
-    <url>/2020/03/21/go-big-or-go-home-6/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>altogether</td>
-<td>合计</td>
-<td>These gifts cost me 1000 dollars altogether</td>
-</tr>
-<tr>
-<td>salt</td>
-<td>盐</td>
-<td>Adding salt gives the dish more flavor</td>
-</tr>
-<tr>
-<td>smog</td>
-<td>烟雾</td>
-<td>There is too much smog in this big city</td>
-</tr>
-<tr>
-<td>not till</td>
-<td>直到…才</td>
-<td>Not till eight o’clock dit I get up</td>
-</tr>
-<tr>
-<td>stand for</td>
-<td>代表</td>
-<td>The sign stands for a bicycle path</td>
-</tr>
-<tr>
-<td>zoom</td>
-<td>拉近</td>
-<td>The creama zoomed in on the child’s face</td>
-</tr>
-<tr>
-<td>cordless</td>
-<td>不用电线的</td>
-<td>A cordless mouse is convenient for using your computer</td>
-</tr>
-<tr>
-<td>spaceship</td>
-<td>宇宙飞船</td>
-<td>At last,the spaceship landed on the moon</td>
-</tr>
-<tr>
-<td>cover</td>
-<td>盖住</td>
-<td>He covers his face with glasses and a face mask</td>
-</tr>
-<tr>
-<td>umbrella</td>
-<td>雨伞</td>
-<td>The dog uses an umbrella to block the sun</td>
-</tr>
-<tr>
-<td>presentation</td>
-<td>科学的</td>
-<td>The student is giving a presentation about how to roll the dough scientifically</td>
-</tr>
-<tr>
-<td>backache</td>
-<td>背痛</td>
-<td>Since I got an office job,my backache has gotton much worse</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-7</title>
     <url>/2020/03/22/go-big-or-go-home-7/</url>
     <content><![CDATA[<table>
@@ -2235,6 +2155,86 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-6</title>
+    <url>/2020/03/21/go-big-or-go-home-6/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>altogether</td>
+<td>合计</td>
+<td>These gifts cost me 1000 dollars altogether</td>
+</tr>
+<tr>
+<td>salt</td>
+<td>盐</td>
+<td>Adding salt gives the dish more flavor</td>
+</tr>
+<tr>
+<td>smog</td>
+<td>烟雾</td>
+<td>There is too much smog in this big city</td>
+</tr>
+<tr>
+<td>not till</td>
+<td>直到…才</td>
+<td>Not till eight o’clock dit I get up</td>
+</tr>
+<tr>
+<td>stand for</td>
+<td>代表</td>
+<td>The sign stands for a bicycle path</td>
+</tr>
+<tr>
+<td>zoom</td>
+<td>拉近</td>
+<td>The creama zoomed in on the child’s face</td>
+</tr>
+<tr>
+<td>cordless</td>
+<td>不用电线的</td>
+<td>A cordless mouse is convenient for using your computer</td>
+</tr>
+<tr>
+<td>spaceship</td>
+<td>宇宙飞船</td>
+<td>At last,the spaceship landed on the moon</td>
+</tr>
+<tr>
+<td>cover</td>
+<td>盖住</td>
+<td>He covers his face with glasses and a face mask</td>
+</tr>
+<tr>
+<td>umbrella</td>
+<td>雨伞</td>
+<td>The dog uses an umbrella to block the sun</td>
+</tr>
+<tr>
+<td>presentation</td>
+<td>科学的</td>
+<td>The student is giving a presentation about how to roll the dough scientifically</td>
+</tr>
+<tr>
+<td>backache</td>
+<td>背痛</td>
+<td>Since I got an office job,my backache has gotton much worse</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-9</title>
     <url>/2020/03/24/go-big-or-go-home-9/</url>
     <content><![CDATA[<table>
@@ -2366,6 +2366,19 @@
       </tags>
   </entry>
   <entry>
+    <title>不得不说的Java‘锁’事</title>
+    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
+    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>锁</tag>
+        <tag>高并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL一条sql查询语句是如何执行的?</title>
     <url>/2019/10/20/mysql%E4%B8%80%E6%9D%A1sql%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/</url>
     <content><![CDATA[<p>[2019-10-13，2019-10-20]周计划：</p>
@@ -2393,19 +2406,6 @@
       <tags>
         <tag>mysql查询语句执行</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>不得不说的Java‘锁’事</title>
-    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
-    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>锁</tag>
-        <tag>高并发</tag>
       </tags>
   </entry>
   <entry>
@@ -2475,37 +2475,6 @@
       <tags>
         <tag>高并发</tag>
         <tag>volatile</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>事务隔离：为什么你改了我看不见？</title>
-    <url>/2019/10/20/%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E6%94%B9%E4%BA%86%E6%88%91%E7%9C%8B%E4%B8%8D%E8%A7%81%EF%BC%9F/</url>
-    <content><![CDATA[<p>这篇讲的是事务隔离，个人了解的还不够多，所以就把最基础的写上，后面的等搞懂了再重新更新下。<br>提到事务，你肯定不陌生，和数据库打交道的时候，我们总是会用到事务。最经典的例子就是转账，你要给朋友小王转 100 块钱，而此时你的银行卡只有 100 块钱。<br>转账过程具体到程序里会有一系列的操作，比如查询余额、做加减法、更新余额等，这些操作必须保证是一体的，不然等程序查完之后，还没做减法之前，你这 100 块钱，完全可以借着这个时间差再查一次，然后再给另外一个朋友转账，如果银行这么整，不就乱了么？这时就要用到“事务”这个概念了。<br>简单来说，事务就是要保证一组数据库操作，要么全部成功，要么全部失败。在 MySQL 中，事务支持是在引擎层实现的。你现在知道，MySQL 是一个支持多引擎的系统，但并不是所有的引擎都支持事务。比如 MySQL 原生的 MyISAM 引擎就不支持事务，这也是 MyISAM 被 InnoDB 取代的重要原因之一。  </p>
-<h3 id="隔离性与隔离级别"><a href="#隔离性与隔离级别" class="headerlink" title="隔离性与隔离级别"></a>隔离性与隔离级别</h3><p>提到事务肯定会想到ACID（原子性，一致性，隔离性，持久性），这节主要讲的是隔离性。<br>当数据库有多个事务同时执行的时候，就可能会出现脏读，不可重复读，幻读的问题，为了解决这些问题，就有了“隔离级别”的概念。<br>在谈隔离级别之前，要了解的是隔离的越严实，效率就会越低，因此很多时候都要在二者之间寻找一个平衡点，SQL标准的隔离级别包括：读未提交，读已提交，可重复读，串行化。<br>读未提交是指，一个事务还没提交时，就能被其他的事务看见。<br>读已提交是指，一个事务提交后才能被其他的事务看见。<br>可重复读是指一个事务在执行过程中看到的数据总是和事务执行时看到的数据保持一致。<br>串行化，顾名思义对于同一行记录，“写”会加“写锁”，“读”会加“读锁”，当出现读写锁冲突的时候，后访问的事务必须等到前一个事务执行完成，才能继续执行。<br>下面举个例子来更好理解：  </p>
-<p><img src="../image/%E4%BA%8B%E5%8A%A1.png" alt="事务.png" title="事务">  </p>
-<p>来看一下，在不同隔离级别下，事务A会有哪些不同的返回结果，V1，V2，V3的返回值分别是什么。</p>
-<p>若隔离级别是“读未提交”：V1就是2，事务B还没有提交就被A看到了，同样V2，V3也是2  </p>
-<p>若隔离级别是“读已提交”：V1是1，V2，V3是2，事务B提交后A才能看见改变。  </p>
-<p>若隔离级别是“可重复读”：V1，V2是1，V3是2，同一个事务才执行中和执行开始的值应该是一样的，V3在事务A提交后可以看到事务B的改变。  </p>
-<p>若隔离级别是“串行化”：V1，V2是1，V3是2，当事务B执行“将1改为2的时候”会被锁住，直到事务A提交后才能改变。  </p>
-<p>在实现上，数据库里面会创建一个视图，访问的时候以视图的逻辑结果为准。在“可重复读”隔离级别下，这个视图实在事务启动时创建的，整个事务存在期间都用这个视图。在“读已提交”隔离级别下，这个视图是在每个SQL语句开始执行的时候创建的。这里需要注意的是，“读未提交”隔离级别下直接返回记录上的最新值，没有视图的概念，而“串行化”隔离级别下直接用加锁的方式来避免并行访问。<br>我们可以看到在不同的隔离级别下，数据库行为是有所不同的。Oracle数据库的默认隔离级别其实就是“读提交”，因此对于一些从Oracle迁移到MySQL的应用，为保证数据库隔离级别的一致，你一定要记得将MySQL的隔离级别设置为“读提交”。  </p>
-<p>配置的方式是，将启动参数transaction的值设置成READ-COMMITTED。你可以用show variables来查看当前的值。<br>总结来说，存在即合理，哪个隔离级别都有它自己的使用场景，你要根据自己的业务情况来定。那么什么时候需要“可重复读”的场景呢？我们来看一个校对逻辑的案例。<br>假设你在管理一个个人银行账户表。一个表存了每个月月底的余额，一个表存了账单明细。这时候你要做数据校对，也就是判断上个月的余额和当月余额的差额，是否与本月的账单明细一致。你一定希望在校对过程中，即使有用户发生了一笔新的交易，也不影响你的校对结果。  </p>
-<h3 id="事务隔离的实现"><a href="#事务隔离的实现" class="headerlink" title="事务隔离的实现"></a>事务隔离的实现</h3><p>理解了事务的隔离级别，我们再来看看事务隔离具体是怎么实现的。这里我们展开说明“可重复读”。  </p>
-<p>在MySQL中，实际上每条记录在更新的时候都会同时记录一条回滚操作。记录上的最新值，通过回滚操作，都可以得到前一个状态的值。<br>假设一个值从1被按顺序改成了2，3，4，在回滚日志里面就会有类似下面的记录。  </p>
-<p><img src="../image/%E5%9B%9E%E6%BB%9A%E6%AE%B5.png" alt="回滚段.png" title="回滚段">    </p>
-<p>当前值是4，但是在查询这条记录的时候，不同时刻启动的事务会有不用的read-view。如图中看到的，在视图A，B，C里面，这一个记录的值分别是1，2，4，同一条记录在系统中可以存在多个版本，就是数据库的多版本并发控制（MVCC）对于read-view，要得到1，就必须将当前值依次执行图中所有的回滚操作得到。<br>同时你会发现，即使现在有另外一个事务正在将4改成5，这个事务跟read-viewA，B，C对应的事务是不会冲突的。<br>你一定会问，回滚日志总不能一直保留吧，什么时候删除呢？答案是，在不需要的时候才删除，也就是说，系统会判断，当没有事务在需要用到这些回滚日志时，回滚日志会被删除。  </p>
-<p>什么时候才不需要了呢？<br>就时当系统里没有比这个回滚日志更早的read-view的时候。<br>基于上面的说明，我们来讨论一下为什么建议你尽量不要使用长事务。<br>长事务意味着系统里面会存在很老的事务视图。由于这些事务随时可能访问数据库里面的任何数据，所以这个事务提交之前，数据库里面它可能用到的回滚记录都必须保留，这就会导致大量占用存储空间。<br>在MySQL5.5及以前的版本，回滚日志时跟数据字典一起放在ibdata文件里的，即使长事务最终提交，回滚段被清理，文件也不会变小。我见过数只有20GB，而非回滚段有200GB的库，最终只好为了清理回滚段，重建整个库。<br>除了对回滚段的影响，长事务还占用锁资源，也可能拖垮整个库，后面讲锁的时候还会展开说。 </p>
-<h3 id="事务的启动方式"><a href="#事务的启动方式" class="headerlink" title="事务的启动方式"></a>事务的启动方式</h3><p>如前面所述，长事务有这些潜在风险，我当然是建议你尽量避免。其实很多时候业务开发同学并不是有意使用长事务，通常是由于误用所致。MySQL的事务启动方式有以下几种：<br>1.显示启动事务语句，begin活start transaction。配套的提交语句是commit，回滚语句是rollback，或者断开连接。<br>有些客户端连接框架会默认连接成功后先执行一个set autocommit = 0的命令。这就导致接下来的查询都在事务中，如果是长链接，就导致了意外的长事务。<br>因此，我会建议你总是使用set autocommit = 1，通过显式语句的方式来启动事务。   </p>
-<p>ps：这里解释一下set autocommit = 1  autocommit指的是事务，如果set autocommit = 0那么所有的语句一定是在一个事务里。在这种情况下，如果使用连接池，并且在查询之前没有rollback或者set autocommit = 1，那么就悲剧了，因为根据mysql的默认事务级别，可重复读，永远也取不到这个事务被开户前的数据。另外一点set autocommit = 0，会自动提交前一个事务，因此正确的做法是rollback ，set autocommit = 0，完成之后在set autocommit<br> = 1  </p>
-<p>但有的开发同学会纠结“多一次交互”的问题，对于一个需要频繁使用事务的业务，第二种方式每个事务在开始时都不需要主动执行一次“begin”，减少了语句的交互次数。如果你也有这个顾虑，我建议你commit work and chain语法。<br>在autocommit为1的情况下，用beigin显示启动的事务，如果执行commit则提交事务。如果执行commit work and chain，则是提交事务并自动启动下一个事务，这样也省去了再次执行begin语句的开销，同时带来的好处是从程序开发的角度明确地知道每个语句是否处于事务中。  </p>
-<p>你可以在information_schema库的innodb_trx这个表中查询长事务，比如下面这个语句，用于查找持续时间超过60s的事务。  </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from information_schema.innodb_trx where TIME_TO_SET(timediff(now(),trx_started)) &gt; 60</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>事务</tag>
       </tags>
   </entry>
   <entry>
@@ -2637,6 +2606,37 @@
       <tags>
         <tag>数据库</tag>
         <tag>MVCC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>事务隔离：为什么你改了我看不见？</title>
+    <url>/2019/10/20/%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E6%94%B9%E4%BA%86%E6%88%91%E7%9C%8B%E4%B8%8D%E8%A7%81%EF%BC%9F/</url>
+    <content><![CDATA[<p>这篇讲的是事务隔离，个人了解的还不够多，所以就把最基础的写上，后面的等搞懂了再重新更新下。<br>提到事务，你肯定不陌生，和数据库打交道的时候，我们总是会用到事务。最经典的例子就是转账，你要给朋友小王转 100 块钱，而此时你的银行卡只有 100 块钱。<br>转账过程具体到程序里会有一系列的操作，比如查询余额、做加减法、更新余额等，这些操作必须保证是一体的，不然等程序查完之后，还没做减法之前，你这 100 块钱，完全可以借着这个时间差再查一次，然后再给另外一个朋友转账，如果银行这么整，不就乱了么？这时就要用到“事务”这个概念了。<br>简单来说，事务就是要保证一组数据库操作，要么全部成功，要么全部失败。在 MySQL 中，事务支持是在引擎层实现的。你现在知道，MySQL 是一个支持多引擎的系统，但并不是所有的引擎都支持事务。比如 MySQL 原生的 MyISAM 引擎就不支持事务，这也是 MyISAM 被 InnoDB 取代的重要原因之一。  </p>
+<h3 id="隔离性与隔离级别"><a href="#隔离性与隔离级别" class="headerlink" title="隔离性与隔离级别"></a>隔离性与隔离级别</h3><p>提到事务肯定会想到ACID（原子性，一致性，隔离性，持久性），这节主要讲的是隔离性。<br>当数据库有多个事务同时执行的时候，就可能会出现脏读，不可重复读，幻读的问题，为了解决这些问题，就有了“隔离级别”的概念。<br>在谈隔离级别之前，要了解的是隔离的越严实，效率就会越低，因此很多时候都要在二者之间寻找一个平衡点，SQL标准的隔离级别包括：读未提交，读已提交，可重复读，串行化。<br>读未提交是指，一个事务还没提交时，就能被其他的事务看见。<br>读已提交是指，一个事务提交后才能被其他的事务看见。<br>可重复读是指一个事务在执行过程中看到的数据总是和事务执行时看到的数据保持一致。<br>串行化，顾名思义对于同一行记录，“写”会加“写锁”，“读”会加“读锁”，当出现读写锁冲突的时候，后访问的事务必须等到前一个事务执行完成，才能继续执行。<br>下面举个例子来更好理解：  </p>
+<p><img src="../image/%E4%BA%8B%E5%8A%A1.png" alt="事务.png" title="事务">  </p>
+<p>来看一下，在不同隔离级别下，事务A会有哪些不同的返回结果，V1，V2，V3的返回值分别是什么。</p>
+<p>若隔离级别是“读未提交”：V1就是2，事务B还没有提交就被A看到了，同样V2，V3也是2  </p>
+<p>若隔离级别是“读已提交”：V1是1，V2，V3是2，事务B提交后A才能看见改变。  </p>
+<p>若隔离级别是“可重复读”：V1，V2是1，V3是2，同一个事务才执行中和执行开始的值应该是一样的，V3在事务A提交后可以看到事务B的改变。  </p>
+<p>若隔离级别是“串行化”：V1，V2是1，V3是2，当事务B执行“将1改为2的时候”会被锁住，直到事务A提交后才能改变。  </p>
+<p>在实现上，数据库里面会创建一个视图，访问的时候以视图的逻辑结果为准。在“可重复读”隔离级别下，这个视图实在事务启动时创建的，整个事务存在期间都用这个视图。在“读已提交”隔离级别下，这个视图是在每个SQL语句开始执行的时候创建的。这里需要注意的是，“读未提交”隔离级别下直接返回记录上的最新值，没有视图的概念，而“串行化”隔离级别下直接用加锁的方式来避免并行访问。<br>我们可以看到在不同的隔离级别下，数据库行为是有所不同的。Oracle数据库的默认隔离级别其实就是“读提交”，因此对于一些从Oracle迁移到MySQL的应用，为保证数据库隔离级别的一致，你一定要记得将MySQL的隔离级别设置为“读提交”。  </p>
+<p>配置的方式是，将启动参数transaction的值设置成READ-COMMITTED。你可以用show variables来查看当前的值。<br>总结来说，存在即合理，哪个隔离级别都有它自己的使用场景，你要根据自己的业务情况来定。那么什么时候需要“可重复读”的场景呢？我们来看一个校对逻辑的案例。<br>假设你在管理一个个人银行账户表。一个表存了每个月月底的余额，一个表存了账单明细。这时候你要做数据校对，也就是判断上个月的余额和当月余额的差额，是否与本月的账单明细一致。你一定希望在校对过程中，即使有用户发生了一笔新的交易，也不影响你的校对结果。  </p>
+<h3 id="事务隔离的实现"><a href="#事务隔离的实现" class="headerlink" title="事务隔离的实现"></a>事务隔离的实现</h3><p>理解了事务的隔离级别，我们再来看看事务隔离具体是怎么实现的。这里我们展开说明“可重复读”。  </p>
+<p>在MySQL中，实际上每条记录在更新的时候都会同时记录一条回滚操作。记录上的最新值，通过回滚操作，都可以得到前一个状态的值。<br>假设一个值从1被按顺序改成了2，3，4，在回滚日志里面就会有类似下面的记录。  </p>
+<p><img src="../image/%E5%9B%9E%E6%BB%9A%E6%AE%B5.png" alt="回滚段.png" title="回滚段">    </p>
+<p>当前值是4，但是在查询这条记录的时候，不同时刻启动的事务会有不用的read-view。如图中看到的，在视图A，B，C里面，这一个记录的值分别是1，2，4，同一条记录在系统中可以存在多个版本，就是数据库的多版本并发控制（MVCC）对于read-view，要得到1，就必须将当前值依次执行图中所有的回滚操作得到。<br>同时你会发现，即使现在有另外一个事务正在将4改成5，这个事务跟read-viewA，B，C对应的事务是不会冲突的。<br>你一定会问，回滚日志总不能一直保留吧，什么时候删除呢？答案是，在不需要的时候才删除，也就是说，系统会判断，当没有事务在需要用到这些回滚日志时，回滚日志会被删除。  </p>
+<p>什么时候才不需要了呢？<br>就时当系统里没有比这个回滚日志更早的read-view的时候。<br>基于上面的说明，我们来讨论一下为什么建议你尽量不要使用长事务。<br>长事务意味着系统里面会存在很老的事务视图。由于这些事务随时可能访问数据库里面的任何数据，所以这个事务提交之前，数据库里面它可能用到的回滚记录都必须保留，这就会导致大量占用存储空间。<br>在MySQL5.5及以前的版本，回滚日志时跟数据字典一起放在ibdata文件里的，即使长事务最终提交，回滚段被清理，文件也不会变小。我见过数只有20GB，而非回滚段有200GB的库，最终只好为了清理回滚段，重建整个库。<br>除了对回滚段的影响，长事务还占用锁资源，也可能拖垮整个库，后面讲锁的时候还会展开说。 </p>
+<h3 id="事务的启动方式"><a href="#事务的启动方式" class="headerlink" title="事务的启动方式"></a>事务的启动方式</h3><p>如前面所述，长事务有这些潜在风险，我当然是建议你尽量避免。其实很多时候业务开发同学并不是有意使用长事务，通常是由于误用所致。MySQL的事务启动方式有以下几种：<br>1.显示启动事务语句，begin活start transaction。配套的提交语句是commit，回滚语句是rollback，或者断开连接。<br>有些客户端连接框架会默认连接成功后先执行一个set autocommit = 0的命令。这就导致接下来的查询都在事务中，如果是长链接，就导致了意外的长事务。<br>因此，我会建议你总是使用set autocommit = 1，通过显式语句的方式来启动事务。   </p>
+<p>ps：这里解释一下set autocommit = 1  autocommit指的是事务，如果set autocommit = 0那么所有的语句一定是在一个事务里。在这种情况下，如果使用连接池，并且在查询之前没有rollback或者set autocommit = 1，那么就悲剧了，因为根据mysql的默认事务级别，可重复读，永远也取不到这个事务被开户前的数据。另外一点set autocommit = 0，会自动提交前一个事务，因此正确的做法是rollback ，set autocommit = 0，完成之后在set autocommit<br> = 1  </p>
+<p>但有的开发同学会纠结“多一次交互”的问题，对于一个需要频繁使用事务的业务，第二种方式每个事务在开始时都不需要主动执行一次“begin”，减少了语句的交互次数。如果你也有这个顾虑，我建议你commit work and chain语法。<br>在autocommit为1的情况下，用beigin显示启动的事务，如果执行commit则提交事务。如果执行commit work and chain，则是提交事务并自动启动下一个事务，这样也省去了再次执行begin语句的开销，同时带来的好处是从程序开发的角度明确地知道每个语句是否处于事务中。  </p>
+<p>你可以在information_schema库的innodb_trx这个表中查询长事务，比如下面这个语句，用于查找持续时间超过60s的事务。  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from information_schema.innodb_trx where TIME_TO_SET(timediff(now(),trx_started)) &gt; 60</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>事务</tag>
       </tags>
   </entry>
   <entry>
