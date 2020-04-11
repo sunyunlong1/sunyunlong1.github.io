@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-10T15:35:21.553Z</updated>
+  <updated>2020-04-11T15:31:09.787Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>go big or go home-27</title>
+    <link href="http://yoursite.com/2020/04/11/go-big-or-go-home-27/"/>
+    <id>http://yoursite.com/2020/04/11/go-big-or-go-home-27/</id>
+    <published>2020-04-11T15:15:56.000Z</published>
+    <updated>2020-04-11T15:31:09.787Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;单词/短语&lt;/th&gt;
+&lt;th&gt;中文&lt;/th&gt;
+&lt;th&gt;句子&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;emergency&lt;/td&gt;
+&lt;td&gt;紧急情况&lt;/td&gt;
+&lt;td&gt;It’s an
+        
+      
+    
+    </summary>
+    
+    
+      <category term="English" scheme="http://yoursite.com/categories/English/"/>
+    
+    
+      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
+    
+  </entry>
   
   <entry>
     <title>go big or go home-26</title>
@@ -698,44 +736,6 @@
 &lt;td&gt;broad&lt;/td&gt;
 &lt;td&gt;宽的&lt;/td&gt;
 &lt;td&gt;This road is broad
-        
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>go big or go home-10</title>
-    <link href="http://yoursite.com/2020/03/25/go-big-or-go-home-10/"/>
-    <id>http://yoursite.com/2020/03/25/go-big-or-go-home-10/</id>
-    <published>2020-03-25T14:51:00.000Z</published>
-    <updated>2020-04-04T11:01:51.313Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;单词/短语&lt;/th&gt;
-&lt;th&gt;中文&lt;/th&gt;
-&lt;th&gt;句子&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;degree Celsius&lt;/td&gt;
-&lt;td&gt;摄氏度&lt;/td&gt;
-&lt;td&gt;It’s about
         
       
     
