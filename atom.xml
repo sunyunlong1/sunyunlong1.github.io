@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-11T15:31:09.787Z</updated>
+  <updated>2020-04-12T15:40:27.373Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>go big or go home-28</title>
+    <link href="http://yoursite.com/2020/04/12/go-big-or-go-home-28/"/>
+    <id>http://yoursite.com/2020/04/12/go-big-or-go-home-28/</id>
+    <published>2020-04-12T15:28:55.000Z</published>
+    <updated>2020-04-12T15:40:27.373Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;单词/短语&lt;/th&gt;
+&lt;th&gt;中文&lt;/th&gt;
+&lt;th&gt;句子&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;go by&lt;/td&gt;
+&lt;td&gt;流逝&lt;/td&gt;
+&lt;td&gt;Don’t waste your time
+        
+      
+    
+    </summary>
+    
+    
+      <category term="English" scheme="http://yoursite.com/categories/English/"/>
+    
+    
+      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
+    
+  </entry>
   
   <entry>
     <title>go big or go home-27</title>
@@ -698,44 +736,6 @@
 &lt;td&gt;draft&lt;/td&gt;
 &lt;td&gt;草稿&lt;/td&gt;
 &lt;td&gt;This is just the
-        
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>go big or go home-11</title>
-    <link href="http://yoursite.com/2020/03/26/go-big-or-go-home-11/"/>
-    <id>http://yoursite.com/2020/03/26/go-big-or-go-home-11/</id>
-    <published>2020-03-26T14:32:55.000Z</published>
-    <updated>2020-04-04T11:01:55.512Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;单词/短语&lt;/th&gt;
-&lt;th&gt;中文&lt;/th&gt;
-&lt;th&gt;句子&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;broad&lt;/td&gt;
-&lt;td&gt;宽的&lt;/td&gt;
-&lt;td&gt;This road is broad
         
       
     
