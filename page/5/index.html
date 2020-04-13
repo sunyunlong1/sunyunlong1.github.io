@@ -67,6 +67,89 @@
     
     
     
+    <article id="blog-leetcode79" class="article article-type-blog" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2019/10/20/leetcode79/"
+    >leetcode79</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2019/10/20/leetcode79/" class="article-date">
+  <time datetime="2019-10-20T15:47:11.000Z" itemprop="datePublished">2019-10-20</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/leetcode/">leetcode</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
+<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],</span><br><span class="line">  [&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],</span><br><span class="line">  [&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = &quot;ABCCED&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;SEE&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;ABCB&quot;, 返回 false.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line"></span><br><span class="line">    static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">    static int[] column = &#123;1,0,-1,0&#125;;</span><br><span class="line"></span><br><span class="line">    public  boolean exist(char[][] board, String word) &#123;</span><br><span class="line"></span><br><span class="line">        for (int i =0,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            for (int j=0,columnLen = board[0].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                if (dfs(board,word,i,j,0)) return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean dfs(char[][] board,String word,int x,int y,int index)&#123;</span><br><span class="line">        if (x&lt;0 || x&gt;=board.length || y&lt;0 || y&gt;=board[0].length) return false;</span><br><span class="line"></span><br><span class="line">        if(board[x][y] != word.charAt(index)) return false;</span><br><span class="line"></span><br><span class="line">        if(index == word.length() - 1) return true;</span><br><span class="line"></span><br><span class="line">        board[x][y] = &apos;#&apos;;</span><br><span class="line"></span><br><span class="line">        for (int i = 0 ; i&lt;4;i++)&#123;</span><br><span class="line">            if (dfs(board,word,x+row[i],y+column[i],index+1)) return true;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        char[][] borad = &#123;&#123;&apos;F&apos;,&apos;Y&apos;,&apos;C&apos;,&apos;E&apos;,&apos;N&apos;,&apos;R&apos;,&apos;D&apos;&#125;,&#123;&apos;K&apos;,&apos;L&apos;,&apos;N&apos;,&apos;F&apos;,&apos;I&apos;,&apos;N&apos;,&apos;U&apos;&#125;,&#123;&apos;A&apos;,&apos;A&apos;,&apos;A&apos;,&apos;R&apos;,&apos;A&apos;,&apos;H&apos;,&apos;R&apos;&#125;,&#123;&apos;N&apos;,&apos;D&apos;,&apos;K&apos;,&apos;L&apos;,&apos;P&apos;,&apos;N&apos;,&apos;E&apos;&#125;,&#123;&apos;A&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;S&apos;,&apos;A&apos;,&apos;P&apos;&#125;,&#123;&apos;O&apos;,&apos;O&apos;,&apos;G&apos;,&apos;O&apos;,&apos;T&apos;,&apos;P&apos;,&apos;N&apos;&#125;,&#123;&apos;H&apos;,&apos;P&apos;,&apos;O&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;O&apos;&#125;&#125;;</span><br><span class="line">        String word= &quot;poland&quot;;</span><br><span class="line">        System.out.println(new Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里主要说明一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">board[x][y] = &apos;#&apos;;</span><br></pre></td></tr></table></figure>
+
+<p>是将已经查找过的做一个标记，以及</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">static int[] column = &#123;1,0,-1,0&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode79/">leetcode79</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/二维网格/">二维网格</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="blog-leetcode208" class="article article-type-blog" itemscope
   itemprop="blogPost" data-scroll-reveal>
 

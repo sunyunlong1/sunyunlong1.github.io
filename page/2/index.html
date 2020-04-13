@@ -67,6 +67,83 @@
     
     
     
+    <article id="blog-redis系列-实现一个延时消费队列" class="article article-type-blog" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2020/04/05/redis系列-实现一个延时消费队列/"
+    >redis系列-实现一个延时消费队列</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/04/05/redis系列-实现一个延时消费队列/" class="article-date">
+  <time datetime="2020-04-05T13:49:30.000Z" itemprop="datePublished">2020-04-05</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h3 id="用Zset和Hash实现一个延时队列，话不多说，附上代码"><a href="#用Zset和Hash实现一个延时队列，话不多说，附上代码" class="headerlink" title="用Zset和Hash实现一个延时队列，话不多说，附上代码"></a>用Zset和Hash实现一个延时队列，话不多说，附上代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertToRank</span><span class="params">(String id, String msg, String isNow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score=<span class="keyword">this</span>.getScore(isNow);</span><br><span class="line">        String uuid=UUID.randomUUID().toString().replaceAll(<span class="string">"-"</span>, <span class="string">""</span>);</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=</span><br><span class="line">                stringRedisTemplate.opsForHash();</span><br><span class="line">        Map&lt;String, String&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>, id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>, msg);</span><br><span class="line">        opsForHash.putAll(Constant.KEY_HASH + uuid, map);</span><br><span class="line">        <span class="keyword">this</span>.insertZset(uuid, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入zset，按照score排序</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> score</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertZset</span><span class="params">(String key, <span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=</span><br><span class="line">                stringRedisTemplate.opsForZSet();</span><br><span class="line">        opsForZSet.add(Constant.KEY_ZSET, key, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前时间</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> isNow is时表示实时消息，放入zset前面</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">double</span> <span class="title">getScore</span><span class="params">(String isNow)</span> </span>&#123;</span><br><span class="line">        Date nowTime=<span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">        SimpleDateFormat simpleDateFormat=<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMddHHmmss"</span>);</span><br><span class="line">        String now=simpleDateFormat.format(nowTime);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"is"</span>.equals(isNow)) &#123;</span><br><span class="line">            <span class="keyword">return</span> Double.parseDouble(now.substring(<span class="number">0</span>, <span class="number">12</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Double.parseDouble(now);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 抢锁</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOut</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key, String value, <span class="keyword">long</span> timeOut)</span> </span>&#123;</span><br><span class="line">        Boolean isSuccess=stringRedisTemplate.opsForValue().setIfAbsent(key, value);</span><br><span class="line">        <span class="keyword">if</span> (isSuccess) &#123;</span><br><span class="line">            stringRedisTemplate.expire(key, timeOut, TimeUnit.MINUTES);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isSuccess;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 释放锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delLock</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取zset第一条数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstData</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=stringRedisTemplate.opsForZSet();</span><br><span class="line">        Set&lt;String&gt; range=opsForZSet.range(key, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (!CollectionUtils.isEmpty(range)) &#123;</span><br><span class="line">            String uuid = range.iterator().next();</span><br><span class="line">            opsForZSet.remove(key,uuid);</span><br><span class="line">            <span class="keyword">return</span> uuid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询当前Zset多少个数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getZsetSize</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stringRedisTemplate.opsForZSet().zCard(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取hash数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,Object&gt; <span class="title">getHashData</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=stringRedisTemplate.opsForHash();</span><br><span class="line">        Object id=opsForHash.get(key, <span class="string">"id"</span>);</span><br><span class="line">        Object msg=opsForHash.get(key, <span class="string">"msg"</span>);</span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>,id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>,msg);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">(CountDownLatch countDownLatch,String uuid)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Map&lt;String, Object&gt; hashData=<span class="keyword">this</span>.getHashData(Constant.KEY_HASH + uuid);</span><br><span class="line">            log.info(<span class="string">"开始发送"</span>+hashData.get(<span class="string">"id"</span>)+<span class="string">"消息: "</span>+hashData.get(<span class="string">"msg"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            countDownLatch.countDown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis-Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写-注意删除也是写的一种-，那么就要注意是不是cluster模式。"><a href="#用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis-Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写-注意删除也是写的一种-，那么就要注意是不是cluster模式。" class="headerlink" title="用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写(注意删除也是写的一种)，那么就要注意是不是cluster模式。"></a>用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写(注意删除也是写的一种)，那么就要注意是不是cluster模式。</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TaskRedis</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisUtil redisUtil;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Scheduled</span>(cron=<span class="string">"0 */1 * * * ?"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> b=redisUtil.tryLock(Constant.KEY_LOCK, <span class="string">"1"</span>, <span class="number">5</span>);</span><br><span class="line">        <span class="keyword">if</span> (!b) &#123;</span><br><span class="line">            log.info(<span class="string">"抢锁失败"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Long zsetSize=redisUtil.getZsetSize(Constant.KEY_ZSET);</span><br><span class="line">            <span class="keyword">if</span> (zsetSize == <span class="number">0L</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> ;</span><br><span class="line">            &#125;</span><br><span class="line">            CountDownLatch countDownLatch=<span class="keyword">new</span> CountDownLatch(<span class="number">500</span>);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; zsetSize; i++) &#123;</span><br><span class="line">                String uuid=redisUtil.getFirstData(Constant.KEY_ZSET);</span><br><span class="line">                redisUtil.sendMsg(countDownLatch, uuid);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                countDownLatch.await(<span class="number">50L</span>, TimeUnit.SECONDS);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                log.info(<span class="string">"e:&#123;&#125;"</span>, e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>, e);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            redisUtil.delLock(Constant.KEY_LOCK);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="这是Controller"><a href="#这是Controller" class="headerlink" title="这是Controller"></a>这是Controller</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/redis"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RedisMsgService redisMsgService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/sendMsg"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sendMsg</span><span class="params">(String id,String msg,String isNow)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.sendMsg(id,msg,isNow);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/insert"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">insert</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.insert();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/kill"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.kill();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过postman调用测试"><a href="#通过postman调用测试" class="headerlink" title="通过postman调用测试"></a>通过postman调用测试</h3><p><img src="../image/postman.png" alt="postman.png" title="postman"></p>
+<h3 id="控制台打印"><a href="#控制台打印" class="headerlink" title="控制台打印"></a>控制台打印</h3><p><img src="../image/sys.png" alt="sys.png" title="sys"></p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/延时队列/">延时队列</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="blog-redis系列-夯实基础面试相关" class="article article-type-blog" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
@@ -1622,224 +1699,6 @@
 <td>spicy</td>
 <td>辣的</td>
 <td>I like spicy hot pot</td>
-</tr>
-</tbody></table>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/单词/">单词</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-
-</article>
-    
-    <article id="blog-go-big-or-go-home-12" class="article article-type-blog" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2020/03/27/go-big-or-go-home-12/"
-    >go big or go home-12</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2020/03/27/go-big-or-go-home-12/" class="article-date">
-  <time datetime="2020-03-27T14:50:25.000Z" itemprop="datePublished">2020-03-27</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/English/">English</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>draft</td>
-<td>草稿</td>
-<td>This is just the draft design of a building</td>
-</tr>
-<tr>
-<td>side</td>
-<td>边</td>
-<td>There are many trees on both sides of the river</td>
-</tr>
-<tr>
-<td>patience</td>
-<td>耐心</td>
-<td>Fishing demands a great deal of patience</td>
-</tr>
-<tr>
-<td>candidate</td>
-<td>候选人</td>
-<td>The candidates are persenting the speeches fot the election</td>
-</tr>
-<tr>
-<td>disturb</td>
-<td>打扰</td>
-<td>His snoring really disturbs me at night</td>
-</tr>
-<tr>
-<td>handle</td>
-<td>把手</td>
-<td>Turn the handle to open the door</td>
-</tr>
-<tr>
-<td>merchant</td>
-<td>商人</td>
-<td>The merchant checks the quality of his produce</td>
-</tr>
-<tr>
-<td>construct</td>
-<td>建造</td>
-<td>The workers are constructing a tall  building</td>
-</tr>
-<tr>
-<td>edition</td>
-<td>版本</td>
-<td>The dictionary is now in its third edition which was published in 2017</td>
-</tr>
-<tr>
-<td>fax</td>
-<td>传真</td>
-<td>You can contact us by email or fax</td>
-</tr>
-<tr>
-<td>maintain</td>
-<td>保持</td>
-<td>How do you maintain relationships with your long-distance friends?</td>
-</tr>
-<tr>
-<td>instant message</td>
-<td>即使消息</td>
-<td>Also emails can realize instant messaging</td>
-</tr>
-<tr>
-<td>pal</td>
-<td>伙伴</td>
-<td>Eamiling the pals is a great and helpful way to stay in touch with each other</td>
-</tr>
-<tr>
-<td>circumstances</td>
-<td>情况</td>
-<td>What circumstances you would choose to send emails to keep in touch?</td>
-</tr>
-<tr>
-<td>goes off/rings</td>
-<td>响了</td>
-<td>My alarm goes off at 9:30 in the morning</td>
-</tr>
-<tr>
-<td>get out of</td>
-<td>形容完全离开床了</td>
-<td>Then I get out of the bed</td>
-</tr>
-<tr>
-<td>get up</td>
-<td>起床/起来</td>
-<td>I’ve fallen and I can’t get up</td>
-</tr>
-<tr>
-<td>wake up</td>
-<td>醒来</td>
-<td>wake up early</td>
-</tr>
-<tr>
-<td>go downstairs</td>
-<td>下楼</td>
-<td>go downstairs</td>
-</tr>
-<tr>
-<td>go upstairs</td>
-<td>上楼</td>
-<td>go upstairs</td>
-</tr>
-<tr>
-<td>go to the bathroom/toilet/restroom</td>
-<td>去厕所(美)/(英)</td>
-<td>go to the bathroom/toilet/restroom</td>
-</tr>
-<tr>
-<td>How would you like your egg?</td>
-<td>你想要什么样的鸡蛋？</td>
-<td>早餐回答</td>
-</tr>
-<tr>
-<td>sunny side up</td>
-<td>太阳蛋</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over easy</td>
-<td>煎鸡蛋程度很轻</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over medium</td>
-<td>一面熟</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over hard</td>
-<td>两面熟</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>scrambled egg</td>
-<td>炒鸡蛋</td>
-<td>scrambled egg</td>
-</tr>
-<tr>
-<td>hard boiled egg</td>
-<td>煮鸡蛋</td>
-<td>hard boiled egg</td>
 </tr>
 </tbody></table>
 
