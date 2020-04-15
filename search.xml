@@ -19,6 +19,73 @@
       </tags>
   </entry>
   <entry>
+    <title>Java基础部分之数据类型</title>
+    <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
+    <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
+<p>char/16</p>
+<p>short/16</p>
+<p>int/32</p>
+<p>float/32</p>
+<p>long/64</p>
+<p>double/64</p>
+<p>boolean/~</p>
+<p>boolean只有两个值，ture，false可以使用1bit来存储，但是具体大小没有明确规定，JVM会在编译期将boolean类型的数据转换为int，使用1来表示true，0表示false，JVM支持boolean数组，但是是通过读写byte数组来实现的。</p>
+<h4 id="包装类型"><a href="#包装类型" class="headerlink" title="包装类型"></a>包装类型</h4><p>基本类型都有对应的包装类型，基本类型与其对应的包装类型之间的赋值使用自动装箱与拆箱完成。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer x = 2; //装箱</span><br><span class="line"></span><br><span class="line">int y = x; //拆箱</span><br></pre></td></tr></table></figure>
+
+<h4 id="缓存池"><a href="#缓存池" class="headerlink" title="缓存池"></a>缓存池</h4><p>new Integer(123)与Integer.valueOf(123)的区别在于：</p>
+<p>new Integer(123)每次都会新建一个对象</p>
+<p>Integer.valueOf(123)会使用缓存池中的对象，多次调用会取得同一个对象的引用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer x = new Integer(123);</span><br><span class="line">Integer y = new Integer(123);</span><br><span class="line">System.out.println(x == y); //false</span><br><span class="line">Integer z = Integer.valueOf(123);</span><br><span class="line">Integer k = Integer.valueOf(123);</span><br><span class="line">System.out.println(z == k); //true</span><br></pre></td></tr></table></figure>
+
+<p>valueOf()方法的实现比较简单，就是先判断是否在缓存池中，如果在的话就直接返回缓存池的内容。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static Integer valueOf(int i) &#123;</span><br><span class="line">	if(i &gt;= IntegerCahe.low &amp;&amp; i &lt;= IntegerCahe.high)</span><br><span class="line">		return IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">	return new Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java8中，Integer缓存池的大小默认为-128-127.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static final int low = -128;</span><br><span class="line">static final int high;</span><br><span class="line">static final Integer cache[];</span><br><span class="line"></span><br><span class="line">static &#123;</span><br><span class="line">	//high value may be configured by property</span><br><span class="line">	int h = 127;</span><br><span class="line">	String integerCacheHighPropValue = </span><br><span class="line">		sum.misc.VM.getSaveProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">	if(integerCacheHighPropValue != null) &#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			int i = parseInt(integerCacheHighPropValue)</span><br><span class="line">			i = Math.max(i,127);</span><br><span class="line">			//Maximum array size is Integer.MAX_VALUE</span><br><span class="line">			h = Math.min(i,Integer.MAX_VALUE - (-low) - 1);</span><br><span class="line">		&#125; catch( NumberFormatException nfe)&#123;</span><br><span class="line">		//If the property cannot be parsed into an int,ignore it.</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	high = h;</span><br><span class="line">	</span><br><span class="line">	cache = new Integer[(high - low) + 1];</span><br><span class="line">	int j = low;</span><br><span class="line">	for(int k = 0; k&lt;cache.length; k++)</span><br><span class="line">		cache[k] = new Integer(j++);</span><br><span class="line">	// range [-128,127] must be interned (JLS7 5.1.7)</span><br><span class="line">	assert IntegerCache.high &gt;= 127;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译器会在自动装箱过程调用valueOf()方法，因此多个值相同且值在缓存池范围内的Integer实例使用自动装箱来创建，那么就会引用相同的对象。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer m = 123;</span><br><span class="line">Integer n = 123;</span><br><span class="line">System.out.println(m == n); //true</span><br></pre></td></tr></table></figure>
+
+<p>基本类型对应的缓冲池如下：</p>
+<p>boolean values true and false</p>
+<p>all byte values</p>
+<p>short values between -128 and 127</p>
+<p>int values between -128 and 127</p>
+<p>char in the range \u0000 to \u007F</p>
+<p>在使用这些基本类型对应的包装类型时，如果该数值范围在缓冲池范围内，就可以直接使用缓冲池中的对象。</p>
+<p>在jdk1.8所有的数值类缓冲池中，Integer的缓冲池IntegerCache很特殊，这个缓冲池的下届是-128，上届默认是127，但是这个上届是可调的，在启动jvm的时候，通过-XX:AutoBoxCache=<size>来指定这个缓冲池的大小，该选项在JVM初始化的时候会设定一个名为java.lang.IntegerCache.high系统属性，然后IntegerCache初始化的时候就会读取该系统属性来决定上界。</size></p>
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>Java基本类型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一路走来，即将毕业。</title>
+    <url>/2019/09/12/Sentiment/</url>
+    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
+<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
+<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
+<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
+<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
+<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
+<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
+<p>祝我自己前途似锦，万事胜意。</p>
+<p>2019-03-27 20:44更</p>
+]]></content>
+      <categories>
+        <category>个人经历</category>
+      </categories>
+      <tags>
+        <tag>个人经历</tag>
+        <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java基础部分之String</title>
     <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
     <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
@@ -198,54 +265,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础部分之数据类型</title>
-    <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
-    <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
-<p>char/16</p>
-<p>short/16</p>
-<p>int/32</p>
-<p>float/32</p>
-<p>long/64</p>
-<p>double/64</p>
-<p>boolean/~</p>
-<p>boolean只有两个值，ture，false可以使用1bit来存储，但是具体大小没有明确规定，JVM会在编译期将boolean类型的数据转换为int，使用1来表示true，0表示false，JVM支持boolean数组，但是是通过读写byte数组来实现的。</p>
-<h4 id="包装类型"><a href="#包装类型" class="headerlink" title="包装类型"></a>包装类型</h4><p>基本类型都有对应的包装类型，基本类型与其对应的包装类型之间的赋值使用自动装箱与拆箱完成。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer x = 2; //装箱</span><br><span class="line"></span><br><span class="line">int y = x; //拆箱</span><br></pre></td></tr></table></figure>
-
-<h4 id="缓存池"><a href="#缓存池" class="headerlink" title="缓存池"></a>缓存池</h4><p>new Integer(123)与Integer.valueOf(123)的区别在于：</p>
-<p>new Integer(123)每次都会新建一个对象</p>
-<p>Integer.valueOf(123)会使用缓存池中的对象，多次调用会取得同一个对象的引用</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer x = new Integer(123);</span><br><span class="line">Integer y = new Integer(123);</span><br><span class="line">System.out.println(x == y); //false</span><br><span class="line">Integer z = Integer.valueOf(123);</span><br><span class="line">Integer k = Integer.valueOf(123);</span><br><span class="line">System.out.println(z == k); //true</span><br></pre></td></tr></table></figure>
-
-<p>valueOf()方法的实现比较简单，就是先判断是否在缓存池中，如果在的话就直接返回缓存池的内容。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static Integer valueOf(int i) &#123;</span><br><span class="line">	if(i &gt;= IntegerCahe.low &amp;&amp; i &lt;= IntegerCahe.high)</span><br><span class="line">		return IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">	return new Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java8中，Integer缓存池的大小默认为-128-127.</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static final int low = -128;</span><br><span class="line">static final int high;</span><br><span class="line">static final Integer cache[];</span><br><span class="line"></span><br><span class="line">static &#123;</span><br><span class="line">	//high value may be configured by property</span><br><span class="line">	int h = 127;</span><br><span class="line">	String integerCacheHighPropValue = </span><br><span class="line">		sum.misc.VM.getSaveProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">	if(integerCacheHighPropValue != null) &#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			int i = parseInt(integerCacheHighPropValue)</span><br><span class="line">			i = Math.max(i,127);</span><br><span class="line">			//Maximum array size is Integer.MAX_VALUE</span><br><span class="line">			h = Math.min(i,Integer.MAX_VALUE - (-low) - 1);</span><br><span class="line">		&#125; catch( NumberFormatException nfe)&#123;</span><br><span class="line">		//If the property cannot be parsed into an int,ignore it.</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	high = h;</span><br><span class="line">	</span><br><span class="line">	cache = new Integer[(high - low) + 1];</span><br><span class="line">	int j = low;</span><br><span class="line">	for(int k = 0; k&lt;cache.length; k++)</span><br><span class="line">		cache[k] = new Integer(j++);</span><br><span class="line">	// range [-128,127] must be interned (JLS7 5.1.7)</span><br><span class="line">	assert IntegerCache.high &gt;= 127;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>编译器会在自动装箱过程调用valueOf()方法，因此多个值相同且值在缓存池范围内的Integer实例使用自动装箱来创建，那么就会引用相同的对象。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Integer m = 123;</span><br><span class="line">Integer n = 123;</span><br><span class="line">System.out.println(m == n); //true</span><br></pre></td></tr></table></figure>
-
-<p>基本类型对应的缓冲池如下：</p>
-<p>boolean values true and false</p>
-<p>all byte values</p>
-<p>short values between -128 and 127</p>
-<p>int values between -128 and 127</p>
-<p>char in the range \u0000 to \u007F</p>
-<p>在使用这些基本类型对应的包装类型时，如果该数值范围在缓冲池范围内，就可以直接使用缓冲池中的对象。</p>
-<p>在jdk1.8所有的数值类缓冲池中，Integer的缓冲池IntegerCache很特殊，这个缓冲池的下届是-128，上届默认是127，但是这个上届是可调的，在启动jvm的时候，通过-XX:AutoBoxCache=<size>来指定这个缓冲池的大小，该选项在JVM初始化的时候会设定一个名为java.lang.IntegerCache.high系统属性，然后IntegerCache初始化的时候就会读取该系统属性来决定上界。</size></p>
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>Java基本类型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-11</title>
-    <url>/2020/03/26/go-big-or-go-home-11/</url>
+    <title>go big or go home-10</title>
+    <url>/2020/03/25/go-big-or-go-home-10/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -255,39 +276,154 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>broad</td>
-<td>宽的</td>
-<td>This road is broad enough for many cars to drive on</td>
+<td>degree Celsius</td>
+<td>摄氏度</td>
+<td>It’s about 20 degrees Celsius</td>
 </tr>
 <tr>
-<td>accomplish</td>
-<td>完成</td>
-<td>She is so happy to have accomplished her weight-loss goal</td>
+<td>rely</td>
+<td>依赖</td>
+<td>Babies rely on their parents for food and care</td>
 </tr>
 <tr>
-<td>case</td>
-<td>箱子</td>
-<td>He carried all of his important things in a black case</td>
+<td>conductor</td>
+<td>指挥</td>
+<td>The conductor is the leader of the band</td>
 </tr>
 <tr>
-<td>normal</td>
-<td>正常的</td>
-<td>A normal human foot should be like the one in the middle</td>
+<td>well-known</td>
+<td>有名的</td>
+<td>This is a well-known painting</td>
 </tr>
 <tr>
-<td>organ</td>
-<td>器官</td>
-<td>Every organ plays an important role in our body</td>
+<td>rescue</td>
+<td>拯救</td>
+<td>The firemen rescued the little boy from the fire</td>
 </tr>
 <tr>
-<td>ceremony</td>
-<td>典礼</td>
-<td>The student was awarded her certificate during the graduation ceremony</td>
+<td>blank</td>
+<td>空白的</td>
+<td>You can write something on this blank notebook</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>费用</td>
+<td>He was shocked by the huge amount of hidden fees behind such a haircut</td>
+</tr>
+<tr>
+<td>autonomous</td>
+<td>自动驾驶</td>
+<td>The man is relaxing-reading a book in his autonomous car</td>
+</tr>
+<tr>
+<td>measurement</td>
+<td>测量</td>
+<td>the measurement in degrees of how hot or cold a thing or place is</td>
+</tr>
+<tr>
+<td>clear my mind</td>
+<td>理清我的思路</td>
+<td>clear my mind</td>
+</tr>
+<tr>
+<td>forecast</td>
+<td>预告</td>
+<td>a prediction of the weather for the future</td>
+</tr>
+<tr>
+<td>weatherman</td>
+<td>天气预报员</td>
+<td>My sister is a weatherman</td>
+</tr>
+<tr>
+<td>a drop of</td>
+<td>一滴/一缕</td>
+<td>a drop of golden sunshine</td>
+</tr>
+<tr>
+<td>freezing</td>
+<td>冰冻的</td>
+<td>It is freezing here,please bring enough warm clothes when you come</td>
+</tr>
+<tr>
+<td>Indeed,couldn’t be better</td>
+<td>确实是这样，不能再好了</td>
+<td>Indeed,couldn’t be better</td>
+</tr>
+<tr>
+<td>minus</td>
+<td>下降</td>
+<td>Even can be minus 20 degrees Celsius</td>
+</tr>
+<tr>
+<td>dry</td>
+<td>干燥的</td>
+<td>Beijing is dry and windy in winter</td>
+</tr>
+<tr>
+<td>windy</td>
+<td>多风的</td>
+<td>Beijing is dry and windy in winter</td>
+</tr>
+<tr>
+<td>heavy</td>
+<td>表示程度</td>
+<td>There is a heavy rain outside</td>
+</tr>
+<tr>
+<td>storm</td>
+<td>暴风雨</td>
+<td>Look at the heavy cloud,I think the storm is coming</td>
+</tr>
+<tr>
+<td>cloud</td>
+<td>云</td>
+<td>Look at the heavy cloud,I think the strom is coming</td>
+</tr>
+<tr>
+<td>I’m afraid so</td>
+<td>恐怕是的</td>
+<td>I’m afraid so ,the weatherman said there would be a heavy rain tonight</td>
+</tr>
+<tr>
+<td>hail</td>
+<td>下冰雹</td>
+<td>heavy hail</td>
+</tr>
+<tr>
+<td>blizzard</td>
+<td>暴风雪</td>
+<td>blizzard</td>
 </tr>
 <tr>
 <td>miserable</td>
 <td>悲惨的</td>
 <td>It’s miserable out</td>
+</tr>
+<tr>
+<td>calling for</td>
+<td>呼吁</td>
+<td>They are calling for blue skies all week</td>
+</tr>
+<tr>
+<td>smoking hot</td>
+<td>火辣</td>
+<td>The gril is smoking hot</td>
+</tr>
+<tr>
+<td>frequently</td>
+<td>经常，频繁</td>
+<td>I go to BeiJing frequently</td>
+</tr>
+<tr>
+<td>developed</td>
+<td>发达</td>
+<td>My hometown is not developed</td>
+</tr>
+<tr>
+<td>优雅句子</td>
+<td>当你独自穿过了暴风雨,你就不再是原来那个人了</td>
+<td>Once you walk through the storm alone,You are no longer the same person as before</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -459,8 +595,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-15</title>
-    <url>/2020/03/30/go-big-or-go-home-15/</url>
+    <title>go big or go home-13</title>
+    <url>/2020/03/29/go-big-or-go-home-13/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -470,49 +606,104 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>development</td>
-<td>发展</td>
-<td>This picture shows the development of phones over time</td>
+<td>dismiss</td>
+<td>开除</td>
+<td>The boss was anrgy and dismissed the staff</td>
 </tr>
 <tr>
-<td>work out</td>
-<td>计算出</td>
-<td>He worked out the math problem on the blackboard</td>
+<td>protection</td>
+<td>保护</td>
+<td>Everyone should get involved in enviromental protection</td>
 </tr>
 <tr>
-<td>take the place of</td>
-<td>取代</td>
-<td>Gradually,robots have taken the place of manual workers</td>
+<td>feed</td>
+<td>喂养</td>
+<td>My mother would feed me when I was hungry</td>
 </tr>
 <tr>
-<td>pardon</td>
-<td>原谅</td>
-<td>The king pardoned the prisoner</td>
+<td>ought to</td>
+<td>应该</td>
+<td>When you study，you ought to sit up straight</td>
 </tr>
 <tr>
-<td>strap</td>
-<td>绑住</td>
-<td>The man is driving a jeep with luggage strapped to the roof</td>
+<td>rapid</td>
+<td>迅速的</td>
+<td>The rabbit ran at a rapid speed</td>
 </tr>
 <tr>
-<td>fur</td>
-<td>毛皮</td>
-<td>A fur coat is very warm,bur very expensive</td>
+<td>cure</td>
+<td>治愈</td>
+<td>These pills will cure your sickness</td>
 </tr>
 <tr>
-<td>yet</td>
-<td>尚/还</td>
-<td>I’m tired,but I haven’t finished studying yet</td>
+<td>outer</td>
+<td>外面的</td>
+<td>The outer part of this ball is green</td>
 </tr>
 <tr>
-<td>jet</td>
-<td>喷气式</td>
-<td>Nowadays most long-distance travel is by jet plane</td>
+<td>dinosaur</td>
+<td>恐龙</td>
+<td>Two dinosaurs are fighting against each other</td>
 </tr>
 <tr>
-<td>bacterium</td>
-<td>细菌</td>
-<td>This kind of bacterium can cause a very dangerous disease</td>
+<td>spicy</td>
+<td>辣的</td>
+<td>I like spicy hot pot</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-11</title>
+    <url>/2020/03/26/go-big-or-go-home-11/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>broad</td>
+<td>宽的</td>
+<td>This road is broad enough for many cars to drive on</td>
+</tr>
+<tr>
+<td>accomplish</td>
+<td>完成</td>
+<td>She is so happy to have accomplished her weight-loss goal</td>
+</tr>
+<tr>
+<td>case</td>
+<td>箱子</td>
+<td>He carried all of his important things in a black case</td>
+</tr>
+<tr>
+<td>normal</td>
+<td>正常的</td>
+<td>A normal human foot should be like the one in the middle</td>
+</tr>
+<tr>
+<td>organ</td>
+<td>器官</td>
+<td>Every organ plays an important role in our body</td>
+</tr>
+<tr>
+<td>ceremony</td>
+<td>典礼</td>
+<td>The student was awarded her certificate during the graduation ceremony</td>
+</tr>
+<tr>
+<td>miserable</td>
+<td>悲惨的</td>
+<td>It’s miserable out</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -578,71 +769,6 @@
 <td>hug</td>
 <td>拥抱</td>
 <td>The happy couple hug in front of their new home</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-13</title>
-    <url>/2020/03/29/go-big-or-go-home-13/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>dismiss</td>
-<td>开除</td>
-<td>The boss was anrgy and dismissed the staff</td>
-</tr>
-<tr>
-<td>protection</td>
-<td>保护</td>
-<td>Everyone should get involved in enviromental protection</td>
-</tr>
-<tr>
-<td>feed</td>
-<td>喂养</td>
-<td>My mother would feed me when I was hungry</td>
-</tr>
-<tr>
-<td>ought to</td>
-<td>应该</td>
-<td>When you study，you ought to sit up straight</td>
-</tr>
-<tr>
-<td>rapid</td>
-<td>迅速的</td>
-<td>The rabbit ran at a rapid speed</td>
-</tr>
-<tr>
-<td>cure</td>
-<td>治愈</td>
-<td>These pills will cure your sickness</td>
-</tr>
-<tr>
-<td>outer</td>
-<td>外面的</td>
-<td>The outer part of this ball is green</td>
-</tr>
-<tr>
-<td>dinosaur</td>
-<td>恐龙</td>
-<td>Two dinosaurs are fighting against each other</td>
-</tr>
-<tr>
-<td>spicy</td>
-<td>辣的</td>
-<td>I like spicy hot pot</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -844,91 +970,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-2</title>
-    <url>/2020/03/17/go-big-or-go-home-2/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stadium</td>
-<td>体育场</td>
-<td>I often play football in the stadium</td>
-</tr>
-<tr>
-<td>reply</td>
-<td>回复</td>
-<td>I’m waiting for your reply</td>
-</tr>
-<tr>
-<td>standard</td>
-<td>标准</td>
-<td>Such a standard figure</td>
-</tr>
-<tr>
-<td>honour</td>
-<td>荣誉</td>
-<td>It’s an honour to graduate from this school</td>
-</tr>
-<tr>
-<td>village</td>
-<td>乡村</td>
-<td>I like village life</td>
-</tr>
-<tr>
-<td>ever since</td>
-<td>自从…时起</td>
-<td>They lived there ever since they married</td>
-</tr>
-<tr>
-<td>turn up</td>
-<td>调高</td>
-<td>Turn up the TV volume</td>
-</tr>
-<tr>
-<td>volume</td>
-<td>音量</td>
-<td>Turn on the volume</td>
-</tr>
-<tr>
-<td>get on with</td>
-<td>与…相处</td>
-<td>She likes get on with animals</td>
-</tr>
-<tr>
-<td>tourism</td>
-<td>旅游</td>
-<td>I like tourism around the world</td>
-</tr>
-<tr>
-<td>industry</td>
-<td>行业</td>
-<td>The tourism industry is getting worse</td>
-</tr>
-<tr>
-<td>experience</td>
-<td>经验</td>
-<td>He has five years of programming experience</td>
-</tr>
-<tr>
-<td>sorrows</td>
-<td>悲伤</td>
-<td>I often share happiness and sorrows with my friends</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-17</title>
     <url>/2020/04/01/go-big-or-go-home-17/</url>
     <content><![CDATA[<table>
@@ -1003,126 +1044,6 @@
 <td>beach</td>
 <td>海边</td>
 <td>The girl took a vacation on the beach</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-19</title>
-    <url>/2020/04/03/go-big-or-go-home-19/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pilot</td>
-<td>飞行员</td>
-<td>The heroic pilot managed to land the damaged plane safely</td>
-</tr>
-<tr>
-<td>mustard</td>
-<td>芥末</td>
-<td>Would you like some mustard on your sandwich?</td>
-</tr>
-<tr>
-<td>agriculture</td>
-<td>农业</td>
-<td>We depend on agriculture to give us food</td>
-</tr>
-<tr>
-<td>proposal</td>
-<td>建议</td>
-<td>He’s against the teacher’s proposal</td>
-</tr>
-<tr>
-<td>mailbox</td>
-<td>邮箱</td>
-<td>Hey！You’ve got a leeter in your mailbox</td>
-</tr>
-<tr>
-<td>cap</td>
-<td>帽子</td>
-<td>This is a blue police cap</td>
-</tr>
-<tr>
-<td>straight</td>
-<td>直的</td>
-<td>How did you get your hair so straight?</td>
-</tr>
-<tr>
-<td>restaurant</td>
-<td>饭馆</td>
-<td>The happy family are dining together at a restaurant</td>
-</tr>
-<tr>
-<td>shrimp</td>
-<td>虾肉</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-20</title>
-    <url>/2020/04/04/go-big-or-go-home-20/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>plate</td>
-<td>盘子</td>
-<td>I can put much food on this big plate</td>
-</tr>
-<tr>
-<td>so that</td>
-<td>太…以至于</td>
-<td>Its so hot that I’m going to melt</td>
-</tr>
-<tr>
-<td>discovery</td>
-<td>发现</td>
-<td>She makes a discovery in the field of flowers</td>
-</tr>
-<tr>
-<td>outline</td>
-<td>外形</td>
-<td>The girl drew an outline of the model</td>
-</tr>
-<tr>
-<td>zip code</td>
-<td>邮政编码</td>
-<td>You must write a zip code on the envelope before mailing a letter</td>
-</tr>
-<tr>
-<td>lip</td>
-<td>嘴唇</td>
-<td>Her lips are the most beautiful part of her face</td>
-</tr>
-<tr>
-<td>weed</td>
-<td>杂草</td>
-<td>The worker is cutting the weeds</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1364,8 +1285,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-21</title>
-    <url>/2020/04/05/go-big-or-go-home-21/</url>
+    <title>go big or go home-19</title>
+    <url>/2020/04/03/go-big-or-go-home-19/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -1375,144 +1296,254 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>vertical</td>
-<td>垂直的</td>
-<td>The boy found the only vertical tree in the woods</td>
+<td>pilot</td>
+<td>飞行员</td>
+<td>The heroic pilot managed to land the damaged plane safely</td>
 </tr>
 <tr>
-<td>extraordinary</td>
-<td>非同寻常的</td>
-<td>The teacher said my daughter has extraordinary musical talent</td>
+<td>mustard</td>
+<td>芥末</td>
+<td>Would you like some mustard on your sandwich?</td>
 </tr>
 <tr>
-<td>object</td>
-<td>物体</td>
-<td>UFO is the short form of Unidentified Flying Object</td>
+<td>agriculture</td>
+<td>农业</td>
+<td>We depend on agriculture to give us food</td>
 </tr>
 <tr>
-<td>ahead</td>
-<td>领先</td>
-<td>I am running ahead of the rest of the group</td>
+<td>proposal</td>
+<td>建议</td>
+<td>He’s against the teacher’s proposal</td>
 </tr>
 <tr>
-<td>for ever</td>
-<td>永远</td>
-<td>Diamonds and gold last for ever, and so will our love</td>
+<td>mailbox</td>
+<td>邮箱</td>
+<td>Hey！You’ve got a leeter in your mailbox</td>
 </tr>
 <tr>
-<td>tip</td>
-<td>小费</td>
-<td>I paid $5 to the waiter for tip</td>
+<td>cap</td>
+<td>帽子</td>
+<td>This is a blue police cap</td>
 </tr>
 <tr>
-<td>barber</td>
-<td>理发师</td>
-<td>I asked my barber to give me a new style this time</td>
+<td>straight</td>
+<td>直的</td>
+<td>How did you get your hair so straight?</td>
 </tr>
 <tr>
-<td>coronavirus</td>
-<td>冠状病毒</td>
-<td></td>
+<td>restaurant</td>
+<td>饭馆</td>
+<td>The happy family are dining together at a restaurant</td>
 </tr>
 <tr>
-<td>western restaurant</td>
-<td>西餐厅</td>
-<td></td>
+<td>shrimp</td>
+<td>虾肉</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-2</title>
+    <url>/2020/03/17/go-big-or-go-home-2/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stadium</td>
+<td>体育场</td>
+<td>I often play football in the stadium</td>
 </tr>
 <tr>
-<td>dining table</td>
-<td>餐桌(正餐)</td>
-<td></td>
+<td>reply</td>
+<td>回复</td>
+<td>I’m waiting for your reply</td>
 </tr>
 <tr>
-<td>6 o’clock sharp</td>
-<td>六点整</td>
-<td></td>
+<td>standard</td>
+<td>标准</td>
+<td>Such a standard figure</td>
 </tr>
 <tr>
-<td>half past 10</td>
-<td>十点半</td>
-<td></td>
+<td>honour</td>
+<td>荣誉</td>
+<td>It’s an honour to graduate from this school</td>
 </tr>
 <tr>
-<td>a quarter past 10</td>
-<td>十点十五</td>
-<td></td>
+<td>village</td>
+<td>乡村</td>
+<td>I like village life</td>
 </tr>
 <tr>
-<td>make a reservation</td>
-<td>预定(还没有预订)</td>
-<td></td>
+<td>ever since</td>
+<td>自从…时起</td>
+<td>They lived there ever since they married</td>
 </tr>
 <tr>
-<td>have a reservation</td>
-<td>预定(已经预订了)</td>
-<td></td>
+<td>turn up</td>
+<td>调高</td>
+<td>Turn up the TV volume</td>
 </tr>
 <tr>
-<td>book a table</td>
-<td>预定一个位置</td>
-<td></td>
+<td>volume</td>
+<td>音量</td>
+<td>Turn on the volume</td>
 </tr>
 <tr>
-<td>breakfast</td>
-<td>早餐，注意没有r</td>
-<td></td>
+<td>get on with</td>
+<td>与…相处</td>
+<td>She likes get on with animals</td>
 </tr>
 <tr>
-<td>have…for dinner</td>
-<td>晚餐吃什么</td>
-<td>I have fruit for dinner</td>
+<td>tourism</td>
+<td>旅游</td>
+<td>I like tourism around the world</td>
 </tr>
 <tr>
-<td>receptionist</td>
-<td>前台</td>
-<td></td>
+<td>industry</td>
+<td>行业</td>
+<td>The tourism industry is getting worse</td>
 </tr>
 <tr>
-<td>Certainly</td>
-<td>当然</td>
-<td></td>
+<td>experience</td>
+<td>经验</td>
+<td>He has five years of programming experience</td>
 </tr>
 <tr>
-<td>I’d like to</td>
-<td>想要，不是命令</td>
-<td></td>
+<td>sorrows</td>
+<td>悲伤</td>
+<td>I often share happiness and sorrows with my friends</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-15</title>
+    <url>/2020/03/30/go-big-or-go-home-15/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>development</td>
+<td>发展</td>
+<td>This picture shows the development of phones over time</td>
 </tr>
 <tr>
-<td>I want to</td>
-<td>想要，带有命令</td>
-<td></td>
+<td>work out</td>
+<td>计算出</td>
+<td>He worked out the math problem on the blackboard</td>
 </tr>
 <tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
+<td>take the place of</td>
+<td>取代</td>
+<td>Gradually,robots have taken the place of manual workers</td>
 </tr>
 <tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
+<td>pardon</td>
+<td>原谅</td>
+<td>The king pardoned the prisoner</td>
 </tr>
 <tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
+<td>strap</td>
+<td>绑住</td>
+<td>The man is driving a jeep with luggage strapped to the roof</td>
 </tr>
 <tr>
-<td>on</td>
-<td>具体的一天</td>
-<td>on Saturday</td>
+<td>fur</td>
+<td>毛皮</td>
+<td>A fur coat is very warm,bur very expensive</td>
 </tr>
 <tr>
-<td>in</td>
-<td>范围</td>
-<td>in Spring</td>
+<td>yet</td>
+<td>尚/还</td>
+<td>I’m tired,but I haven’t finished studying yet</td>
 </tr>
 <tr>
-<td>at</td>
-<td>具体时刻</td>
-<td>at 7o’clock</td>
+<td>jet</td>
+<td>喷气式</td>
+<td>Nowadays most long-distance travel is by jet plane</td>
+</tr>
+<tr>
+<td>bacterium</td>
+<td>细菌</td>
+<td>This kind of bacterium can cause a very dangerous disease</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-20</title>
+    <url>/2020/04/04/go-big-or-go-home-20/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plate</td>
+<td>盘子</td>
+<td>I can put much food on this big plate</td>
+</tr>
+<tr>
+<td>so that</td>
+<td>太…以至于</td>
+<td>Its so hot that I’m going to melt</td>
+</tr>
+<tr>
+<td>discovery</td>
+<td>发现</td>
+<td>She makes a discovery in the field of flowers</td>
+</tr>
+<tr>
+<td>outline</td>
+<td>外形</td>
+<td>The girl drew an outline of the model</td>
+</tr>
+<tr>
+<td>zip code</td>
+<td>邮政编码</td>
+<td>You must write a zip code on the envelope before mailing a letter</td>
+</tr>
+<tr>
+<td>lip</td>
+<td>嘴唇</td>
+<td>Her lips are the most beautiful part of her face</td>
+</tr>
+<tr>
+<td>weed</td>
+<td>杂草</td>
+<td>The worker is cutting the weeds</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1949,6 +1980,246 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-21</title>
+    <url>/2020/04/05/go-big-or-go-home-21/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vertical</td>
+<td>垂直的</td>
+<td>The boy found the only vertical tree in the woods</td>
+</tr>
+<tr>
+<td>extraordinary</td>
+<td>非同寻常的</td>
+<td>The teacher said my daughter has extraordinary musical talent</td>
+</tr>
+<tr>
+<td>object</td>
+<td>物体</td>
+<td>UFO is the short form of Unidentified Flying Object</td>
+</tr>
+<tr>
+<td>ahead</td>
+<td>领先</td>
+<td>I am running ahead of the rest of the group</td>
+</tr>
+<tr>
+<td>for ever</td>
+<td>永远</td>
+<td>Diamonds and gold last for ever, and so will our love</td>
+</tr>
+<tr>
+<td>tip</td>
+<td>小费</td>
+<td>I paid $5 to the waiter for tip</td>
+</tr>
+<tr>
+<td>barber</td>
+<td>理发师</td>
+<td>I asked my barber to give me a new style this time</td>
+</tr>
+<tr>
+<td>coronavirus</td>
+<td>冠状病毒</td>
+<td></td>
+</tr>
+<tr>
+<td>western restaurant</td>
+<td>西餐厅</td>
+<td></td>
+</tr>
+<tr>
+<td>dining table</td>
+<td>餐桌(正餐)</td>
+<td></td>
+</tr>
+<tr>
+<td>6 o’clock sharp</td>
+<td>六点整</td>
+<td></td>
+</tr>
+<tr>
+<td>half past 10</td>
+<td>十点半</td>
+<td></td>
+</tr>
+<tr>
+<td>a quarter past 10</td>
+<td>十点十五</td>
+<td></td>
+</tr>
+<tr>
+<td>make a reservation</td>
+<td>预定(还没有预订)</td>
+<td></td>
+</tr>
+<tr>
+<td>have a reservation</td>
+<td>预定(已经预订了)</td>
+<td></td>
+</tr>
+<tr>
+<td>book a table</td>
+<td>预定一个位置</td>
+<td></td>
+</tr>
+<tr>
+<td>breakfast</td>
+<td>早餐，注意没有r</td>
+<td></td>
+</tr>
+<tr>
+<td>have…for dinner</td>
+<td>晚餐吃什么</td>
+<td>I have fruit for dinner</td>
+</tr>
+<tr>
+<td>receptionist</td>
+<td>前台</td>
+<td></td>
+</tr>
+<tr>
+<td>Certainly</td>
+<td>当然</td>
+<td></td>
+</tr>
+<tr>
+<td>I’d like to</td>
+<td>想要，不是命令</td>
+<td></td>
+</tr>
+<tr>
+<td>I want to</td>
+<td>想要，带有命令</td>
+<td></td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>on</td>
+<td>具体的一天</td>
+<td>on Saturday</td>
+</tr>
+<tr>
+<td>in</td>
+<td>范围</td>
+<td>in Spring</td>
+</tr>
+<tr>
+<td>at</td>
+<td>具体时刻</td>
+<td>at 7o’clock</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-23</title>
+    <url>/2020/04/07/go-big-or-go-home-23/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pure</td>
+<td>纯净的</td>
+<td>The water seems so pure and clean</td>
+</tr>
+<tr>
+<td>regulation</td>
+<td>法规</td>
+<td>The traffic police is introducing traffic rules and regulations to us</td>
+</tr>
+<tr>
+<td>Africa</td>
+<td>非洲</td>
+<td>Africa is home to some of the world’s oldest cultures</td>
+</tr>
+<tr>
+<td>motherland</td>
+<td>祖国</td>
+<td>Everyone has their own motherland</td>
+</tr>
+<tr>
+<td>liberty</td>
+<td>自由</td>
+<td>The bird flew from the cage and got liberty</td>
+</tr>
+<tr>
+<td>pair</td>
+<td>一对</td>
+<td>Here is a pair of black shoes</td>
+</tr>
+<tr>
+<td>irrigate</td>
+<td>灌溉</td>
+<td>This machine can irrigate the field</td>
+</tr>
+<tr>
+<td>accompany</td>
+<td>陪伴</td>
+<td>I always accompany my children to their school</td>
+</tr>
+<tr>
+<td>typist</td>
+<td>打字员</td>
+<td>The typist is finishing her documents</td>
+</tr>
+<tr>
+<td>barrier</td>
+<td>路障</td>
+<td>The road was closed by a barrier</td>
+</tr>
+<tr>
+<td>octopus</td>
+<td>章鱼</td>
+<td>-</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切薄片</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-24</title>
     <url>/2020/04/08/go-big-or-go-home-24/</url>
     <content><![CDATA[<table>
@@ -2174,8 +2445,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-23</title>
-    <url>/2020/04/07/go-big-or-go-home-23/</url>
+    <title>go big or go home-25</title>
+    <url>/2020/04/10/go-big-or-go-home-25/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2185,63 +2456,53 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>pure</td>
-<td>纯净的</td>
-<td>The water seems so pure and clean</td>
+<td>headmistress</td>
+<td>女校长</td>
+<td>Our headmistress is giving us a speech</td>
 </tr>
 <tr>
-<td>regulation</td>
-<td>法规</td>
-<td>The traffic police is introducing traffic rules and regulations to us</td>
+<td>conventional</td>
+<td>依据惯例的</td>
+<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
 </tr>
 <tr>
-<td>Africa</td>
-<td>非洲</td>
-<td>Africa is home to some of the world’s oldest cultures</td>
+<td>carry out</td>
+<td>完成</td>
+<td>After the hard work,I finally carried out my plan</td>
 </tr>
 <tr>
-<td>motherland</td>
-<td>祖国</td>
-<td>Everyone has their own motherland</td>
+<td>behaviour</td>
+<td>行为</td>
+<td>I can tell he is happy from his behaviour</td>
 </tr>
 <tr>
-<td>liberty</td>
-<td>自由</td>
-<td>The bird flew from the cage and got liberty</td>
+<td>mirror</td>
+<td>镜子</td>
+<td>Look at yourselves in the mirror</td>
 </tr>
 <tr>
-<td>pair</td>
-<td>一对</td>
-<td>Here is a pair of black shoes</td>
+<td>vast</td>
+<td>辽阔的</td>
+<td>This vast desert looks impossible to pass</td>
 </tr>
 <tr>
-<td>irrigate</td>
-<td>灌溉</td>
-<td>This machine can irrigate the field</td>
+<td>toast</td>
+<td>烤面包</td>
+<td>There are two slices of toast and some butter on the table</td>
 </tr>
 <tr>
-<td>accompany</td>
-<td>陪伴</td>
-<td>I always accompany my children to their school</td>
+<td>cyclist</td>
+<td>骑自行车的人</td>
+<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
 </tr>
 <tr>
-<td>typist</td>
-<td>打字员</td>
-<td>The typist is finishing her documents</td>
-</tr>
-<tr>
-<td>barrier</td>
-<td>路障</td>
-<td>The road was closed by a barrier</td>
-</tr>
-<tr>
-<td>octopus</td>
-<td>章鱼</td>
+<td>satisfy</td>
+<td>满意</td>
 <td>-</td>
 </tr>
 <tr>
-<td>slice</td>
-<td>切薄片</td>
+<td>frightened</td>
+<td>害怕的</td>
 <td>-</td>
 </tr>
 </tbody></table>
@@ -2324,76 +2585,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-25</title>
-    <url>/2020/04/10/go-big-or-go-home-25/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>headmistress</td>
-<td>女校长</td>
-<td>Our headmistress is giving us a speech</td>
-</tr>
-<tr>
-<td>conventional</td>
-<td>依据惯例的</td>
-<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
-</tr>
-<tr>
-<td>carry out</td>
-<td>完成</td>
-<td>After the hard work,I finally carried out my plan</td>
-</tr>
-<tr>
-<td>behaviour</td>
-<td>行为</td>
-<td>I can tell he is happy from his behaviour</td>
-</tr>
-<tr>
-<td>mirror</td>
-<td>镜子</td>
-<td>Look at yourselves in the mirror</td>
-</tr>
-<tr>
-<td>vast</td>
-<td>辽阔的</td>
-<td>This vast desert looks impossible to pass</td>
-</tr>
-<tr>
-<td>toast</td>
-<td>烤面包</td>
-<td>There are two slices of toast and some butter on the table</td>
-</tr>
-<tr>
-<td>cyclist</td>
-<td>骑自行车的人</td>
-<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
-</tr>
-<tr>
-<td>satisfy</td>
-<td>满意</td>
-<td>-</td>
-</tr>
-<tr>
-<td>frightened</td>
-<td>害怕的</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-26</title>
     <url>/2020/04/10/go-big-or-go-home-26/</url>
     <content><![CDATA[<table>
@@ -2448,81 +2639,6 @@
 <td>aboard</td>
 <td>在…上</td>
 <td>In Thailand,fishers often cook and have meals aboard their boats</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-30</title>
-    <url>/2020/04/14/go-big-or-go-home-30/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>apartment</td>
-<td>公寓</td>
-<td>This apartment is so bright with these windows</td>
-</tr>
-<tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
-</tr>
-<tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
-</tr>
-<tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
-</tr>
-<tr>
-<td>catch</td>
-<td>捕捉</td>
-<td>The goalkeeper caught the ball.What a save!</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-<tr>
-<td>sparrow</td>
-<td>麻雀</td>
-<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
-</tr>
-<tr>
-<td>mud</td>
-<td>泥</td>
-<td>Oh no!I think our car is stuck in the mud!</td>
-</tr>
-<tr>
-<td>stuck</td>
-<td>不能动的</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>shapes</td>
-<td>形状</td>
-<td>I like collecting glasses of all shapes and sizes</td>
-</tr>
-<tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversion was interrputed by a knock at the door</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2608,6 +2724,156 @@
 <td>night owl</td>
 <td>夜晚的猫头鹰</td>
 <td>When the important exams come,Jack becomes a night owl</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-30</title>
+    <url>/2020/04/14/go-big-or-go-home-30/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apartment</td>
+<td>公寓</td>
+<td>This apartment is so bright with these windows</td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>捕捉</td>
+<td>The goalkeeper caught the ball.What a save!</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+<tr>
+<td>sparrow</td>
+<td>麻雀</td>
+<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
+</tr>
+<tr>
+<td>mud</td>
+<td>泥</td>
+<td>Oh no!I think our car is stuck in the mud!</td>
+</tr>
+<tr>
+<td>stuck</td>
+<td>不能动的</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>shapes</td>
+<td>形状</td>
+<td>I like collecting glasses of all shapes and sizes</td>
+</tr>
+<tr>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversation was interrputed by a knock at the door</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-31</title>
+    <url>/2020/04/15/go-big-or-go-home-31/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>colleague</td>
+<td>同事</td>
+<td>I really learned a lot of discussing with my colleagues</td>
+</tr>
+<tr>
+<td>arrow</td>
+<td>箭</td>
+<td>Traditional hunters use arrows to catch animals</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>空的</td>
+<td>The man’s wallet is empty</td>
+</tr>
+<tr>
+<td>associate</td>
+<td>联想</td>
+<td>I associate this picture with a star</td>
+</tr>
+<tr>
+<td>easy-going</td>
+<td>随和</td>
+<td>My friend and I are easy-going</td>
+</tr>
+<tr>
+<td>carry off</td>
+<td>夺走</td>
+<td>He’s gonna carry off her bag!Stop him!</td>
+</tr>
+<tr>
+<td>lost</td>
+<td>迷路的</td>
+<td>The hikers are lost walking in the forest</td>
+</tr>
+<tr>
+<td>lock</td>
+<td>锁</td>
+<td>The door is locked;we can’t get in</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切片</td>
+<td>The man thinly slices the beef</td>
+</tr>
+<tr>
+<td>might</td>
+<td>或许</td>
+<td>I think it might rain later,so I should take an umbrella</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3064,6 +3330,86 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-8</title>
+    <url>/2020/03/23/go-big-or-go-home-8/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fit</td>
+<td>匹配</td>
+<td>They two are a perfect fit and I’m sure they are good friends</td>
+</tr>
+<tr>
+<td>insure</td>
+<td>为…投保</td>
+<td>He insures the car against traffic accidents</td>
+</tr>
+<tr>
+<td>ring sb. back</td>
+<td>回电话</td>
+<td>Oh,I missed a call from my mother.I’ll ring her back</td>
+</tr>
+<tr>
+<td>try sth. out</td>
+<td>试验</td>
+<td>I’m going to try out my new experiment on some mice</td>
+</tr>
+<tr>
+<td>come off</td>
+<td>从…掉下</td>
+<td>She looks surprised when her facial mask comes off her face</td>
+</tr>
+<tr>
+<td>postbox</td>
+<td>邮箱</td>
+<td>I take letters out from the postbox everyday</td>
+</tr>
+<tr>
+<td>over and over again</td>
+<td>重复多次</td>
+<td>He said no over and over again</td>
+</tr>
+<tr>
+<td>questionnaire</td>
+<td>调查问卷</td>
+<td>Please complete this questionnaire</td>
+</tr>
+<tr>
+<td>savage</td>
+<td>野蛮人</td>
+<td>Their wordy conversion made me feel like a total savage</td>
+</tr>
+<tr>
+<td>wallet</td>
+<td>口袋</td>
+<td>He takes out some money from his wallet</td>
+</tr>
+<tr>
+<td>platform</td>
+<td>平台</td>
+<td>Bigger platform</td>
+</tr>
+<tr>
+<td>says</td>
+<td>说的话</td>
+<td>The bird is repeating what the girl says</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-7</title>
     <url>/2020/03/22/go-big-or-go-home-7/</url>
     <content><![CDATA[<table>
@@ -3305,83 +3651,22 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-8</title>
-    <url>/2020/03/23/go-big-or-go-home-8/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>fit</td>
-<td>匹配</td>
-<td>They two are a perfect fit and I’m sure they are good friends</td>
-</tr>
-<tr>
-<td>insure</td>
-<td>为…投保</td>
-<td>He insures the car against traffic accidents</td>
-</tr>
-<tr>
-<td>ring sb. back</td>
-<td>回电话</td>
-<td>Oh,I missed a call from my mother.I’ll ring her back</td>
-</tr>
-<tr>
-<td>try sth. out</td>
-<td>试验</td>
-<td>I’m going to try out my new experiment on some mice</td>
-</tr>
-<tr>
-<td>come off</td>
-<td>从…掉下</td>
-<td>She looks surprised when her facial mask comes off her face</td>
-</tr>
-<tr>
-<td>postbox</td>
-<td>邮箱</td>
-<td>I take letters out from the postbox everyday</td>
-</tr>
-<tr>
-<td>over and over again</td>
-<td>重复多次</td>
-<td>He said no over and over again</td>
-</tr>
-<tr>
-<td>questionnaire</td>
-<td>调查问卷</td>
-<td>Please complete this questionnaire</td>
-</tr>
-<tr>
-<td>savage</td>
-<td>野蛮人</td>
-<td>Their wordy conversion made me feel like a total savage</td>
-</tr>
-<tr>
-<td>wallet</td>
-<td>口袋</td>
-<td>He takes out some money from his wallet</td>
-</tr>
-<tr>
-<td>platform</td>
-<td>平台</td>
-<td>Bigger platform</td>
-</tr>
-<tr>
-<td>says</td>
-<td>说的话</td>
-<td>The bird is repeating what the girl says</td>
-</tr>
-</tbody></table>
-]]></content>
+    <title>leetcode338</title>
+    <url>/2019/10/20/leetcode338/</url>
+    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
+
+<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>English</category>
+        <category>leetcode</category>
       </categories>
       <tags>
-        <tag>单词</tag>
+        <tag>leetcode338</tag>
+        <tag>二进制数</tag>
       </tags>
   </entry>
   <entry>
@@ -3408,38 +3693,6 @@
       <tags>
         <tag>二维网格</tag>
         <tag>leetcode79</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode338</title>
-    <url>/2019/10/20/leetcode338/</url>
-    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
-
-<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode338</tag>
-        <tag>二进制数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>不得不说的Java‘锁’事</title>
-    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
-    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>锁</tag>
-        <tag>高并发</tag>
       </tags>
   </entry>
   <entry>
@@ -3493,6 +3746,19 @@
       </tags>
   </entry>
   <entry>
+    <title>不得不说的Java‘锁’事</title>
+    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
+    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>锁</tag>
+        <tag>高并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>redis系列-Redisson分布式锁验证+踩坑</title>
     <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</url>
     <content><![CDATA[<h3 id="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码"><a href="#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码" class="headerlink" title="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码"></a>本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.redisson&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;redisson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.11.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
@@ -3531,8 +3797,8 @@
         <category>个人经历</category>
       </categories>
       <tags>
-        <tag>转正述职</tag>
         <tag>个人经历</tag>
+        <tag>转正述职</tag>
       </tags>
   </entry>
   <entry>
@@ -3550,199 +3816,8 @@
         <category>个人经历</category>
       </categories>
       <tags>
+        <tag>个人经历</tag>
         <tag>转正述职</tag>
-        <tag>个人经历</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>一路走来，即将毕业。</title>
-    <url>/2019/09/12/Sentiment/</url>
-    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
-<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
-<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
-<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
-<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
-<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
-<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
-<p>祝我自己前途似锦，万事胜意。</p>
-<p>2019-03-27 20:44更</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>毕业感悟</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-10</title>
-    <url>/2020/03/25/go-big-or-go-home-10/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>degree Celsius</td>
-<td>摄氏度</td>
-<td>It’s about 20 degrees Celsius</td>
-</tr>
-<tr>
-<td>rely</td>
-<td>依赖</td>
-<td>Babies rely on their parents for food and care</td>
-</tr>
-<tr>
-<td>conductor</td>
-<td>指挥</td>
-<td>The conductor is the leader of the band</td>
-</tr>
-<tr>
-<td>well-known</td>
-<td>有名的</td>
-<td>This is a well-known painting</td>
-</tr>
-<tr>
-<td>rescue</td>
-<td>拯救</td>
-<td>The firemen rescued the little boy from the fire</td>
-</tr>
-<tr>
-<td>blank</td>
-<td>空白的</td>
-<td>You can write something on this blank notebook</td>
-</tr>
-<tr>
-<td>fee</td>
-<td>费用</td>
-<td>He was shocked by the huge amount of hidden fees behind such a haircut</td>
-</tr>
-<tr>
-<td>autonomous</td>
-<td>自动驾驶</td>
-<td>The man is relaxing-reading a book in his autonomous car</td>
-</tr>
-<tr>
-<td>measurement</td>
-<td>测量</td>
-<td>the measurement in degrees of how hot or cold a thing or place is</td>
-</tr>
-<tr>
-<td>clear my mind</td>
-<td>理清我的思路</td>
-<td>clear my mind</td>
-</tr>
-<tr>
-<td>forecast</td>
-<td>预告</td>
-<td>a prediction of the weather for the future</td>
-</tr>
-<tr>
-<td>weatherman</td>
-<td>天气预报员</td>
-<td>My sister is a weatherman</td>
-</tr>
-<tr>
-<td>a drop of</td>
-<td>一滴/一缕</td>
-<td>a drop of golden sunshine</td>
-</tr>
-<tr>
-<td>freezing</td>
-<td>冰冻的</td>
-<td>It is freezing here,please bring enough warm clothes when you come</td>
-</tr>
-<tr>
-<td>Indeed,couldn’t be better</td>
-<td>确实是这样，不能再好了</td>
-<td>Indeed,couldn’t be better</td>
-</tr>
-<tr>
-<td>minus</td>
-<td>下降</td>
-<td>Even can be minus 20 degrees Celsius</td>
-</tr>
-<tr>
-<td>dry</td>
-<td>干燥的</td>
-<td>Beijing is dry and windy in winter</td>
-</tr>
-<tr>
-<td>windy</td>
-<td>多风的</td>
-<td>Beijing is dry and windy in winter</td>
-</tr>
-<tr>
-<td>heavy</td>
-<td>表示程度</td>
-<td>There is a heavy rain outside</td>
-</tr>
-<tr>
-<td>storm</td>
-<td>暴风雨</td>
-<td>Look at the heavy cloud,I think the storm is coming</td>
-</tr>
-<tr>
-<td>cloud</td>
-<td>云</td>
-<td>Look at the heavy cloud,I think the strom is coming</td>
-</tr>
-<tr>
-<td>I’m afraid so</td>
-<td>恐怕是的</td>
-<td>I’m afraid so ,the weatherman said there would be a heavy rain tonight</td>
-</tr>
-<tr>
-<td>hail</td>
-<td>下冰雹</td>
-<td>heavy hail</td>
-</tr>
-<tr>
-<td>blizzard</td>
-<td>暴风雪</td>
-<td>blizzard</td>
-</tr>
-<tr>
-<td>miserable</td>
-<td>悲惨的</td>
-<td>It’s miserable out</td>
-</tr>
-<tr>
-<td>calling for</td>
-<td>呼吁</td>
-<td>They are calling for blue skies all week</td>
-</tr>
-<tr>
-<td>smoking hot</td>
-<td>火辣</td>
-<td>The gril is smoking hot</td>
-</tr>
-<tr>
-<td>frequently</td>
-<td>经常，频繁</td>
-<td>I go to BeiJing frequently</td>
-</tr>
-<tr>
-<td>developed</td>
-<td>发达</td>
-<td>My hometown is not developed</td>
-</tr>
-<tr>
-<td>优雅句子</td>
-<td>当你独自穿过了暴风雨,你就不再是原来那个人了</td>
-<td>Once you walk through the storm alone,You are no longer the same person as before</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
       </tags>
   </entry>
   <entry>
