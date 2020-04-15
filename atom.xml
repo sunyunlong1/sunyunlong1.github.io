@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-14T14:44:36.127Z</updated>
+  <updated>2020-04-15T15:04:54.058Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>你看着是一坨，它也经历了很多</title>
+    <link href="http://yoursite.com/2020/04/15/%E4%BD%A0%E7%9C%8B%E7%9D%80%E6%98%AF%E4%B8%80%E5%9D%A8%EF%BC%8C%E5%AE%83%E4%B9%9F%E7%BB%8F%E5%8E%86%E4%BA%86%E5%BE%88%E5%A4%9A/"/>
+    <id>http://yoursite.com/2020/04/15/%E4%BD%A0%E7%9C%8B%E7%9D%80%E6%98%AF%E4%B8%80%E5%9D%A8%EF%BC%8C%E5%AE%83%E4%B9%9F%E7%BB%8F%E5%8E%86%E4%BA%86%E5%BE%88%E5%A4%9A/</id>
+    <published>2020-04-15T14:39:43.000Z</published>
+    <updated>2020-04-15T15:04:54.058Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;你看着它是一坨，它也经历了很多。&lt;/p&gt;
+&lt;p&gt;今天发生了一个bug，钉钉推送数据时出现错误，目标用户收到的数据发生错乱，推送了目标用户的数据子集&lt;/p&gt;
+&lt;p&gt;起因：我们的数据权限依赖于商分的一张手工维护的底表，这张底表可以理解为hr在录入员工信息的一张表。只不过这里维护
+        
+      
+    
+    </summary>
+    
+    
+      <category term="个人经历" scheme="http://yoursite.com/categories/%E4%B8%AA%E4%BA%BA%E7%BB%8F%E5%8E%86/"/>
+    
+    
+      <category term="转正述职" scheme="http://yoursite.com/tags/%E8%BD%AC%E6%AD%A3%E8%BF%B0%E8%81%8C/"/>
+    
+      <category term="个人经历" scheme="http://yoursite.com/tags/%E4%B8%AA%E4%BA%BA%E7%BB%8F%E5%8E%86/"/>
+    
+  </entry>
   
   <entry>
     <title>go big or go home-30</title>
@@ -698,44 +729,6 @@
 &lt;td&gt;development&lt;/td&gt;
 &lt;td&gt;发展&lt;/td&gt;
 &lt;td&gt;This picture
-        
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>go big or go home-14</title>
-    <link href="http://yoursite.com/2020/03/29/go-big-or-go-home-14/"/>
-    <id>http://yoursite.com/2020/03/29/go-big-or-go-home-14/</id>
-    <published>2020-03-29T15:25:08.000Z</published>
-    <updated>2020-04-04T11:02:15.258Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;单词/短语&lt;/th&gt;
-&lt;th&gt;中文&lt;/th&gt;
-&lt;th&gt;句子&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;humor&lt;/td&gt;
-&lt;td&gt;幽默&lt;/td&gt;
-&lt;td&gt;The performance that
         
       
     

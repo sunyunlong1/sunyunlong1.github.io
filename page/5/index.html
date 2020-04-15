@@ -67,6 +67,149 @@
     
     
     
+    <article id="blog-深入浅出索引" class="article article-type-blog" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2019/10/26/深入浅出索引/"
+    >深入浅出索引</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2019/10/26/深入浅出索引/" class="article-date">
+  <time datetime="2019-10-26T15:46:47.000Z" itemprop="datePublished">2019-10-26</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <p>这节讲的是索引的相关知识，提到索引相信大家都不会陌生，在工作中或多或少都会接触过，建立索引主要是用来提升SQL查询速度的一种解决方案。<br>那么索引是什么？<br>一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。  </p>
+<h3 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h3><p>这里引入三种模型，哈希表有序数组和搜索树  </p>
+<p>哈希表是一种以建-值（key-value）存储的数据结构，我们只要输入待查找的key，就能找到value。哈希的思路很简单，把值放在数组里，用一个哈希函数把key换算成一个确定的位置，然后把value放在数组的这个位置。<br>不可避免的，多个key经过哈希函数的换算会出现同一个值的情况，处理这种情况的方式是，拉出一个链表。<br>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字。这时对应的哈希索引的示意图如下所示。  </p>
+<p><img src="../image/%E5%93%88%E5%B8%8C%E8%A1%A8.png" alt="哈希表.png" title="哈希表">  </p>
+<p>需要注意的是，图中四个ID_card_n的值并不是递增的，这样做的好处是增加新的User时速度会很快，只需要往后追加。但缺点是，因为不是有序的，所以哈希索引做区间查询速度是很慢的。  </p>
+<p>所以，哈希表这种结构适用于只有等值查询的场景，比如 Memcached 及其他一些 NoSQL 引擎。  </p>
+<p>而有序数组在等值查询和范围查询场景的性能就都非常优秀。还是根据上面这个例子，如果用有序数组来实现的话，示意图如下所示：  </p>
+<p><img src="../image/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84.png" alt="有序数组.png" title="有序数组">  </p>
+<p>这里假设身份证号没有重复，这个数组就是按照身份证号递增的顺序保存的，这个时候如果你要查ID_card_n2对应的名字，用二分法就可以快速得到，这个时间复杂度是O(log(N)).<br>同时很显然，这个索引结构支持范围查询。你要查身份证号在[ID_card_X,ID_card_Y]区间的User，可以先用二分法找到ID_card_X(如果不存在ID_card_X，就找到大于ID_card_X的第一个User)，然后向右遍历，直到查到第一个大于ID_card_Y的身份证号，推出循环。<br>如果仅仅看查询效率，有序数组就是最好的数据结构了，但是在更新数据的时候，如果有新增的数据，就需要挪动后续所有的记录，成本太高。<br>所以，有序数组只适用于静态存储引擎，比如你要保存的是2019年某个城市所有人口的信息，这类不会再修改的数据。<br>二叉搜索树是经典的数据结构了，还是根据上面的例子，如果我们用二叉搜索树来实现的话，示意图如下所示，</p>
+<p><img src="../image/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="二叉搜索树.png" title="二叉搜索树">  </p>
+<p>二叉搜索树的特点是：每个节点的左儿子小于父节点，父节点又小于右儿子，这样如果你要查ID_card_2的话按照图中的顺序就是按照UserA -&gt; UserC -&gt; UserF -&gt; User2这个路径得到。这个时间复杂度是O(log(N))。<br>当然为了维持O(log(N))的查询复杂度，你就需要保持这颗树是平衡二叉树，为了做这个保证，更新的时间复杂度也是O(log(N))。<br>树可以有二叉，也可以有多叉，多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉搜索树的效率是最高的，但是实际上大多数数据库存储却并不适用二叉树。其原因是，索引不止存在于内存中，还要写到磁盘上。<br>你可以想象一下一棵100万节点的平衡二叉树，树高20，一次查询可能需要访问20个数据块，在机械硬盘时代，从磁盘随机读取一个数据块需要10ms的寻址时间，也就是说，对于一个100万行的表，如果使用二叉树来存储，单独访问一个行可能需要20个10ms的时间，这个查询可真够慢的，为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。以 InnoDB 的一个整数字段索引为例，这个 N 差不多是 1200。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p>
+<p>N 叉树由于在读写上的性能优点，以及适配磁盘的访问模式，已经被广泛应用在数据库引擎中了。  </p>
+<h3 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h3><p>大家都知道InnoDB的索引模型是B+树，假设我们有一个主键列为ID的表，表中有字段K，并且在K上有索引，如下图所示：  </p>
+<p><img src="../image/InnoDB%E7%B4%A2%E5%BC%95.png" alt="InnoDB索引.png" title="InnoDB索引">  </p>
+<p>从图中不难看出，根据叶子节点的内容，索引类型分为主键索引和非主键索引。</p>
+<p>主键索引的叶子节点存的是整行数据。在 InnoDB 里，主键索引也被称为聚簇索引（clustered index）。  </p>
+<p>非主键索引的叶子节点内容是主键的值。在 InnoDB 里，非主键索引也被称为二级索引（secondary index）。</p>
+<p>根据上面的索引结构说明，我们来讨论一个问题：基于主键索引和普通索引的查询有什么区别？</p>
+<p>如果语句是 select * from T where ID=500，即主键查询方式，则只需要搜索 ID 这棵 B+ 树；<br>如果语句是 select * from T where k=5，即普通索引查询方式，则需要先搜索 k 索引树，得到 ID 的值为 500，再到 ID 索引树搜索一次。这个过程称为_回表_。<br>也就是说，基于非主键索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。   </p>
+<p>除了性能外，页分裂操作还影响数据页的利用率。原本放在一个页的数据，现在分到两个页中，整体空间利用率降低大约 50%。</p>
+<p>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。</p>
+<p>基于上面的索引维护过程说明，我们来讨论一个案例：</p>
+<p>你可能在一些建表规范里面见到过类似的描述，要求建表语句里一定要有自增主键。当然事无绝对，我们来分析一下哪些场景下应该使用自增主键，而哪些场景下不应该。</p>
+<p>自增主键是指自增列上定义的主键，在建表语句中一般是这么定义的： NOT NULL PRIMARY KEY AUTO_INCREMENT。</p>
+<p>插入新记录的时候可以不指定 ID 的值，系统会获取当前 ID 最大值加 1 作为下一条记录的 ID 值。</p>
+<p>也就是说，自增主键的插入数据模式，正符合了我们前面提到的递增插入的场景。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。</p>
+<p>而有业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。</p>
+<p>除了考虑性能外，我们还可以从存储空间的角度来看。假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？</p>
+<p>由于每个非主键索引的叶子节点上都是主键的值。如果用身份证号做主键，那么每个二级索引的叶子节点占用约 20 个字节，而如果用整型做主键，则只要 4 个字节，如果是长整型（bigint）则是 8 个字节。</p>
+<p>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</p>
+<p>所以，从性能和存储空间方面考量，自增主键往往是更合理的选择。</p>
+<p>有没有什么场景适合用业务字段直接做主键的呢？还是有的。比如，有些业务的场景需求是这样的：</p>
+<p>只有一个索引；</p>
+<p>该索引必须是唯一索引。</p>
+<p>你一定看出来了，这就是典型的 KV 场景。</p>
+<p>由于没有其他索引，所以也就不用考虑其他索引的叶子节点大小的问题。</p>
+<p>这时候我们就要优先考虑上一段提到的“尽量使用主键查询”原则，直接将这个索引设置为主键，可以避免每次查询需要搜索两棵树。 </p>
+<p>对于一张表可以这么理解：<br>每一张表其实就是好几个B+树，树结点的key值就是某一行的主键，value是该行的其他数据。新建索引就是新增一个B+树，查询不走索引就是遍历主B+树。</p>
+<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>如果执行的语句是 select ID from T where k between 3 and 5，这时只需要查 ID 的值，而 ID 的值已经在 k 索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，索引 k 已经“覆盖了”我们的查询需求，我们称为覆盖索引。</p>
+<p>由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以使用覆盖索引是一个常用的性能优化手段。</p>
+<p>需要注意的是，在引擎内部使用覆盖索引在索引 k 上其实读了三个记录，R3~R5（对应的索引 k 上的记录项），但是对于 MySQL 的 Server 层来说，它就是找引擎拿到了两条记录，因此 MySQL 认为扫描行数是 2。  </p>
+<p>基于上面覆盖索引的说明，我们来讨论一个问题：在一个市民信息表上，是否有必要将身份证号和名字建立联合索引？  </p>
+<p>我们知道，身份证号是市民的唯一标识。也就是说，如果有根据身份证号查询市民信息的需求，我们只要在身份证号字段上建立索引就够了。而再建立一个（身份证号、姓名）的联合索引，是不是浪费空间？</p>
+<p>如果现在有一个高频请求，要根据市民的身份证号查询他的姓名，这个联合索引就有意义了。它可以在这个高频请求上用到覆盖索引，不再需要回表查整行记录，减少语句的执行时间。</p>
+<p>当然，索引字段的维护总是有代价的。因此，在建立冗余索引来支持覆盖索引时就需要权衡考虑了。这正是业务 DBA，或者称为业务数据架构师的工作。  </p>
+<h3 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h3><p>对于最左前缀原则大家都应该轻车熟路了，就不过多介绍，有些重点内容可以考虑一下：<br>基于上面对最左前缀索引的说明，我们来讨论一个问题：在建立联合索引的时候，如何安排索引内的字段顺序。</p>
+<p>这里我们的评估标准是，索引的复用能力。因为可以支持最左前缀，所以当已经有了 (a,b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。  </p>
+<p>所以现在你知道了，这段开头的问题里，我们要为高频请求创建 (身份证号，姓名）这个联合索引，并用这个索引支持“根据身份证号查询地址”的需求。</p>
+<p>那么，如果既有联合查询，又有基于 a、b 各自的查询呢？查询条件里面只有 b 的语句，是无法使用 (a,b) 这个联合索引的，这时候你不得不维护另外一个索引，也就是说你需要同时维护 (a,b)、(b) 这两个索引。</p>
+<p>这时候，我们要考虑的原则就是空间了。比如上面这个市民表的情况，name 字段是比 age 字段大的 ，那我就建议你创建一个（name,age) 的联合索引和一个 (age) 的单字段索引。  </p>
+<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>上一段我们说到满足最左前缀原则的时候，最左前缀可以用于在索引中定位记录。这时，你可能要问，那些不符合最左前缀的部分，会怎么样呢？</p>
+<p>我们还是以市民表的联合索引（name, age）为例。如果现在有一个需求：检索出表中“名字第一个字是张，而且年龄是 10 岁的所有男孩”。那么，SQL 语句是这么写的：   </p>
+<p><code>mysql&gt; select * from tuser where name like &#39;张 %&#39; and age=10 and ismale=1;</code></p>
+<p>你已经知道了前缀索引规则，所以这个语句在搜索索引树的时候，只能用 “张”，找到第一个满足条件的记录 ID3。当然，这还不错，总比全表扫描要好。</p>
+<p>然后呢？</p>
+<p>当然是判断其他条件是否满足。</p>
+<p>在 MySQL 5.6 之前，只能从 ID3 开始一个个回表。到主键索引上找出数据行，再对比字段值。</p>
+<p>而 MySQL 5.6 引入的索引下推优化（index condition pushdown)， 可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
+<p>图 3 和图 4，是这两个过程的执行流程图。</p>
+<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
+<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
+<p>在图 3 和 4 这两个图里面，每一个虚线箭头表示回表一次。</p>
+<p>图 3 中，在 (name,age) 索引里面我特意去掉了 age 的值，这个过程 InnoDB 并不会去看 age 的值，只是按顺序把“name 第一个字是’张’”的记录一条条取出来回表。因此，需要回表 4 次。</p>
+<p>图 4 跟图 3 的区别是，InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
+<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>实际上主键索引也是可以使用多个字段的。DBA 小吕在入职新公司的时候，就发现自己接手维护的库里面，有这么一个表，表结构定义类似这样的：</p>
+<figure class="highlight plain"><figcaption><span>TABLE `geek` (</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">公司的同事告诉他说，由于历史原因，这个表需要 a、b 做联合主键，这个小吕理解了。</span><br><span class="line"></span><br><span class="line">但是，学过本章内容的小吕又纳闷了，既然主键包含了 a、b 这两个字段，那意味着单独在字段 c 上创建一个索引，就已经包含了三个字段了呀，为什么要创建“ca”“cb”这两个索引？</span><br><span class="line"></span><br><span class="line">同事告诉他，是因为他们的业务里面有这样的两种语句：</span><br></pre></td></tr></table></figure>
+
+<p>select * from geek where c=N order by a limit 1;<br>select * from geek where c=N order by b limit 1;<br>```  </p>
+<p>我给你的问题是，这位同事的解释对吗，为了这两个查询模式，这两个索引是否都是必须的？为什么呢？  </p>
+<p>解答：  </p>
+<p>表记录<br>–a–|–b–|–c–|–d–<br>1 2 3 d<br>1 3 2 d<br>1 4 3 d<br>2 1 3 d<br>2 2 2 d<br>2 3 4 d<br>主键 a，b 的聚簇索引组织顺序相当于 order by a,b ，也就是先按 a 排序，再按 b 排序，c 无序。</p>
+<p>索引 ca 的组织是先按 c 排序，再按 a 排序，同时记录主键<br>–c–|–a–|–主键部分b– （注意，这里不是 ab，而是只有 b）<br>2 1 3<br>2 2 2<br>3 1 2<br>3 1 4<br>3 2 1<br>4 2 3<br>这个跟索引 c 的数据是一模一样的。</p>
+<p>索引 cb 的组织是先按 c 排序，在按 b 排序，同时记录主键<br>–c–|–b–|–主键部分a– （同上）<br>2 2 2<br>2 3 1<br>3 1 2<br>3 2 1<br>3 4 1<br>4 3 2  </p>
+<p>所以，结论是 ca 可以去掉，cb 需要保留。</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="blog-leetcode338" class="article article-type-blog" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
@@ -824,81 +967,6 @@
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java基本类型/">Java基本类型</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java基础/">Java基础</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-
-</article>
-    
-    <article id="blog-BigDecimal比较大小" class="article article-type-blog" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2019/09/16/BigDecimal比较大小/"
-    >BigDecimal比较大小</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2019/09/16/BigDecimal比较大小/" class="article-date">
-  <time datetime="2019-09-16T14:26:23.000Z" itemprop="datePublished">2019-09-16</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">public class TestBigDecimal &#123;</span><br><span class="line">     public static void main(String[] args) &#123;</span><br><span class="line">        BigDecimal b1 = BigDecimal.valueOf(0.00);</span><br><span class="line">        BigDecimal b2 = new BigDecimal(0.00);</span><br><span class="line">        BigDecimal b3 = new BigDecimal(&quot;0.00&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(b1);</span><br><span class="line">        System.out.println(b2);</span><br><span class="line">        System.out.println(b3);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line">        System.out.println(&quot;equals比较&quot;);</span><br><span class="line">        System.out.println(contrast1(b1,b2));</span><br><span class="line">        System.out.println(contrast1(b1,b3));</span><br><span class="line">        System.out.println(contrast1(b2,b3));</span><br><span class="line">        System.out.println(contrast1(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;compareTo比较&quot;);</span><br><span class="line">        System.out.println(contrast2(b1,b2));</span><br><span class="line">        System.out.println(contrast2(b1,b3));</span><br><span class="line">        System.out.println(contrast2(b2,b3));</span><br><span class="line">        System.out.println(contrast2(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static boolean contrast1(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.equals(b2);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static int contrast2(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.compareTo(b2);</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p> 运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">0.0</span><br><span class="line">0</span><br><span class="line">0.00</span><br><span class="line">--------------</span><br><span class="line">equals比较</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">--------------</span><br><span class="line">compareTo比较</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
-
-<p><img src="../image/equals.png" alt="equals.png" title="equals"><br>清楚的看到比较了小数位，小数位不同直接返回false<br>在看一下compareTo源码：<br><img src="../image/compareTo.png" alt="compareTo.png" title="compareTo"><br>可以看到比较逻辑是先判断小数位是否相同，相同则比较有效值，不同先比较正负，正负相同在比较数值大小<br>结论：在进行需要忽略小数位比较时需要用compareTo()，不忽略小数位比较时用equals()</p>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BigDecimal/">BigDecimal</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java基础/">Java基础</a></li></ul>
 
 
     </footer>
