@@ -65,27 +65,6 @@
       </tags>
   </entry>
   <entry>
-    <title>一路走来，即将毕业。</title>
-    <url>/2019/09/12/Sentiment/</url>
-    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
-<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
-<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
-<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
-<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
-<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
-<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
-<p>祝我自己前途似锦，万事胜意。</p>
-<p>2019-03-27 20:44更</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>毕业感悟</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之String</title>
     <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
     <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
@@ -127,6 +106,377 @@
       <tags>
         <tag>Java基础</tag>
         <tag>String</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一路走来，即将毕业。</title>
+    <url>/2019/09/12/Sentiment/</url>
+    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
+<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
+<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
+<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
+<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
+<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
+<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
+<p>祝我自己前途似锦，万事胜意。</p>
+<p>2019-03-27 20:44更</p>
+]]></content>
+      <categories>
+        <category>个人经历</category>
+      </categories>
+      <tags>
+        <tag>个人经历</tag>
+        <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home</title>
+    <url>/2020/03/16/go%20big%20or%20go%20home/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>early birld</td>
+<td>早起的鸟儿</td>
+<td>Early birld gets the worm</td>
+</tr>
+<tr>
+<td>happiness</td>
+<td>开心幸福</td>
+<td>I often share happiness and sorrows with my friends</td>
+</tr>
+<tr>
+<td>jail</td>
+<td>监狱</td>
+<td>He may be jailed for killing</td>
+</tr>
+<tr>
+<td>breaks the law</td>
+<td>打破法律</td>
+<td>He was jailed for breaking the law</td>
+</tr>
+<tr>
+<td>chemical reaction</td>
+<td>化学反应</td>
+<td>When you smiling,you will experience a chemical reaction</td>
+</tr>
+<tr>
+<td>produces good-feeling chemicals</td>
+<td>同上</td>
+<td>When you smiling,you produces good-feeling chemicals</td>
+</tr>
+<tr>
+<td>fake simle</td>
+<td>假笑</td>
+<td>I may be fake simle when I together with my boss</td>
+</tr>
+<tr>
+<td>relax</td>
+<td>放松</td>
+<td>I want to keep relaxing in holiday</td>
+</tr>
+<tr>
+<td>look younger</td>
+<td>看起来年轻</td>
+<td>You look younger than your age</td>
+</tr>
+<tr>
+<td>sick</td>
+<td>生病</td>
+<td>The little girl may be sick</td>
+</tr>
+<tr>
+<td>pressure</td>
+<td>压力</td>
+<td>Post-90s pressure</td>
+</tr>
+<tr>
+<td>mortgage</td>
+<td>房贷</td>
+<td>He feel pressure beacuse of the mortgage</td>
+</tr>
+<tr>
+<td>get sick</td>
+<td>生病</td>
+<td>I don’t want to get sick</td>
+</tr>
+<tr>
+<td>vocabulary</td>
+<td>词汇</td>
+<td>Chinese vocabulary</td>
+</tr>
+<tr>
+<td>busy with</td>
+<td>忙于工作</td>
+<td>I’m too busy with my work</td>
+</tr>
+<tr>
+<td>crying</td>
+<td>哭</td>
+<td>The little girl is crying</td>
+</tr>
+<tr>
+<td>get lost</td>
+<td>走丢</td>
+<td>She got lost</td>
+</tr>
+<tr>
+<td>toothache</td>
+<td>牙痛</td>
+<td>Doctor,I have a toothache</td>
+</tr>
+<tr>
+<td>glass</td>
+<td>杯子</td>
+<td>The glass is broken</td>
+</tr>
+<tr>
+<td>stomachache</td>
+<td>胃痛</td>
+<td>The boy has a stomachache</td>
+</tr>
+<tr>
+<td>live</td>
+<td>注意读音[lɪv , laɪv]</td>
+<td>I live in Beijing；live Spring gala</td>
+</tr>
+<tr>
+<td>farther</td>
+<td>更远</td>
+<td>The higher you climb,The farther you can see</td>
+</tr>
+<tr>
+<td>suffer</td>
+<td>伤害</td>
+<td>The longer the war lasts,the more the people there will suffer</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-12</title>
+    <url>/2020/03/27/go-big-or-go-home-12/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>draft</td>
+<td>草稿</td>
+<td>This is just the draft design of a building</td>
+</tr>
+<tr>
+<td>side</td>
+<td>边</td>
+<td>There are many trees on both sides of the river</td>
+</tr>
+<tr>
+<td>patience</td>
+<td>耐心</td>
+<td>Fishing demands a great deal of patience</td>
+</tr>
+<tr>
+<td>candidate</td>
+<td>候选人</td>
+<td>The candidates are persenting the speeches fot the election</td>
+</tr>
+<tr>
+<td>disturb</td>
+<td>打扰</td>
+<td>His snoring really disturbs me at night</td>
+</tr>
+<tr>
+<td>handle</td>
+<td>把手</td>
+<td>Turn the handle to open the door</td>
+</tr>
+<tr>
+<td>merchant</td>
+<td>商人</td>
+<td>The merchant checks the quality of his produce</td>
+</tr>
+<tr>
+<td>construct</td>
+<td>建造</td>
+<td>The workers are constructing a tall  building</td>
+</tr>
+<tr>
+<td>edition</td>
+<td>版本</td>
+<td>The dictionary is now in its third edition which was published in 2017</td>
+</tr>
+<tr>
+<td>fax</td>
+<td>传真</td>
+<td>You can contact us by email or fax</td>
+</tr>
+<tr>
+<td>maintain</td>
+<td>保持</td>
+<td>How do you maintain relationships with your long-distance friends?</td>
+</tr>
+<tr>
+<td>instant message</td>
+<td>即使消息</td>
+<td>Also emails can realize instant messaging</td>
+</tr>
+<tr>
+<td>pal</td>
+<td>伙伴</td>
+<td>Eamiling the pals is a great and helpful way to stay in touch with each other</td>
+</tr>
+<tr>
+<td>circumstances</td>
+<td>情况</td>
+<td>What circumstances you would choose to send emails to keep in touch?</td>
+</tr>
+<tr>
+<td>goes off/rings</td>
+<td>响了</td>
+<td>My alarm goes off at 9:30 in the morning</td>
+</tr>
+<tr>
+<td>get out of</td>
+<td>形容完全离开床了</td>
+<td>Then I get out of the bed</td>
+</tr>
+<tr>
+<td>get up</td>
+<td>起床/起来</td>
+<td>I’ve fallen and I can’t get up</td>
+</tr>
+<tr>
+<td>wake up</td>
+<td>醒来</td>
+<td>wake up early</td>
+</tr>
+<tr>
+<td>go downstairs</td>
+<td>下楼</td>
+<td>go downstairs</td>
+</tr>
+<tr>
+<td>go upstairs</td>
+<td>上楼</td>
+<td>go upstairs</td>
+</tr>
+<tr>
+<td>go to the bathroom/toilet/restroom</td>
+<td>去厕所(美)/(英)</td>
+<td>go to the bathroom/toilet/restroom</td>
+</tr>
+<tr>
+<td>How would you like your egg?</td>
+<td>你想要什么样的鸡蛋？</td>
+<td>早餐回答</td>
+</tr>
+<tr>
+<td>sunny side up</td>
+<td>太阳蛋</td>
+<td>回答上文</td>
+</tr>
+<tr>
+<td>over easy</td>
+<td>煎鸡蛋程度很轻</td>
+<td>回答上文</td>
+</tr>
+<tr>
+<td>over medium</td>
+<td>一面熟</td>
+<td>回答上文</td>
+</tr>
+<tr>
+<td>over hard</td>
+<td>两面熟</td>
+<td>回答上文</td>
+</tr>
+<tr>
+<td>scrambled egg</td>
+<td>炒鸡蛋</td>
+<td>scrambled egg</td>
+</tr>
+<tr>
+<td>hard boiled egg</td>
+<td>煮鸡蛋</td>
+<td>hard boiled egg</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-11</title>
+    <url>/2020/03/26/go-big-or-go-home-11/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>broad</td>
+<td>宽的</td>
+<td>This road is broad enough for many cars to drive on</td>
+</tr>
+<tr>
+<td>accomplish</td>
+<td>完成</td>
+<td>She is so happy to have accomplished her weight-loss goal</td>
+</tr>
+<tr>
+<td>case</td>
+<td>箱子</td>
+<td>He carried all of his important things in a black case</td>
+</tr>
+<tr>
+<td>normal</td>
+<td>正常的</td>
+<td>A normal human foot should be like the one in the middle</td>
+</tr>
+<tr>
+<td>organ</td>
+<td>器官</td>
+<td>Every organ plays an important role in our body</td>
+</tr>
+<tr>
+<td>ceremony</td>
+<td>典礼</td>
+<td>The student was awarded her certificate during the graduation ceremony</td>
+</tr>
+<tr>
+<td>miserable</td>
+<td>悲惨的</td>
+<td>It’s miserable out</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
       </tags>
   </entry>
   <entry>
@@ -300,8 +650,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home</title>
-    <url>/2020/03/16/go%20big%20or%20go%20home/</url>
+    <title>go big or go home-15</title>
+    <url>/2020/03/30/go-big-or-go-home-15/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -311,334 +661,49 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>early birld</td>
-<td>早起的鸟儿</td>
-<td>Early birld gets the worm</td>
+<td>development</td>
+<td>发展</td>
+<td>This picture shows the development of phones over time</td>
 </tr>
 <tr>
-<td>happiness</td>
-<td>开心幸福</td>
-<td>I often share happiness and sorrows with my friends</td>
+<td>work out</td>
+<td>计算出</td>
+<td>He worked out the math problem on the blackboard</td>
 </tr>
 <tr>
-<td>jail</td>
-<td>监狱</td>
-<td>He may be jailed for killing</td>
+<td>take the place of</td>
+<td>取代</td>
+<td>Gradually,robots have taken the place of manual workers</td>
 </tr>
 <tr>
-<td>breaks the law</td>
-<td>打破法律</td>
-<td>He was jailed for breaking the law</td>
+<td>pardon</td>
+<td>原谅</td>
+<td>The king pardoned the prisoner</td>
 </tr>
 <tr>
-<td>chemical reaction</td>
-<td>化学反应</td>
-<td>When you smiling,you will experience a chemical reaction</td>
+<td>strap</td>
+<td>绑住</td>
+<td>The man is driving a jeep with luggage strapped to the roof</td>
 </tr>
 <tr>
-<td>produces good-feeling chemicals</td>
-<td>同上</td>
-<td>When you smiling,you produces good-feeling chemicals</td>
+<td>fur</td>
+<td>毛皮</td>
+<td>A fur coat is very warm,bur very expensive</td>
 </tr>
 <tr>
-<td>fake simle</td>
-<td>假笑</td>
-<td>I may be fake simle when I together with my boss</td>
+<td>yet</td>
+<td>尚/还</td>
+<td>I’m tired,but I haven’t finished studying yet</td>
 </tr>
 <tr>
-<td>relax</td>
-<td>放松</td>
-<td>I want to keep relaxing in holiday</td>
+<td>jet</td>
+<td>喷气式</td>
+<td>Nowadays most long-distance travel is by jet plane</td>
 </tr>
 <tr>
-<td>look younger</td>
-<td>看起来年轻</td>
-<td>You look younger than your age</td>
-</tr>
-<tr>
-<td>sick</td>
-<td>生病</td>
-<td>The little girl may be sick</td>
-</tr>
-<tr>
-<td>pressure</td>
-<td>压力</td>
-<td>Post-90s pressure</td>
-</tr>
-<tr>
-<td>mortgage</td>
-<td>房贷</td>
-<td>He feel pressure beacuse of the mortgage</td>
-</tr>
-<tr>
-<td>get sick</td>
-<td>生病</td>
-<td>I don’t want to get sick</td>
-</tr>
-<tr>
-<td>vocabulary</td>
-<td>词汇</td>
-<td>Chinese vocabulary</td>
-</tr>
-<tr>
-<td>busy with</td>
-<td>忙于工作</td>
-<td>I’m too busy with my work</td>
-</tr>
-<tr>
-<td>crying</td>
-<td>哭</td>
-<td>The little girl is crying</td>
-</tr>
-<tr>
-<td>get lost</td>
-<td>走丢</td>
-<td>She got lost</td>
-</tr>
-<tr>
-<td>toothache</td>
-<td>牙痛</td>
-<td>Doctor,I have a toothache</td>
-</tr>
-<tr>
-<td>glass</td>
-<td>杯子</td>
-<td>The glass is broken</td>
-</tr>
-<tr>
-<td>stomachache</td>
-<td>胃痛</td>
-<td>The boy has a stomachache</td>
-</tr>
-<tr>
-<td>live</td>
-<td>注意读音[lɪv , laɪv]</td>
-<td>I live in Beijing；live Spring gala</td>
-</tr>
-<tr>
-<td>farther</td>
-<td>更远</td>
-<td>The higher you climb,The farther you can see</td>
-</tr>
-<tr>
-<td>suffer</td>
-<td>伤害</td>
-<td>The longer the war lasts,the more the people there will suffer</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-11</title>
-    <url>/2020/03/26/go-big-or-go-home-11/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>broad</td>
-<td>宽的</td>
-<td>This road is broad enough for many cars to drive on</td>
-</tr>
-<tr>
-<td>accomplish</td>
-<td>完成</td>
-<td>She is so happy to have accomplished her weight-loss goal</td>
-</tr>
-<tr>
-<td>case</td>
-<td>箱子</td>
-<td>He carried all of his important things in a black case</td>
-</tr>
-<tr>
-<td>normal</td>
-<td>正常的</td>
-<td>A normal human foot should be like the one in the middle</td>
-</tr>
-<tr>
-<td>organ</td>
-<td>器官</td>
-<td>Every organ plays an important role in our body</td>
-</tr>
-<tr>
-<td>ceremony</td>
-<td>典礼</td>
-<td>The student was awarded her certificate during the graduation ceremony</td>
-</tr>
-<tr>
-<td>miserable</td>
-<td>悲惨的</td>
-<td>It’s miserable out</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-12</title>
-    <url>/2020/03/27/go-big-or-go-home-12/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>draft</td>
-<td>草稿</td>
-<td>This is just the draft design of a building</td>
-</tr>
-<tr>
-<td>side</td>
-<td>边</td>
-<td>There are many trees on both sides of the river</td>
-</tr>
-<tr>
-<td>patience</td>
-<td>耐心</td>
-<td>Fishing demands a great deal of patience</td>
-</tr>
-<tr>
-<td>candidate</td>
-<td>候选人</td>
-<td>The candidates are persenting the speeches fot the election</td>
-</tr>
-<tr>
-<td>disturb</td>
-<td>打扰</td>
-<td>His snoring really disturbs me at night</td>
-</tr>
-<tr>
-<td>handle</td>
-<td>把手</td>
-<td>Turn the handle to open the door</td>
-</tr>
-<tr>
-<td>merchant</td>
-<td>商人</td>
-<td>The merchant checks the quality of his produce</td>
-</tr>
-<tr>
-<td>construct</td>
-<td>建造</td>
-<td>The workers are constructing a tall  building</td>
-</tr>
-<tr>
-<td>edition</td>
-<td>版本</td>
-<td>The dictionary is now in its third edition which was published in 2017</td>
-</tr>
-<tr>
-<td>fax</td>
-<td>传真</td>
-<td>You can contact us by email or fax</td>
-</tr>
-<tr>
-<td>maintain</td>
-<td>保持</td>
-<td>How do you maintain relationships with your long-distance friends?</td>
-</tr>
-<tr>
-<td>instant message</td>
-<td>即使消息</td>
-<td>Also emails can realize instant messaging</td>
-</tr>
-<tr>
-<td>pal</td>
-<td>伙伴</td>
-<td>Eamiling the pals is a great and helpful way to stay in touch with each other</td>
-</tr>
-<tr>
-<td>circumstances</td>
-<td>情况</td>
-<td>What circumstances you would choose to send emails to keep in touch?</td>
-</tr>
-<tr>
-<td>goes off/rings</td>
-<td>响了</td>
-<td>My alarm goes off at 9:30 in the morning</td>
-</tr>
-<tr>
-<td>get out of</td>
-<td>形容完全离开床了</td>
-<td>Then I get out of the bed</td>
-</tr>
-<tr>
-<td>get up</td>
-<td>起床/起来</td>
-<td>I’ve fallen and I can’t get up</td>
-</tr>
-<tr>
-<td>wake up</td>
-<td>醒来</td>
-<td>wake up early</td>
-</tr>
-<tr>
-<td>go downstairs</td>
-<td>下楼</td>
-<td>go downstairs</td>
-</tr>
-<tr>
-<td>go upstairs</td>
-<td>上楼</td>
-<td>go upstairs</td>
-</tr>
-<tr>
-<td>go to the bathroom/toilet/restroom</td>
-<td>去厕所(美)/(英)</td>
-<td>go to the bathroom/toilet/restroom</td>
-</tr>
-<tr>
-<td>How would you like your egg?</td>
-<td>你想要什么样的鸡蛋？</td>
-<td>早餐回答</td>
-</tr>
-<tr>
-<td>sunny side up</td>
-<td>太阳蛋</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over easy</td>
-<td>煎鸡蛋程度很轻</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over medium</td>
-<td>一面熟</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over hard</td>
-<td>两面熟</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>scrambled egg</td>
-<td>炒鸡蛋</td>
-<td>scrambled egg</td>
-</tr>
-<tr>
-<td>hard boiled egg</td>
-<td>煮鸡蛋</td>
-<td>hard boiled egg</td>
+<td>bacterium</td>
+<td>细菌</td>
+<td>This kind of bacterium can cause a very dangerous disease</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -704,136 +769,6 @@
 <td>spicy</td>
 <td>辣的</td>
 <td>I like spicy hot pot</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-14</title>
-    <url>/2020/03/29/go-big-or-go-home-14/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>humor</td>
-<td>幽默</td>
-<td>The performance that he was forced to eat corn showed his unique sense of humor</td>
-</tr>
-<tr>
-<td>ridiculous</td>
-<td>可笑的</td>
-<td>She looks ridiculous wearing this dress when walking in the street</td>
-</tr>
-<tr>
-<td>go ahead</td>
-<td>继续干下去</td>
-<td>The boy still went ahead with the race even after falling</td>
-</tr>
-<tr>
-<td>rare</td>
-<td>半熟的</td>
-<td>He likes eating rare steak,which is bloody and red in the middle</td>
-</tr>
-<tr>
-<td>fluency</td>
-<td>流畅</td>
-<td>He speaks with perfect fluency</td>
-</tr>
-<tr>
-<td>yawn</td>
-<td>打哈欠</td>
-<td>The cat yawned lying on the grass.So cute</td>
-</tr>
-<tr>
-<td>boycott</td>
-<td>抵制</td>
-<td>The office workers are putting up a boycott</td>
-</tr>
-<tr>
-<td>certificate</td>
-<td>证书</td>
-<td>I got my graduation certificate after finishing college</td>
-</tr>
-<tr>
-<td>hug</td>
-<td>拥抱</td>
-<td>The happy couple hug in front of their new home</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-15</title>
-    <url>/2020/03/30/go-big-or-go-home-15/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>development</td>
-<td>发展</td>
-<td>This picture shows the development of phones over time</td>
-</tr>
-<tr>
-<td>work out</td>
-<td>计算出</td>
-<td>He worked out the math problem on the blackboard</td>
-</tr>
-<tr>
-<td>take the place of</td>
-<td>取代</td>
-<td>Gradually,robots have taken the place of manual workers</td>
-</tr>
-<tr>
-<td>pardon</td>
-<td>原谅</td>
-<td>The king pardoned the prisoner</td>
-</tr>
-<tr>
-<td>strap</td>
-<td>绑住</td>
-<td>The man is driving a jeep with luggage strapped to the roof</td>
-</tr>
-<tr>
-<td>fur</td>
-<td>毛皮</td>
-<td>A fur coat is very warm,bur very expensive</td>
-</tr>
-<tr>
-<td>yet</td>
-<td>尚/还</td>
-<td>I’m tired,but I haven’t finished studying yet</td>
-</tr>
-<tr>
-<td>jet</td>
-<td>喷气式</td>
-<td>Nowadays most long-distance travel is by jet plane</td>
-</tr>
-<tr>
-<td>bacterium</td>
-<td>细菌</td>
-<td>This kind of bacterium can cause a very dangerous disease</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1109,6 +1044,71 @@
 <td>beach</td>
 <td>海边</td>
 <td>The girl took a vacation on the beach</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-14</title>
+    <url>/2020/03/29/go-big-or-go-home-14/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>humor</td>
+<td>幽默</td>
+<td>The performance that he was forced to eat corn showed his unique sense of humor</td>
+</tr>
+<tr>
+<td>ridiculous</td>
+<td>可笑的</td>
+<td>She looks ridiculous wearing this dress when walking in the street</td>
+</tr>
+<tr>
+<td>go ahead</td>
+<td>继续干下去</td>
+<td>The boy still went ahead with the race even after falling</td>
+</tr>
+<tr>
+<td>rare</td>
+<td>半熟的</td>
+<td>He likes eating rare steak,which is bloody and red in the middle</td>
+</tr>
+<tr>
+<td>fluency</td>
+<td>流畅</td>
+<td>He speaks with perfect fluency</td>
+</tr>
+<tr>
+<td>yawn</td>
+<td>打哈欠</td>
+<td>The cat yawned lying on the grass.So cute</td>
+</tr>
+<tr>
+<td>boycott</td>
+<td>抵制</td>
+<td>The office workers are putting up a boycott</td>
+</tr>
+<tr>
+<td>certificate</td>
+<td>证书</td>
+<td>I got my graduation certificate after finishing college</td>
+</tr>
+<tr>
+<td>hug</td>
+<td>拥抱</td>
+<td>The happy couple hug in front of their new home</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1500,61 +1500,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-20</title>
-    <url>/2020/04/04/go-big-or-go-home-20/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>plate</td>
-<td>盘子</td>
-<td>I can put much food on this big plate</td>
-</tr>
-<tr>
-<td>so that</td>
-<td>太…以至于</td>
-<td>Its so hot that I’m going to melt</td>
-</tr>
-<tr>
-<td>discovery</td>
-<td>发现</td>
-<td>She makes a discovery in the field of flowers</td>
-</tr>
-<tr>
-<td>outline</td>
-<td>外形</td>
-<td>The girl drew an outline of the model</td>
-</tr>
-<tr>
-<td>zip code</td>
-<td>邮政编码</td>
-<td>You must write a zip code on the envelope before mailing a letter</td>
-</tr>
-<tr>
-<td>lip</td>
-<td>嘴唇</td>
-<td>Her lips are the most beautiful part of her face</td>
-</tr>
-<tr>
-<td>weed</td>
-<td>杂草</td>
-<td>The worker is cutting the weeds</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-21</title>
     <url>/2020/04/05/go-big-or-go-home-21/</url>
     <content><![CDATA[<table>
@@ -1704,6 +1649,61 @@
 <td>at</td>
 <td>具体时刻</td>
 <td>at 7o’clock</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-20</title>
+    <url>/2020/04/04/go-big-or-go-home-20/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plate</td>
+<td>盘子</td>
+<td>I can put much food on this big plate</td>
+</tr>
+<tr>
+<td>so that</td>
+<td>太…以至于</td>
+<td>Its so hot that I’m going to melt</td>
+</tr>
+<tr>
+<td>discovery</td>
+<td>发现</td>
+<td>She makes a discovery in the field of flowers</td>
+</tr>
+<tr>
+<td>outline</td>
+<td>外形</td>
+<td>The girl drew an outline of the model</td>
+</tr>
+<tr>
+<td>zip code</td>
+<td>邮政编码</td>
+<td>You must write a zip code on the envelope before mailing a letter</td>
+</tr>
+<tr>
+<td>lip</td>
+<td>嘴唇</td>
+<td>Her lips are the most beautiful part of her face</td>
+</tr>
+<tr>
+<td>weed</td>
+<td>杂草</td>
+<td>The worker is cutting the weeds</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2070,156 +2070,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-23</title>
-    <url>/2020/04/07/go-big-or-go-home-23/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pure</td>
-<td>纯净的</td>
-<td>The water seems so pure and clean</td>
-</tr>
-<tr>
-<td>regulation</td>
-<td>法规</td>
-<td>The traffic police is introducing traffic rules and regulations to us</td>
-</tr>
-<tr>
-<td>Africa</td>
-<td>非洲</td>
-<td>Africa is home to some of the world’s oldest cultures</td>
-</tr>
-<tr>
-<td>motherland</td>
-<td>祖国</td>
-<td>Everyone has their own motherland</td>
-</tr>
-<tr>
-<td>liberty</td>
-<td>自由</td>
-<td>The bird flew from the cage and got liberty</td>
-</tr>
-<tr>
-<td>pair</td>
-<td>一对</td>
-<td>Here is a pair of black shoes</td>
-</tr>
-<tr>
-<td>irrigate</td>
-<td>灌溉</td>
-<td>This machine can irrigate the field</td>
-</tr>
-<tr>
-<td>accompany</td>
-<td>陪伴</td>
-<td>I always accompany my children to their school</td>
-</tr>
-<tr>
-<td>typist</td>
-<td>打字员</td>
-<td>The typist is finishing her documents</td>
-</tr>
-<tr>
-<td>barrier</td>
-<td>路障</td>
-<td>The road was closed by a barrier</td>
-</tr>
-<tr>
-<td>octopus</td>
-<td>章鱼</td>
-<td>-</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>切薄片</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-25</title>
-    <url>/2020/04/10/go-big-or-go-home-25/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>headmistress</td>
-<td>女校长</td>
-<td>Our headmistress is giving us a speech</td>
-</tr>
-<tr>
-<td>conventional</td>
-<td>依据惯例的</td>
-<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
-</tr>
-<tr>
-<td>carry out</td>
-<td>完成</td>
-<td>After the hard work,I finally carried out my plan</td>
-</tr>
-<tr>
-<td>behaviour</td>
-<td>行为</td>
-<td>I can tell he is happy from his behaviour</td>
-</tr>
-<tr>
-<td>mirror</td>
-<td>镜子</td>
-<td>Look at yourselves in the mirror</td>
-</tr>
-<tr>
-<td>vast</td>
-<td>辽阔的</td>
-<td>This vast desert looks impossible to pass</td>
-</tr>
-<tr>
-<td>toast</td>
-<td>烤面包</td>
-<td>There are two slices of toast and some butter on the table</td>
-</tr>
-<tr>
-<td>cyclist</td>
-<td>骑自行车的人</td>
-<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
-</tr>
-<tr>
-<td>satisfy</td>
-<td>满意</td>
-<td>-</td>
-</tr>
-<tr>
-<td>frightened</td>
-<td>害怕的</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-24</title>
     <url>/2020/04/08/go-big-or-go-home-24/</url>
     <content><![CDATA[<table>
@@ -2445,6 +2295,156 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-25</title>
+    <url>/2020/04/10/go-big-or-go-home-25/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>headmistress</td>
+<td>女校长</td>
+<td>Our headmistress is giving us a speech</td>
+</tr>
+<tr>
+<td>conventional</td>
+<td>依据惯例的</td>
+<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
+</tr>
+<tr>
+<td>carry out</td>
+<td>完成</td>
+<td>After the hard work,I finally carried out my plan</td>
+</tr>
+<tr>
+<td>behaviour</td>
+<td>行为</td>
+<td>I can tell he is happy from his behaviour</td>
+</tr>
+<tr>
+<td>mirror</td>
+<td>镜子</td>
+<td>Look at yourselves in the mirror</td>
+</tr>
+<tr>
+<td>vast</td>
+<td>辽阔的</td>
+<td>This vast desert looks impossible to pass</td>
+</tr>
+<tr>
+<td>toast</td>
+<td>烤面包</td>
+<td>There are two slices of toast and some butter on the table</td>
+</tr>
+<tr>
+<td>cyclist</td>
+<td>骑自行车的人</td>
+<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
+</tr>
+<tr>
+<td>satisfy</td>
+<td>满意</td>
+<td>-</td>
+</tr>
+<tr>
+<td>frightened</td>
+<td>害怕的</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-23</title>
+    <url>/2020/04/07/go-big-or-go-home-23/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pure</td>
+<td>纯净的</td>
+<td>The water seems so pure and clean</td>
+</tr>
+<tr>
+<td>regulation</td>
+<td>法规</td>
+<td>The traffic police is introducing traffic rules and regulations to us</td>
+</tr>
+<tr>
+<td>Africa</td>
+<td>非洲</td>
+<td>Africa is home to some of the world’s oldest cultures</td>
+</tr>
+<tr>
+<td>motherland</td>
+<td>祖国</td>
+<td>Everyone has their own motherland</td>
+</tr>
+<tr>
+<td>liberty</td>
+<td>自由</td>
+<td>The bird flew from the cage and got liberty</td>
+</tr>
+<tr>
+<td>pair</td>
+<td>一对</td>
+<td>Here is a pair of black shoes</td>
+</tr>
+<tr>
+<td>irrigate</td>
+<td>灌溉</td>
+<td>This machine can irrigate the field</td>
+</tr>
+<tr>
+<td>accompany</td>
+<td>陪伴</td>
+<td>I always accompany my children to their school</td>
+</tr>
+<tr>
+<td>typist</td>
+<td>打字员</td>
+<td>The typist is finishing her documents</td>
+</tr>
+<tr>
+<td>barrier</td>
+<td>路障</td>
+<td>The road was closed by a barrier</td>
+</tr>
+<tr>
+<td>octopus</td>
+<td>章鱼</td>
+<td>-</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切薄片</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-26</title>
     <url>/2020/04/10/go-big-or-go-home-26/</url>
     <content><![CDATA[<table>
@@ -2569,161 +2569,6 @@
 <td>forest</td>
 <td>森林</td>
 <td>The sun shines through the forest</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-28</title>
-    <url>/2020/04/12/go-big-or-go-home-28/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>go by</td>
-<td>流逝</td>
-<td>Don’t waste your time as it goes by quickly</td>
-</tr>
-<tr>
-<td>left-handed</td>
-<td>惯用左手的</td>
-<td>This left-handed girl is painting with her left hand</td>
-</tr>
-<tr>
-<td>badminton</td>
-<td>羽毛球</td>
-<td>These kids are playing badminton in the park</td>
-</tr>
-<tr>
-<td>bench</td>
-<td>长凳</td>
-<td>The boy is sitting on the bench with his monther</td>
-</tr>
-<tr>
-<td>seaman</td>
-<td>水手</td>
-<td>He looks really happy in the seaman uniform</td>
-</tr>
-<tr>
-<td>bookshelf</td>
-<td>书架</td>
-<td>Various books are placed on the bookshelves</td>
-</tr>
-<tr>
-<td>diamond</td>
-<td>钻石</td>
-<td>Diamond rings are very popular among young couples</td>
-</tr>
-<tr>
-<td>bucket</td>
-<td>水桶</td>
-<td>The cute cat is hiding in a bucket</td>
-</tr>
-<tr>
-<td>Antarctic</td>
-<td>南极</td>
-<td>This kind of animal lives in the Antarctic</td>
-</tr>
-<tr>
-<td>graduation</td>
-<td>毕业</td>
-<td>They stand in line and wait for their graduation ceremony</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-29</title>
-    <url>/2020/04/13/go-big-or-go-home-29/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>soil</td>
-<td>泥土</td>
-<td>He held some soil in his hand</td>
-</tr>
-<tr>
-<td>appropriate</td>
-<td>合适的</td>
-<td>A gentle handshake is appropriate when greeting someone for the first time</td>
-</tr>
-<tr>
-<td>hook</td>
-<td>钩子</td>
-<td>We put a worm on the hook to catch a fish</td>
-</tr>
-<tr>
-<td>knot</td>
-<td>结</td>
-<td>Chinese knots are a traditional handicraft of China</td>
-</tr>
-<tr>
-<td>punishment</td>
-<td>惩罚</td>
-<td>The student was given punishment for doing something wrong</td>
-</tr>
-<tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversion was interrputed by a knock at the door</td>
-</tr>
-<tr>
-<td>bread</td>
-<td>面包</td>
-<td>There are different kinds of bread in the picture</td>
-</tr>
-<tr>
-<td>disgusting</td>
-<td>令人厌恶的</td>
-<td>He finds the smell of the sock disgusting</td>
-</tr>
-<tr>
-<td>non-violent</td>
-<td>非暴力的</td>
-<td>Every conflict has a non-violent solution</td>
-</tr>
-<tr>
-<td>Morning person</td>
-<td>习惯早起的人</td>
-<td>I hate waking up early for work,so I’m totally not a morning person</td>
-</tr>
-<tr>
-<td>early bird</td>
-<td>早起的鸟儿</td>
-<td>Tom is an early bird.He is always the first to arrive in school</td>
-</tr>
-<tr>
-<td>night person</td>
-<td>晚睡的人</td>
-<td>He is really a night person,he always stays up very late</td>
-</tr>
-<tr>
-<td>night owl</td>
-<td>夜晚的猫头鹰</td>
-<td>When the important exams come,Jack becomes a night owl</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2925,6 +2770,76 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-28</title>
+    <url>/2020/04/12/go-big-or-go-home-28/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>go by</td>
+<td>流逝</td>
+<td>Don’t waste your time as it goes by quickly</td>
+</tr>
+<tr>
+<td>left-handed</td>
+<td>惯用左手的</td>
+<td>This left-handed girl is painting with her left hand</td>
+</tr>
+<tr>
+<td>badminton</td>
+<td>羽毛球</td>
+<td>These kids are playing badminton in the park</td>
+</tr>
+<tr>
+<td>bench</td>
+<td>长凳</td>
+<td>The boy is sitting on the bench with his monther</td>
+</tr>
+<tr>
+<td>seaman</td>
+<td>水手</td>
+<td>He looks really happy in the seaman uniform</td>
+</tr>
+<tr>
+<td>bookshelf</td>
+<td>书架</td>
+<td>Various books are placed on the bookshelves</td>
+</tr>
+<tr>
+<td>diamond</td>
+<td>钻石</td>
+<td>Diamond rings are very popular among young couples</td>
+</tr>
+<tr>
+<td>bucket</td>
+<td>水桶</td>
+<td>The cute cat is hiding in a bucket</td>
+</tr>
+<tr>
+<td>Antarctic</td>
+<td>南极</td>
+<td>This kind of animal lives in the Antarctic</td>
+</tr>
+<tr>
+<td>graduation</td>
+<td>毕业</td>
+<td>They stand in line and wait for their graduation ceremony</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-30</title>
     <url>/2020/04/14/go-big-or-go-home-30/</url>
     <content><![CDATA[<table>
@@ -3064,6 +2979,301 @@
 <td>dead</td>
 <td>死的</td>
 <td>The fish is dead</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-33</title>
+    <url>/2020/04/17/go-big-or-go-home-33/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>suspect</td>
+<td>嫌疑犯</td>
+<td>The suspect is talking with his lawyer</td>
+</tr>
+<tr>
+<td>hand in</td>
+<td>上交</td>
+<td>He’s handing in his homework to the teacher</td>
+</tr>
+<tr>
+<td>ladder</td>
+<td>梯子</td>
+<td>The man is standing on a ladder</td>
+</tr>
+<tr>
+<td>weakness</td>
+<td>弱点</td>
+<td>Vampires’s weakness is that they are afraid of sunshine</td>
+</tr>
+<tr>
+<td>French</td>
+<td>法国</td>
+<td>The Eiffel tower is a French landmark</td>
+</tr>
+<tr>
+<td>million</td>
+<td>百万</td>
+<td>-</td>
+</tr>
+<tr>
+<td>billion</td>
+<td>十亿</td>
+<td>-</td>
+</tr>
+<tr>
+<td>minibus</td>
+<td>小巴士</td>
+<td>Let’s take the minibus on a trip!</td>
+</tr>
+<tr>
+<td>junior</td>
+<td>三年级学生</td>
+<td>The junior is preparing for her exams in the dormitory</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-29</title>
+    <url>/2020/04/13/go-big-or-go-home-29/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>soil</td>
+<td>泥土</td>
+<td>He held some soil in his hand</td>
+</tr>
+<tr>
+<td>appropriate</td>
+<td>合适的</td>
+<td>A gentle handshake is appropriate when greeting someone for the first time</td>
+</tr>
+<tr>
+<td>hook</td>
+<td>钩子</td>
+<td>We put a worm on the hook to catch a fish</td>
+</tr>
+<tr>
+<td>knot</td>
+<td>结</td>
+<td>Chinese knots are a traditional handicraft of China</td>
+</tr>
+<tr>
+<td>punishment</td>
+<td>惩罚</td>
+<td>The student was given punishment for doing something wrong</td>
+</tr>
+<tr>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversion was interrputed by a knock at the door</td>
+</tr>
+<tr>
+<td>bread</td>
+<td>面包</td>
+<td>There are different kinds of bread in the picture</td>
+</tr>
+<tr>
+<td>disgusting</td>
+<td>令人厌恶的</td>
+<td>He finds the smell of the sock disgusting</td>
+</tr>
+<tr>
+<td>non-violent</td>
+<td>非暴力的</td>
+<td>Every conflict has a non-violent solution</td>
+</tr>
+<tr>
+<td>Morning person</td>
+<td>习惯早起的人</td>
+<td>I hate waking up early for work,so I’m totally not a morning person</td>
+</tr>
+<tr>
+<td>early bird</td>
+<td>早起的鸟儿</td>
+<td>Tom is an early bird.He is always the first to arrive in school</td>
+</tr>
+<tr>
+<td>night person</td>
+<td>晚睡的人</td>
+<td>He is really a night person,he always stays up very late</td>
+</tr>
+<tr>
+<td>night owl</td>
+<td>夜晚的猫头鹰</td>
+<td>When the important exams come,Jack becomes a night owl</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-4</title>
+    <url>/2020/03/19/go-big-or-go-home-4/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>desperate</td>
+<td>绝望的</td>
+<td>The unemployed man looks so desperate</td>
+</tr>
+<tr>
+<td>beyond</td>
+<td>更远的/超出…能力</td>
+<td>The birds flew far beyond the land’s edge</td>
+</tr>
+<tr>
+<td>in need of</td>
+<td>需要</td>
+<td>The dry field is in need of rain</td>
+</tr>
+<tr>
+<td>gesture</td>
+<td>手势</td>
+<td>This gesture means you are very good</td>
+</tr>
+<tr>
+<td>production</td>
+<td>生产</td>
+<td>Thousands of cars are under production</td>
+</tr>
+<tr>
+<td>pregnant</td>
+<td>怀孕的</td>
+<td>The pregnant woman is drinking water</td>
+</tr>
+<tr>
+<td>complain</td>
+<td>抱怨</td>
+<td>She complains that the homework is difficult</td>
+</tr>
+<tr>
+<td>unemployed</td>
+<td>失业</td>
+<td>Have you been unemployed for over six months?</td>
+</tr>
+<tr>
+<td>edge</td>
+<td>边缘</td>
+<td>He edged closer to the telephone, ready to grab it</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-6</title>
+    <url>/2020/03/21/go-big-or-go-home-6/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>altogether</td>
+<td>合计</td>
+<td>These gifts cost me 1000 dollars altogether</td>
+</tr>
+<tr>
+<td>salt</td>
+<td>盐</td>
+<td>Adding salt gives the dish more flavor</td>
+</tr>
+<tr>
+<td>smog</td>
+<td>烟雾</td>
+<td>There is too much smog in this big city</td>
+</tr>
+<tr>
+<td>not till</td>
+<td>直到…才</td>
+<td>Not till eight o’clock dit I get up</td>
+</tr>
+<tr>
+<td>stand for</td>
+<td>代表</td>
+<td>The sign stands for a bicycle path</td>
+</tr>
+<tr>
+<td>zoom</td>
+<td>拉近</td>
+<td>The creama zoomed in on the child’s face</td>
+</tr>
+<tr>
+<td>cordless</td>
+<td>不用电线的</td>
+<td>A cordless mouse is convenient for using your computer</td>
+</tr>
+<tr>
+<td>spaceship</td>
+<td>宇宙飞船</td>
+<td>At last,the spaceship landed on the moon</td>
+</tr>
+<tr>
+<td>cover</td>
+<td>盖住</td>
+<td>He covers his face with glasses and a face mask</td>
+</tr>
+<tr>
+<td>umbrella</td>
+<td>雨伞</td>
+<td>The dog uses an umbrella to block the sun</td>
+</tr>
+<tr>
+<td>presentation</td>
+<td>科学的</td>
+<td>The student is giving a presentation about how to roll the dough scientifically</td>
+</tr>
+<tr>
+<td>backache</td>
+<td>背痛</td>
+<td>Since I got an office job,my backache has gotton much worse</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3259,151 +3469,6 @@
 <td>premanent</td>
 <td>永久的</td>
 <td>He hopes to find a premanent job</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-4</title>
-    <url>/2020/03/19/go-big-or-go-home-4/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>desperate</td>
-<td>绝望的</td>
-<td>The unemployed man looks so desperate</td>
-</tr>
-<tr>
-<td>beyond</td>
-<td>更远的/超出…能力</td>
-<td>The birds flew far beyond the land’s edge</td>
-</tr>
-<tr>
-<td>in need of</td>
-<td>需要</td>
-<td>The dry field is in need of rain</td>
-</tr>
-<tr>
-<td>gesture</td>
-<td>手势</td>
-<td>This gesture means you are very good</td>
-</tr>
-<tr>
-<td>production</td>
-<td>生产</td>
-<td>Thousands of cars are under production</td>
-</tr>
-<tr>
-<td>pregnant</td>
-<td>怀孕的</td>
-<td>The pregnant woman is drinking water</td>
-</tr>
-<tr>
-<td>complain</td>
-<td>抱怨</td>
-<td>She complains that the homework is difficult</td>
-</tr>
-<tr>
-<td>unemployed</td>
-<td>失业</td>
-<td>Have you been unemployed for over six months?</td>
-</tr>
-<tr>
-<td>edge</td>
-<td>边缘</td>
-<td>He edged closer to the telephone, ready to grab it</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-6</title>
-    <url>/2020/03/21/go-big-or-go-home-6/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>altogether</td>
-<td>合计</td>
-<td>These gifts cost me 1000 dollars altogether</td>
-</tr>
-<tr>
-<td>salt</td>
-<td>盐</td>
-<td>Adding salt gives the dish more flavor</td>
-</tr>
-<tr>
-<td>smog</td>
-<td>烟雾</td>
-<td>There is too much smog in this big city</td>
-</tr>
-<tr>
-<td>not till</td>
-<td>直到…才</td>
-<td>Not till eight o’clock dit I get up</td>
-</tr>
-<tr>
-<td>stand for</td>
-<td>代表</td>
-<td>The sign stands for a bicycle path</td>
-</tr>
-<tr>
-<td>zoom</td>
-<td>拉近</td>
-<td>The creama zoomed in on the child’s face</td>
-</tr>
-<tr>
-<td>cordless</td>
-<td>不用电线的</td>
-<td>A cordless mouse is convenient for using your computer</td>
-</tr>
-<tr>
-<td>spaceship</td>
-<td>宇宙飞船</td>
-<td>At last,the spaceship landed on the moon</td>
-</tr>
-<tr>
-<td>cover</td>
-<td>盖住</td>
-<td>He covers his face with glasses and a face mask</td>
-</tr>
-<tr>
-<td>umbrella</td>
-<td>雨伞</td>
-<td>The dog uses an umbrella to block the sun</td>
-</tr>
-<tr>
-<td>presentation</td>
-<td>科学的</td>
-<td>The student is giving a presentation about how to roll the dough scientifically</td>
-</tr>
-<tr>
-<td>backache</td>
-<td>背痛</td>
-<td>Since I got an office job,my backache has gotton much worse</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3650,27 +3715,6 @@
       </tags>
   </entry>
   <entry>
-    <title>leetcode208</title>
-    <url>/2019/10/20/leetcode208/</url>
-    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
-<p>示例:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Trie trie = new Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(&quot;apple&quot;);</span><br><span class="line">trie.search(&quot;apple&quot;);   // 返回 true</span><br><span class="line">trie.search(&quot;app&quot;);     // 返回 false</span><br><span class="line">trie.startsWith(&quot;app&quot;); // 返回 true</span><br><span class="line">trie.insert(&quot;app&quot;);   </span><br><span class="line">trie.search(&quot;app&quot;);     // 返回 true</span><br></pre></td></tr></table></figure>
-
-<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TrieNode &#123;</span><br><span class="line"></span><br><span class="line">    public char val;</span><br><span class="line"></span><br><span class="line">    public TrieNode[] children = new TrieNode[26];</span><br><span class="line"></span><br><span class="line">    public boolean isWord;</span><br><span class="line"></span><br><span class="line">    public TrieNode() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public TrieNode(char c) &#123;</span><br><span class="line">        TrieNode node = new TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Trie &#123;</span><br><span class="line">    private TrieNode root;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Initialize your data structure here.</span><br><span class="line">     */</span><br><span class="line">    public Trie() &#123;</span><br><span class="line">        root = new TrieNode();</span><br><span class="line">        root.val = &apos; &apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Inserts a word into the trie.</span><br><span class="line">     */</span><br><span class="line">    public void insert(String word) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            char c = word.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null) &#123;</span><br><span class="line">                t.children[c - &apos;a&apos;] = new TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns if the word is in the trie.</span><br><span class="line">     */</span><br><span class="line">    public boolean search(String word) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            char c = word.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null) &#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        return t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns if there is any word in the trie that starts with the given prefix.</span><br><span class="line">     */</span><br><span class="line">    public boolean startsWith(String prefix) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            char c = prefix.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null)&#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = new Trie();</span><br><span class="line">        obj.insert(&quot;trie&quot;);</span><br><span class="line">        boolean param_2 = obj.search(&quot;trie&quot;);</span><br><span class="line">        boolean param_3 = obj.startsWith(&quot;trie&quot;);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>Trie树</tag>
-        <tag>leetcode208</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-9</title>
     <url>/2020/03/24/go-big-or-go-home-9/</url>
     <content><![CDATA[<table>
@@ -3736,6 +3780,27 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode208</title>
+    <url>/2019/10/20/leetcode208/</url>
+    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Trie trie = new Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(&quot;apple&quot;);</span><br><span class="line">trie.search(&quot;apple&quot;);   // 返回 true</span><br><span class="line">trie.search(&quot;app&quot;);     // 返回 false</span><br><span class="line">trie.startsWith(&quot;app&quot;); // 返回 true</span><br><span class="line">trie.insert(&quot;app&quot;);   </span><br><span class="line">trie.search(&quot;app&quot;);     // 返回 true</span><br></pre></td></tr></table></figure>
+
+<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TrieNode &#123;</span><br><span class="line"></span><br><span class="line">    public char val;</span><br><span class="line"></span><br><span class="line">    public TrieNode[] children = new TrieNode[26];</span><br><span class="line"></span><br><span class="line">    public boolean isWord;</span><br><span class="line"></span><br><span class="line">    public TrieNode() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public TrieNode(char c) &#123;</span><br><span class="line">        TrieNode node = new TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Trie &#123;</span><br><span class="line">    private TrieNode root;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Initialize your data structure here.</span><br><span class="line">     */</span><br><span class="line">    public Trie() &#123;</span><br><span class="line">        root = new TrieNode();</span><br><span class="line">        root.val = &apos; &apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Inserts a word into the trie.</span><br><span class="line">     */</span><br><span class="line">    public void insert(String word) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            char c = word.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null) &#123;</span><br><span class="line">                t.children[c - &apos;a&apos;] = new TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns if the word is in the trie.</span><br><span class="line">     */</span><br><span class="line">    public boolean search(String word) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i &lt; word.length(); i++) &#123;</span><br><span class="line">            char c = word.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null) &#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        return t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns if there is any word in the trie that starts with the given prefix.</span><br><span class="line">     */</span><br><span class="line">    public boolean startsWith(String prefix) &#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        for (int i = 0; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            char c = prefix.charAt(i);</span><br><span class="line">            if (t.children[c - &apos;a&apos;] == null)&#123;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - &apos;a&apos;];</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = new Trie();</span><br><span class="line">        obj.insert(&quot;trie&quot;);</span><br><span class="line">        boolean param_2 = obj.search(&quot;trie&quot;);</span><br><span class="line">        boolean param_3 = obj.startsWith(&quot;trie&quot;);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>Trie树</tag>
+        <tag>leetcode208</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode338</title>
     <url>/2019/10/20/leetcode338/</url>
     <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
@@ -3752,32 +3817,6 @@
       <tags>
         <tag>leetcode338</tag>
         <tag>二进制数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode79</title>
-    <url>/2019/10/20/leetcode79/</url>
-    <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
-<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
-<p>示例:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],</span><br><span class="line">  [&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],</span><br><span class="line">  [&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = &quot;ABCCED&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;SEE&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;ABCB&quot;, 返回 false.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line"></span><br><span class="line">    static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">    static int[] column = &#123;1,0,-1,0&#125;;</span><br><span class="line"></span><br><span class="line">    public  boolean exist(char[][] board, String word) &#123;</span><br><span class="line"></span><br><span class="line">        for (int i =0,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            for (int j=0,columnLen = board[0].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                if (dfs(board,word,i,j,0)) return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean dfs(char[][] board,String word,int x,int y,int index)&#123;</span><br><span class="line">        if (x&lt;0 || x&gt;=board.length || y&lt;0 || y&gt;=board[0].length) return false;</span><br><span class="line"></span><br><span class="line">        if(board[x][y] != word.charAt(index)) return false;</span><br><span class="line"></span><br><span class="line">        if(index == word.length() - 1) return true;</span><br><span class="line"></span><br><span class="line">        board[x][y] = &apos;#&apos;;</span><br><span class="line"></span><br><span class="line">        for (int i = 0 ; i&lt;4;i++)&#123;</span><br><span class="line">            if (dfs(board,word,x+row[i],y+column[i],index+1)) return true;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        char[][] borad = &#123;&#123;&apos;F&apos;,&apos;Y&apos;,&apos;C&apos;,&apos;E&apos;,&apos;N&apos;,&apos;R&apos;,&apos;D&apos;&#125;,&#123;&apos;K&apos;,&apos;L&apos;,&apos;N&apos;,&apos;F&apos;,&apos;I&apos;,&apos;N&apos;,&apos;U&apos;&#125;,&#123;&apos;A&apos;,&apos;A&apos;,&apos;A&apos;,&apos;R&apos;,&apos;A&apos;,&apos;H&apos;,&apos;R&apos;&#125;,&#123;&apos;N&apos;,&apos;D&apos;,&apos;K&apos;,&apos;L&apos;,&apos;P&apos;,&apos;N&apos;,&apos;E&apos;&#125;,&#123;&apos;A&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;S&apos;,&apos;A&apos;,&apos;P&apos;&#125;,&#123;&apos;O&apos;,&apos;O&apos;,&apos;G&apos;,&apos;O&apos;,&apos;T&apos;,&apos;P&apos;,&apos;N&apos;&#125;,&#123;&apos;H&apos;,&apos;P&apos;,&apos;O&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;O&apos;&#125;&#125;;</span><br><span class="line">        String word= &quot;poland&quot;;</span><br><span class="line">        System.out.println(new Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里主要说明一下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board[x][y] = &apos;#&apos;;</span><br></pre></td></tr></table></figure>
-
-<p>是将已经查找过的做一个标记，以及</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">static int[] column = &#123;1,0,-1,0&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>二维网格</tag>
-        <tag>leetcode79</tag>
       </tags>
   </entry>
   <entry>
@@ -3811,6 +3850,32 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode79</title>
+    <url>/2019/10/20/leetcode79/</url>
+    <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
+<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],</span><br><span class="line">  [&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],</span><br><span class="line">  [&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = &quot;ABCCED&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;SEE&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;ABCB&quot;, 返回 false.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line"></span><br><span class="line">    static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">    static int[] column = &#123;1,0,-1,0&#125;;</span><br><span class="line"></span><br><span class="line">    public  boolean exist(char[][] board, String word) &#123;</span><br><span class="line"></span><br><span class="line">        for (int i =0,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            for (int j=0,columnLen = board[0].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                if (dfs(board,word,i,j,0)) return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean dfs(char[][] board,String word,int x,int y,int index)&#123;</span><br><span class="line">        if (x&lt;0 || x&gt;=board.length || y&lt;0 || y&gt;=board[0].length) return false;</span><br><span class="line"></span><br><span class="line">        if(board[x][y] != word.charAt(index)) return false;</span><br><span class="line"></span><br><span class="line">        if(index == word.length() - 1) return true;</span><br><span class="line"></span><br><span class="line">        board[x][y] = &apos;#&apos;;</span><br><span class="line"></span><br><span class="line">        for (int i = 0 ; i&lt;4;i++)&#123;</span><br><span class="line">            if (dfs(board,word,x+row[i],y+column[i],index+1)) return true;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        char[][] borad = &#123;&#123;&apos;F&apos;,&apos;Y&apos;,&apos;C&apos;,&apos;E&apos;,&apos;N&apos;,&apos;R&apos;,&apos;D&apos;&#125;,&#123;&apos;K&apos;,&apos;L&apos;,&apos;N&apos;,&apos;F&apos;,&apos;I&apos;,&apos;N&apos;,&apos;U&apos;&#125;,&#123;&apos;A&apos;,&apos;A&apos;,&apos;A&apos;,&apos;R&apos;,&apos;A&apos;,&apos;H&apos;,&apos;R&apos;&#125;,&#123;&apos;N&apos;,&apos;D&apos;,&apos;K&apos;,&apos;L&apos;,&apos;P&apos;,&apos;N&apos;,&apos;E&apos;&#125;,&#123;&apos;A&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;S&apos;,&apos;A&apos;,&apos;P&apos;&#125;,&#123;&apos;O&apos;,&apos;O&apos;,&apos;G&apos;,&apos;O&apos;,&apos;T&apos;,&apos;P&apos;,&apos;N&apos;&#125;,&#123;&apos;H&apos;,&apos;P&apos;,&apos;O&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;O&apos;&#125;&#125;;</span><br><span class="line">        String word= &quot;poland&quot;;</span><br><span class="line">        System.out.println(new Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里主要说明一下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board[x][y] = &apos;#&apos;;</span><br></pre></td></tr></table></figure>
+
+<p>是将已经查找过的做一个标记，以及</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">static int[] column = &#123;1,0,-1,0&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>二维网格</tag>
+        <tag>leetcode79</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>redis系列-Redisson分布式锁验证+踩坑</title>
     <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</url>
     <content><![CDATA[<h3 id="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码"><a href="#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码" class="headerlink" title="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码"></a>本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.redisson&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;redisson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.11.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
@@ -3836,19 +3901,6 @@
       </tags>
   </entry>
   <entry>
-    <title>不得不说的Java‘锁’事</title>
-    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
-    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>锁</tag>
-        <tag>高并发</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>redis系列-实现一个延时消费队列</title>
     <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%BB%B6%E6%97%B6%E6%B6%88%E8%B4%B9%E9%98%9F%E5%88%97/</url>
     <content><![CDATA[<h3 id="用Zset和Hash实现一个延时队列，话不多说，附上代码"><a href="#用Zset和Hash实现一个延时队列，话不多说，附上代码" class="headerlink" title="用Zset和Hash实现一个延时队列，话不多说，附上代码"></a>用Zset和Hash实现一个延时队列，话不多说，附上代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertToRank</span><span class="params">(String id, String msg, String isNow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score=<span class="keyword">this</span>.getScore(isNow);</span><br><span class="line">        String uuid=UUID.randomUUID().toString().replaceAll(<span class="string">"-"</span>, <span class="string">""</span>);</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=</span><br><span class="line">                stringRedisTemplate.opsForHash();</span><br><span class="line">        Map&lt;String, String&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>, id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>, msg);</span><br><span class="line">        opsForHash.putAll(Constant.KEY_HASH + uuid, map);</span><br><span class="line">        <span class="keyword">this</span>.insertZset(uuid, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入zset，按照score排序</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> score</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertZset</span><span class="params">(String key, <span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=</span><br><span class="line">                stringRedisTemplate.opsForZSet();</span><br><span class="line">        opsForZSet.add(Constant.KEY_ZSET, key, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前时间</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> isNow is时表示实时消息，放入zset前面</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">double</span> <span class="title">getScore</span><span class="params">(String isNow)</span> </span>&#123;</span><br><span class="line">        Date nowTime=<span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">        SimpleDateFormat simpleDateFormat=<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMddHHmmss"</span>);</span><br><span class="line">        String now=simpleDateFormat.format(nowTime);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"is"</span>.equals(isNow)) &#123;</span><br><span class="line">            <span class="keyword">return</span> Double.parseDouble(now.substring(<span class="number">0</span>, <span class="number">12</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Double.parseDouble(now);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 抢锁</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOut</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key, String value, <span class="keyword">long</span> timeOut)</span> </span>&#123;</span><br><span class="line">        Boolean isSuccess=stringRedisTemplate.opsForValue().setIfAbsent(key, value);</span><br><span class="line">        <span class="keyword">if</span> (isSuccess) &#123;</span><br><span class="line">            stringRedisTemplate.expire(key, timeOut, TimeUnit.MINUTES);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isSuccess;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 释放锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delLock</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取zset第一条数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstData</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=stringRedisTemplate.opsForZSet();</span><br><span class="line">        Set&lt;String&gt; range=opsForZSet.range(key, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (!CollectionUtils.isEmpty(range)) &#123;</span><br><span class="line">            String uuid = range.iterator().next();</span><br><span class="line">            opsForZSet.remove(key,uuid);</span><br><span class="line">            <span class="keyword">return</span> uuid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询当前Zset多少个数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getZsetSize</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stringRedisTemplate.opsForZSet().zCard(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取hash数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,Object&gt; <span class="title">getHashData</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=stringRedisTemplate.opsForHash();</span><br><span class="line">        Object id=opsForHash.get(key, <span class="string">"id"</span>);</span><br><span class="line">        Object msg=opsForHash.get(key, <span class="string">"msg"</span>);</span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>,id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>,msg);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">(CountDownLatch countDownLatch,String uuid)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Map&lt;String, Object&gt; hashData=<span class="keyword">this</span>.getHashData(Constant.KEY_HASH + uuid);</span><br><span class="line">            log.info(<span class="string">"开始发送"</span>+hashData.get(<span class="string">"id"</span>)+<span class="string">"消息: "</span>+hashData.get(<span class="string">"msg"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            countDownLatch.countDown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -3866,6 +3918,19 @@
       <tags>
         <tag>redis</tag>
         <tag>延时队列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>不得不说的Java‘锁’事</title>
+    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
+    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>锁</tag>
+        <tag>高并发</tag>
       </tags>
   </entry>
   <entry>
@@ -3984,92 +4049,6 @@
       <tags>
         <tag>数据库</tag>
         <tag>事务</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深入浅出索引</title>
-    <url>/2019/10/26/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%B4%A2%E5%BC%95/</url>
-    <content><![CDATA[<p>这节讲的是索引的相关知识，提到索引相信大家都不会陌生，在工作中或多或少都会接触过，建立索引主要是用来提升SQL查询速度的一种解决方案。<br>那么索引是什么？<br>一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。  </p>
-<h3 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h3><p>这里引入三种模型，哈希表有序数组和搜索树  </p>
-<p>哈希表是一种以建-值（key-value）存储的数据结构，我们只要输入待查找的key，就能找到value。哈希的思路很简单，把值放在数组里，用一个哈希函数把key换算成一个确定的位置，然后把value放在数组的这个位置。<br>不可避免的，多个key经过哈希函数的换算会出现同一个值的情况，处理这种情况的方式是，拉出一个链表。<br>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字。这时对应的哈希索引的示意图如下所示。  </p>
-<p><img src="../image/%E5%93%88%E5%B8%8C%E8%A1%A8.png" alt="哈希表.png" title="哈希表">  </p>
-<p>需要注意的是，图中四个ID_card_n的值并不是递增的，这样做的好处是增加新的User时速度会很快，只需要往后追加。但缺点是，因为不是有序的，所以哈希索引做区间查询速度是很慢的。  </p>
-<p>所以，哈希表这种结构适用于只有等值查询的场景，比如 Memcached 及其他一些 NoSQL 引擎。  </p>
-<p>而有序数组在等值查询和范围查询场景的性能就都非常优秀。还是根据上面这个例子，如果用有序数组来实现的话，示意图如下所示：  </p>
-<p><img src="../image/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84.png" alt="有序数组.png" title="有序数组">  </p>
-<p>这里假设身份证号没有重复，这个数组就是按照身份证号递增的顺序保存的，这个时候如果你要查ID_card_n2对应的名字，用二分法就可以快速得到，这个时间复杂度是O(log(N)).<br>同时很显然，这个索引结构支持范围查询。你要查身份证号在[ID_card_X,ID_card_Y]区间的User，可以先用二分法找到ID_card_X(如果不存在ID_card_X，就找到大于ID_card_X的第一个User)，然后向右遍历，直到查到第一个大于ID_card_Y的身份证号，推出循环。<br>如果仅仅看查询效率，有序数组就是最好的数据结构了，但是在更新数据的时候，如果有新增的数据，就需要挪动后续所有的记录，成本太高。<br>所以，有序数组只适用于静态存储引擎，比如你要保存的是2019年某个城市所有人口的信息，这类不会再修改的数据。<br>二叉搜索树是经典的数据结构了，还是根据上面的例子，如果我们用二叉搜索树来实现的话，示意图如下所示，</p>
-<p><img src="../image/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="二叉搜索树.png" title="二叉搜索树">  </p>
-<p>二叉搜索树的特点是：每个节点的左儿子小于父节点，父节点又小于右儿子，这样如果你要查ID_card_2的话按照图中的顺序就是按照UserA -&gt; UserC -&gt; UserF -&gt; User2这个路径得到。这个时间复杂度是O(log(N))。<br>当然为了维持O(log(N))的查询复杂度，你就需要保持这颗树是平衡二叉树，为了做这个保证，更新的时间复杂度也是O(log(N))。<br>树可以有二叉，也可以有多叉，多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉搜索树的效率是最高的，但是实际上大多数数据库存储却并不适用二叉树。其原因是，索引不止存在于内存中，还要写到磁盘上。<br>你可以想象一下一棵100万节点的平衡二叉树，树高20，一次查询可能需要访问20个数据块，在机械硬盘时代，从磁盘随机读取一个数据块需要10ms的寻址时间，也就是说，对于一个100万行的表，如果使用二叉树来存储，单独访问一个行可能需要20个10ms的时间，这个查询可真够慢的，为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。以 InnoDB 的一个整数字段索引为例，这个 N 差不多是 1200。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p>
-<p>N 叉树由于在读写上的性能优点，以及适配磁盘的访问模式，已经被广泛应用在数据库引擎中了。  </p>
-<h3 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h3><p>大家都知道InnoDB的索引模型是B+树，假设我们有一个主键列为ID的表，表中有字段K，并且在K上有索引，如下图所示：  </p>
-<p><img src="../image/InnoDB%E7%B4%A2%E5%BC%95.png" alt="InnoDB索引.png" title="InnoDB索引">  </p>
-<p>从图中不难看出，根据叶子节点的内容，索引类型分为主键索引和非主键索引。</p>
-<p>主键索引的叶子节点存的是整行数据。在 InnoDB 里，主键索引也被称为聚簇索引（clustered index）。  </p>
-<p>非主键索引的叶子节点内容是主键的值。在 InnoDB 里，非主键索引也被称为二级索引（secondary index）。</p>
-<p>根据上面的索引结构说明，我们来讨论一个问题：基于主键索引和普通索引的查询有什么区别？</p>
-<p>如果语句是 select * from T where ID=500，即主键查询方式，则只需要搜索 ID 这棵 B+ 树；<br>如果语句是 select * from T where k=5，即普通索引查询方式，则需要先搜索 k 索引树，得到 ID 的值为 500，再到 ID 索引树搜索一次。这个过程称为_回表_。<br>也就是说，基于非主键索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。   </p>
-<p>除了性能外，页分裂操作还影响数据页的利用率。原本放在一个页的数据，现在分到两个页中，整体空间利用率降低大约 50%。</p>
-<p>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。</p>
-<p>基于上面的索引维护过程说明，我们来讨论一个案例：</p>
-<p>你可能在一些建表规范里面见到过类似的描述，要求建表语句里一定要有自增主键。当然事无绝对，我们来分析一下哪些场景下应该使用自增主键，而哪些场景下不应该。</p>
-<p>自增主键是指自增列上定义的主键，在建表语句中一般是这么定义的： NOT NULL PRIMARY KEY AUTO_INCREMENT。</p>
-<p>插入新记录的时候可以不指定 ID 的值，系统会获取当前 ID 最大值加 1 作为下一条记录的 ID 值。</p>
-<p>也就是说，自增主键的插入数据模式，正符合了我们前面提到的递增插入的场景。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。</p>
-<p>而有业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。</p>
-<p>除了考虑性能外，我们还可以从存储空间的角度来看。假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？</p>
-<p>由于每个非主键索引的叶子节点上都是主键的值。如果用身份证号做主键，那么每个二级索引的叶子节点占用约 20 个字节，而如果用整型做主键，则只要 4 个字节，如果是长整型（bigint）则是 8 个字节。</p>
-<p>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</p>
-<p>所以，从性能和存储空间方面考量，自增主键往往是更合理的选择。</p>
-<p>有没有什么场景适合用业务字段直接做主键的呢？还是有的。比如，有些业务的场景需求是这样的：</p>
-<p>只有一个索引；</p>
-<p>该索引必须是唯一索引。</p>
-<p>你一定看出来了，这就是典型的 KV 场景。</p>
-<p>由于没有其他索引，所以也就不用考虑其他索引的叶子节点大小的问题。</p>
-<p>这时候我们就要优先考虑上一段提到的“尽量使用主键查询”原则，直接将这个索引设置为主键，可以避免每次查询需要搜索两棵树。 </p>
-<p>对于一张表可以这么理解：<br>每一张表其实就是好几个B+树，树结点的key值就是某一行的主键，value是该行的其他数据。新建索引就是新增一个B+树，查询不走索引就是遍历主B+树。</p>
-<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>如果执行的语句是 select ID from T where k between 3 and 5，这时只需要查 ID 的值，而 ID 的值已经在 k 索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，索引 k 已经“覆盖了”我们的查询需求，我们称为覆盖索引。</p>
-<p>由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以使用覆盖索引是一个常用的性能优化手段。</p>
-<p>需要注意的是，在引擎内部使用覆盖索引在索引 k 上其实读了三个记录，R3~R5（对应的索引 k 上的记录项），但是对于 MySQL 的 Server 层来说，它就是找引擎拿到了两条记录，因此 MySQL 认为扫描行数是 2。  </p>
-<p>基于上面覆盖索引的说明，我们来讨论一个问题：在一个市民信息表上，是否有必要将身份证号和名字建立联合索引？  </p>
-<p>我们知道，身份证号是市民的唯一标识。也就是说，如果有根据身份证号查询市民信息的需求，我们只要在身份证号字段上建立索引就够了。而再建立一个（身份证号、姓名）的联合索引，是不是浪费空间？</p>
-<p>如果现在有一个高频请求，要根据市民的身份证号查询他的姓名，这个联合索引就有意义了。它可以在这个高频请求上用到覆盖索引，不再需要回表查整行记录，减少语句的执行时间。</p>
-<p>当然，索引字段的维护总是有代价的。因此，在建立冗余索引来支持覆盖索引时就需要权衡考虑了。这正是业务 DBA，或者称为业务数据架构师的工作。  </p>
-<h3 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h3><p>对于最左前缀原则大家都应该轻车熟路了，就不过多介绍，有些重点内容可以考虑一下：<br>基于上面对最左前缀索引的说明，我们来讨论一个问题：在建立联合索引的时候，如何安排索引内的字段顺序。</p>
-<p>这里我们的评估标准是，索引的复用能力。因为可以支持最左前缀，所以当已经有了 (a,b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。  </p>
-<p>所以现在你知道了，这段开头的问题里，我们要为高频请求创建 (身份证号，姓名）这个联合索引，并用这个索引支持“根据身份证号查询地址”的需求。</p>
-<p>那么，如果既有联合查询，又有基于 a、b 各自的查询呢？查询条件里面只有 b 的语句，是无法使用 (a,b) 这个联合索引的，这时候你不得不维护另外一个索引，也就是说你需要同时维护 (a,b)、(b) 这两个索引。</p>
-<p>这时候，我们要考虑的原则就是空间了。比如上面这个市民表的情况，name 字段是比 age 字段大的 ，那我就建议你创建一个（name,age) 的联合索引和一个 (age) 的单字段索引。  </p>
-<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>上一段我们说到满足最左前缀原则的时候，最左前缀可以用于在索引中定位记录。这时，你可能要问，那些不符合最左前缀的部分，会怎么样呢？</p>
-<p>我们还是以市民表的联合索引（name, age）为例。如果现在有一个需求：检索出表中“名字第一个字是张，而且年龄是 10 岁的所有男孩”。那么，SQL 语句是这么写的：   </p>
-<p><code>mysql&gt; select * from tuser where name like &#39;张 %&#39; and age=10 and ismale=1;</code></p>
-<p>你已经知道了前缀索引规则，所以这个语句在搜索索引树的时候，只能用 “张”，找到第一个满足条件的记录 ID3。当然，这还不错，总比全表扫描要好。</p>
-<p>然后呢？</p>
-<p>当然是判断其他条件是否满足。</p>
-<p>在 MySQL 5.6 之前，只能从 ID3 开始一个个回表。到主键索引上找出数据行，再对比字段值。</p>
-<p>而 MySQL 5.6 引入的索引下推优化（index condition pushdown)， 可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
-<p>图 3 和图 4，是这两个过程的执行流程图。</p>
-<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
-<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
-<p>在图 3 和 4 这两个图里面，每一个虚线箭头表示回表一次。</p>
-<p>图 3 中，在 (name,age) 索引里面我特意去掉了 age 的值，这个过程 InnoDB 并不会去看 age 的值，只是按顺序把“name 第一个字是’张’”的记录一条条取出来回表。因此，需要回表 4 次。</p>
-<p>图 4 跟图 3 的区别是，InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
-<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>实际上主键索引也是可以使用多个字段的。DBA 小吕在入职新公司的时候，就发现自己接手维护的库里面，有这么一个表，表结构定义类似这样的：</p>
-<figure class="highlight plain"><figcaption><span>TABLE `geek` (</span></figcaption><table><tr><td class="code"><pre><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">公司的同事告诉他说，由于历史原因，这个表需要 a、b 做联合主键，这个小吕理解了。</span><br><span class="line"></span><br><span class="line">但是，学过本章内容的小吕又纳闷了，既然主键包含了 a、b 这两个字段，那意味着单独在字段 c 上创建一个索引，就已经包含了三个字段了呀，为什么要创建“ca”“cb”这两个索引？</span><br><span class="line"></span><br><span class="line">同事告诉他，是因为他们的业务里面有这样的两种语句：</span><br></pre></td></tr></table></figure>
-
-<p>select * from geek where c=N order by a limit 1;<br>select * from geek where c=N order by b limit 1;<br>```  </p>
-<p>我给你的问题是，这位同事的解释对吗，为了这两个查询模式，这两个索引是否都是必须的？为什么呢？  </p>
-<p>解答：  </p>
-<p>表记录<br>–a–|–b–|–c–|–d–<br>1 2 3 d<br>1 3 2 d<br>1 4 3 d<br>2 1 3 d<br>2 2 2 d<br>2 3 4 d<br>主键 a，b 的聚簇索引组织顺序相当于 order by a,b ，也就是先按 a 排序，再按 b 排序，c 无序。</p>
-<p>索引 ca 的组织是先按 c 排序，再按 a 排序，同时记录主键<br>–c–|–a–|–主键部分b– （注意，这里不是 ab，而是只有 b）<br>2 1 3<br>2 2 2<br>3 1 2<br>3 1 4<br>3 2 1<br>4 2 3<br>这个跟索引 c 的数据是一模一样的。</p>
-<p>索引 cb 的组织是先按 c 排序，在按 b 排序，同时记录主键<br>–c–|–b–|–主键部分a– （同上）<br>2 2 2<br>2 3 1<br>3 1 2<br>3 2 1<br>3 4 1<br>4 3 2  </p>
-<p>所以，结论是 ca 可以去掉，cb 需要保留。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>索引</tag>
       </tags>
   </entry>
   <entry>
@@ -4201,6 +4180,92 @@
       <tags>
         <tag>数据库</tag>
         <tag>MVCC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深入浅出索引</title>
+    <url>/2019/10/26/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<p>这节讲的是索引的相关知识，提到索引相信大家都不会陌生，在工作中或多或少都会接触过，建立索引主要是用来提升SQL查询速度的一种解决方案。<br>那么索引是什么？<br>一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。  </p>
+<h3 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h3><p>这里引入三种模型，哈希表有序数组和搜索树  </p>
+<p>哈希表是一种以建-值（key-value）存储的数据结构，我们只要输入待查找的key，就能找到value。哈希的思路很简单，把值放在数组里，用一个哈希函数把key换算成一个确定的位置，然后把value放在数组的这个位置。<br>不可避免的，多个key经过哈希函数的换算会出现同一个值的情况，处理这种情况的方式是，拉出一个链表。<br>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字。这时对应的哈希索引的示意图如下所示。  </p>
+<p><img src="../image/%E5%93%88%E5%B8%8C%E8%A1%A8.png" alt="哈希表.png" title="哈希表">  </p>
+<p>需要注意的是，图中四个ID_card_n的值并不是递增的，这样做的好处是增加新的User时速度会很快，只需要往后追加。但缺点是，因为不是有序的，所以哈希索引做区间查询速度是很慢的。  </p>
+<p>所以，哈希表这种结构适用于只有等值查询的场景，比如 Memcached 及其他一些 NoSQL 引擎。  </p>
+<p>而有序数组在等值查询和范围查询场景的性能就都非常优秀。还是根据上面这个例子，如果用有序数组来实现的话，示意图如下所示：  </p>
+<p><img src="../image/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84.png" alt="有序数组.png" title="有序数组">  </p>
+<p>这里假设身份证号没有重复，这个数组就是按照身份证号递增的顺序保存的，这个时候如果你要查ID_card_n2对应的名字，用二分法就可以快速得到，这个时间复杂度是O(log(N)).<br>同时很显然，这个索引结构支持范围查询。你要查身份证号在[ID_card_X,ID_card_Y]区间的User，可以先用二分法找到ID_card_X(如果不存在ID_card_X，就找到大于ID_card_X的第一个User)，然后向右遍历，直到查到第一个大于ID_card_Y的身份证号，推出循环。<br>如果仅仅看查询效率，有序数组就是最好的数据结构了，但是在更新数据的时候，如果有新增的数据，就需要挪动后续所有的记录，成本太高。<br>所以，有序数组只适用于静态存储引擎，比如你要保存的是2019年某个城市所有人口的信息，这类不会再修改的数据。<br>二叉搜索树是经典的数据结构了，还是根据上面的例子，如果我们用二叉搜索树来实现的话，示意图如下所示，</p>
+<p><img src="../image/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="二叉搜索树.png" title="二叉搜索树">  </p>
+<p>二叉搜索树的特点是：每个节点的左儿子小于父节点，父节点又小于右儿子，这样如果你要查ID_card_2的话按照图中的顺序就是按照UserA -&gt; UserC -&gt; UserF -&gt; User2这个路径得到。这个时间复杂度是O(log(N))。<br>当然为了维持O(log(N))的查询复杂度，你就需要保持这颗树是平衡二叉树，为了做这个保证，更新的时间复杂度也是O(log(N))。<br>树可以有二叉，也可以有多叉，多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉搜索树的效率是最高的，但是实际上大多数数据库存储却并不适用二叉树。其原因是，索引不止存在于内存中，还要写到磁盘上。<br>你可以想象一下一棵100万节点的平衡二叉树，树高20，一次查询可能需要访问20个数据块，在机械硬盘时代，从磁盘随机读取一个数据块需要10ms的寻址时间，也就是说，对于一个100万行的表，如果使用二叉树来存储，单独访问一个行可能需要20个10ms的时间，这个查询可真够慢的，为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。以 InnoDB 的一个整数字段索引为例，这个 N 差不多是 1200。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p>
+<p>N 叉树由于在读写上的性能优点，以及适配磁盘的访问模式，已经被广泛应用在数据库引擎中了。  </p>
+<h3 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h3><p>大家都知道InnoDB的索引模型是B+树，假设我们有一个主键列为ID的表，表中有字段K，并且在K上有索引，如下图所示：  </p>
+<p><img src="../image/InnoDB%E7%B4%A2%E5%BC%95.png" alt="InnoDB索引.png" title="InnoDB索引">  </p>
+<p>从图中不难看出，根据叶子节点的内容，索引类型分为主键索引和非主键索引。</p>
+<p>主键索引的叶子节点存的是整行数据。在 InnoDB 里，主键索引也被称为聚簇索引（clustered index）。  </p>
+<p>非主键索引的叶子节点内容是主键的值。在 InnoDB 里，非主键索引也被称为二级索引（secondary index）。</p>
+<p>根据上面的索引结构说明，我们来讨论一个问题：基于主键索引和普通索引的查询有什么区别？</p>
+<p>如果语句是 select * from T where ID=500，即主键查询方式，则只需要搜索 ID 这棵 B+ 树；<br>如果语句是 select * from T where k=5，即普通索引查询方式，则需要先搜索 k 索引树，得到 ID 的值为 500，再到 ID 索引树搜索一次。这个过程称为_回表_。<br>也就是说，基于非主键索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。   </p>
+<p>除了性能外，页分裂操作还影响数据页的利用率。原本放在一个页的数据，现在分到两个页中，整体空间利用率降低大约 50%。</p>
+<p>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。</p>
+<p>基于上面的索引维护过程说明，我们来讨论一个案例：</p>
+<p>你可能在一些建表规范里面见到过类似的描述，要求建表语句里一定要有自增主键。当然事无绝对，我们来分析一下哪些场景下应该使用自增主键，而哪些场景下不应该。</p>
+<p>自增主键是指自增列上定义的主键，在建表语句中一般是这么定义的： NOT NULL PRIMARY KEY AUTO_INCREMENT。</p>
+<p>插入新记录的时候可以不指定 ID 的值，系统会获取当前 ID 最大值加 1 作为下一条记录的 ID 值。</p>
+<p>也就是说，自增主键的插入数据模式，正符合了我们前面提到的递增插入的场景。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。</p>
+<p>而有业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。</p>
+<p>除了考虑性能外，我们还可以从存储空间的角度来看。假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？</p>
+<p>由于每个非主键索引的叶子节点上都是主键的值。如果用身份证号做主键，那么每个二级索引的叶子节点占用约 20 个字节，而如果用整型做主键，则只要 4 个字节，如果是长整型（bigint）则是 8 个字节。</p>
+<p>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</p>
+<p>所以，从性能和存储空间方面考量，自增主键往往是更合理的选择。</p>
+<p>有没有什么场景适合用业务字段直接做主键的呢？还是有的。比如，有些业务的场景需求是这样的：</p>
+<p>只有一个索引；</p>
+<p>该索引必须是唯一索引。</p>
+<p>你一定看出来了，这就是典型的 KV 场景。</p>
+<p>由于没有其他索引，所以也就不用考虑其他索引的叶子节点大小的问题。</p>
+<p>这时候我们就要优先考虑上一段提到的“尽量使用主键查询”原则，直接将这个索引设置为主键，可以避免每次查询需要搜索两棵树。 </p>
+<p>对于一张表可以这么理解：<br>每一张表其实就是好几个B+树，树结点的key值就是某一行的主键，value是该行的其他数据。新建索引就是新增一个B+树，查询不走索引就是遍历主B+树。</p>
+<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>如果执行的语句是 select ID from T where k between 3 and 5，这时只需要查 ID 的值，而 ID 的值已经在 k 索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，索引 k 已经“覆盖了”我们的查询需求，我们称为覆盖索引。</p>
+<p>由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以使用覆盖索引是一个常用的性能优化手段。</p>
+<p>需要注意的是，在引擎内部使用覆盖索引在索引 k 上其实读了三个记录，R3~R5（对应的索引 k 上的记录项），但是对于 MySQL 的 Server 层来说，它就是找引擎拿到了两条记录，因此 MySQL 认为扫描行数是 2。  </p>
+<p>基于上面覆盖索引的说明，我们来讨论一个问题：在一个市民信息表上，是否有必要将身份证号和名字建立联合索引？  </p>
+<p>我们知道，身份证号是市民的唯一标识。也就是说，如果有根据身份证号查询市民信息的需求，我们只要在身份证号字段上建立索引就够了。而再建立一个（身份证号、姓名）的联合索引，是不是浪费空间？</p>
+<p>如果现在有一个高频请求，要根据市民的身份证号查询他的姓名，这个联合索引就有意义了。它可以在这个高频请求上用到覆盖索引，不再需要回表查整行记录，减少语句的执行时间。</p>
+<p>当然，索引字段的维护总是有代价的。因此，在建立冗余索引来支持覆盖索引时就需要权衡考虑了。这正是业务 DBA，或者称为业务数据架构师的工作。  </p>
+<h3 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h3><p>对于最左前缀原则大家都应该轻车熟路了，就不过多介绍，有些重点内容可以考虑一下：<br>基于上面对最左前缀索引的说明，我们来讨论一个问题：在建立联合索引的时候，如何安排索引内的字段顺序。</p>
+<p>这里我们的评估标准是，索引的复用能力。因为可以支持最左前缀，所以当已经有了 (a,b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。  </p>
+<p>所以现在你知道了，这段开头的问题里，我们要为高频请求创建 (身份证号，姓名）这个联合索引，并用这个索引支持“根据身份证号查询地址”的需求。</p>
+<p>那么，如果既有联合查询，又有基于 a、b 各自的查询呢？查询条件里面只有 b 的语句，是无法使用 (a,b) 这个联合索引的，这时候你不得不维护另外一个索引，也就是说你需要同时维护 (a,b)、(b) 这两个索引。</p>
+<p>这时候，我们要考虑的原则就是空间了。比如上面这个市民表的情况，name 字段是比 age 字段大的 ，那我就建议你创建一个（name,age) 的联合索引和一个 (age) 的单字段索引。  </p>
+<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>上一段我们说到满足最左前缀原则的时候，最左前缀可以用于在索引中定位记录。这时，你可能要问，那些不符合最左前缀的部分，会怎么样呢？</p>
+<p>我们还是以市民表的联合索引（name, age）为例。如果现在有一个需求：检索出表中“名字第一个字是张，而且年龄是 10 岁的所有男孩”。那么，SQL 语句是这么写的：   </p>
+<p><code>mysql&gt; select * from tuser where name like &#39;张 %&#39; and age=10 and ismale=1;</code></p>
+<p>你已经知道了前缀索引规则，所以这个语句在搜索索引树的时候，只能用 “张”，找到第一个满足条件的记录 ID3。当然，这还不错，总比全表扫描要好。</p>
+<p>然后呢？</p>
+<p>当然是判断其他条件是否满足。</p>
+<p>在 MySQL 5.6 之前，只能从 ID3 开始一个个回表。到主键索引上找出数据行，再对比字段值。</p>
+<p>而 MySQL 5.6 引入的索引下推优化（index condition pushdown)， 可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
+<p>图 3 和图 4，是这两个过程的执行流程图。</p>
+<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
+<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
+<p>在图 3 和 4 这两个图里面，每一个虚线箭头表示回表一次。</p>
+<p>图 3 中，在 (name,age) 索引里面我特意去掉了 age 的值，这个过程 InnoDB 并不会去看 age 的值，只是按顺序把“name 第一个字是’张’”的记录一条条取出来回表。因此，需要回表 4 次。</p>
+<p>图 4 跟图 3 的区别是，InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
+<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>实际上主键索引也是可以使用多个字段的。DBA 小吕在入职新公司的时候，就发现自己接手维护的库里面，有这么一个表，表结构定义类似这样的：</p>
+<figure class="highlight plain"><figcaption><span>TABLE `geek` (</span></figcaption><table><tr><td class="code"><pre><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">公司的同事告诉他说，由于历史原因，这个表需要 a、b 做联合主键，这个小吕理解了。</span><br><span class="line"></span><br><span class="line">但是，学过本章内容的小吕又纳闷了，既然主键包含了 a、b 这两个字段，那意味着单独在字段 c 上创建一个索引，就已经包含了三个字段了呀，为什么要创建“ca”“cb”这两个索引？</span><br><span class="line"></span><br><span class="line">同事告诉他，是因为他们的业务里面有这样的两种语句：</span><br></pre></td></tr></table></figure>
+
+<p>select * from geek where c=N order by a limit 1;<br>select * from geek where c=N order by b limit 1;<br>```  </p>
+<p>我给你的问题是，这位同事的解释对吗，为了这两个查询模式，这两个索引是否都是必须的？为什么呢？  </p>
+<p>解答：  </p>
+<p>表记录<br>–a–|–b–|–c–|–d–<br>1 2 3 d<br>1 3 2 d<br>1 4 3 d<br>2 1 3 d<br>2 2 2 d<br>2 3 4 d<br>主键 a，b 的聚簇索引组织顺序相当于 order by a,b ，也就是先按 a 排序，再按 b 排序，c 无序。</p>
+<p>索引 ca 的组织是先按 c 排序，再按 a 排序，同时记录主键<br>–c–|–a–|–主键部分b– （注意，这里不是 ab，而是只有 b）<br>2 1 3<br>2 2 2<br>3 1 2<br>3 1 4<br>3 2 1<br>4 2 3<br>这个跟索引 c 的数据是一模一样的。</p>
+<p>索引 cb 的组织是先按 c 排序，在按 b 排序，同时记录主键<br>–c–|–b–|–主键部分a– （同上）<br>2 2 2<br>2 3 1<br>3 1 2<br>3 2 1<br>3 4 1<br>4 3 2  </p>
+<p>所以，结论是 ca 可以去掉，cb 需要保留。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>索引</tag>
       </tags>
   </entry>
   <entry>
