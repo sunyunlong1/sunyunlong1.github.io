@@ -67,6 +67,169 @@
     
     
     
+    <article id="blog-浅谈MVCC" class="article article-type-blog" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2020/03/23/浅谈MVCC/"
+    >浅谈MVCC</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/03/23/浅谈MVCC/" class="article-date">
+  <time datetime="2020-03-23T15:42:30.000Z" itemprop="datePublished">2020-03-23</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><h3 id="版本链"><a href="#版本链" class="headerlink" title="版本链"></a>版本链</h3><p>对于使用InnoDB存储引擎的表来说，它的聚簇索引记录中都包含两个必要的隐藏列（row_id并不是必要的，我们创建的表中有主键或者非NULL唯一键时都不会包含row_id列）：</p>
+<ol>
+<li>trx_id：每次对某条聚簇索引记录进行改动时，都会把对应的事务id赋值给trx_id隐藏列。</li>
+<li>roll_pointer：每次对某条聚簇索引记录进行改动时，都会把旧的版本写入到undo日志中，然后这个隐藏列就相当于一个指针，可以通过它来找到该记录修改前的信息。</li>
+</ol>
+<h4 id="比方说我们的表t现在只包含一条记录："><a href="#比方说我们的表t现在只包含一条记录：" class="headerlink" title="比方说我们的表t现在只包含一条记录："></a>比方说我们的表t现在只包含一条记录：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM t;</span><br><span class="line">+----+--------+</span><br><span class="line">| id | c      |</span><br><span class="line">+----+--------+</span><br><span class="line">|  1 | 刘备   |</span><br><span class="line">+----+--------+</span><br><span class="line">1 row in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+
+<p>复制代码假设插入该记录的事务id为80，那么此刻该条记录的示意图如下所示：</p>
+<p><img src="../image/MVCC1.png" alt="MVCC1.png" title="MVCC1"><br>假设之后两个id分别为100、200的事务对这条记录进行UPDATE操作，操作流程如下：</p>
+<p><img src="../image/MVCC2.png" alt="MVCC2.png" title="MVCC2">  </p>
+<ol>
+<li>小贴士： 能不能在两个事务中交叉更新同一条记录呢？哈哈，这是不可以滴，第一个事务更新了某条记录后，就会给这条记录加锁，另一个事务再次更新时就需要等待第一个事务提交了，把锁释放之后才可以继续更新。本篇文章不是讨论锁的，有关锁的更多细节我们之后再说。</li>
+</ol>
+<p>每次对记录进行改动，都会记录一条undo日志，每条undo日志也都有一个roll_pointer属性（INSERT操作对应的undo日志没有该属性，因为该记录并没有更早的版本），可以将这些undo日志都连起来，串成一个链表，所以现在的情况就像下图一样：</p>
+<p><img src="../image/MVCC3.png" alt="MVCC3.png" title="MVCC3">  </p>
+<p>对该记录每次更新后，都会将旧值放到一条undo日志中，就算是该记录的一个旧版本，随着更新次数的增多，所有的版本都会被roll_pointer属性连接成一个链表，我们把这个链表称之为版本链，版本链的头节点就是当前记录最新的值。另外，每个版本中还包含生成该版本时对应的事务id，这个信息很重要，我们稍后就会用到。</p>
+<h3 id="ReadView"><a href="#ReadView" class="headerlink" title="ReadView"></a>ReadView</h3><p>对于使用READ UNCOMMITTED隔离级别的事务来说，直接读取记录的最新版本就好了，对于使用SERIALIZABLE隔离级别的事务来说，使用加锁的方式来访问记录。对于使用READ COMMITTED和REPEATABLE READ隔离级别的事务来说，就需要用到我们上边所说的版本链了，核心问题就是：需要判断一下版本链中的哪个版本是当前事务可见的。所以设计InnoDB的大叔提出了一个ReadView的概念，这个ReadView中主要包含当前系统中还有哪些活跃的读写事务，把它们的事务id放到一个列表中，我们把这个列表命名为为m_ids。这样在访问某条记录时，只需要按照下边的步骤判断记录的某个版本是否可见：</p>
+<ol>
+<li>如果被访问版本的trx_id属性值小于m_ids列表中最小的事务id，表明生成该版本的事务在生成ReadView前已经提交，所以该版本可以被当前事务访问。</li>
+<li>如果被访问版本的trx_id属性值大于m_ids列表中最大的事务id，表明生成该版本的事务在生成ReadView后才生成，所以该版本不可以被当前事务访问。</li>
+<li>如果被访问版本的trx_id属性值在m_ids列表中最大的事务id和最小事务id之间，那就需要判断一下trx_id属性值是不是在m_ids列表中，如果在，说明创建ReadView时生成该版本的事务还是活跃的，该版本不可以被访问；如果不在，说明创建ReadView时生成该版本的事务已经被提交，该版本可以被访问。</li>
+</ol>
+<p>如果某个版本的数据对当前事务不可见的话，那就顺着版本链找到下一个版本的数据，继续按照上边的步骤判断可见性，依此类推，直到版本链中的最后一个版本，如果最后一个版本也不可见的话，那么就意味着该条记录对该事务不可见，查询结果就不包含该记录。</p>
+<p>在MySQL中，READ COMMITTED和REPEATABLE READ隔离级别的的一个非常大的区别就是它们生成ReadView的时机不同，我们来看一下。</p>
+<h3 id="READ-COMMITTED-—-每次读取数据前都生成一个ReadView"><a href="#READ-COMMITTED-—-每次读取数据前都生成一个ReadView" class="headerlink" title="READ COMMITTED — 每次读取数据前都生成一个ReadView"></a>READ COMMITTED — 每次读取数据前都生成一个ReadView</h3><p>比方说现在系统里有两个id分别为100、200的事务在执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Transaction 100</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;关羽&apos; WHERE id = 1;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;张飞&apos; WHERE id = 1;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Transaction 200</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># 更新了一些别的表的记录</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>小贴士： 事务执行过程中，只有在第一次真正修改记录时（比如使用INSERT、DELETE、UPDATE语句），才会被分配一个单独的事务id，这个事务id是递增的。</li>
+</ol>
+<p>此刻，表t中id为1的记录得到的版本链表如下所示：</p>
+<p><img src="../image/MVCC4.png" alt="MVCC4.png" title="MVCC4"></p>
+<p>假设现在有一个使用READ COMMITTED隔离级别的事务开始执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 使用READ COMMITTED隔离级别的事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># SELECT1：Transaction 100、200未提交</span><br><span class="line">SELECT * FROM t WHERE id = 1; # 得到的列c的值为&apos;刘备&apos;</span><br></pre></td></tr></table></figure>
+
+<p>这个SELECT1的执行过程如下：</p>
+<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[100, 200]。</p>
+<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’张飞’，该版本的trx_id值为100，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’关羽’，该版本的trx_id值也为100，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
+<p>之后，我们把事务id为100的事务提交一下，就像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># Transaction 100</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;关羽&apos; WHERE id = 1;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;张飞&apos; WHERE id = 1;</span><br><span class="line"></span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+
+<p>然后再到事务id为200的事务中更新一下表t中id为1的记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Transaction 200</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># 更新了一些别的表的记录</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;赵云&apos; WHERE id = 1;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;诸葛亮&apos; WHERE id = 1;</span><br></pre></td></tr></table></figure>
+
+<p>此刻，表t中id为1的记录的版本链就长这样：</p>
+<p><img src="../image/MVCC5.png" alt="MVCC5.png" title="MVCC5"></p>
+<p>然后再到刚才使用READ COMMITTED隔离级别的事务中继续查找这个id为1的记录，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 使用READ COMMITTED隔离级别的事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># SELECT1：Transaction 100、200均未提交</span><br><span class="line">SELECT * FROM t WHERE id = 1; # 得到的列c的值为&apos;刘备&apos;</span><br><span class="line"></span><br><span class="line"># SELECT2：Transaction 100提交，Transaction 200未提交</span><br><span class="line">SELECT * FROM t WHERE id = 1; # 得到的列c的值为&apos;张飞&apos;</span><br></pre></td></tr></table></figure>
+
+<p>这个SELECT2的执行过程如下：</p>
+<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[200]（事务id为100的那个事务已经提交了，所以生成快照时就没有它了）。</p>
+<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’诸葛亮’，该版本的trx_id值为200，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’赵云’，该版本的trx_id值为200，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’张飞’，该版本的trx_id值为100，比m_ids列表中最小的事务id200还要小，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’张飞’的记录。</p>
+<p>以此类推，如果之后事务id为200的记录也提交了，再此在使用READ COMMITTED隔离级别的事务中查询表t中id值为1的记录时，得到的结果就是’诸葛亮’了，具体流程我们就不分析了。总结一下就是：使用READ COMMITTED隔离级别的事务在每次查询开始时都会生成一个独立的ReadView。</p>
+<h3 id="REPEATABLE-READ-—在第一次读取数据时生成一个ReadView"><a href="#REPEATABLE-READ-—在第一次读取数据时生成一个ReadView" class="headerlink" title="REPEATABLE READ —在第一次读取数据时生成一个ReadView"></a>REPEATABLE READ —在第一次读取数据时生成一个ReadView</h3><p>对于使用REPEATABLE READ隔离级别的事务来说，只会在第一次执行查询语句时生成一个ReadView，之后的查询就不会重复生成了。我们还是用例子看一下是什么效果。</p>
+<p>比方说现在系统里有两个id分别为100、200的事务在执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Transaction 100</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;关羽&apos; WHERE id = 1;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;张飞&apos; WHERE id = 1;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Transaction 200</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># 更新了一些别的表的记录</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>此刻，表t中id为1的记录得到的版本链表如下所示：</p>
+<p><img src="../image/MVCC6.png" alt="MVCC6.png" title="MVCC6"></p>
+<p>假设现在有一个使用REPEATABLE READ隔离级别的事务开始执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 使用REPEATABLE READ隔离级别的事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># SELECT1：Transaction 100、200未提交</span><br><span class="line">SELECT * FROM t WHERE id = 1; # 得到的列c的值为&apos;刘备&apos;</span><br></pre></td></tr></table></figure>
+
+<p>这个SELECT1的执行过程如下：</p>
+<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[100, 200]。</p>
+<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’张飞’，该版本的trx_id值为100，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’关羽’，该版本的trx_id值也为100，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
+<p>之后，我们把事务id为100的事务提交一下，就像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Transaction 100</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;关羽&apos; WHERE id = 1;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;张飞&apos; WHERE id = 1;</span><br><span class="line"></span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+
+<p>然后再到事务id为200的事务中更新一下表t中id为1的记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Transaction 200</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># 更新了一些别的表的记录</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;赵云&apos; WHERE id = 1;</span><br><span class="line"></span><br><span class="line">UPDATE t SET c = &apos;诸葛亮&apos; WHERE id = 1;</span><br></pre></td></tr></table></figure>
+
+<p>此刻，表t中id为1的记录的版本链就长这样：</p>
+<p><img src="../image/MVCC7.png" alt="MVCC7.png" title="MVCC7"></p>
+<p>然后再到刚才使用REPEATABLE READ隔离级别的事务中继续查找这个id为1的记录，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 使用REPEATABLE READ隔离级别的事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># SELECT1：Transaction 100、200均未提交</span><br><span class="line">SELECT * FROM t WHERE id = 1; # 得到的列c的值为&apos;刘备&apos;</span><br><span class="line"></span><br><span class="line"># SELECT2：Transaction 100提交，Transaction 200未提交</span><br><span class="line">SELECT * FROM t WHERE id = 1; # 得到的列c的值仍为&apos;刘备&apos;</span><br></pre></td></tr></table></figure>
+
+<p>这个SELECT2的执行过程如下：</p>
+<p>因为之前已经生成过ReadView了，所以此时直接复用之前的ReadView，之前的ReadView中的m_ids列表就是[100, 200]。</p>
+<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’诸葛亮’，该版本的trx_id值为200，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’赵云’，该版本的trx_id值为200，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’张飞’，该版本的trx_id值为100，而m_ids列表中是包含值为100的事务id的，所以该版本也不符合要求，同理下一个列c的内容是’关羽’的版本也不符合要求。继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，80小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
+<p>也就是说两次SELECT查询得到的结果是重复的，记录的列c值都是’刘备’，这就是可重复读的含义。如果我们之后再把事务id为200的记录提交了，之后再到刚才使用REPEATABLE READ隔离级别的事务中继续查找这个id为1的记录，得到的结果还是’刘备’，具体执行过程大家可以自己分析一下。</p>
+<h3 id="MVCC总结"><a href="#MVCC总结" class="headerlink" title="MVCC总结"></a>MVCC总结</h3><p>从上边的描述中我们可以看出来，所谓的MVCC（Multi-Version Concurrency Control ，多版本并发控制）指的就是在使用READ COMMITTD、REPEATABLE READ这两种隔离级别的事务在执行普通的SEELCT操作时访问记录的版本链的过程，这样子可以使不同事务的读-写、写-读操作并发执行，从而提升系统性能。READ COMMITTD、REPEATABLE READ这两个隔离级别的一个很大不同就是生成ReadView的时机不同，READ COMMITTD在每一次进行普通SELECT操作前都会生成一个ReadView，而REPEATABLE READ只在第一次进行普通SELECT操作前生成一个ReadView，之后的查询操作都重复这个ReadView就好了。</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="blog-go-big-or-go-home-8" class="article article-type-blog" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
@@ -1498,125 +1661,6 @@
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/volatile/">volatile</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高并发/">高并发</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-
-</article>
-    
-    <article id="blog-彻底搞懂ThreadLocal" class="article article-type-blog" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2020/03/10/彻底搞懂ThreadLocal/"
-    >彻底搞懂ThreadLocal</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2020/03/10/彻底搞懂ThreadLocal/" class="article-date">
-  <time datetime="2020-03-10T15:51:45.000Z" itemprop="datePublished">2020-03-10</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/高并发系列/">高并发系列</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <h3 id="1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"><a href="#1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？" class="headerlink" title="1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"></a>1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？</h3><p>答：</p>
-<p>从JAVA官方对ThreadLocal类的说明定义（定义在示例代码中）：ThreadLocal类用来提供线程内部的局部变量。这种变量在多线程环境下访问（通过get和set方法访问）时能保证各个线程的变量相对独立于其他线程内的变量。ThreadLocal实例通常来说都是private static类型的，用于关联线程和线程上下文。</p>
-<p>我们可以得知ThreadLocal的作用是：ThreadLocal的作用是提供线程内的局部变量，不同的线程之间不会相互干扰，这种变量在线程的生命周期内起作用，减少同一个线程内多个函数或组件之间一些公共变量的传递的复杂度。</p>
-<p>上述可以概述为：ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。</p>
-<p>示例代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 该类提供了线程局部 (thread-local) 变量。 这些变量不同于它们的普通对应物，</span><br><span class="line"> * 因为访问某个变量（通过其 get 或 set 方法）的每个线程都有自己的局部变量</span><br><span class="line"> * 它独立于变量的初始化副本。ThreadLocal 实例通常是类中的 private static 字段</span><br><span class="line"> * 它们希望将状态与某一个线程（例如，用户 ID 或事务 ID）相关联。</span><br><span class="line"> *</span><br><span class="line"> * 例如，以下类生成对每个线程唯一的局部标识符。</span><br><span class="line"> * </span><br><span class="line"> * 线程 ID 是在第一次调用 UniqueThreadIdGenerator.getCurrentThreadId() 时分配的，</span><br><span class="line"> * 在后续调用中不会更改。</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * import java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"> *</span><br><span class="line"> * public class ThreadId &#123;</span><br><span class="line"> *     // 原子性整数，包含下一个分配的线程Thread ID </span><br><span class="line"> *     private static final AtomicInteger nextId = new AtomicInteger(0);</span><br><span class="line"> *</span><br><span class="line"> *     // 每一个线程对应的Thread ID</span><br><span class="line"> *     private static final ThreadLocal&lt;Integer&gt; threadId =</span><br><span class="line"> *         new ThreadLocal&lt;Integer&gt;() &#123;</span><br><span class="line"> *             @Override protected Integer initialValue() &#123;</span><br><span class="line"> *                 return nextId.getAndIncrement();</span><br><span class="line"> *         &#125;</span><br><span class="line"> *     &#125;;</span><br><span class="line"> *</span><br><span class="line"> *     // 返回当前线程对应的唯一Thread ID, 必要时会进行分配</span><br><span class="line"> *     public static int get() &#123;</span><br><span class="line"> *         return threadId.get();</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> * 每个线程都保持对其线程局部变量副本的隐式引用，只要线程是活动的并且 ThreadLocal 实例是可访问的</span><br><span class="line"> * 在线程消失之后，其线程局部实例的所有副本都会被垃圾回收，（除非存在对这些副本的其他引用）。</span><br><span class="line"> *</span><br><span class="line"> * @author  Josh Bloch and Doug Lea</span><br><span class="line"> * @since   1.2</span><br><span class="line"> */</span><br><span class="line">public class ThreadLocal&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">   /**</span><br><span class="line">     * 自定义哈希码（仅在ThreadLocalMaps中有用）</span><br><span class="line">     * 可用于降低hash冲突</span><br><span class="line">     */</span><br><span class="line">    private final int threadLocalHashCode = nextHashCode();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 生成下一个哈希码hashCode. 生成操作是原子性的. 从0开始</span><br><span class="line">     * </span><br><span class="line">     */</span><br><span class="line">    private static AtomicInteger nextHashCode =</span><br><span class="line">        new AtomicInteger();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 表示了连续分配的两个ThreadLocal实例的threadLocalHashCode值的增量 </span><br><span class="line">     */</span><br><span class="line">    private static final int HASH_INCREMENT = 0x61c88647;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回下一个哈希码hashCode</span><br><span class="line">     */</span><br><span class="line">    private static int nextHashCode() &#123;</span><br><span class="line">        return nextHashCode.getAndAdd(HASH_INCREMENT);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中nextHashCode()方法就是一个原子类不停地去加上0x61c88647，这是一个很特别的数，叫斐波那契散列（Fibonacci Hashing），斐波那契又有一个名称叫黄金分割，也就是说将这个数作为哈希值的增量将会使哈希表的分布更为均匀。</p>
-<h3 id="2-问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？"><a href="#2-问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？" class="headerlink" title="2.问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？"></a>2.问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？</h3><p>答：</p>
-<p>通常，如果我不去看源代码的话，我猜ThreadLocal是这样子设计的：每个ThreadLocal类都创建一个Map，然后用线程的ID threadID作为Map的key，要存储的局部变量作为Map的value，这样就能达到各个线程的值隔离的效果。这是最简单的设计方法，JDK最早期的ThreadLocal就是这样设计的。</p>
-<p>但是，JDK后面优化了设计方案，现时JDK8 ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。</p>
-<p>这个设计与我们一开始说的设计刚好相反，这样设计有如下几点优势：<br>1） 这样设计之后每个Map存储的Entry数量就会变小，因为之前的存储数量由Thread的数量决定，现在是由ThreadLocal的数量决定。</p>
-<h4 id="关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1-8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。"><a href="#关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1-8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。" class="headerlink" title="关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1.8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。"></a>关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1.8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。</h4><p>2） 当Thread销毁之后，对应的ThreadLocalMap也会随之销毁，能减少内存的使用。</p>
-<h3 id="3-问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set-T-value-，获取get-，删除remove-等操作。"><a href="#3-问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set-T-value-，获取get-，删除remove-等操作。" class="headerlink" title="3.问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set(T value)，获取get()，删除remove()等操作。"></a>3.问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set(T value)，获取get()，删除remove()等操作。</h3><p>答：</p>
-<p>调用get()操作获取ThreadLocal中对应当前线程存储的值时，进行了如下操作：<br>1 ) 获取当前线程Thread对象，进而获取此线程对象中维护的ThreadLocalMap对象。<br>2 ) 判断当前的ThreadLocalMap是否存在：</p>
-<p>如果存在，则以当前的ThreadLocal 为 key，调用ThreadLocalMap中的getEntry方法获取对应的存储实体 e。找到对应的存储实体 e，获取存储实体 e 对应的 value值，即为我们想要的当前线程对应此ThreadLocal的值，返回结果值。<br>如果不存在，则证明此线程没有维护的ThreadLocalMap对象，调用setInitialValue方法进行初始化。返回setInitialValue初始化的值。</p>
-<p>setInitialValue方法的操作如下：<br>1 ) 调用initialValue获取初始化的值。<br>2 ) 获取当前线程Thread对象，进而获取此线程对象中维护的ThreadLocalMap对象。<br>3 ) 判断当前的ThreadLocalMap是否存在：</p>
-<p>如果存在，则调用map.set设置此实体entry。</p>
-<p>如果不存在，则调用createMap进行ThreadLocalMap对象的初始化，并将此实体entry作为第一个值存放至ThreadLocalMap中。</p>
-<h3 id="4-问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗"><a href="#4-问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗" class="headerlink" title="4.问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗?"></a>4.问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗?</h3><p>答：</p>
-<p>ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，核心组成元素有：<br>1 ) Entry[] table;：底层哈希表 table, 必要时需要进行扩容，底层哈希表 table.length 长度必须是2的n次方。<br>2 ) int size;：实际存储键值对元素个数 entries<br>3 ) int threshold;：下一次扩容时的阈值，阈值 threshold = 底层哈希表table的长度 len * 2 / 3。当size &gt;= threshold时，遍历table并删除key为null的元素，如果删除后size &gt;= threshold*3/4时，需要对table进行扩容（详情请查看set(ThreadLocal&lt;?&gt; key, Object value)方法说明）。</p>
-<p>其中Entry[] table;哈希表存储的核心元素是Entry，Entry包含：<br>1 ) ThreadLocal&lt;?&gt; k；：当前存储的ThreadLocal实例对象<br>2 ) Object value;：当前 ThreadLocal 对应储存的值value</p>
-<p>需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。(弱引用相关问题解释请查看 问答 5)</p>
-<h3 id="5-问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？"><a href="#5-问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？" class="headerlink" title="5.问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？"></a>5.问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？</h3><p>答：</p>
-<p>首先，回答这个问题之前，我需要解释一下什么是强引用，什么是弱引用。</p>
-<p>我们在正常情况下，普遍使用的是强引用：<br>A a = new A();</p>
-<p>B b = new B();复制代码当 a = null;b = null;时，一段时间后，JAVA垃圾回收机制GC会将 a 和 b 对应所分配的内存空间给回收。<br>但考虑这样一种情况：<br>C c = new C(b);<br>b = null;复制代码当 b 被设置成null时，那么是否意味这一段时间后GC工作可以回收 b 所分配的内存空间呢？答案是否定的，因为即使 b 被设置成null，但 c 仍然持有对 b 的引用，而且还是强引用，所以GC不会回收 b 原先所分配的空间，既不能回收，又不能使用，这就造成了 内存泄露。<br>那么如何处理呢？<br>可以通过c = null;，也可以使用弱引用WeakReference w = new WeakReference(b);。因为使用了弱引用WeakReference，GC是可以回收 b 原先所分配的空间的。<br>上述解释主要参考自：对ThreadLocal实现原理的一点思考</p>
-<p>回到ThreadLocal的层面上，ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收，这样一来，ThreadLocalMap中就会出现key为null的Entry，就没有办法访问这些key为null的Entry的value，如果当前线程再迟迟不结束的话，这些key为null的Entry的value就会一直存在一条强引用链：Thread Ref -&gt; Thread -&gt; ThreaLocalMap -&gt; Entry -&gt; value 永远无法回收，造成内存泄漏。</p>
-<p>其实，ThreadLocalMap的设计中已经考虑到这种情况，也加上了一些防护措施：在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。<br>但是这些被动的预防措施并不能保证不会内存泄漏：</p>
-<p>使用static的ThreadLocal，延长了ThreadLocal的生命周期，可能导致的内存泄漏（参考ThreadLocal 内存泄露的实例分析）。</p>
-<p>分配使用了ThreadLocal又不再调用get(),set(),remove()方法，那么就会导致内存泄漏。</p>
-<p>从表面上看内存泄漏的根源在于使用了弱引用。网上的文章大多着重分析ThreadLocal使用了弱引用会导致内存泄漏，但是另一个问题也同样值得思考：为什么使用弱引用而不是强引用？<br>我们先来看看官方文档的说法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">To help deal with very large and long-lived usages, </span><br><span class="line">the hash table entries use WeakReferences for keys.</span><br></pre></td></tr></table></figure>
-
-<p>为了应对非常大和长时间的用途，哈希表使用弱引用的 key。<br>下面我们分两种情况讨论：</p>
-<p>key 使用强引用：引用的ThreadLocal的对象被回收了，但是ThreadLocalMap还持有ThreadLocal的强引用，如果没有手动删除，ThreadLocal不会被回收，导致Entry内存泄漏。</p>
-<p>key 使用弱引用：引用的ThreadLocal的对象被回收了，由于ThreadLocalMap持有ThreadLocal的弱引用，即使没有手动删除，ThreadLocal也会被回收。value在下一次ThreadLocalMap调用get(),set(),remove()的时候会被清除。</p>
-<p>比较两种情况，我们可以发现：由于ThreadLocalMap的生命周期跟Thread一样长，如果都没有手动删除对应key，都会导致内存泄漏，但是使用弱引用可以多一层保障：弱引用ThreadLocal不会内存泄漏，对应的value在下一次ThreadLocalMap调用get(),set(),remove()的时候会被清除。</p>
-<p>因此，ThreadLocal内存泄漏的根源是：由于ThreadLocalMap的生命周期跟Thread一样长，如果没有手动删除对应key就会导致内存泄漏，而不是因为弱引用。<br>综合上面的分析，我们可以理解ThreadLocal内存泄漏的前因后果，那么怎么避免内存泄漏呢？<br>每次使用完ThreadLocal，都调用它的remove()方法，清除数据。<br>在使用线程池的情况下，没有及时清理ThreadLocal，不仅是内存泄漏的问题，更严重的是可能导致业务逻辑出现问题。所以，使用ThreadLocal就跟加锁完要解锁一样，用完就清理。</p>
-<h3 id="6-问：ThreadLocal和synchronized的区别"><a href="#6-问：ThreadLocal和synchronized的区别" class="headerlink" title="6.问：ThreadLocal和synchronized的区别?"></a>6.问：ThreadLocal和synchronized的区别?</h3><p>答：ThreadLocal和synchronized关键字都用于处理多线程并发访问变量的问题，只是二者处理问题的角度和思路不同。</p>
-<p>ThreadLocal是一个Java类,通过对当前线程中的局部变量的操作来解决不同线程的变量访问的冲突问题。所以，ThreadLocal提供了线程安全的共享对象机制，每个线程都拥有其副本。</p>
-<p>Java中的synchronized是一个保留字，它依靠JVM的锁机制来实现临界区的函数或者变量的访问中的原子性。在同步机制中，通过对象的锁机制保证同一时间只有一个线程访问变量。此时，被用作“锁机制”的变量时多个线程共享的。</p>
-<p>同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。</p>
-<h3 id="7-问：ThreadLocal在现时有什么应用场景？"><a href="#7-问：ThreadLocal在现时有什么应用场景？" class="headerlink" title="7.问：ThreadLocal在现时有什么应用场景？"></a>7.问：ThreadLocal在现时有什么应用场景？</h3><p>答：总的来说ThreadLocal主要是解决2种类型的问题：</p>
-<p>解决并发问题：使用ThreadLocal代替synchronized来保证线程安全。同步机制采用了“以时间换空间”的方式，而ThreadLocal采用了“以空间换时间”的方式。前者仅提供一份变量，让不同的线程排队访问，而后者为每一个线程都提供了一份变量，因此可以同时访问而互不影响。</p>
-<p>解决数据存储问题：ThreadLocal为变量在每个线程中都创建了一个副本，所以每个线程可以访问自己内部的副本变量，不同线程之间不会互相干扰。如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。</p>
-<p>应用场景：<br>Spring使用ThreadLocal解决线程安全问题</p>
-<p>我们知道在一般情况下，只有无状态的Bean才可以在多线程环境下共享，在Spring中，绝大部分Bean都可以声明为singleton作用域。就是因为Spring对一些Bean（如RequestContextHolder、TransactionSynchronizationManager、LocaleContextHolder等）中非线程安全状态采用ThreadLocal进行处理，让它们也成为线程安全的状态，因为有状态的Bean就可以在多线程中共享了。</p>
-<p>一般的Web应用划分为展现层、服务层和持久层三个层次，在不同的层中编写对应的逻辑，下层通过接口向上层开放功能调用。在一般情况下，从接收请求到返回响应所经过的所有程序调用都同属于一个线程ThreadLocal是解决线程安全问题一个很好的思路，它通过为每个线程提供一个独立的变量副本解决了变量并发访问的冲突问题。在很多情况下，ThreadLocal比直接使用synchronized同步机制解决线程安全问题更简单，更方便，且结果程序拥有更高的并发性。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="1-ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。"><a href="#1-ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。" class="headerlink" title="1.ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。"></a>1.ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。</h3><h3 id="2-ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。"><a href="#2-ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。" class="headerlink" title="2.ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。"></a>2.ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。</h3><h3 id="3-对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。"><a href="#3-对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。" class="headerlink" title="3.对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。"></a>3.对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。</h3><h3 id="4-ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold-底层哈希表table的长度-len-2-3，当实际存储元素个数size-大于或等于-阈值threshold的-3-4-时size-gt-threshold-3-4，则对底层哈希表数组table进行扩容操作。"><a href="#4-ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold-底层哈希表table的长度-len-2-3，当实际存储元素个数size-大于或等于-阈值threshold的-3-4-时size-gt-threshold-3-4，则对底层哈希表数组table进行扩容操作。" class="headerlink" title="4.ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold = 底层哈希表table的长度 len * 2 / 3，当实际存储元素个数size 大于或等于 阈值threshold的 3/4 时size &gt;= threshold*3/4，则对底层哈希表数组table进行扩容操作。"></a>4.ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold = 底层哈希表table的长度 len * 2 / 3，当实际存储元素个数size 大于或等于 阈值threshold的 3/4 时size &gt;= threshold*3/4，则对底层哈希表数组table进行扩容操作。</h3><h3 id="5-ThreadLocalMap中的哈希表Entry-table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal-对应储存的值value。需要注意的是，此Entry继承了弱引用-WeakReference，所以在使用ThreadLocalMap时，发现key-null，则意味着此key-ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。"><a href="#5-ThreadLocalMap中的哈希表Entry-table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal-对应储存的值value。需要注意的是，此Entry继承了弱引用-WeakReference，所以在使用ThreadLocalMap时，发现key-null，则意味着此key-ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。" class="headerlink" title="5.ThreadLocalMap中的哈希表Entry[] table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal 对应储存的值value。需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key  ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。"></a>5.ThreadLocalMap中的哈希表Entry[] table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal 对应储存的值value。需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key  ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。</h3><h3 id="6-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统-GC-的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get-set-remove-的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。"><a href="#6-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统-GC-的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get-set-remove-的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。" class="headerlink" title="6.ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。"></a>6.ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。</h3><h3 id="7-为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove-来清理无用的Entry。这在操作在使用线程池时尤为重要。"><a href="#7-为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove-来清理无用的Entry。这在操作在使用线程池时尤为重要。" class="headerlink" title="7.为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。这在操作在使用线程池时尤为重要。"></a>7.为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。这在操作在使用线程池时尤为重要。</h3><h3 id="8-ThreadLocal和synchronized的区别：同步机制-synchronized关键字-采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。"><a href="#8-ThreadLocal和synchronized的区别：同步机制-synchronized关键字-采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。" class="headerlink" title="8.ThreadLocal和synchronized的区别：同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。"></a>8.ThreadLocal和synchronized的区别：同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。</h3><h3 id="9-ThreadLocal主要是解决2种类型的问题：A-解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B-解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。"><a href="#9-ThreadLocal主要是解决2种类型的问题：A-解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B-解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。" class="headerlink" title="9.ThreadLocal主要是解决2种类型的问题：A. 解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B. 解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。"></a>9.ThreadLocal主要是解决2种类型的问题：A. 解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B. 解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。</h3><p>作者：liangzzz<br>链接：<a href="https://juejin.im/post/5a0e985df265da430e4ebb92" target="_blank" rel="noopener">https://juejin.im/post/5a0e985df265da430e4ebb92</a><br>来源：掘金<br>中间加上了自己的理解</p>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ThreadLocal/">ThreadLocal</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高并发/">高并发</a></li></ul>
 
 
     </footer>

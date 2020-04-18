@@ -65,6 +65,27 @@
       </tags>
   </entry>
   <entry>
+    <title>一路走来，即将毕业。</title>
+    <url>/2019/09/12/Sentiment/</url>
+    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
+<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
+<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
+<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
+<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
+<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
+<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
+<p>祝我自己前途似锦，万事胜意。</p>
+<p>2019-03-27 20:44更</p>
+]]></content>
+      <categories>
+        <category>个人经历</category>
+      </categories>
+      <tags>
+        <tag>个人经历</tag>
+        <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java基础部分之String</title>
     <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
     <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
@@ -106,27 +127,6 @@
       <tags>
         <tag>Java基础</tag>
         <tag>String</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>一路走来，即将毕业。</title>
-    <url>/2019/09/12/Sentiment/</url>
-    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
-<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
-<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
-<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
-<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
-<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
-<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
-<p>祝我自己前途似锦，万事胜意。</p>
-<p>2019-03-27 20:44更</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>毕业感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -254,166 +254,6 @@
 <td>suffer</td>
 <td>伤害</td>
 <td>The longer the war lasts,the more the people there will suffer</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-12</title>
-    <url>/2020/03/27/go-big-or-go-home-12/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>draft</td>
-<td>草稿</td>
-<td>This is just the draft design of a building</td>
-</tr>
-<tr>
-<td>side</td>
-<td>边</td>
-<td>There are many trees on both sides of the river</td>
-</tr>
-<tr>
-<td>patience</td>
-<td>耐心</td>
-<td>Fishing demands a great deal of patience</td>
-</tr>
-<tr>
-<td>candidate</td>
-<td>候选人</td>
-<td>The candidates are persenting the speeches fot the election</td>
-</tr>
-<tr>
-<td>disturb</td>
-<td>打扰</td>
-<td>His snoring really disturbs me at night</td>
-</tr>
-<tr>
-<td>handle</td>
-<td>把手</td>
-<td>Turn the handle to open the door</td>
-</tr>
-<tr>
-<td>merchant</td>
-<td>商人</td>
-<td>The merchant checks the quality of his produce</td>
-</tr>
-<tr>
-<td>construct</td>
-<td>建造</td>
-<td>The workers are constructing a tall  building</td>
-</tr>
-<tr>
-<td>edition</td>
-<td>版本</td>
-<td>The dictionary is now in its third edition which was published in 2017</td>
-</tr>
-<tr>
-<td>fax</td>
-<td>传真</td>
-<td>You can contact us by email or fax</td>
-</tr>
-<tr>
-<td>maintain</td>
-<td>保持</td>
-<td>How do you maintain relationships with your long-distance friends?</td>
-</tr>
-<tr>
-<td>instant message</td>
-<td>即使消息</td>
-<td>Also emails can realize instant messaging</td>
-</tr>
-<tr>
-<td>pal</td>
-<td>伙伴</td>
-<td>Eamiling the pals is a great and helpful way to stay in touch with each other</td>
-</tr>
-<tr>
-<td>circumstances</td>
-<td>情况</td>
-<td>What circumstances you would choose to send emails to keep in touch?</td>
-</tr>
-<tr>
-<td>goes off/rings</td>
-<td>响了</td>
-<td>My alarm goes off at 9:30 in the morning</td>
-</tr>
-<tr>
-<td>get out of</td>
-<td>形容完全离开床了</td>
-<td>Then I get out of the bed</td>
-</tr>
-<tr>
-<td>get up</td>
-<td>起床/起来</td>
-<td>I’ve fallen and I can’t get up</td>
-</tr>
-<tr>
-<td>wake up</td>
-<td>醒来</td>
-<td>wake up early</td>
-</tr>
-<tr>
-<td>go downstairs</td>
-<td>下楼</td>
-<td>go downstairs</td>
-</tr>
-<tr>
-<td>go upstairs</td>
-<td>上楼</td>
-<td>go upstairs</td>
-</tr>
-<tr>
-<td>go to the bathroom/toilet/restroom</td>
-<td>去厕所(美)/(英)</td>
-<td>go to the bathroom/toilet/restroom</td>
-</tr>
-<tr>
-<td>How would you like your egg?</td>
-<td>你想要什么样的鸡蛋？</td>
-<td>早餐回答</td>
-</tr>
-<tr>
-<td>sunny side up</td>
-<td>太阳蛋</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over easy</td>
-<td>煎鸡蛋程度很轻</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over medium</td>
-<td>一面熟</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>over hard</td>
-<td>两面熟</td>
-<td>回答上文</td>
-</tr>
-<tr>
-<td>scrambled egg</td>
-<td>炒鸡蛋</td>
-<td>scrambled egg</td>
-</tr>
-<tr>
-<td>hard boiled egg</td>
-<td>煮鸡蛋</td>
-<td>hard boiled egg</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -650,8 +490,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-15</title>
-    <url>/2020/03/30/go-big-or-go-home-15/</url>
+    <title>go big or go home-12</title>
+    <url>/2020/03/27/go-big-or-go-home-12/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -661,49 +501,144 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>development</td>
-<td>发展</td>
-<td>This picture shows the development of phones over time</td>
+<td>draft</td>
+<td>草稿</td>
+<td>This is just the draft design of a building</td>
 </tr>
 <tr>
-<td>work out</td>
-<td>计算出</td>
-<td>He worked out the math problem on the blackboard</td>
+<td>side</td>
+<td>边</td>
+<td>There are many trees on both sides of the river</td>
 </tr>
 <tr>
-<td>take the place of</td>
-<td>取代</td>
-<td>Gradually,robots have taken the place of manual workers</td>
+<td>patience</td>
+<td>耐心</td>
+<td>Fishing demands a great deal of patience</td>
 </tr>
 <tr>
-<td>pardon</td>
-<td>原谅</td>
-<td>The king pardoned the prisoner</td>
+<td>candidate</td>
+<td>候选人</td>
+<td>The candidates are persenting the speeches fot the election</td>
 </tr>
 <tr>
-<td>strap</td>
-<td>绑住</td>
-<td>The man is driving a jeep with luggage strapped to the roof</td>
+<td>disturb</td>
+<td>打扰</td>
+<td>His snoring really disturbs me at night</td>
 </tr>
 <tr>
-<td>fur</td>
-<td>毛皮</td>
-<td>A fur coat is very warm,bur very expensive</td>
+<td>handle</td>
+<td>把手</td>
+<td>Turn the handle to open the door</td>
 </tr>
 <tr>
-<td>yet</td>
-<td>尚/还</td>
-<td>I’m tired,but I haven’t finished studying yet</td>
+<td>merchant</td>
+<td>商人</td>
+<td>The merchant checks the quality of his produce</td>
 </tr>
 <tr>
-<td>jet</td>
-<td>喷气式</td>
-<td>Nowadays most long-distance travel is by jet plane</td>
+<td>construct</td>
+<td>建造</td>
+<td>The workers are constructing a tall  building</td>
 </tr>
 <tr>
-<td>bacterium</td>
-<td>细菌</td>
-<td>This kind of bacterium can cause a very dangerous disease</td>
+<td>edition</td>
+<td>版本</td>
+<td>The dictionary is now in its third edition which was published in 2017</td>
+</tr>
+<tr>
+<td>fax</td>
+<td>传真</td>
+<td>You can contact us by email or fax</td>
+</tr>
+<tr>
+<td>maintain</td>
+<td>保持</td>
+<td>How do you maintain relationships with your long-distance friends?</td>
+</tr>
+<tr>
+<td>instant message</td>
+<td>即使消息</td>
+<td>Also emails can realize instant messaging</td>
+</tr>
+<tr>
+<td>pal</td>
+<td>伙伴</td>
+<td>Eamiling the pals is a great and helpful way to stay in touch with each other</td>
+</tr>
+<tr>
+<td>circumstances</td>
+<td>情况</td>
+<td>What circumstances you would choose to send emails to keep in touch?</td>
+</tr>
+<tr>
+<td>goes off/rings</td>
+<td>响了</td>
+<td>My alarm goes off at 9:30 in the morning</td>
+</tr>
+<tr>
+<td>get out of</td>
+<td>形容完全离开床了</td>
+<td>Then I get out of the bed</td>
+</tr>
+<tr>
+<td>get up</td>
+<td>起床/起来</td>
+<td>I’ve fallen and I can’t get up</td>
+</tr>
+<tr>
+<td>wake up</td>
+<td>醒来</td>
+<td>wake up early</td>
+</tr>
+<tr>
+<td>go downstairs</td>
+<td>下楼</td>
+<td>go downstairs</td>
+</tr>
+<tr>
+<td>go upstairs</td>
+<td>上楼</td>
+<td>go upstairs</td>
+</tr>
+<tr>
+<td>go to the bathroom/toilet/restroom</td>
+<td>去厕所(美)/(英)</td>
+<td>go to the bathroom/toilet/restroom</td>
+</tr>
+<tr>
+<td>How would you like your egg?</td>
+<td>你想要什么样的鸡蛋？</td>
+<td>早餐回答</td>
+</tr>
+<tr>
+<td>sunny side up</td>
+<td>太阳蛋</td>
+<td>回答上文</td>
+</tr>
+<tr>
+<td>over easy</td>
+<td>煎鸡蛋程度很轻</td>
+<td>回答上文</td>
+</tr>
+<tr>
+<td>over medium</td>
+<td>一面熟</td>
+<td>回答上文</td>
+</tr>
+<tr>
+<td>over hard</td>
+<td>两面熟</td>
+<td>回答上文</td>
+</tr>
+<tr>
+<td>scrambled egg</td>
+<td>炒鸡蛋</td>
+<td>scrambled egg</td>
+</tr>
+<tr>
+<td>hard boiled egg</td>
+<td>煮鸡蛋</td>
+<td>hard boiled egg</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -769,6 +704,136 @@
 <td>spicy</td>
 <td>辣的</td>
 <td>I like spicy hot pot</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-14</title>
+    <url>/2020/03/29/go-big-or-go-home-14/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>humor</td>
+<td>幽默</td>
+<td>The performance that he was forced to eat corn showed his unique sense of humor</td>
+</tr>
+<tr>
+<td>ridiculous</td>
+<td>可笑的</td>
+<td>She looks ridiculous wearing this dress when walking in the street</td>
+</tr>
+<tr>
+<td>go ahead</td>
+<td>继续干下去</td>
+<td>The boy still went ahead with the race even after falling</td>
+</tr>
+<tr>
+<td>rare</td>
+<td>半熟的</td>
+<td>He likes eating rare steak,which is bloody and red in the middle</td>
+</tr>
+<tr>
+<td>fluency</td>
+<td>流畅</td>
+<td>He speaks with perfect fluency</td>
+</tr>
+<tr>
+<td>yawn</td>
+<td>打哈欠</td>
+<td>The cat yawned lying on the grass.So cute</td>
+</tr>
+<tr>
+<td>boycott</td>
+<td>抵制</td>
+<td>The office workers are putting up a boycott</td>
+</tr>
+<tr>
+<td>certificate</td>
+<td>证书</td>
+<td>I got my graduation certificate after finishing college</td>
+</tr>
+<tr>
+<td>hug</td>
+<td>拥抱</td>
+<td>The happy couple hug in front of their new home</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-15</title>
+    <url>/2020/03/30/go-big-or-go-home-15/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>development</td>
+<td>发展</td>
+<td>This picture shows the development of phones over time</td>
+</tr>
+<tr>
+<td>work out</td>
+<td>计算出</td>
+<td>He worked out the math problem on the blackboard</td>
+</tr>
+<tr>
+<td>take the place of</td>
+<td>取代</td>
+<td>Gradually,robots have taken the place of manual workers</td>
+</tr>
+<tr>
+<td>pardon</td>
+<td>原谅</td>
+<td>The king pardoned the prisoner</td>
+</tr>
+<tr>
+<td>strap</td>
+<td>绑住</td>
+<td>The man is driving a jeep with luggage strapped to the roof</td>
+</tr>
+<tr>
+<td>fur</td>
+<td>毛皮</td>
+<td>A fur coat is very warm,bur very expensive</td>
+</tr>
+<tr>
+<td>yet</td>
+<td>尚/还</td>
+<td>I’m tired,but I haven’t finished studying yet</td>
+</tr>
+<tr>
+<td>jet</td>
+<td>喷气式</td>
+<td>Nowadays most long-distance travel is by jet plane</td>
+</tr>
+<tr>
+<td>bacterium</td>
+<td>细菌</td>
+<td>This kind of bacterium can cause a very dangerous disease</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1044,71 +1109,6 @@
 <td>beach</td>
 <td>海边</td>
 <td>The girl took a vacation on the beach</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-14</title>
-    <url>/2020/03/29/go-big-or-go-home-14/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>humor</td>
-<td>幽默</td>
-<td>The performance that he was forced to eat corn showed his unique sense of humor</td>
-</tr>
-<tr>
-<td>ridiculous</td>
-<td>可笑的</td>
-<td>She looks ridiculous wearing this dress when walking in the street</td>
-</tr>
-<tr>
-<td>go ahead</td>
-<td>继续干下去</td>
-<td>The boy still went ahead with the race even after falling</td>
-</tr>
-<tr>
-<td>rare</td>
-<td>半熟的</td>
-<td>He likes eating rare steak,which is bloody and red in the middle</td>
-</tr>
-<tr>
-<td>fluency</td>
-<td>流畅</td>
-<td>He speaks with perfect fluency</td>
-</tr>
-<tr>
-<td>yawn</td>
-<td>打哈欠</td>
-<td>The cat yawned lying on the grass.So cute</td>
-</tr>
-<tr>
-<td>boycott</td>
-<td>抵制</td>
-<td>The office workers are putting up a boycott</td>
-</tr>
-<tr>
-<td>certificate</td>
-<td>证书</td>
-<td>I got my graduation certificate after finishing college</td>
-</tr>
-<tr>
-<td>hug</td>
-<td>拥抱</td>
-<td>The happy couple hug in front of their new home</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1500,6 +1500,61 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-20</title>
+    <url>/2020/04/04/go-big-or-go-home-20/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plate</td>
+<td>盘子</td>
+<td>I can put much food on this big plate</td>
+</tr>
+<tr>
+<td>so that</td>
+<td>太…以至于</td>
+<td>Its so hot that I’m going to melt</td>
+</tr>
+<tr>
+<td>discovery</td>
+<td>发现</td>
+<td>She makes a discovery in the field of flowers</td>
+</tr>
+<tr>
+<td>outline</td>
+<td>外形</td>
+<td>The girl drew an outline of the model</td>
+</tr>
+<tr>
+<td>zip code</td>
+<td>邮政编码</td>
+<td>You must write a zip code on the envelope before mailing a letter</td>
+</tr>
+<tr>
+<td>lip</td>
+<td>嘴唇</td>
+<td>Her lips are the most beautiful part of her face</td>
+</tr>
+<tr>
+<td>weed</td>
+<td>杂草</td>
+<td>The worker is cutting the weeds</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-21</title>
     <url>/2020/04/05/go-big-or-go-home-21/</url>
     <content><![CDATA[<table>
@@ -1649,61 +1704,6 @@
 <td>at</td>
 <td>具体时刻</td>
 <td>at 7o’clock</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-20</title>
-    <url>/2020/04/04/go-big-or-go-home-20/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>plate</td>
-<td>盘子</td>
-<td>I can put much food on this big plate</td>
-</tr>
-<tr>
-<td>so that</td>
-<td>太…以至于</td>
-<td>Its so hot that I’m going to melt</td>
-</tr>
-<tr>
-<td>discovery</td>
-<td>发现</td>
-<td>She makes a discovery in the field of flowers</td>
-</tr>
-<tr>
-<td>outline</td>
-<td>外形</td>
-<td>The girl drew an outline of the model</td>
-</tr>
-<tr>
-<td>zip code</td>
-<td>邮政编码</td>
-<td>You must write a zip code on the envelope before mailing a letter</td>
-</tr>
-<tr>
-<td>lip</td>
-<td>嘴唇</td>
-<td>Her lips are the most beautiful part of her face</td>
-</tr>
-<tr>
-<td>weed</td>
-<td>杂草</td>
-<td>The worker is cutting the weeds</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2070,6 +2070,86 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-23</title>
+    <url>/2020/04/07/go-big-or-go-home-23/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pure</td>
+<td>纯净的</td>
+<td>The water seems so pure and clean</td>
+</tr>
+<tr>
+<td>regulation</td>
+<td>法规</td>
+<td>The traffic police is introducing traffic rules and regulations to us</td>
+</tr>
+<tr>
+<td>Africa</td>
+<td>非洲</td>
+<td>Africa is home to some of the world’s oldest cultures</td>
+</tr>
+<tr>
+<td>motherland</td>
+<td>祖国</td>
+<td>Everyone has their own motherland</td>
+</tr>
+<tr>
+<td>liberty</td>
+<td>自由</td>
+<td>The bird flew from the cage and got liberty</td>
+</tr>
+<tr>
+<td>pair</td>
+<td>一对</td>
+<td>Here is a pair of black shoes</td>
+</tr>
+<tr>
+<td>irrigate</td>
+<td>灌溉</td>
+<td>This machine can irrigate the field</td>
+</tr>
+<tr>
+<td>accompany</td>
+<td>陪伴</td>
+<td>I always accompany my children to their school</td>
+</tr>
+<tr>
+<td>typist</td>
+<td>打字员</td>
+<td>The typist is finishing her documents</td>
+</tr>
+<tr>
+<td>barrier</td>
+<td>路障</td>
+<td>The road was closed by a barrier</td>
+</tr>
+<tr>
+<td>octopus</td>
+<td>章鱼</td>
+<td>-</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切薄片</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-24</title>
     <url>/2020/04/08/go-big-or-go-home-24/</url>
     <content><![CDATA[<table>
@@ -2365,8 +2445,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-23</title>
-    <url>/2020/04/07/go-big-or-go-home-23/</url>
+    <title>go big or go home-27</title>
+    <url>/2020/04/11/go-big-or-go-home-27/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2376,64 +2456,124 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>pure</td>
-<td>纯净的</td>
-<td>The water seems so pure and clean</td>
+<td>emergency</td>
+<td>紧急情况</td>
+<td>It’s an emergency.Get her to the hospital now!</td>
 </tr>
 <tr>
-<td>regulation</td>
-<td>法规</td>
-<td>The traffic police is introducing traffic rules and regulations to us</td>
+<td>do one’s best</td>
+<td>尽最大的努力</td>
+<td>Don’t worry so much about the exam.Just do your best</td>
 </tr>
 <tr>
-<td>Africa</td>
-<td>非洲</td>
-<td>Africa is home to some of the world’s oldest cultures</td>
+<td>absolute</td>
+<td>绝对的</td>
+<td>Motion is absolute,while stillness is relative</td>
 </tr>
 <tr>
-<td>motherland</td>
-<td>祖国</td>
-<td>Everyone has their own motherland</td>
+<td>tongue</td>
+<td>舌头</td>
+<td>The boy sticks out his tongue to make a face to me</td>
 </tr>
 <tr>
-<td>liberty</td>
-<td>自由</td>
-<td>The bird flew from the cage and got liberty</td>
+<td>instruct</td>
+<td>指导</td>
+<td>My mom instructs me how to play golf</td>
 </tr>
 <tr>
-<td>pair</td>
-<td>一对</td>
-<td>Here is a pair of black shoes</td>
+<td>nylon</td>
+<td>尼龙</td>
+<td>The socks,strap and cord are all made of nylon</td>
 </tr>
 <tr>
-<td>irrigate</td>
-<td>灌溉</td>
-<td>This machine can irrigate the field</td>
+<td>strange</td>
+<td>奇怪的</td>
+<td>I met a guy wearing strange clothes on the subway</td>
 </tr>
 <tr>
-<td>accompany</td>
-<td>陪伴</td>
-<td>I always accompany my children to their school</td>
+<td>secondhand</td>
+<td>二手的</td>
+<td>The boy bought a secondhand book from the old man</td>
 </tr>
 <tr>
-<td>typist</td>
-<td>打字员</td>
-<td>The typist is finishing her documents</td>
+<td>expand</td>
+<td>扩大</td>
+<td>Our business is expanding across the whole country</td>
 </tr>
 <tr>
-<td>barrier</td>
-<td>路障</td>
-<td>The road was closed by a barrier</td>
+<td>forest</td>
+<td>森林</td>
+<td>The sun shines through the forest</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-28</title>
+    <url>/2020/04/12/go-big-or-go-home-28/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>go by</td>
+<td>流逝</td>
+<td>Don’t waste your time as it goes by quickly</td>
 </tr>
 <tr>
-<td>octopus</td>
-<td>章鱼</td>
-<td>-</td>
+<td>left-handed</td>
+<td>惯用左手的</td>
+<td>This left-handed girl is painting with her left hand</td>
 </tr>
 <tr>
-<td>slice</td>
-<td>切薄片</td>
-<td>-</td>
+<td>badminton</td>
+<td>羽毛球</td>
+<td>These kids are playing badminton in the park</td>
+</tr>
+<tr>
+<td>bench</td>
+<td>长凳</td>
+<td>The boy is sitting on the bench with his monther</td>
+</tr>
+<tr>
+<td>seaman</td>
+<td>水手</td>
+<td>He looks really happy in the seaman uniform</td>
+</tr>
+<tr>
+<td>bookshelf</td>
+<td>书架</td>
+<td>Various books are placed on the bookshelves</td>
+</tr>
+<tr>
+<td>diamond</td>
+<td>钻石</td>
+<td>Diamond rings are very popular among young couples</td>
+</tr>
+<tr>
+<td>bucket</td>
+<td>水桶</td>
+<td>The cute cat is hiding in a bucket</td>
+</tr>
+<tr>
+<td>Antarctic</td>
+<td>南极</td>
+<td>This kind of animal lives in the Antarctic</td>
+</tr>
+<tr>
+<td>graduation</td>
+<td>毕业</td>
+<td>They stand in line and wait for their graduation ceremony</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2510,8 +2650,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-27</title>
-    <url>/2020/04/11/go-big-or-go-home-27/</url>
+    <title>go big or go home-29</title>
+    <url>/2020/04/13/go-big-or-go-home-29/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2521,54 +2661,304 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>emergency</td>
-<td>紧急情况</td>
-<td>It’s an emergency.Get her to the hospital now!</td>
+<td>soil</td>
+<td>泥土</td>
+<td>He held some soil in his hand</td>
 </tr>
 <tr>
-<td>do one’s best</td>
-<td>尽最大的努力</td>
-<td>Don’t worry so much about the exam.Just do your best</td>
+<td>appropriate</td>
+<td>合适的</td>
+<td>A gentle handshake is appropriate when greeting someone for the first time</td>
 </tr>
 <tr>
-<td>absolute</td>
-<td>绝对的</td>
-<td>Motion is absolute,while stillness is relative</td>
+<td>hook</td>
+<td>钩子</td>
+<td>We put a worm on the hook to catch a fish</td>
 </tr>
 <tr>
-<td>tongue</td>
-<td>舌头</td>
-<td>The boy sticks out his tongue to make a face to me</td>
+<td>knot</td>
+<td>结</td>
+<td>Chinese knots are a traditional handicraft of China</td>
 </tr>
 <tr>
-<td>instruct</td>
-<td>指导</td>
-<td>My mom instructs me how to play golf</td>
+<td>punishment</td>
+<td>惩罚</td>
+<td>The student was given punishment for doing something wrong</td>
 </tr>
 <tr>
-<td>nylon</td>
-<td>尼龙</td>
-<td>The socks,strap and cord are all made of nylon</td>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversion was interrputed by a knock at the door</td>
 </tr>
 <tr>
-<td>strange</td>
-<td>奇怪的</td>
-<td>I met a guy wearing strange clothes on the subway</td>
+<td>bread</td>
+<td>面包</td>
+<td>There are different kinds of bread in the picture</td>
 </tr>
 <tr>
-<td>secondhand</td>
-<td>二手的</td>
-<td>The boy bought a secondhand book from the old man</td>
+<td>disgusting</td>
+<td>令人厌恶的</td>
+<td>He finds the smell of the sock disgusting</td>
 </tr>
 <tr>
-<td>expand</td>
-<td>扩大</td>
-<td>Our business is expanding across the whole country</td>
+<td>non-violent</td>
+<td>非暴力的</td>
+<td>Every conflict has a non-violent solution</td>
 </tr>
 <tr>
-<td>forest</td>
-<td>森林</td>
-<td>The sun shines through the forest</td>
+<td>Morning person</td>
+<td>习惯早起的人</td>
+<td>I hate waking up early for work,so I’m totally not a morning person</td>
+</tr>
+<tr>
+<td>early bird</td>
+<td>早起的鸟儿</td>
+<td>Tom is an early bird.He is always the first to arrive in school</td>
+</tr>
+<tr>
+<td>night person</td>
+<td>晚睡的人</td>
+<td>He is really a night person,he always stays up very late</td>
+</tr>
+<tr>
+<td>night owl</td>
+<td>夜晚的猫头鹰</td>
+<td>When the important exams come,Jack becomes a night owl</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-30</title>
+    <url>/2020/04/14/go-big-or-go-home-30/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apartment</td>
+<td>公寓</td>
+<td>This apartment is so bright with these windows</td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>捕捉</td>
+<td>The goalkeeper caught the ball.What a save!</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+<tr>
+<td>sparrow</td>
+<td>麻雀</td>
+<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
+</tr>
+<tr>
+<td>mud</td>
+<td>泥</td>
+<td>Oh no!I think our car is stuck in the mud!</td>
+</tr>
+<tr>
+<td>stuck</td>
+<td>不能动的</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>shapes</td>
+<td>形状</td>
+<td>I like collecting glasses of all shapes and sizes</td>
+</tr>
+<tr>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversation was interrputed by a knock at the door</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-31</title>
+    <url>/2020/04/15/go-big-or-go-home-31/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>colleague</td>
+<td>同事</td>
+<td>I really learned a lot of discussing with my colleagues</td>
+</tr>
+<tr>
+<td>arrow</td>
+<td>箭</td>
+<td>Traditional hunters use arrows to catch animals</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>空的</td>
+<td>The man’s wallet is empty</td>
+</tr>
+<tr>
+<td>associate</td>
+<td>联想</td>
+<td>I associate this picture with a star</td>
+</tr>
+<tr>
+<td>easy-going</td>
+<td>随和</td>
+<td>My friend and I are easy-going</td>
+</tr>
+<tr>
+<td>carry off</td>
+<td>夺走</td>
+<td>He’s gonna carry off her bag!Stop him!</td>
+</tr>
+<tr>
+<td>lost</td>
+<td>迷路的</td>
+<td>The hikers are lost walking in the forest</td>
+</tr>
+<tr>
+<td>lock</td>
+<td>锁</td>
+<td>The door is locked;we can’t get in</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切片</td>
+<td>The man thinly slices the beef</td>
+</tr>
+<tr>
+<td>might</td>
+<td>或许</td>
+<td>I think it might rain later,so I should take an umbrella</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-32</title>
+    <url>/2020/04/16/go-big-or-go-home-32/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>latter</td>
+<td>后者</td>
+<td>When asked what he would prefer;an apple or pizza,the boy chose the latter</td>
+</tr>
+<tr>
+<td>kitchen</td>
+<td>厨房</td>
+<td>The kitchen is clean and modern</td>
+</tr>
+<tr>
+<td>senior</td>
+<td>年长的</td>
+<td>The senior citizens in the community often have fun talking to each other</td>
+</tr>
+<tr>
+<td>build</td>
+<td>建造</td>
+<td>They are building a block of offices</td>
+</tr>
+<tr>
+<td>parcel</td>
+<td>包裹</td>
+<td>The person has a lot of parcels to send on Novermber 11th</td>
+</tr>
+<tr>
+<td>animal</td>
+<td>动物</td>
+<td>There are many kinds of animals on earth</td>
+</tr>
+<tr>
+<td>take out the rubbish</td>
+<td>倒垃圾</td>
+<td>Could you please take out the rubbish when you leave?</td>
+</tr>
+<tr>
+<td>put it in the trash can</td>
+<td>放进垃圾桶</td>
+<td>Don’t drop the bottle there,please put it in the trash can</td>
+</tr>
+<tr>
+<td>empty the recycle bin</td>
+<td>清理垃圾桶</td>
+<td>-</td>
+</tr>
+<tr>
+<td>garbage</td>
+<td>食物垃圾(美式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>trash</td>
+<td>纸/塑料(美式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>rubbish</td>
+<td>垃圾(英式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2770,226 +3160,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-28</title>
-    <url>/2020/04/12/go-big-or-go-home-28/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>go by</td>
-<td>流逝</td>
-<td>Don’t waste your time as it goes by quickly</td>
-</tr>
-<tr>
-<td>left-handed</td>
-<td>惯用左手的</td>
-<td>This left-handed girl is painting with her left hand</td>
-</tr>
-<tr>
-<td>badminton</td>
-<td>羽毛球</td>
-<td>These kids are playing badminton in the park</td>
-</tr>
-<tr>
-<td>bench</td>
-<td>长凳</td>
-<td>The boy is sitting on the bench with his monther</td>
-</tr>
-<tr>
-<td>seaman</td>
-<td>水手</td>
-<td>He looks really happy in the seaman uniform</td>
-</tr>
-<tr>
-<td>bookshelf</td>
-<td>书架</td>
-<td>Various books are placed on the bookshelves</td>
-</tr>
-<tr>
-<td>diamond</td>
-<td>钻石</td>
-<td>Diamond rings are very popular among young couples</td>
-</tr>
-<tr>
-<td>bucket</td>
-<td>水桶</td>
-<td>The cute cat is hiding in a bucket</td>
-</tr>
-<tr>
-<td>Antarctic</td>
-<td>南极</td>
-<td>This kind of animal lives in the Antarctic</td>
-</tr>
-<tr>
-<td>graduation</td>
-<td>毕业</td>
-<td>They stand in line and wait for their graduation ceremony</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-30</title>
-    <url>/2020/04/14/go-big-or-go-home-30/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>apartment</td>
-<td>公寓</td>
-<td>This apartment is so bright with these windows</td>
-</tr>
-<tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
-</tr>
-<tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
-</tr>
-<tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
-</tr>
-<tr>
-<td>catch</td>
-<td>捕捉</td>
-<td>The goalkeeper caught the ball.What a save!</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-<tr>
-<td>sparrow</td>
-<td>麻雀</td>
-<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
-</tr>
-<tr>
-<td>mud</td>
-<td>泥</td>
-<td>Oh no!I think our car is stuck in the mud!</td>
-</tr>
-<tr>
-<td>stuck</td>
-<td>不能动的</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>shapes</td>
-<td>形状</td>
-<td>I like collecting glasses of all shapes and sizes</td>
-</tr>
-<tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversation was interrputed by a knock at the door</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-31</title>
-    <url>/2020/04/15/go-big-or-go-home-31/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>colleague</td>
-<td>同事</td>
-<td>I really learned a lot of discussing with my colleagues</td>
-</tr>
-<tr>
-<td>arrow</td>
-<td>箭</td>
-<td>Traditional hunters use arrows to catch animals</td>
-</tr>
-<tr>
-<td>empty</td>
-<td>空的</td>
-<td>The man’s wallet is empty</td>
-</tr>
-<tr>
-<td>associate</td>
-<td>联想</td>
-<td>I associate this picture with a star</td>
-</tr>
-<tr>
-<td>easy-going</td>
-<td>随和</td>
-<td>My friend and I are easy-going</td>
-</tr>
-<tr>
-<td>carry off</td>
-<td>夺走</td>
-<td>He’s gonna carry off her bag!Stop him!</td>
-</tr>
-<tr>
-<td>lost</td>
-<td>迷路的</td>
-<td>The hikers are lost walking in the forest</td>
-</tr>
-<tr>
-<td>lock</td>
-<td>锁</td>
-<td>The door is locked;we can’t get in</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>切片</td>
-<td>The man thinly slices the beef</td>
-</tr>
-<tr>
-<td>might</td>
-<td>或许</td>
-<td>I think it might rain later,so I should take an umbrella</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-33</title>
     <url>/2020/04/17/go-big-or-go-home-33/</url>
     <content><![CDATA[<table>
@@ -3055,8 +3225,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-29</title>
-    <url>/2020/04/13/go-big-or-go-home-29/</url>
+    <title>go big or go home-34</title>
+    <url>/2020/04/18/go-big-or-go-home-34/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3066,69 +3236,163 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>soil</td>
-<td>泥土</td>
-<td>He held some soil in his hand</td>
+<td>point</td>
+<td>指向</td>
+<td>They are pointing at each other</td>
 </tr>
 <tr>
-<td>appropriate</td>
-<td>合适的</td>
-<td>A gentle handshake is appropriate when greeting someone for the first time</td>
+<td>department store</td>
+<td>百货商场</td>
+<td>This department store sells many different kinds of goods</td>
 </tr>
 <tr>
-<td>hook</td>
-<td>钩子</td>
-<td>We put a worm on the hook to catch a fish</td>
+<td>silver medal</td>
+<td>银牌</td>
+<td>The athlete who took second place got a silver medal</td>
 </tr>
 <tr>
-<td>knot</td>
-<td>结</td>
-<td>Chinese knots are a traditional handicraft of China</td>
+<td>forgive</td>
+<td>原谅</td>
+<td>The girl says,”Can you forgive me,mom?”</td>
 </tr>
 <tr>
-<td>punishment</td>
-<td>惩罚</td>
-<td>The student was given punishment for doing something wrong</td>
+<td>go on doing</td>
+<td>继续干某事</td>
+<td>Even though he was tired,he went on working for 12 hours</td>
 </tr>
 <tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversion was interrputed by a knock at the door</td>
+<td>alone</td>
+<td>孤单</td>
+<td>Seesaws are not very fun when you’re alone</td>
 </tr>
 <tr>
-<td>bread</td>
-<td>面包</td>
-<td>There are different kinds of bread in the picture</td>
+<td>brotherhood</td>
+<td>手足情谊</td>
+<td>The brotherhood between the boys will keep them close forever</td>
 </tr>
 <tr>
-<td>disgusting</td>
-<td>令人厌恶的</td>
-<td>He finds the smell of the sock disgusting</td>
+<td>statistics</td>
+<td>统计数字</td>
+<td>I use facts and statistics to prove my point</td>
 </tr>
 <tr>
-<td>non-violent</td>
-<td>非暴力的</td>
-<td>Every conflict has a non-violent solution</td>
+<td>bookstore</td>
+<td>书店</td>
+<td>She’s buying books in the bookstore</td>
 </tr>
 <tr>
-<td>Morning person</td>
-<td>习惯早起的人</td>
-<td>I hate waking up early for work,so I’m totally not a morning person</td>
+<td>decision</td>
+<td>决定</td>
+<td>I’ve made my decision to buy this beautiful skirt</td>
 </tr>
 <tr>
-<td>early bird</td>
-<td>早起的鸟儿</td>
-<td>Tom is an early bird.He is always the first to arrive in school</td>
+<td>suspect</td>
+<td>嫌疑犯</td>
+<td>The suspect is talking with his lawyer</td>
+</tr>
+</tbody></table>
+]]></content>
+  </entry>
+  <entry>
+    <title>go big or go home-5</title>
+    <url>/2020/03/20/go-big-or-go-home-5/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>foreign</td>
+<td>外国的</td>
+<td>Do you work in foreign company?</td>
 </tr>
 <tr>
-<td>night person</td>
-<td>晚睡的人</td>
-<td>He is really a night person,he always stays up very late</td>
+<td>recite</td>
+<td>背诵</td>
+<td>Do you think it difficult to recite English words?</td>
 </tr>
 <tr>
-<td>night owl</td>
-<td>夜晚的猫头鹰</td>
-<td>When the important exams come,Jack becomes a night owl</td>
+<td>normally</td>
+<td>通常情况下</td>
+<td>Normally,how often do you play basketball?</td>
+</tr>
+<tr>
+<td>basketball court</td>
+<td>篮球场</td>
+<td>There is a baskerball court in my neighborhood</td>
+</tr>
+<tr>
+<td>facility</td>
+<td>设施</td>
+<td>There is the facility you need</td>
+</tr>
+<tr>
+<td>football/soccer</td>
+<td>在美式英语中football是橄榄球，足球用soccer</td>
+<td>I play football twice a week</td>
+</tr>
+<tr>
+<td>volleyball</td>
+<td>排球</td>
+<td>When I was in college,I was the caption of the volleyball team</td>
+</tr>
+<tr>
+<td>badminton</td>
+<td>羽毛球</td>
+<td>LinDan played badminton very well</td>
+</tr>
+<tr>
+<td>hockey</td>
+<td>曲棍球</td>
+<td>Hockey is very popular in the United States</td>
+</tr>
+<tr>
+<td>skating</td>
+<td>滑冰</td>
+<td>In winter,I like playing skating and skiing</td>
+</tr>
+<tr>
+<td>skiing</td>
+<td>滑雪</td>
+<td>In winter,I like playing skating and skiing</td>
+</tr>
+<tr>
+<td>athlete</td>
+<td>运动员</td>
+<td>You will be a good athlete</td>
+</tr>
+<tr>
+<td>athletic</td>
+<td>爱运动的</td>
+<td>You are athletic</td>
+</tr>
+<tr>
+<td>act</td>
+<td>行动</td>
+<td>This is the time for acting</td>
+</tr>
+<tr>
+<td>heat</td>
+<td>高温</td>
+<td>Warm the milk to blood heat</td>
+</tr>
+<tr>
+<td>components</td>
+<td>零件</td>
+<td>These are the components of the car</td>
+</tr>
+<tr>
+<td>join up</td>
+<td>参军</td>
+<td>I want to join the army</td>
+</tr>
+<tr>
+<td>premanent</td>
+<td>永久的</td>
+<td>He hopes to find a premanent job</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3274,201 +3538,6 @@
 <td>backache</td>
 <td>背痛</td>
 <td>Since I got an office job,my backache has gotton much worse</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-32</title>
-    <url>/2020/04/16/go-big-or-go-home-32/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>latter</td>
-<td>后者</td>
-<td>When asked what he would prefer;an apple or pizza,the boy chose the latter</td>
-</tr>
-<tr>
-<td>kitchen</td>
-<td>厨房</td>
-<td>The kitchen is clean and modern</td>
-</tr>
-<tr>
-<td>senior</td>
-<td>年长的</td>
-<td>The senior citizens in the community often have fun talking to each other</td>
-</tr>
-<tr>
-<td>build</td>
-<td>建造</td>
-<td>They are building a block of offices</td>
-</tr>
-<tr>
-<td>parcel</td>
-<td>包裹</td>
-<td>The person has a lot of parcels to send on Novermber 11th</td>
-</tr>
-<tr>
-<td>animal</td>
-<td>动物</td>
-<td>There are many kinds of animals on earth</td>
-</tr>
-<tr>
-<td>take out the rubbish</td>
-<td>倒垃圾</td>
-<td>Could you please take out the rubbish when you leave?</td>
-</tr>
-<tr>
-<td>put it in the trash can</td>
-<td>放进垃圾桶</td>
-<td>Don’t drop the bottle there,please put it in the trash can</td>
-</tr>
-<tr>
-<td>empty the recycle bin</td>
-<td>清理垃圾桶</td>
-<td>-</td>
-</tr>
-<tr>
-<td>garbage</td>
-<td>食物垃圾(美式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>trash</td>
-<td>纸/塑料(美式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>rubbish</td>
-<td>垃圾(英式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-5</title>
-    <url>/2020/03/20/go-big-or-go-home-5/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>foreign</td>
-<td>外国的</td>
-<td>Do you work in foreign company?</td>
-</tr>
-<tr>
-<td>recite</td>
-<td>背诵</td>
-<td>Do you think it difficult to recite English words?</td>
-</tr>
-<tr>
-<td>normally</td>
-<td>通常情况下</td>
-<td>Normally,how often do you play basketball?</td>
-</tr>
-<tr>
-<td>basketball court</td>
-<td>篮球场</td>
-<td>There is a baskerball court in my neighborhood</td>
-</tr>
-<tr>
-<td>facility</td>
-<td>设施</td>
-<td>There is the facility you need</td>
-</tr>
-<tr>
-<td>football/soccer</td>
-<td>在美式英语中football是橄榄球，足球用soccer</td>
-<td>I play football twice a week</td>
-</tr>
-<tr>
-<td>volleyball</td>
-<td>排球</td>
-<td>When I was in college,I was the caption of the volleyball team</td>
-</tr>
-<tr>
-<td>badminton</td>
-<td>羽毛球</td>
-<td>LinDan played badminton very well</td>
-</tr>
-<tr>
-<td>hockey</td>
-<td>曲棍球</td>
-<td>Hockey is very popular in the United States</td>
-</tr>
-<tr>
-<td>skating</td>
-<td>滑冰</td>
-<td>In winter,I like playing skating and skiing</td>
-</tr>
-<tr>
-<td>skiing</td>
-<td>滑雪</td>
-<td>In winter,I like playing skating and skiing</td>
-</tr>
-<tr>
-<td>athlete</td>
-<td>运动员</td>
-<td>You will be a good athlete</td>
-</tr>
-<tr>
-<td>athletic</td>
-<td>爱运动的</td>
-<td>You are athletic</td>
-</tr>
-<tr>
-<td>act</td>
-<td>行动</td>
-<td>This is the time for acting</td>
-</tr>
-<tr>
-<td>heat</td>
-<td>高温</td>
-<td>Warm the milk to blood heat</td>
-</tr>
-<tr>
-<td>components</td>
-<td>零件</td>
-<td>These are the components of the car</td>
-</tr>
-<tr>
-<td>join up</td>
-<td>参军</td>
-<td>I want to join the army</td>
-</tr>
-<tr>
-<td>premanent</td>
-<td>永久的</td>
-<td>He hopes to find a premanent job</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3820,6 +3889,32 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode79</title>
+    <url>/2019/10/20/leetcode79/</url>
+    <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
+<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],</span><br><span class="line">  [&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],</span><br><span class="line">  [&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = &quot;ABCCED&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;SEE&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;ABCB&quot;, 返回 false.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line"></span><br><span class="line">    static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">    static int[] column = &#123;1,0,-1,0&#125;;</span><br><span class="line"></span><br><span class="line">    public  boolean exist(char[][] board, String word) &#123;</span><br><span class="line"></span><br><span class="line">        for (int i =0,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            for (int j=0,columnLen = board[0].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                if (dfs(board,word,i,j,0)) return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean dfs(char[][] board,String word,int x,int y,int index)&#123;</span><br><span class="line">        if (x&lt;0 || x&gt;=board.length || y&lt;0 || y&gt;=board[0].length) return false;</span><br><span class="line"></span><br><span class="line">        if(board[x][y] != word.charAt(index)) return false;</span><br><span class="line"></span><br><span class="line">        if(index == word.length() - 1) return true;</span><br><span class="line"></span><br><span class="line">        board[x][y] = &apos;#&apos;;</span><br><span class="line"></span><br><span class="line">        for (int i = 0 ; i&lt;4;i++)&#123;</span><br><span class="line">            if (dfs(board,word,x+row[i],y+column[i],index+1)) return true;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        char[][] borad = &#123;&#123;&apos;F&apos;,&apos;Y&apos;,&apos;C&apos;,&apos;E&apos;,&apos;N&apos;,&apos;R&apos;,&apos;D&apos;&#125;,&#123;&apos;K&apos;,&apos;L&apos;,&apos;N&apos;,&apos;F&apos;,&apos;I&apos;,&apos;N&apos;,&apos;U&apos;&#125;,&#123;&apos;A&apos;,&apos;A&apos;,&apos;A&apos;,&apos;R&apos;,&apos;A&apos;,&apos;H&apos;,&apos;R&apos;&#125;,&#123;&apos;N&apos;,&apos;D&apos;,&apos;K&apos;,&apos;L&apos;,&apos;P&apos;,&apos;N&apos;,&apos;E&apos;&#125;,&#123;&apos;A&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;S&apos;,&apos;A&apos;,&apos;P&apos;&#125;,&#123;&apos;O&apos;,&apos;O&apos;,&apos;G&apos;,&apos;O&apos;,&apos;T&apos;,&apos;P&apos;,&apos;N&apos;&#125;,&#123;&apos;H&apos;,&apos;P&apos;,&apos;O&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;O&apos;&#125;&#125;;</span><br><span class="line">        String word= &quot;poland&quot;;</span><br><span class="line">        System.out.println(new Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里主要说明一下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board[x][y] = &apos;#&apos;;</span><br></pre></td></tr></table></figure>
+
+<p>是将已经查找过的做一个标记，以及</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">static int[] column = &#123;1,0,-1,0&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>二维网格</tag>
+        <tag>leetcode79</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL一条sql查询语句是如何执行的?</title>
     <url>/2019/10/20/mysql%E4%B8%80%E6%9D%A1sql%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/</url>
     <content><![CDATA[<p>[2019-10-13，2019-10-20]周计划：</p>
@@ -3847,32 +3942,6 @@
       <tags>
         <tag>mysql查询语句执行</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode79</title>
-    <url>/2019/10/20/leetcode79/</url>
-    <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
-<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
-<p>示例:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],</span><br><span class="line">  [&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],</span><br><span class="line">  [&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = &quot;ABCCED&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;SEE&quot;, 返回 true.</span><br><span class="line">给定 word = &quot;ABCB&quot;, 返回 false.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line"></span><br><span class="line">    static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">    static int[] column = &#123;1,0,-1,0&#125;;</span><br><span class="line"></span><br><span class="line">    public  boolean exist(char[][] board, String word) &#123;</span><br><span class="line"></span><br><span class="line">        for (int i =0,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            for (int j=0,columnLen = board[0].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                if (dfs(board,word,i,j,0)) return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean dfs(char[][] board,String word,int x,int y,int index)&#123;</span><br><span class="line">        if (x&lt;0 || x&gt;=board.length || y&lt;0 || y&gt;=board[0].length) return false;</span><br><span class="line"></span><br><span class="line">        if(board[x][y] != word.charAt(index)) return false;</span><br><span class="line"></span><br><span class="line">        if(index == word.length() - 1) return true;</span><br><span class="line"></span><br><span class="line">        board[x][y] = &apos;#&apos;;</span><br><span class="line"></span><br><span class="line">        for (int i = 0 ; i&lt;4;i++)&#123;</span><br><span class="line">            if (dfs(board,word,x+row[i],y+column[i],index+1)) return true;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        char[][] borad = &#123;&#123;&apos;F&apos;,&apos;Y&apos;,&apos;C&apos;,&apos;E&apos;,&apos;N&apos;,&apos;R&apos;,&apos;D&apos;&#125;,&#123;&apos;K&apos;,&apos;L&apos;,&apos;N&apos;,&apos;F&apos;,&apos;I&apos;,&apos;N&apos;,&apos;U&apos;&#125;,&#123;&apos;A&apos;,&apos;A&apos;,&apos;A&apos;,&apos;R&apos;,&apos;A&apos;,&apos;H&apos;,&apos;R&apos;&#125;,&#123;&apos;N&apos;,&apos;D&apos;,&apos;K&apos;,&apos;L&apos;,&apos;P&apos;,&apos;N&apos;,&apos;E&apos;&#125;,&#123;&apos;A&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;S&apos;,&apos;A&apos;,&apos;P&apos;&#125;,&#123;&apos;O&apos;,&apos;O&apos;,&apos;G&apos;,&apos;O&apos;,&apos;T&apos;,&apos;P&apos;,&apos;N&apos;&#125;,&#123;&apos;H&apos;,&apos;P&apos;,&apos;O&apos;,&apos;L&apos;,&apos;A&apos;,&apos;N&apos;,&apos;O&apos;&#125;&#125;;</span><br><span class="line">        String word= &quot;poland&quot;;</span><br><span class="line">        System.out.println(new Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里主要说明一下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">board[x][y] = &apos;#&apos;;</span><br></pre></td></tr></table></figure>
-
-<p>是将已经查找过的做一个标记，以及</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">static int[] row = &#123;0,1,0,-1&#125;;</span><br><span class="line">static int[] column = &#123;1,0,-1,0&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>二维网格</tag>
-        <tag>leetcode79</tag>
       </tags>
   </entry>
   <entry>

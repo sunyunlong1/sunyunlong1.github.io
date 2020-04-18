@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-17T14:22:53.687Z</updated>
+  <updated>2020-04-18T15:44:07.276Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>go big or go home-34</title>
+    <link href="http://yoursite.com/2020/04/18/go-big-or-go-home-34/"/>
+    <id>http://yoursite.com/2020/04/18/go-big-or-go-home-34/</id>
+    <published>2020-04-18T15:30:36.000Z</published>
+    <updated>2020-04-18T15:44:07.276Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;单词/短语&lt;/th&gt;
+&lt;th&gt;中文&lt;/th&gt;
+&lt;th&gt;句子&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;point&lt;/td&gt;
+&lt;td&gt;指向&lt;/td&gt;
+&lt;td&gt;They are pointing at
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>go big or go home-33</title>
@@ -691,44 +725,6 @@
 &lt;td&gt;pilot&lt;/td&gt;
 &lt;td&gt;飞行员&lt;/td&gt;
 &lt;td&gt;The heroic pilot
-        
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>go big or go home-18</title>
-    <link href="http://yoursite.com/2020/04/02/go-big-or-go-home-18/"/>
-    <id>http://yoursite.com/2020/04/02/go-big-or-go-home-18/</id>
-    <published>2020-04-02T13:40:01.000Z</published>
-    <updated>2020-04-04T11:02:38.964Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;单词/短语&lt;/th&gt;
-&lt;th&gt;中文&lt;/th&gt;
-&lt;th&gt;句子&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;noisy&lt;/td&gt;
-&lt;td&gt;吵闹的&lt;/td&gt;
-&lt;td&gt;I think they are
         
       
     
