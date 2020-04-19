@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-18T15:44:07.276Z</updated>
+  <updated>2020-04-19T15:46:07.734Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,107 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>go big or go home-35</title>
+    <link href="http://yoursite.com/2020/04/19/go-big-or-go-home-35/"/>
+    <id>http://yoursite.com/2020/04/19/go-big-or-go-home-35/</id>
+    <published>2020-04-19T15:32:53.000Z</published>
+    <updated>2020-04-19T15:46:07.734Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;单词/短语&lt;/th&gt;
+&lt;th&gt;中文&lt;/th&gt;
+&lt;th&gt;句子&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;south&lt;/td&gt;
+&lt;td&gt;南方&lt;/td&gt;
+&lt;td&gt;A large number of
+        
+      
+    
+    </summary>
+    
+    
+      <category term="English" scheme="http://yoursite.com/categories/English/"/>
+    
+    
+      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>《深入理解Java虚拟机》第二章 Java内存区域与内存溢出异常</title>
+    <link href="http://yoursite.com/2020/04/19/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%BA%8C%E7%AB%A0-Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E4%B8%8E%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E5%BC%82%E5%B8%B8/"/>
+    <id>http://yoursite.com/2020/04/19/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%BA%8C%E7%AB%A0-Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E4%B8%8E%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E5%BC%82%E5%B8%B8/</id>
+    <published>2020-04-19T13:58:19.000Z</published>
+    <updated>2020-04-19T16:10:49.402Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;此篇为第二章-Java内存区域与内存溢出异常，主要从两部分介绍&quot;&gt;&lt;a href=&quot;#此篇为第二章-Java内存区域与内存溢出异常，主要从两部分介绍&quot; class=&quot;headerlink&quot; title=&quot;此篇为第二章
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Java基础" scheme="http://yoursite.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="深入理解Java虚拟机" scheme="http://yoursite.com/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    
+      <category term="Java内存区域与内存溢出异常" scheme="http://yoursite.com/tags/Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E4%B8%8E%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E5%BC%82%E5%B8%B8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>《深入理解Java虚拟机》第一章 走进Java</title>
+    <link href="http://yoursite.com/2020/04/19/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%80%E7%AB%A0/"/>
+    <id>http://yoursite.com/2020/04/19/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%80%E7%AB%A0/</id>
+    <published>2020-04-19T13:47:54.000Z</published>
+    <updated>2020-04-19T13:58:50.606Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;结束了Redis系列问题，现在开始JVM虚拟机的篇章，第一讲，此系列不定时更新，因为想把这本书看透是需要时间的，所以我打算把JVM当作调味品，最近打算学习一下大数据知识，所以JVM当作放松的“课外书籍”来看。&quot;&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Java基础" scheme="http://yoursite.com/categories/Java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="走进Java" scheme="http://yoursite.com/tags/%E8%B5%B0%E8%BF%9BJava/"/>
+    
+      <category term="深入理解Java虚拟机" scheme="http://yoursite.com/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
     <title>go big or go home-34</title>
     <link href="http://yoursite.com/2020/04/18/go-big-or-go-home-34/"/>
     <id>http://yoursite.com/2020/04/18/go-big-or-go-home-34/</id>
     <published>2020-04-18T15:30:36.000Z</published>
-    <updated>2020-04-18T15:44:07.276Z</updated>
+    <updated>2020-04-19T15:33:18.318Z</updated>
     
     <summary type="html">
     
@@ -47,6 +143,10 @@
     </summary>
     
     
+      <category term="English" scheme="http://yoursite.com/categories/English/"/>
+    
+    
+      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
     
   </entry>
   
@@ -630,111 +730,6 @@
       <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
     
       <category term="延时队列" scheme="http://yoursite.com/tags/%E5%BB%B6%E6%97%B6%E9%98%9F%E5%88%97/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>redis系列-夯实基础面试相关</title>
-    <link href="http://yoursite.com/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%A4%AF%E5%AE%9E%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E7%9B%B8%E5%85%B3/"/>
-    <id>http://yoursite.com/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%A4%AF%E5%AE%9E%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E7%9B%B8%E5%85%B3/</id>
-    <published>2020-04-05T10:51:36.000Z</published>
-    <updated>2020-04-06T02:54:45.817Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h3 id=&quot;最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的&quot;&gt;&lt;a href=&quot;#最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="redis" scheme="http://yoursite.com/categories/redis/"/>
-    
-    
-      <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
-    
-      <category term="面试" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>go big or go home-20</title>
-    <link href="http://yoursite.com/2020/04/04/go-big-or-go-home-20/"/>
-    <id>http://yoursite.com/2020/04/04/go-big-or-go-home-20/</id>
-    <published>2020-04-04T15:23:35.000Z</published>
-    <updated>2020-04-04T16:30:11.326Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;单词/短语&lt;/th&gt;
-&lt;th&gt;中文&lt;/th&gt;
-&lt;th&gt;句子&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;plate&lt;/td&gt;
-&lt;td&gt;盘子&lt;/td&gt;
-&lt;td&gt;I can put much food
-        
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>go big or go home-19</title>
-    <link href="http://yoursite.com/2020/04/03/go-big-or-go-home-19/"/>
-    <id>http://yoursite.com/2020/04/03/go-big-or-go-home-19/</id>
-    <published>2020-04-03T14:18:09.000Z</published>
-    <updated>2020-04-04T11:02:45.171Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;单词/短语&lt;/th&gt;
-&lt;th&gt;中文&lt;/th&gt;
-&lt;th&gt;句子&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;pilot&lt;/td&gt;
-&lt;td&gt;飞行员&lt;/td&gt;
-&lt;td&gt;The heroic pilot
-        
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
     
   </entry>
   
