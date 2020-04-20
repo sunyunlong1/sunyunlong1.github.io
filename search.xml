@@ -1,45 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>BigDecimal比较大小</title>
-    <url>/2019/09/16/BigDecimal%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/</url>
-    <content><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TestBigDecimal &#123;</span><br><span class="line">     public static void main(String[] args) &#123;</span><br><span class="line">        BigDecimal b1 = BigDecimal.valueOf(0.00);</span><br><span class="line">        BigDecimal b2 = new BigDecimal(0.00);</span><br><span class="line">        BigDecimal b3 = new BigDecimal(&quot;0.00&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(b1);</span><br><span class="line">        System.out.println(b2);</span><br><span class="line">        System.out.println(b3);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line">        System.out.println(&quot;equals比较&quot;);</span><br><span class="line">        System.out.println(contrast1(b1,b2));</span><br><span class="line">        System.out.println(contrast1(b1,b3));</span><br><span class="line">        System.out.println(contrast1(b2,b3));</span><br><span class="line">        System.out.println(contrast1(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;compareTo比较&quot;);</span><br><span class="line">        System.out.println(contrast2(b1,b2));</span><br><span class="line">        System.out.println(contrast2(b1,b3));</span><br><span class="line">        System.out.println(contrast2(b2,b3));</span><br><span class="line">        System.out.println(contrast2(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static boolean contrast1(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.equals(b2);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static int contrast2(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.compareTo(b2);</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p> 运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0.0</span><br><span class="line">0</span><br><span class="line">0.00</span><br><span class="line">--------------</span><br><span class="line">equals比较</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">--------------</span><br><span class="line">compareTo比较</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
-
-<p><img src="../image/equals.png" alt="equals.png" title="equals"><br>清楚的看到比较了小数位，小数位不同直接返回false<br>在看一下compareTo源码：<br><img src="../image/compareTo.png" alt="compareTo.png" title="compareTo"><br>可以看到比较逻辑是先判断小数位是否相同，相同则比较有效值，不同先比较正负，正负相同在比较数值大小<br>结论：在进行需要忽略小数位比较时需要用compareTo()，不忽略小数位比较时用equals()</p>
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>BigDecimal</tag>
-        <tag>Java基础</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>一路走来，即将毕业。</title>
-    <url>/2019/09/12/Sentiment/</url>
-    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
-<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
-<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
-<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
-<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
-<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
-<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
-<p>祝我自己前途似锦，万事胜意。</p>
-<p>2019-03-27 20:44更</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>毕业感悟</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之String</title>
     <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
     <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
@@ -79,8 +40,26 @@
         <category>Java基础</category>
       </categories>
       <tags>
-        <tag>Java基础</tag>
         <tag>String</tag>
+        <tag>Java基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BigDecimal比较大小</title>
+    <url>/2019/09/16/BigDecimal%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/</url>
+    <content><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TestBigDecimal &#123;</span><br><span class="line">     public static void main(String[] args) &#123;</span><br><span class="line">        BigDecimal b1 = BigDecimal.valueOf(0.00);</span><br><span class="line">        BigDecimal b2 = new BigDecimal(0.00);</span><br><span class="line">        BigDecimal b3 = new BigDecimal(&quot;0.00&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(b1);</span><br><span class="line">        System.out.println(b2);</span><br><span class="line">        System.out.println(b3);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line">        System.out.println(&quot;equals比较&quot;);</span><br><span class="line">        System.out.println(contrast1(b1,b2));</span><br><span class="line">        System.out.println(contrast1(b1,b3));</span><br><span class="line">        System.out.println(contrast1(b2,b3));</span><br><span class="line">        System.out.println(contrast1(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;compareTo比较&quot;);</span><br><span class="line">        System.out.println(contrast2(b1,b2));</span><br><span class="line">        System.out.println(contrast2(b1,b3));</span><br><span class="line">        System.out.println(contrast2(b2,b3));</span><br><span class="line">        System.out.println(contrast2(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static boolean contrast1(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.equals(b2);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static int contrast2(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.compareTo(b2);</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p> 运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0.0</span><br><span class="line">0</span><br><span class="line">0.00</span><br><span class="line">--------------</span><br><span class="line">equals比较</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">--------------</span><br><span class="line">compareTo比较</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p><img src="../image/equals.png" alt="equals.png" title="equals"><br>清楚的看到比较了小数位，小数位不同直接返回false<br>在看一下compareTo源码：<br><img src="../image/compareTo.png" alt="compareTo.png" title="compareTo"><br>可以看到比较逻辑是先判断小数位是否相同，相同则比较有效值，不同先比较正负，正负相同在比较数值大小<br>结论：在进行需要忽略小数位比较时需要用compareTo()，不忽略小数位比较时用equals()</p>
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>BigDecimal</tag>
       </tags>
   </entry>
   <entry>
@@ -127,6 +106,27 @@
       <tags>
         <tag>Java基础</tag>
         <tag>Java基本类型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一路走来，即将毕业。</title>
+    <url>/2019/09/12/Sentiment/</url>
+    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
+<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
+<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
+<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
+<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
+<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
+<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
+<p>祝我自己前途似锦，万事胜意。</p>
+<p>2019-03-27 20:44更</p>
+]]></content>
+      <categories>
+        <category>个人经历</category>
+      </categories>
+      <tags>
+        <tag>个人经历</tag>
+        <tag>毕业感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -1500,61 +1500,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-20</title>
-    <url>/2020/04/04/go-big-or-go-home-20/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>plate</td>
-<td>盘子</td>
-<td>I can put much food on this big plate</td>
-</tr>
-<tr>
-<td>so that</td>
-<td>太…以至于</td>
-<td>Its so hot that I’m going to melt</td>
-</tr>
-<tr>
-<td>discovery</td>
-<td>发现</td>
-<td>She makes a discovery in the field of flowers</td>
-</tr>
-<tr>
-<td>outline</td>
-<td>外形</td>
-<td>The girl drew an outline of the model</td>
-</tr>
-<tr>
-<td>zip code</td>
-<td>邮政编码</td>
-<td>You must write a zip code on the envelope before mailing a letter</td>
-</tr>
-<tr>
-<td>lip</td>
-<td>嘴唇</td>
-<td>Her lips are the most beautiful part of her face</td>
-</tr>
-<tr>
-<td>weed</td>
-<td>杂草</td>
-<td>The worker is cutting the weeds</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-21</title>
     <url>/2020/04/05/go-big-or-go-home-21/</url>
     <content><![CDATA[<table>
@@ -1704,6 +1649,61 @@
 <td>at</td>
 <td>具体时刻</td>
 <td>at 7o’clock</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-20</title>
+    <url>/2020/04/04/go-big-or-go-home-20/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>plate</td>
+<td>盘子</td>
+<td>I can put much food on this big plate</td>
+</tr>
+<tr>
+<td>so that</td>
+<td>太…以至于</td>
+<td>Its so hot that I’m going to melt</td>
+</tr>
+<tr>
+<td>discovery</td>
+<td>发现</td>
+<td>She makes a discovery in the field of flowers</td>
+</tr>
+<tr>
+<td>outline</td>
+<td>外形</td>
+<td>The girl drew an outline of the model</td>
+</tr>
+<tr>
+<td>zip code</td>
+<td>邮政编码</td>
+<td>You must write a zip code on the envelope before mailing a letter</td>
+</tr>
+<tr>
+<td>lip</td>
+<td>嘴唇</td>
+<td>Her lips are the most beautiful part of her face</td>
+</tr>
+<tr>
+<td>weed</td>
+<td>杂草</td>
+<td>The worker is cutting the weeds</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2150,6 +2150,76 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-25</title>
+    <url>/2020/04/10/go-big-or-go-home-25/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>headmistress</td>
+<td>女校长</td>
+<td>Our headmistress is giving us a speech</td>
+</tr>
+<tr>
+<td>conventional</td>
+<td>依据惯例的</td>
+<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
+</tr>
+<tr>
+<td>carry out</td>
+<td>完成</td>
+<td>After the hard work,I finally carried out my plan</td>
+</tr>
+<tr>
+<td>behaviour</td>
+<td>行为</td>
+<td>I can tell he is happy from his behaviour</td>
+</tr>
+<tr>
+<td>mirror</td>
+<td>镜子</td>
+<td>Look at yourselves in the mirror</td>
+</tr>
+<tr>
+<td>vast</td>
+<td>辽阔的</td>
+<td>This vast desert looks impossible to pass</td>
+</tr>
+<tr>
+<td>toast</td>
+<td>烤面包</td>
+<td>There are two slices of toast and some butter on the table</td>
+</tr>
+<tr>
+<td>cyclist</td>
+<td>骑自行车的人</td>
+<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
+</tr>
+<tr>
+<td>satisfy</td>
+<td>满意</td>
+<td>-</td>
+</tr>
+<tr>
+<td>frightened</td>
+<td>害怕的</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-24</title>
     <url>/2020/04/08/go-big-or-go-home-24/</url>
     <content><![CDATA[<table>
@@ -2375,8 +2445,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-25</title>
-    <url>/2020/04/10/go-big-or-go-home-25/</url>
+    <title>go big or go home-26</title>
+    <url>/2020/04/10/go-big-or-go-home-26/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2386,124 +2456,49 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>headmistress</td>
-<td>女校长</td>
-<td>Our headmistress is giving us a speech</td>
+<td>give in</td>
+<td>投降</td>
+<td>He finally gave in to me and admintted that I’m the winner</td>
 </tr>
 <tr>
-<td>conventional</td>
-<td>依据惯例的</td>
-<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
+<td>transform</td>
+<td>改变</td>
+<td>You will transform into a beautiful butterfly one day</td>
 </tr>
 <tr>
-<td>carry out</td>
-<td>完成</td>
-<td>After the hard work,I finally carried out my plan</td>
+<td>department</td>
+<td>部门</td>
+<td>Our company consists of financial department,sales department,and technical department</td>
 </tr>
 <tr>
-<td>behaviour</td>
-<td>行为</td>
-<td>I can tell he is happy from his behaviour</td>
+<td>put off</td>
+<td>推迟</td>
+<td>The sports meeting will be put off because of the rain</td>
 </tr>
 <tr>
-<td>mirror</td>
-<td>镜子</td>
-<td>Look at yourselves in the mirror</td>
+<td>mass</td>
+<td>众多</td>
+<td>A mass of people are waiting</td>
 </tr>
 <tr>
-<td>vast</td>
-<td>辽阔的</td>
-<td>This vast desert looks impossible to pass</td>
+<td>allow</td>
+<td>允许</td>
+<td>The green light allows you to go</td>
 </tr>
 <tr>
-<td>toast</td>
-<td>烤面包</td>
-<td>There are two slices of toast and some butter on the table</td>
+<td>serious</td>
+<td>认真的</td>
+<td>He is always very serious while working</td>
 </tr>
 <tr>
-<td>cyclist</td>
-<td>骑自行车的人</td>
-<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
+<td>seem</td>
+<td>看起来</td>
+<td>It seems his car has a serious problem</td>
 </tr>
 <tr>
-<td>satisfy</td>
-<td>满意</td>
-<td>-</td>
-</tr>
-<tr>
-<td>frightened</td>
-<td>害怕的</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-27</title>
-    <url>/2020/04/11/go-big-or-go-home-27/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>emergency</td>
-<td>紧急情况</td>
-<td>It’s an emergency.Get her to the hospital now!</td>
-</tr>
-<tr>
-<td>do one’s best</td>
-<td>尽最大的努力</td>
-<td>Don’t worry so much about the exam.Just do your best</td>
-</tr>
-<tr>
-<td>absolute</td>
-<td>绝对的</td>
-<td>Motion is absolute,while stillness is relative</td>
-</tr>
-<tr>
-<td>tongue</td>
-<td>舌头</td>
-<td>The boy sticks out his tongue to make a face to me</td>
-</tr>
-<tr>
-<td>instruct</td>
-<td>指导</td>
-<td>My mom instructs me how to play golf</td>
-</tr>
-<tr>
-<td>nylon</td>
-<td>尼龙</td>
-<td>The socks,strap and cord are all made of nylon</td>
-</tr>
-<tr>
-<td>strange</td>
-<td>奇怪的</td>
-<td>I met a guy wearing strange clothes on the subway</td>
-</tr>
-<tr>
-<td>secondhand</td>
-<td>二手的</td>
-<td>The boy bought a secondhand book from the old man</td>
-</tr>
-<tr>
-<td>expand</td>
-<td>扩大</td>
-<td>Our business is expanding across the whole country</td>
-</tr>
-<tr>
-<td>forest</td>
-<td>森林</td>
-<td>The sun shines through the forest</td>
+<td>aboard</td>
+<td>在…上</td>
+<td>In Thailand,fishers often cook and have meals aboard their boats</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2585,8 +2580,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-26</title>
-    <url>/2020/04/10/go-big-or-go-home-26/</url>
+    <title>go big or go home-27</title>
+    <url>/2020/04/11/go-big-or-go-home-27/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2596,49 +2591,54 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>give in</td>
-<td>投降</td>
-<td>He finally gave in to me and admintted that I’m the winner</td>
+<td>emergency</td>
+<td>紧急情况</td>
+<td>It’s an emergency.Get her to the hospital now!</td>
 </tr>
 <tr>
-<td>transform</td>
-<td>改变</td>
-<td>You will transform into a beautiful butterfly one day</td>
+<td>do one’s best</td>
+<td>尽最大的努力</td>
+<td>Don’t worry so much about the exam.Just do your best</td>
 </tr>
 <tr>
-<td>department</td>
-<td>部门</td>
-<td>Our company consists of financial department,sales department,and technical department</td>
+<td>absolute</td>
+<td>绝对的</td>
+<td>Motion is absolute,while stillness is relative</td>
 </tr>
 <tr>
-<td>put off</td>
-<td>推迟</td>
-<td>The sports meeting will be put off because of the rain</td>
+<td>tongue</td>
+<td>舌头</td>
+<td>The boy sticks out his tongue to make a face to me</td>
 </tr>
 <tr>
-<td>mass</td>
-<td>众多</td>
-<td>A mass of people are waiting</td>
+<td>instruct</td>
+<td>指导</td>
+<td>My mom instructs me how to play golf</td>
 </tr>
 <tr>
-<td>allow</td>
-<td>允许</td>
-<td>The green light allows you to go</td>
+<td>nylon</td>
+<td>尼龙</td>
+<td>The socks,strap and cord are all made of nylon</td>
 </tr>
 <tr>
-<td>serious</td>
-<td>认真的</td>
-<td>He is always very serious while working</td>
+<td>strange</td>
+<td>奇怪的</td>
+<td>I met a guy wearing strange clothes on the subway</td>
 </tr>
 <tr>
-<td>seem</td>
-<td>看起来</td>
-<td>It seems his car has a serious problem</td>
+<td>secondhand</td>
+<td>二手的</td>
+<td>The boy bought a secondhand book from the old man</td>
 </tr>
 <tr>
-<td>aboard</td>
-<td>在…上</td>
-<td>In Thailand,fishers often cook and have meals aboard their boats</td>
+<td>expand</td>
+<td>扩大</td>
+<td>Our business is expanding across the whole country</td>
+</tr>
+<tr>
+<td>forest</td>
+<td>森林</td>
+<td>The sun shines through the forest</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2810,8 +2810,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-30</title>
-    <url>/2020/04/14/go-big-or-go-home-30/</url>
+    <title>go big or go home-32</title>
+    <url>/2020/04/16/go-big-or-go-home-32/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2821,59 +2821,69 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>apartment</td>
-<td>公寓</td>
-<td>This apartment is so bright with these windows</td>
+<td>latter</td>
+<td>后者</td>
+<td>When asked what he would prefer;an apple or pizza,the boy chose the latter</td>
 </tr>
 <tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
+<td>kitchen</td>
+<td>厨房</td>
+<td>The kitchen is clean and modern</td>
 </tr>
 <tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
+<td>senior</td>
+<td>年长的</td>
+<td>The senior citizens in the community often have fun talking to each other</td>
 </tr>
 <tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
+<td>build</td>
+<td>建造</td>
+<td>They are building a block of offices</td>
 </tr>
 <tr>
-<td>catch</td>
-<td>捕捉</td>
-<td>The goalkeeper caught the ball.What a save!</td>
+<td>parcel</td>
+<td>包裹</td>
+<td>The person has a lot of parcels to send on Novermber 11th</td>
+</tr>
+<tr>
+<td>animal</td>
+<td>动物</td>
+<td>There are many kinds of animals on earth</td>
+</tr>
+<tr>
+<td>take out the rubbish</td>
+<td>倒垃圾</td>
+<td>Could you please take out the rubbish when you leave?</td>
+</tr>
+<tr>
+<td>put it in the trash can</td>
+<td>放进垃圾桶</td>
+<td>Don’t drop the bottle there,please put it in the trash can</td>
+</tr>
+<tr>
+<td>empty the recycle bin</td>
+<td>清理垃圾桶</td>
+<td>-</td>
+</tr>
+<tr>
+<td>garbage</td>
+<td>食物垃圾(美式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>trash</td>
+<td>纸/塑料(美式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>rubbish</td>
+<td>垃圾(英式)</td>
+<td>-</td>
 </tr>
 <tr>
 <td>dead</td>
 <td>死的</td>
 <td>The fish is dead</td>
-</tr>
-<tr>
-<td>sparrow</td>
-<td>麻雀</td>
-<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
-</tr>
-<tr>
-<td>mud</td>
-<td>泥</td>
-<td>Oh no!I think our car is stuck in the mud!</td>
-</tr>
-<tr>
-<td>stuck</td>
-<td>不能动的</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>shapes</td>
-<td>形状</td>
-<td>I like collecting glasses of all shapes and sizes</td>
-</tr>
-<tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversation was interrputed by a knock at the door</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3075,8 +3085,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-32</title>
-    <url>/2020/04/16/go-big-or-go-home-32/</url>
+    <title>go big or go home-30</title>
+    <url>/2020/04/14/go-big-or-go-home-30/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3086,134 +3096,59 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>latter</td>
-<td>后者</td>
-<td>When asked what he would prefer;an apple or pizza,the boy chose the latter</td>
+<td>apartment</td>
+<td>公寓</td>
+<td>This apartment is so bright with these windows</td>
 </tr>
 <tr>
-<td>kitchen</td>
-<td>厨房</td>
-<td>The kitchen is clean and modern</td>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
 </tr>
 <tr>
-<td>senior</td>
-<td>年长的</td>
-<td>The senior citizens in the community often have fun talking to each other</td>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
 </tr>
 <tr>
-<td>build</td>
-<td>建造</td>
-<td>They are building a block of offices</td>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
 </tr>
 <tr>
-<td>parcel</td>
-<td>包裹</td>
-<td>The person has a lot of parcels to send on Novermber 11th</td>
-</tr>
-<tr>
-<td>animal</td>
-<td>动物</td>
-<td>There are many kinds of animals on earth</td>
-</tr>
-<tr>
-<td>take out the rubbish</td>
-<td>倒垃圾</td>
-<td>Could you please take out the rubbish when you leave?</td>
-</tr>
-<tr>
-<td>put it in the trash can</td>
-<td>放进垃圾桶</td>
-<td>Don’t drop the bottle there,please put it in the trash can</td>
-</tr>
-<tr>
-<td>empty the recycle bin</td>
-<td>清理垃圾桶</td>
-<td>-</td>
-</tr>
-<tr>
-<td>garbage</td>
-<td>食物垃圾(美式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>trash</td>
-<td>纸/塑料(美式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>rubbish</td>
-<td>垃圾(英式)</td>
-<td>-</td>
+<td>catch</td>
+<td>捕捉</td>
+<td>The goalkeeper caught the ball.What a save!</td>
 </tr>
 <tr>
 <td>dead</td>
 <td>死的</td>
 <td>The fish is dead</td>
 </tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-33</title>
-    <url>/2020/04/17/go-big-or-go-home-33/</url>
-    <content><![CDATA[<table>
-<thead>
 <tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>suspect</td>
-<td>嫌疑犯</td>
-<td>The suspect is talking with his lawyer</td>
+<td>sparrow</td>
+<td>麻雀</td>
+<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
 </tr>
 <tr>
-<td>hand in</td>
-<td>上交</td>
-<td>He’s handing in his homework to the teacher</td>
+<td>mud</td>
+<td>泥</td>
+<td>Oh no!I think our car is stuck in the mud!</td>
 </tr>
 <tr>
-<td>ladder</td>
-<td>梯子</td>
-<td>The man is standing on a ladder</td>
+<td>stuck</td>
+<td>不能动的</td>
+<td>同上</td>
 </tr>
 <tr>
-<td>weakness</td>
-<td>弱点</td>
-<td>Vampires’s weakness is that they are afraid of sunshine</td>
+<td>shapes</td>
+<td>形状</td>
+<td>I like collecting glasses of all shapes and sizes</td>
 </tr>
 <tr>
-<td>French</td>
-<td>法国</td>
-<td>The Eiffel tower is a French landmark</td>
-</tr>
-<tr>
-<td>million</td>
-<td>百万</td>
-<td>-</td>
-</tr>
-<tr>
-<td>billion</td>
-<td>十亿</td>
-<td>-</td>
-</tr>
-<tr>
-<td>minibus</td>
-<td>小巴士</td>
-<td>Let’s take the minibus on a trip!</td>
-</tr>
-<tr>
-<td>junior</td>
-<td>三年级学生</td>
-<td>The junior is preparing for her exams in the dormitory</td>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversation was interrputed by a knock at the door</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3253,7 +3188,7 @@
 <tr>
 <td>acknowledge</td>
 <td>告知收到</td>
-<td>Acknowledge，We will bake the bread soon</td>
+<td>Acknowledge,We will bake the bread soon</td>
 </tr>
 <tr>
 <td>radiation</td>
@@ -3330,8 +3265,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-34</title>
-    <url>/2020/04/18/go-big-or-go-home-34/</url>
+    <title>go big or go home-33</title>
+    <url>/2020/04/17/go-big-or-go-home-33/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3341,59 +3276,49 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>point</td>
-<td>指向</td>
-<td>They are pointing at each other</td>
-</tr>
-<tr>
-<td>department store</td>
-<td>百货商场</td>
-<td>This department store sells many different kinds of goods</td>
-</tr>
-<tr>
-<td>silver medal</td>
-<td>银牌</td>
-<td>The athlete who took second place got a silver medal</td>
-</tr>
-<tr>
-<td>forgive</td>
-<td>原谅</td>
-<td>The girl says,”Can you forgive me,mom?”</td>
-</tr>
-<tr>
-<td>go on doing</td>
-<td>继续干某事</td>
-<td>Even though he was tired,he went on working for 12 hours</td>
-</tr>
-<tr>
-<td>alone</td>
-<td>孤单</td>
-<td>Seesaws are not very fun when you’re alone</td>
-</tr>
-<tr>
-<td>brotherhood</td>
-<td>手足情谊</td>
-<td>The brotherhood between the boys will keep them close forever</td>
-</tr>
-<tr>
-<td>statistics</td>
-<td>统计数字</td>
-<td>I use facts and statistics to prove my point</td>
-</tr>
-<tr>
-<td>bookstore</td>
-<td>书店</td>
-<td>She’s buying books in the bookstore</td>
-</tr>
-<tr>
-<td>decision</td>
-<td>决定</td>
-<td>I’ve made my decision to buy this beautiful skirt</td>
-</tr>
-<tr>
 <td>suspect</td>
 <td>嫌疑犯</td>
 <td>The suspect is talking with his lawyer</td>
+</tr>
+<tr>
+<td>hand in</td>
+<td>上交</td>
+<td>He’s handing in his homework to the teacher</td>
+</tr>
+<tr>
+<td>ladder</td>
+<td>梯子</td>
+<td>The man is standing on a ladder</td>
+</tr>
+<tr>
+<td>weakness</td>
+<td>弱点</td>
+<td>Vampires’s weakness is that they are afraid of sunshine</td>
+</tr>
+<tr>
+<td>French</td>
+<td>法国</td>
+<td>The Eiffel tower is a French landmark</td>
+</tr>
+<tr>
+<td>million</td>
+<td>百万</td>
+<td>-</td>
+</tr>
+<tr>
+<td>billion</td>
+<td>十亿</td>
+<td>-</td>
+</tr>
+<tr>
+<td>minibus</td>
+<td>小巴士</td>
+<td>Let’s take the minibus on a trip!</td>
+</tr>
+<tr>
+<td>junior</td>
+<td>三年级学生</td>
+<td>The junior is preparing for her exams in the dormitory</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3459,6 +3384,81 @@
 <td>amateur</td>
 <td>业余爱好者</td>
 <td>The office worker is also an amateur soccer player</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-34</title>
+    <url>/2020/04/18/go-big-or-go-home-34/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>point</td>
+<td>指向</td>
+<td>They are pointing at each other</td>
+</tr>
+<tr>
+<td>department store</td>
+<td>百货商场</td>
+<td>This department store sells many different kinds of goods</td>
+</tr>
+<tr>
+<td>silver medal</td>
+<td>银牌</td>
+<td>The athlete who took second place got a silver medal</td>
+</tr>
+<tr>
+<td>forgive</td>
+<td>原谅</td>
+<td>The girl says,”Can you forgive me,mom?”</td>
+</tr>
+<tr>
+<td>go on doing</td>
+<td>继续干某事</td>
+<td>Even though he was tired,he went on working for 12 hours</td>
+</tr>
+<tr>
+<td>alone</td>
+<td>孤单</td>
+<td>Seesaws are not very fun when you’re alone</td>
+</tr>
+<tr>
+<td>brotherhood</td>
+<td>手足情谊</td>
+<td>The brotherhood between the boys will keep them close forever</td>
+</tr>
+<tr>
+<td>statistics</td>
+<td>统计数字</td>
+<td>I use facts and statistics to prove my point</td>
+</tr>
+<tr>
+<td>bookstore</td>
+<td>书店</td>
+<td>She’s buying books in the bookstore</td>
+</tr>
+<tr>
+<td>decision</td>
+<td>决定</td>
+<td>I’ve made my decision to buy this beautiful skirt</td>
+</tr>
+<tr>
+<td>suspect</td>
+<td>嫌疑犯</td>
+<td>The suspect is talking with his lawyer</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -4046,25 +4046,6 @@
       </tags>
   </entry>
   <entry>
-    <title>leetcode338</title>
-    <url>/2019/10/20/leetcode338/</url>
-    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
-
-<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode338</tag>
-        <tag>二进制数</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode79</title>
     <url>/2019/10/20/leetcode79/</url>
     <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
@@ -4121,6 +4102,50 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode338</title>
+    <url>/2019/10/20/leetcode338/</url>
+    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
+
+<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode338</tag>
+        <tag>二进制数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>redis系列-Redisson分布式锁验证+踩坑</title>
+    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</url>
+    <content><![CDATA[<h3 id="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码"><a href="#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码" class="headerlink" title="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码"></a>本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.redisson&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;redisson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.11.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span>: 秒杀商品接口, 这里为了测试就手动创建三个线程</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> JsonObject</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@exception</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@author</span> mazhq</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2018/11/18 13:46</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis() + TIMEOUT;</span><br><span class="line">        RLock lock=</span><br><span class="line">                redissonClient.getLock(KEY);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Thread a = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程1"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread b = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程2"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread c = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程3"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            a.start();</span><br><span class="line">            b.start();</span><br><span class="line">            c.start();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"--------"</span>);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"111"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 库存减1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下"><a href="#重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下" class="headerlink" title="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下"></a>重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下</h3><p><a href="https://blog.csdn.net/zilong_zilong/article/details/78252037" target="_blank" rel="noopener">https://blog.csdn.net/zilong_zilong/article/details/78252037</a></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里使用了单节点，还有集群模式，哨兵模式，种类很多config.useSingleServer</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedissonClinetConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redissonClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Config config=<span class="keyword">new</span> Config();</span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">"redis://127.0.0.1:6379"</span>)</span><br><span class="line">                .setConnectionPoolSize(<span class="number">500</span>)</span><br><span class="line">                .setIdleConnectionTimeout(<span class="number">10000</span>)</span><br><span class="line">                .setConnectTimeout(<span class="number">30000</span>)</span><br><span class="line">                .setTimeout(<span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line">        RedissonClient redisson=Redisson.create(config);</span><br><span class="line">        <span class="keyword">return</span> redisson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"><a href="#先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功" class="headerlink" title="先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"></a>先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功</h3><p><img src="../image/kill.png" alt="kill.png" title="kill"></p>
+<p><img src="../image/begin.png" alt="begin.png" title="begin"></p>
+<p><img src="../image/end.png" alt="end.png" title="end"></p>
+<h3 id="我们来验证下"><a href="#我们来验证下" class="headerlink" title="我们来验证下"></a>我们来验证下</h3><p><img src="../image/check.png" alt="check.png" title="check"></p>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis分布式锁</tag>
+        <tag>Redisson框架</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>redis系列-实现一个延时消费队列</title>
     <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%BB%B6%E6%97%B6%E6%B6%88%E8%B4%B9%E9%98%9F%E5%88%97/</url>
     <content><![CDATA[<h3 id="用Zset和Hash实现一个延时队列，话不多说，附上代码"><a href="#用Zset和Hash实现一个延时队列，话不多说，附上代码" class="headerlink" title="用Zset和Hash实现一个延时队列，话不多说，附上代码"></a>用Zset和Hash实现一个延时队列，话不多说，附上代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertToRank</span><span class="params">(String id, String msg, String isNow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score=<span class="keyword">this</span>.getScore(isNow);</span><br><span class="line">        String uuid=UUID.randomUUID().toString().replaceAll(<span class="string">"-"</span>, <span class="string">""</span>);</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=</span><br><span class="line">                stringRedisTemplate.opsForHash();</span><br><span class="line">        Map&lt;String, String&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>, id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>, msg);</span><br><span class="line">        opsForHash.putAll(Constant.KEY_HASH + uuid, map);</span><br><span class="line">        <span class="keyword">this</span>.insertZset(uuid, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入zset，按照score排序</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> score</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertZset</span><span class="params">(String key, <span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=</span><br><span class="line">                stringRedisTemplate.opsForZSet();</span><br><span class="line">        opsForZSet.add(Constant.KEY_ZSET, key, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前时间</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> isNow is时表示实时消息，放入zset前面</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">double</span> <span class="title">getScore</span><span class="params">(String isNow)</span> </span>&#123;</span><br><span class="line">        Date nowTime=<span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">        SimpleDateFormat simpleDateFormat=<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMddHHmmss"</span>);</span><br><span class="line">        String now=simpleDateFormat.format(nowTime);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"is"</span>.equals(isNow)) &#123;</span><br><span class="line">            <span class="keyword">return</span> Double.parseDouble(now.substring(<span class="number">0</span>, <span class="number">12</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Double.parseDouble(now);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 抢锁</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOut</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key, String value, <span class="keyword">long</span> timeOut)</span> </span>&#123;</span><br><span class="line">        Boolean isSuccess=stringRedisTemplate.opsForValue().setIfAbsent(key, value);</span><br><span class="line">        <span class="keyword">if</span> (isSuccess) &#123;</span><br><span class="line">            stringRedisTemplate.expire(key, timeOut, TimeUnit.MINUTES);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isSuccess;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 释放锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delLock</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取zset第一条数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstData</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=stringRedisTemplate.opsForZSet();</span><br><span class="line">        Set&lt;String&gt; range=opsForZSet.range(key, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (!CollectionUtils.isEmpty(range)) &#123;</span><br><span class="line">            String uuid = range.iterator().next();</span><br><span class="line">            opsForZSet.remove(key,uuid);</span><br><span class="line">            <span class="keyword">return</span> uuid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询当前Zset多少个数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getZsetSize</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stringRedisTemplate.opsForZSet().zCard(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取hash数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,Object&gt; <span class="title">getHashData</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=stringRedisTemplate.opsForHash();</span><br><span class="line">        Object id=opsForHash.get(key, <span class="string">"id"</span>);</span><br><span class="line">        Object msg=opsForHash.get(key, <span class="string">"msg"</span>);</span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>,id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>,msg);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">(CountDownLatch countDownLatch,String uuid)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Map&lt;String, Object&gt; hashData=<span class="keyword">this</span>.getHashData(Constant.KEY_HASH + uuid);</span><br><span class="line">            log.info(<span class="string">"开始发送"</span>+hashData.get(<span class="string">"id"</span>)+<span class="string">"消息: "</span>+hashData.get(<span class="string">"msg"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            countDownLatch.countDown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -4154,28 +4179,21 @@
       </tags>
   </entry>
   <entry>
-    <title>redis系列-Redisson分布式锁验证+踩坑</title>
-    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</url>
-    <content><![CDATA[<h3 id="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码"><a href="#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码" class="headerlink" title="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码"></a>本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.redisson&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;redisson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.11.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span>: 秒杀商品接口, 这里为了测试就手动创建三个线程</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> JsonObject</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@exception</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@author</span> mazhq</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2018/11/18 13:46</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis() + TIMEOUT;</span><br><span class="line">        RLock lock=</span><br><span class="line">                redissonClient.getLock(KEY);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Thread a = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程1"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread b = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程2"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread c = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程3"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            a.start();</span><br><span class="line">            b.start();</span><br><span class="line">            c.start();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"--------"</span>);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"111"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 库存减1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下"><a href="#重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下" class="headerlink" title="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下"></a>重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下</h3><p><a href="https://blog.csdn.net/zilong_zilong/article/details/78252037" target="_blank" rel="noopener">https://blog.csdn.net/zilong_zilong/article/details/78252037</a></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里使用了单节点，还有集群模式，哨兵模式，种类很多config.useSingleServer</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedissonClinetConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redissonClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Config config=<span class="keyword">new</span> Config();</span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">"redis://127.0.0.1:6379"</span>)</span><br><span class="line">                .setConnectionPoolSize(<span class="number">500</span>)</span><br><span class="line">                .setIdleConnectionTimeout(<span class="number">10000</span>)</span><br><span class="line">                .setConnectTimeout(<span class="number">30000</span>)</span><br><span class="line">                .setTimeout(<span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line">        RedissonClient redisson=Redisson.create(config);</span><br><span class="line">        <span class="keyword">return</span> redisson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"><a href="#先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功" class="headerlink" title="先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"></a>先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功</h3><p><img src="../image/kill.png" alt="kill.png" title="kill"></p>
-<p><img src="../image/begin.png" alt="begin.png" title="begin"></p>
-<p><img src="../image/end.png" alt="end.png" title="end"></p>
-<h3 id="我们来验证下"><a href="#我们来验证下" class="headerlink" title="我们来验证下"></a>我们来验证下</h3><p><img src="../image/check.png" alt="check.png" title="check"></p>
+    <title>你看着是一坨，它也经历了很多</title>
+    <url>/2020/04/15/%E4%BD%A0%E7%9C%8B%E7%9D%80%E6%98%AF%E4%B8%80%E5%9D%A8%EF%BC%8C%E5%AE%83%E4%B9%9F%E7%BB%8F%E5%8E%86%E4%BA%86%E5%BE%88%E5%A4%9A/</url>
+    <content><![CDATA[<p>你看着它是一坨，它也经历了很多。</p>
+<p>今天发生了一个bug，钉钉推送数据时出现错误，目标用户收到的数据发生错乱，推送了目标用户的数据子集</p>
+<p>起因：我们的数据权限依赖于商分的一张手工维护的底表，这张底表可以理解为hr在录入员工信息的一张表。只不过这里维护的不是员工信息，是数据权限，既然是手工维护，难免会出现差错。一起背锅。</p>
+<p>以上是背景，加上原来的产品离职，换了新的产品，可能在设计上两位观念不符，以这个为起因，这位新的产品一直在diss我们的系统，这里是bug，那里是bug，只要不按照她的思维方式，那就被认为是bug。</p>
+<p>这款产品我从实习的时候就在做，已经马上一年了，认真迭代，提出自己的想法，从重复代码如何自动化，减少工作量，为这款产品做了各种辅助的工具，各种脚本，各种统计的信息，最近才加上了PVUV的统计(因为觉得公司统计的数据不准确，所以从后端接口的角度去进行了统计)，到现在产品已经趋于稳定，虽然承认这个系统技术含量不高，但确实解决了一些人的问题，还是有他的价值的，今天听到这么diss这款产品，这么diss我们的小伙伴，心里真不是滋味，凭什么我们迭代了这么久的东西，她在不看之前prd的前提下可以这样说，今天是我在这里工作之后第一次感觉到不快乐，你看着是一坨的东西，也经历了很多人的心血。</p>
+<p>同时大公司内部才会出现的一个问题是，可能会出现多种产品满足了同样的业务需求，如果说是内部竞争，像腾讯一样，谁做成了是谁的，这是良心的竞争，而我要说的是，在已经有了满足业务需求的产品的时候，还要从头在做一款几乎是一样的产品，为什么耗费这样的人力财力？不仅我们部门，其他部门也存在，不为了公司，真正的去考虑，而是为了那所谓的绩效，当然为了钱无可厚非，但如果这样做就能打高绩效的公司真的不知道待下去的意义，我觉得如果我离职这个应该算一点原因。</p>
 ]]></content>
       <categories>
-        <category>redis</category>
+        <category>个人经历</category>
       </categories>
       <tags>
-        <tag>redis分布式锁</tag>
-        <tag>Redisson框架</tag>
+        <tag>个人经历</tag>
+        <tag>转正述职</tag>
       </tags>
   </entry>
   <entry>
@@ -4223,24 +4241,6 @@
       <tags>
         <tag>深入理解Java虚拟机</tag>
         <tag>Java内存区域与内存溢出异常</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>你看着是一坨，它也经历了很多</title>
-    <url>/2020/04/15/%E4%BD%A0%E7%9C%8B%E7%9D%80%E6%98%AF%E4%B8%80%E5%9D%A8%EF%BC%8C%E5%AE%83%E4%B9%9F%E7%BB%8F%E5%8E%86%E4%BA%86%E5%BE%88%E5%A4%9A/</url>
-    <content><![CDATA[<p>你看着它是一坨，它也经历了很多。</p>
-<p>今天发生了一个bug，钉钉推送数据时出现错误，目标用户收到的数据发生错乱，推送了目标用户的数据子集</p>
-<p>起因：我们的数据权限依赖于商分的一张手工维护的底表，这张底表可以理解为hr在录入员工信息的一张表。只不过这里维护的不是员工信息，是数据权限，既然是手工维护，难免会出现差错。一起背锅。</p>
-<p>以上是背景，加上原来的产品离职，换了新的产品，可能在设计上两位观念不符，以这个为起因，这位新的产品一直在diss我们的系统，这里是bug，那里是bug，只要不按照她的思维方式，那就被认为是bug。</p>
-<p>这款产品我从实习的时候就在做，已经马上一年了，认真迭代，提出自己的想法，从重复代码如何自动化，减少工作量，为这款产品做了各种辅助的工具，各种脚本，各种统计的信息，最近才加上了PVUV的统计(因为觉得公司统计的数据不准确，所以从后端接口的角度去进行了统计)，到现在产品已经趋于稳定，虽然承认这个系统技术含量不高，但确实解决了一些人的问题，还是有他的价值的，今天听到这么diss这款产品，这么diss我们的小伙伴，心里真不是滋味，凭什么我们迭代了这么久的东西，她在不看之前prd的前提下可以这样说，今天是我在这里工作之后第一次感觉到不快乐，你看着是一坨的东西，也经历了很多人的心血。</p>
-<p>同时大公司内部才会出现的一个问题是，可能会出现多种产品满足了同样的业务需求，如果说是内部竞争，像腾讯一样，谁做成了是谁的，这是良心的竞争，而我要说的是，在已经有了满足业务需求的产品的时候，还要从头在做一款几乎是一样的产品，为什么耗费这样的人力财力？不仅我们部门，其他部门也存在，不为了公司，真正的去考虑，而是为了那所谓的绩效，当然为了钱无可厚非，但如果这样做就能打高绩效的公司真的不知道待下去的意义，我觉得如果我离职这个应该算一点原因。</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>转正述职</tag>
       </tags>
   </entry>
   <entry>
@@ -4561,68 +4561,6 @@
       </tags>
   </entry>
   <entry>
-    <title>彻底搞懂ThreadLocal</title>
-    <url>/2020/03/10/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82ThreadLocal/</url>
-    <content><![CDATA[<h3 id="1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"><a href="#1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？" class="headerlink" title="1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"></a>1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？</h3><p>答：</p>
-<p>从JAVA官方对ThreadLocal类的说明定义（定义在示例代码中）：ThreadLocal类用来提供线程内部的局部变量。这种变量在多线程环境下访问（通过get和set方法访问）时能保证各个线程的变量相对独立于其他线程内的变量。ThreadLocal实例通常来说都是private static类型的，用于关联线程和线程上下文。</p>
-<p>我们可以得知ThreadLocal的作用是：ThreadLocal的作用是提供线程内的局部变量，不同的线程之间不会相互干扰，这种变量在线程的生命周期内起作用，减少同一个线程内多个函数或组件之间一些公共变量的传递的复杂度。</p>
-<p>上述可以概述为：ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。</p>
-<p>示例代码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 该类提供了线程局部 (thread-local) 变量。 这些变量不同于它们的普通对应物，</span><br><span class="line"> * 因为访问某个变量（通过其 get 或 set 方法）的每个线程都有自己的局部变量</span><br><span class="line"> * 它独立于变量的初始化副本。ThreadLocal 实例通常是类中的 private static 字段</span><br><span class="line"> * 它们希望将状态与某一个线程（例如，用户 ID 或事务 ID）相关联。</span><br><span class="line"> *</span><br><span class="line"> * 例如，以下类生成对每个线程唯一的局部标识符。</span><br><span class="line"> * </span><br><span class="line"> * 线程 ID 是在第一次调用 UniqueThreadIdGenerator.getCurrentThreadId() 时分配的，</span><br><span class="line"> * 在后续调用中不会更改。</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * import java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"> *</span><br><span class="line"> * public class ThreadId &#123;</span><br><span class="line"> *     // 原子性整数，包含下一个分配的线程Thread ID </span><br><span class="line"> *     private static final AtomicInteger nextId = new AtomicInteger(0);</span><br><span class="line"> *</span><br><span class="line"> *     // 每一个线程对应的Thread ID</span><br><span class="line"> *     private static final ThreadLocal&lt;Integer&gt; threadId =</span><br><span class="line"> *         new ThreadLocal&lt;Integer&gt;() &#123;</span><br><span class="line"> *             @Override protected Integer initialValue() &#123;</span><br><span class="line"> *                 return nextId.getAndIncrement();</span><br><span class="line"> *         &#125;</span><br><span class="line"> *     &#125;;</span><br><span class="line"> *</span><br><span class="line"> *     // 返回当前线程对应的唯一Thread ID, 必要时会进行分配</span><br><span class="line"> *     public static int get() &#123;</span><br><span class="line"> *         return threadId.get();</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> * 每个线程都保持对其线程局部变量副本的隐式引用，只要线程是活动的并且 ThreadLocal 实例是可访问的</span><br><span class="line"> * 在线程消失之后，其线程局部实例的所有副本都会被垃圾回收，（除非存在对这些副本的其他引用）。</span><br><span class="line"> *</span><br><span class="line"> * @author  Josh Bloch and Doug Lea</span><br><span class="line"> * @since   1.2</span><br><span class="line"> */</span><br><span class="line">public class ThreadLocal&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">   /**</span><br><span class="line">     * 自定义哈希码（仅在ThreadLocalMaps中有用）</span><br><span class="line">     * 可用于降低hash冲突</span><br><span class="line">     */</span><br><span class="line">    private final int threadLocalHashCode = nextHashCode();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 生成下一个哈希码hashCode. 生成操作是原子性的. 从0开始</span><br><span class="line">     * </span><br><span class="line">     */</span><br><span class="line">    private static AtomicInteger nextHashCode =</span><br><span class="line">        new AtomicInteger();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 表示了连续分配的两个ThreadLocal实例的threadLocalHashCode值的增量 </span><br><span class="line">     */</span><br><span class="line">    private static final int HASH_INCREMENT = 0x61c88647;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回下一个哈希码hashCode</span><br><span class="line">     */</span><br><span class="line">    private static int nextHashCode() &#123;</span><br><span class="line">        return nextHashCode.getAndAdd(HASH_INCREMENT);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中nextHashCode()方法就是一个原子类不停地去加上0x61c88647，这是一个很特别的数，叫斐波那契散列（Fibonacci Hashing），斐波那契又有一个名称叫黄金分割，也就是说将这个数作为哈希值的增量将会使哈希表的分布更为均匀。</p>
-<h3 id="2-问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？"><a href="#2-问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？" class="headerlink" title="2.问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？"></a>2.问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？</h3><p>答：</p>
-<p>通常，如果我不去看源代码的话，我猜ThreadLocal是这样子设计的：每个ThreadLocal类都创建一个Map，然后用线程的ID threadID作为Map的key，要存储的局部变量作为Map的value，这样就能达到各个线程的值隔离的效果。这是最简单的设计方法，JDK最早期的ThreadLocal就是这样设计的。</p>
-<p>但是，JDK后面优化了设计方案，现时JDK8 ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。</p>
-<p>这个设计与我们一开始说的设计刚好相反，这样设计有如下几点优势：<br>1） 这样设计之后每个Map存储的Entry数量就会变小，因为之前的存储数量由Thread的数量决定，现在是由ThreadLocal的数量决定。</p>
-<h4 id="关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1-8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。"><a href="#关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1-8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。" class="headerlink" title="关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1.8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。"></a>关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1.8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。</h4><p>2） 当Thread销毁之后，对应的ThreadLocalMap也会随之销毁，能减少内存的使用。</p>
-<h3 id="3-问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set-T-value-，获取get-，删除remove-等操作。"><a href="#3-问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set-T-value-，获取get-，删除remove-等操作。" class="headerlink" title="3.问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set(T value)，获取get()，删除remove()等操作。"></a>3.问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set(T value)，获取get()，删除remove()等操作。</h3><p>答：</p>
-<p>调用get()操作获取ThreadLocal中对应当前线程存储的值时，进行了如下操作：<br>1 ) 获取当前线程Thread对象，进而获取此线程对象中维护的ThreadLocalMap对象。<br>2 ) 判断当前的ThreadLocalMap是否存在：</p>
-<p>如果存在，则以当前的ThreadLocal 为 key，调用ThreadLocalMap中的getEntry方法获取对应的存储实体 e。找到对应的存储实体 e，获取存储实体 e 对应的 value值，即为我们想要的当前线程对应此ThreadLocal的值，返回结果值。<br>如果不存在，则证明此线程没有维护的ThreadLocalMap对象，调用setInitialValue方法进行初始化。返回setInitialValue初始化的值。</p>
-<p>setInitialValue方法的操作如下：<br>1 ) 调用initialValue获取初始化的值。<br>2 ) 获取当前线程Thread对象，进而获取此线程对象中维护的ThreadLocalMap对象。<br>3 ) 判断当前的ThreadLocalMap是否存在：</p>
-<p>如果存在，则调用map.set设置此实体entry。</p>
-<p>如果不存在，则调用createMap进行ThreadLocalMap对象的初始化，并将此实体entry作为第一个值存放至ThreadLocalMap中。</p>
-<h3 id="4-问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗"><a href="#4-问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗" class="headerlink" title="4.问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗?"></a>4.问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗?</h3><p>答：</p>
-<p>ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，核心组成元素有：<br>1 ) Entry[] table;：底层哈希表 table, 必要时需要进行扩容，底层哈希表 table.length 长度必须是2的n次方。<br>2 ) int size;：实际存储键值对元素个数 entries<br>3 ) int threshold;：下一次扩容时的阈值，阈值 threshold = 底层哈希表table的长度 len * 2 / 3。当size &gt;= threshold时，遍历table并删除key为null的元素，如果删除后size &gt;= threshold*3/4时，需要对table进行扩容（详情请查看set(ThreadLocal&lt;?&gt; key, Object value)方法说明）。</p>
-<p>其中Entry[] table;哈希表存储的核心元素是Entry，Entry包含：<br>1 ) ThreadLocal&lt;?&gt; k；：当前存储的ThreadLocal实例对象<br>2 ) Object value;：当前 ThreadLocal 对应储存的值value</p>
-<p>需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。(弱引用相关问题解释请查看 问答 5)</p>
-<h3 id="5-问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？"><a href="#5-问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？" class="headerlink" title="5.问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？"></a>5.问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？</h3><p>答：</p>
-<p>首先，回答这个问题之前，我需要解释一下什么是强引用，什么是弱引用。</p>
-<p>我们在正常情况下，普遍使用的是强引用：<br>A a = new A();</p>
-<p>B b = new B();复制代码当 a = null;b = null;时，一段时间后，JAVA垃圾回收机制GC会将 a 和 b 对应所分配的内存空间给回收。<br>但考虑这样一种情况：<br>C c = new C(b);<br>b = null;复制代码当 b 被设置成null时，那么是否意味这一段时间后GC工作可以回收 b 所分配的内存空间呢？答案是否定的，因为即使 b 被设置成null，但 c 仍然持有对 b 的引用，而且还是强引用，所以GC不会回收 b 原先所分配的空间，既不能回收，又不能使用，这就造成了 内存泄露。<br>那么如何处理呢？<br>可以通过c = null;，也可以使用弱引用WeakReference w = new WeakReference(b);。因为使用了弱引用WeakReference，GC是可以回收 b 原先所分配的空间的。<br>上述解释主要参考自：对ThreadLocal实现原理的一点思考</p>
-<p>回到ThreadLocal的层面上，ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收，这样一来，ThreadLocalMap中就会出现key为null的Entry，就没有办法访问这些key为null的Entry的value，如果当前线程再迟迟不结束的话，这些key为null的Entry的value就会一直存在一条强引用链：Thread Ref -&gt; Thread -&gt; ThreaLocalMap -&gt; Entry -&gt; value 永远无法回收，造成内存泄漏。</p>
-<p>其实，ThreadLocalMap的设计中已经考虑到这种情况，也加上了一些防护措施：在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。<br>但是这些被动的预防措施并不能保证不会内存泄漏：</p>
-<p>使用static的ThreadLocal，延长了ThreadLocal的生命周期，可能导致的内存泄漏（参考ThreadLocal 内存泄露的实例分析）。</p>
-<p>分配使用了ThreadLocal又不再调用get(),set(),remove()方法，那么就会导致内存泄漏。</p>
-<p>从表面上看内存泄漏的根源在于使用了弱引用。网上的文章大多着重分析ThreadLocal使用了弱引用会导致内存泄漏，但是另一个问题也同样值得思考：为什么使用弱引用而不是强引用？<br>我们先来看看官方文档的说法：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">To help deal with very large and long-lived usages, </span><br><span class="line">the hash table entries use WeakReferences for keys.</span><br></pre></td></tr></table></figure>
-
-<p>为了应对非常大和长时间的用途，哈希表使用弱引用的 key。<br>下面我们分两种情况讨论：</p>
-<p>key 使用强引用：引用的ThreadLocal的对象被回收了，但是ThreadLocalMap还持有ThreadLocal的强引用，如果没有手动删除，ThreadLocal不会被回收，导致Entry内存泄漏。</p>
-<p>key 使用弱引用：引用的ThreadLocal的对象被回收了，由于ThreadLocalMap持有ThreadLocal的弱引用，即使没有手动删除，ThreadLocal也会被回收。value在下一次ThreadLocalMap调用get(),set(),remove()的时候会被清除。</p>
-<p>比较两种情况，我们可以发现：由于ThreadLocalMap的生命周期跟Thread一样长，如果都没有手动删除对应key，都会导致内存泄漏，但是使用弱引用可以多一层保障：弱引用ThreadLocal不会内存泄漏，对应的value在下一次ThreadLocalMap调用get(),set(),remove()的时候会被清除。</p>
-<p>因此，ThreadLocal内存泄漏的根源是：由于ThreadLocalMap的生命周期跟Thread一样长，如果没有手动删除对应key就会导致内存泄漏，而不是因为弱引用。<br>综合上面的分析，我们可以理解ThreadLocal内存泄漏的前因后果，那么怎么避免内存泄漏呢？<br>每次使用完ThreadLocal，都调用它的remove()方法，清除数据。<br>在使用线程池的情况下，没有及时清理ThreadLocal，不仅是内存泄漏的问题，更严重的是可能导致业务逻辑出现问题。所以，使用ThreadLocal就跟加锁完要解锁一样，用完就清理。</p>
-<h3 id="6-问：ThreadLocal和synchronized的区别"><a href="#6-问：ThreadLocal和synchronized的区别" class="headerlink" title="6.问：ThreadLocal和synchronized的区别?"></a>6.问：ThreadLocal和synchronized的区别?</h3><p>答：ThreadLocal和synchronized关键字都用于处理多线程并发访问变量的问题，只是二者处理问题的角度和思路不同。</p>
-<p>ThreadLocal是一个Java类,通过对当前线程中的局部变量的操作来解决不同线程的变量访问的冲突问题。所以，ThreadLocal提供了线程安全的共享对象机制，每个线程都拥有其副本。</p>
-<p>Java中的synchronized是一个保留字，它依靠JVM的锁机制来实现临界区的函数或者变量的访问中的原子性。在同步机制中，通过对象的锁机制保证同一时间只有一个线程访问变量。此时，被用作“锁机制”的变量时多个线程共享的。</p>
-<p>同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。</p>
-<h3 id="7-问：ThreadLocal在现时有什么应用场景？"><a href="#7-问：ThreadLocal在现时有什么应用场景？" class="headerlink" title="7.问：ThreadLocal在现时有什么应用场景？"></a>7.问：ThreadLocal在现时有什么应用场景？</h3><p>答：总的来说ThreadLocal主要是解决2种类型的问题：</p>
-<p>解决并发问题：使用ThreadLocal代替synchronized来保证线程安全。同步机制采用了“以时间换空间”的方式，而ThreadLocal采用了“以空间换时间”的方式。前者仅提供一份变量，让不同的线程排队访问，而后者为每一个线程都提供了一份变量，因此可以同时访问而互不影响。</p>
-<p>解决数据存储问题：ThreadLocal为变量在每个线程中都创建了一个副本，所以每个线程可以访问自己内部的副本变量，不同线程之间不会互相干扰。如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。</p>
-<p>应用场景：<br>Spring使用ThreadLocal解决线程安全问题</p>
-<p>我们知道在一般情况下，只有无状态的Bean才可以在多线程环境下共享，在Spring中，绝大部分Bean都可以声明为singleton作用域。就是因为Spring对一些Bean（如RequestContextHolder、TransactionSynchronizationManager、LocaleContextHolder等）中非线程安全状态采用ThreadLocal进行处理，让它们也成为线程安全的状态，因为有状态的Bean就可以在多线程中共享了。</p>
-<p>一般的Web应用划分为展现层、服务层和持久层三个层次，在不同的层中编写对应的逻辑，下层通过接口向上层开放功能调用。在一般情况下，从接收请求到返回响应所经过的所有程序调用都同属于一个线程ThreadLocal是解决线程安全问题一个很好的思路，它通过为每个线程提供一个独立的变量副本解决了变量并发访问的冲突问题。在很多情况下，ThreadLocal比直接使用synchronized同步机制解决线程安全问题更简单，更方便，且结果程序拥有更高的并发性。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="1-ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。"><a href="#1-ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。" class="headerlink" title="1.ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。"></a>1.ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。</h3><h3 id="2-ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。"><a href="#2-ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。" class="headerlink" title="2.ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。"></a>2.ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。</h3><h3 id="3-对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。"><a href="#3-对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。" class="headerlink" title="3.对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。"></a>3.对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。</h3><h3 id="4-ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold-底层哈希表table的长度-len-2-3，当实际存储元素个数size-大于或等于-阈值threshold的-3-4-时size-gt-threshold-3-4，则对底层哈希表数组table进行扩容操作。"><a href="#4-ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold-底层哈希表table的长度-len-2-3，当实际存储元素个数size-大于或等于-阈值threshold的-3-4-时size-gt-threshold-3-4，则对底层哈希表数组table进行扩容操作。" class="headerlink" title="4.ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold = 底层哈希表table的长度 len * 2 / 3，当实际存储元素个数size 大于或等于 阈值threshold的 3/4 时size &gt;= threshold*3/4，则对底层哈希表数组table进行扩容操作。"></a>4.ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold = 底层哈希表table的长度 len * 2 / 3，当实际存储元素个数size 大于或等于 阈值threshold的 3/4 时size &gt;= threshold*3/4，则对底层哈希表数组table进行扩容操作。</h3><h3 id="5-ThreadLocalMap中的哈希表Entry-table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal-对应储存的值value。需要注意的是，此Entry继承了弱引用-WeakReference，所以在使用ThreadLocalMap时，发现key-null，则意味着此key-ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。"><a href="#5-ThreadLocalMap中的哈希表Entry-table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal-对应储存的值value。需要注意的是，此Entry继承了弱引用-WeakReference，所以在使用ThreadLocalMap时，发现key-null，则意味着此key-ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。" class="headerlink" title="5.ThreadLocalMap中的哈希表Entry[] table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal 对应储存的值value。需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key  ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。"></a>5.ThreadLocalMap中的哈希表Entry[] table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal 对应储存的值value。需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key  ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。</h3><h3 id="6-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统-GC-的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get-set-remove-的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。"><a href="#6-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统-GC-的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get-set-remove-的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。" class="headerlink" title="6.ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。"></a>6.ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。</h3><h3 id="7-为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove-来清理无用的Entry。这在操作在使用线程池时尤为重要。"><a href="#7-为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove-来清理无用的Entry。这在操作在使用线程池时尤为重要。" class="headerlink" title="7.为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。这在操作在使用线程池时尤为重要。"></a>7.为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。这在操作在使用线程池时尤为重要。</h3><h3 id="8-ThreadLocal和synchronized的区别：同步机制-synchronized关键字-采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。"><a href="#8-ThreadLocal和synchronized的区别：同步机制-synchronized关键字-采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。" class="headerlink" title="8.ThreadLocal和synchronized的区别：同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。"></a>8.ThreadLocal和synchronized的区别：同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。</h3><h3 id="9-ThreadLocal主要是解决2种类型的问题：A-解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B-解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。"><a href="#9-ThreadLocal主要是解决2种类型的问题：A-解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B-解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。" class="headerlink" title="9.ThreadLocal主要是解决2种类型的问题：A. 解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B. 解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。"></a>9.ThreadLocal主要是解决2种类型的问题：A. 解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B. 解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。</h3><p>作者：liangzzz<br>链接：<a href="https://juejin.im/post/5a0e985df265da430e4ebb92" target="_blank" rel="noopener">https://juejin.im/post/5a0e985df265da430e4ebb92</a><br>来源：掘金<br>中间加上了自己的理解</p>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>高并发</tag>
-        <tag>ThreadLocal</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>redis系列-夯实基础面试相关</title>
     <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%A4%AF%E5%AE%9E%E5%9F%BA%E7%A1%80%E9%9D%A2%E8%AF%95%E7%9B%B8%E5%85%B3/</url>
     <content><![CDATA[<h3 id="最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的"><a href="#最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的" class="headerlink" title="最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的"></a>最近看了很多redis相关的东西，做一点总结，redis涉及太多，本站支持在首页搜索关键字，看是否可以搜索到你想要的</h3><h3 id="1、使用Redis有哪些好处？"><a href="#1、使用Redis有哪些好处？" class="headerlink" title="1、使用Redis有哪些好处？"></a>1、使用Redis有哪些好处？</h3><ol>
@@ -4865,6 +4803,68 @@
       <tags>
         <tag>redis</tag>
         <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>彻底搞懂ThreadLocal</title>
+    <url>/2020/03/10/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82ThreadLocal/</url>
+    <content><![CDATA[<h3 id="1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"><a href="#1-问：ThreadLocal了解吗？您能给我说说他的主要用途吗？" class="headerlink" title="1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？"></a>1.问：ThreadLocal了解吗？您能给我说说他的主要用途吗？</h3><p>答：</p>
+<p>从JAVA官方对ThreadLocal类的说明定义（定义在示例代码中）：ThreadLocal类用来提供线程内部的局部变量。这种变量在多线程环境下访问（通过get和set方法访问）时能保证各个线程的变量相对独立于其他线程内的变量。ThreadLocal实例通常来说都是private static类型的，用于关联线程和线程上下文。</p>
+<p>我们可以得知ThreadLocal的作用是：ThreadLocal的作用是提供线程内的局部变量，不同的线程之间不会相互干扰，这种变量在线程的生命周期内起作用，减少同一个线程内多个函数或组件之间一些公共变量的传递的复杂度。</p>
+<p>上述可以概述为：ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。</p>
+<p>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 该类提供了线程局部 (thread-local) 变量。 这些变量不同于它们的普通对应物，</span><br><span class="line"> * 因为访问某个变量（通过其 get 或 set 方法）的每个线程都有自己的局部变量</span><br><span class="line"> * 它独立于变量的初始化副本。ThreadLocal 实例通常是类中的 private static 字段</span><br><span class="line"> * 它们希望将状态与某一个线程（例如，用户 ID 或事务 ID）相关联。</span><br><span class="line"> *</span><br><span class="line"> * 例如，以下类生成对每个线程唯一的局部标识符。</span><br><span class="line"> * </span><br><span class="line"> * 线程 ID 是在第一次调用 UniqueThreadIdGenerator.getCurrentThreadId() 时分配的，</span><br><span class="line"> * 在后续调用中不会更改。</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * import java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"> *</span><br><span class="line"> * public class ThreadId &#123;</span><br><span class="line"> *     // 原子性整数，包含下一个分配的线程Thread ID </span><br><span class="line"> *     private static final AtomicInteger nextId = new AtomicInteger(0);</span><br><span class="line"> *</span><br><span class="line"> *     // 每一个线程对应的Thread ID</span><br><span class="line"> *     private static final ThreadLocal&lt;Integer&gt; threadId =</span><br><span class="line"> *         new ThreadLocal&lt;Integer&gt;() &#123;</span><br><span class="line"> *             @Override protected Integer initialValue() &#123;</span><br><span class="line"> *                 return nextId.getAndIncrement();</span><br><span class="line"> *         &#125;</span><br><span class="line"> *     &#125;;</span><br><span class="line"> *</span><br><span class="line"> *     // 返回当前线程对应的唯一Thread ID, 必要时会进行分配</span><br><span class="line"> *     public static int get() &#123;</span><br><span class="line"> *         return threadId.get();</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> * 每个线程都保持对其线程局部变量副本的隐式引用，只要线程是活动的并且 ThreadLocal 实例是可访问的</span><br><span class="line"> * 在线程消失之后，其线程局部实例的所有副本都会被垃圾回收，（除非存在对这些副本的其他引用）。</span><br><span class="line"> *</span><br><span class="line"> * @author  Josh Bloch and Doug Lea</span><br><span class="line"> * @since   1.2</span><br><span class="line"> */</span><br><span class="line">public class ThreadLocal&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">   /**</span><br><span class="line">     * 自定义哈希码（仅在ThreadLocalMaps中有用）</span><br><span class="line">     * 可用于降低hash冲突</span><br><span class="line">     */</span><br><span class="line">    private final int threadLocalHashCode = nextHashCode();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 生成下一个哈希码hashCode. 生成操作是原子性的. 从0开始</span><br><span class="line">     * </span><br><span class="line">     */</span><br><span class="line">    private static AtomicInteger nextHashCode =</span><br><span class="line">        new AtomicInteger();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 表示了连续分配的两个ThreadLocal实例的threadLocalHashCode值的增量 </span><br><span class="line">     */</span><br><span class="line">    private static final int HASH_INCREMENT = 0x61c88647;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回下一个哈希码hashCode</span><br><span class="line">     */</span><br><span class="line">    private static int nextHashCode() &#123;</span><br><span class="line">        return nextHashCode.getAndAdd(HASH_INCREMENT);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中nextHashCode()方法就是一个原子类不停地去加上0x61c88647，这是一个很特别的数，叫斐波那契散列（Fibonacci Hashing），斐波那契又有一个名称叫黄金分割，也就是说将这个数作为哈希值的增量将会使哈希表的分布更为均匀。</p>
+<h3 id="2-问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？"><a href="#2-问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？" class="headerlink" title="2.问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？"></a>2.问：ThreadLocal实现原理是什么，它是怎么样做到局部变量不同的线程之间不会相互干扰的？</h3><p>答：</p>
+<p>通常，如果我不去看源代码的话，我猜ThreadLocal是这样子设计的：每个ThreadLocal类都创建一个Map，然后用线程的ID threadID作为Map的key，要存储的局部变量作为Map的value，这样就能达到各个线程的值隔离的效果。这是最简单的设计方法，JDK最早期的ThreadLocal就是这样设计的。</p>
+<p>但是，JDK后面优化了设计方案，现时JDK8 ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。</p>
+<p>这个设计与我们一开始说的设计刚好相反，这样设计有如下几点优势：<br>1） 这样设计之后每个Map存储的Entry数量就会变小，因为之前的存储数量由Thread的数量决定，现在是由ThreadLocal的数量决定。</p>
+<h4 id="关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1-8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。"><a href="#关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1-8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。" class="headerlink" title="关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1.8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。"></a>关于这点需要做一个解释：至于jdk8之前的做法是有多少线程map中就存放多少，自然map很大，链表很长效率很低；jdk1.8之后用ThreadLocal作为key，也就是说每个线程内部维护一个ThreadLocalMap，每次set时都有偏移量，黄金分割点，不会导致key重复，map小冲突就小，效率高，即使还会存在冲突，不过没关系，这个ThreadLocal是不存在Next的所以不会存在链表，继续增加偏移量寻找下一个空点。</h4><p>2） 当Thread销毁之后，对应的ThreadLocalMap也会随之销毁，能减少内存的使用。</p>
+<h3 id="3-问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set-T-value-，获取get-，删除remove-等操作。"><a href="#3-问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set-T-value-，获取get-，删除remove-等操作。" class="headerlink" title="3.问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set(T value)，获取get()，删除remove()等操作。"></a>3.问：您能说说ThreadLocal常用操作的底层实现原理吗？如存储set(T value)，获取get()，删除remove()等操作。</h3><p>答：</p>
+<p>调用get()操作获取ThreadLocal中对应当前线程存储的值时，进行了如下操作：<br>1 ) 获取当前线程Thread对象，进而获取此线程对象中维护的ThreadLocalMap对象。<br>2 ) 判断当前的ThreadLocalMap是否存在：</p>
+<p>如果存在，则以当前的ThreadLocal 为 key，调用ThreadLocalMap中的getEntry方法获取对应的存储实体 e。找到对应的存储实体 e，获取存储实体 e 对应的 value值，即为我们想要的当前线程对应此ThreadLocal的值，返回结果值。<br>如果不存在，则证明此线程没有维护的ThreadLocalMap对象，调用setInitialValue方法进行初始化。返回setInitialValue初始化的值。</p>
+<p>setInitialValue方法的操作如下：<br>1 ) 调用initialValue获取初始化的值。<br>2 ) 获取当前线程Thread对象，进而获取此线程对象中维护的ThreadLocalMap对象。<br>3 ) 判断当前的ThreadLocalMap是否存在：</p>
+<p>如果存在，则调用map.set设置此实体entry。</p>
+<p>如果不存在，则调用createMap进行ThreadLocalMap对象的初始化，并将此实体entry作为第一个值存放至ThreadLocalMap中。</p>
+<h3 id="4-问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗"><a href="#4-问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗" class="headerlink" title="4.问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗?"></a>4.问：对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作，核心是ThreadLocalMap这个哈希表，你能谈谈ThreadLocalMap的内部底层实现吗?</h3><p>答：</p>
+<p>ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，核心组成元素有：<br>1 ) Entry[] table;：底层哈希表 table, 必要时需要进行扩容，底层哈希表 table.length 长度必须是2的n次方。<br>2 ) int size;：实际存储键值对元素个数 entries<br>3 ) int threshold;：下一次扩容时的阈值，阈值 threshold = 底层哈希表table的长度 len * 2 / 3。当size &gt;= threshold时，遍历table并删除key为null的元素，如果删除后size &gt;= threshold*3/4时，需要对table进行扩容（详情请查看set(ThreadLocal&lt;?&gt; key, Object value)方法说明）。</p>
+<p>其中Entry[] table;哈希表存储的核心元素是Entry，Entry包含：<br>1 ) ThreadLocal&lt;?&gt; k；：当前存储的ThreadLocal实例对象<br>2 ) Object value;：当前 ThreadLocal 对应储存的值value</p>
+<p>需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。(弱引用相关问题解释请查看 问答 5)</p>
+<h3 id="5-问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？"><a href="#5-问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？" class="headerlink" title="5.问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？"></a>5.问：ThreadLocalMap中的存储实体Entry使用ThreadLocal作为key，但这个Entry是继承弱引用WeakReference的，为什么要这样设计，使用了弱引用WeakReference会造成内存泄露问题吗？</h3><p>答：</p>
+<p>首先，回答这个问题之前，我需要解释一下什么是强引用，什么是弱引用。</p>
+<p>我们在正常情况下，普遍使用的是强引用：<br>A a = new A();</p>
+<p>B b = new B();复制代码当 a = null;b = null;时，一段时间后，JAVA垃圾回收机制GC会将 a 和 b 对应所分配的内存空间给回收。<br>但考虑这样一种情况：<br>C c = new C(b);<br>b = null;复制代码当 b 被设置成null时，那么是否意味这一段时间后GC工作可以回收 b 所分配的内存空间呢？答案是否定的，因为即使 b 被设置成null，但 c 仍然持有对 b 的引用，而且还是强引用，所以GC不会回收 b 原先所分配的空间，既不能回收，又不能使用，这就造成了 内存泄露。<br>那么如何处理呢？<br>可以通过c = null;，也可以使用弱引用WeakReference w = new WeakReference(b);。因为使用了弱引用WeakReference，GC是可以回收 b 原先所分配的空间的。<br>上述解释主要参考自：对ThreadLocal实现原理的一点思考</p>
+<p>回到ThreadLocal的层面上，ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收，这样一来，ThreadLocalMap中就会出现key为null的Entry，就没有办法访问这些key为null的Entry的value，如果当前线程再迟迟不结束的话，这些key为null的Entry的value就会一直存在一条强引用链：Thread Ref -&gt; Thread -&gt; ThreaLocalMap -&gt; Entry -&gt; value 永远无法回收，造成内存泄漏。</p>
+<p>其实，ThreadLocalMap的设计中已经考虑到这种情况，也加上了一些防护措施：在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。<br>但是这些被动的预防措施并不能保证不会内存泄漏：</p>
+<p>使用static的ThreadLocal，延长了ThreadLocal的生命周期，可能导致的内存泄漏（参考ThreadLocal 内存泄露的实例分析）。</p>
+<p>分配使用了ThreadLocal又不再调用get(),set(),remove()方法，那么就会导致内存泄漏。</p>
+<p>从表面上看内存泄漏的根源在于使用了弱引用。网上的文章大多着重分析ThreadLocal使用了弱引用会导致内存泄漏，但是另一个问题也同样值得思考：为什么使用弱引用而不是强引用？<br>我们先来看看官方文档的说法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">To help deal with very large and long-lived usages, </span><br><span class="line">the hash table entries use WeakReferences for keys.</span><br></pre></td></tr></table></figure>
+
+<p>为了应对非常大和长时间的用途，哈希表使用弱引用的 key。<br>下面我们分两种情况讨论：</p>
+<p>key 使用强引用：引用的ThreadLocal的对象被回收了，但是ThreadLocalMap还持有ThreadLocal的强引用，如果没有手动删除，ThreadLocal不会被回收，导致Entry内存泄漏。</p>
+<p>key 使用弱引用：引用的ThreadLocal的对象被回收了，由于ThreadLocalMap持有ThreadLocal的弱引用，即使没有手动删除，ThreadLocal也会被回收。value在下一次ThreadLocalMap调用get(),set(),remove()的时候会被清除。</p>
+<p>比较两种情况，我们可以发现：由于ThreadLocalMap的生命周期跟Thread一样长，如果都没有手动删除对应key，都会导致内存泄漏，但是使用弱引用可以多一层保障：弱引用ThreadLocal不会内存泄漏，对应的value在下一次ThreadLocalMap调用get(),set(),remove()的时候会被清除。</p>
+<p>因此，ThreadLocal内存泄漏的根源是：由于ThreadLocalMap的生命周期跟Thread一样长，如果没有手动删除对应key就会导致内存泄漏，而不是因为弱引用。<br>综合上面的分析，我们可以理解ThreadLocal内存泄漏的前因后果，那么怎么避免内存泄漏呢？<br>每次使用完ThreadLocal，都调用它的remove()方法，清除数据。<br>在使用线程池的情况下，没有及时清理ThreadLocal，不仅是内存泄漏的问题，更严重的是可能导致业务逻辑出现问题。所以，使用ThreadLocal就跟加锁完要解锁一样，用完就清理。</p>
+<h3 id="6-问：ThreadLocal和synchronized的区别"><a href="#6-问：ThreadLocal和synchronized的区别" class="headerlink" title="6.问：ThreadLocal和synchronized的区别?"></a>6.问：ThreadLocal和synchronized的区别?</h3><p>答：ThreadLocal和synchronized关键字都用于处理多线程并发访问变量的问题，只是二者处理问题的角度和思路不同。</p>
+<p>ThreadLocal是一个Java类,通过对当前线程中的局部变量的操作来解决不同线程的变量访问的冲突问题。所以，ThreadLocal提供了线程安全的共享对象机制，每个线程都拥有其副本。</p>
+<p>Java中的synchronized是一个保留字，它依靠JVM的锁机制来实现临界区的函数或者变量的访问中的原子性。在同步机制中，通过对象的锁机制保证同一时间只有一个线程访问变量。此时，被用作“锁机制”的变量时多个线程共享的。</p>
+<p>同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。</p>
+<h3 id="7-问：ThreadLocal在现时有什么应用场景？"><a href="#7-问：ThreadLocal在现时有什么应用场景？" class="headerlink" title="7.问：ThreadLocal在现时有什么应用场景？"></a>7.问：ThreadLocal在现时有什么应用场景？</h3><p>答：总的来说ThreadLocal主要是解决2种类型的问题：</p>
+<p>解决并发问题：使用ThreadLocal代替synchronized来保证线程安全。同步机制采用了“以时间换空间”的方式，而ThreadLocal采用了“以空间换时间”的方式。前者仅提供一份变量，让不同的线程排队访问，而后者为每一个线程都提供了一份变量，因此可以同时访问而互不影响。</p>
+<p>解决数据存储问题：ThreadLocal为变量在每个线程中都创建了一个副本，所以每个线程可以访问自己内部的副本变量，不同线程之间不会互相干扰。如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。</p>
+<p>应用场景：<br>Spring使用ThreadLocal解决线程安全问题</p>
+<p>我们知道在一般情况下，只有无状态的Bean才可以在多线程环境下共享，在Spring中，绝大部分Bean都可以声明为singleton作用域。就是因为Spring对一些Bean（如RequestContextHolder、TransactionSynchronizationManager、LocaleContextHolder等）中非线程安全状态采用ThreadLocal进行处理，让它们也成为线程安全的状态，因为有状态的Bean就可以在多线程中共享了。</p>
+<p>一般的Web应用划分为展现层、服务层和持久层三个层次，在不同的层中编写对应的逻辑，下层通过接口向上层开放功能调用。在一般情况下，从接收请求到返回响应所经过的所有程序调用都同属于一个线程ThreadLocal是解决线程安全问题一个很好的思路，它通过为每个线程提供一个独立的变量副本解决了变量并发访问的冲突问题。在很多情况下，ThreadLocal比直接使用synchronized同步机制解决线程安全问题更简单，更方便，且结果程序拥有更高的并发性。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="1-ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。"><a href="#1-ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。" class="headerlink" title="1.ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。"></a>1.ThreadLocal提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。</h3><h3 id="2-ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。"><a href="#2-ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。" class="headerlink" title="2.ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。"></a>2.ThreadLocal的设计是：每个Thread维护一个ThreadLocalMap哈希表，这个哈希表的key是ThreadLocal实例本身，value才是真正要存储的值Object。</h3><h3 id="3-对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。"><a href="#3-对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。" class="headerlink" title="3.对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。"></a>3.对ThreadLocal的常用操作实际是对线程Thread中的ThreadLocalMap进行操作。</h3><h3 id="4-ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold-底层哈希表table的长度-len-2-3，当实际存储元素个数size-大于或等于-阈值threshold的-3-4-时size-gt-threshold-3-4，则对底层哈希表数组table进行扩容操作。"><a href="#4-ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold-底层哈希表table的长度-len-2-3，当实际存储元素个数size-大于或等于-阈值threshold的-3-4-时size-gt-threshold-3-4，则对底层哈希表数组table进行扩容操作。" class="headerlink" title="4.ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold = 底层哈希表table的长度 len * 2 / 3，当实际存储元素个数size 大于或等于 阈值threshold的 3/4 时size &gt;= threshold*3/4，则对底层哈希表数组table进行扩容操作。"></a>4.ThreadLocalMap的底层实现是一个定制的自定义HashMap哈希表，ThreadLocalMap的阈值threshold = 底层哈希表table的长度 len * 2 / 3，当实际存储元素个数size 大于或等于 阈值threshold的 3/4 时size &gt;= threshold*3/4，则对底层哈希表数组table进行扩容操作。</h3><h3 id="5-ThreadLocalMap中的哈希表Entry-table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal-对应储存的值value。需要注意的是，此Entry继承了弱引用-WeakReference，所以在使用ThreadLocalMap时，发现key-null，则意味着此key-ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。"><a href="#5-ThreadLocalMap中的哈希表Entry-table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal-对应储存的值value。需要注意的是，此Entry继承了弱引用-WeakReference，所以在使用ThreadLocalMap时，发现key-null，则意味着此key-ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。" class="headerlink" title="5.ThreadLocalMap中的哈希表Entry[] table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal 对应储存的值value。需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key  ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。"></a>5.ThreadLocalMap中的哈希表Entry[] table存储的核心元素是Entry，存储的key是ThreadLocal实例对象，value是ThreadLocal 对应储存的值value。需要注意的是，此Entry继承了弱引用 WeakReference，所以在使用ThreadLocalMap时，发现key == null，则意味着此key  ThreadLocal不在被引用，需要将其从ThreadLocalMap哈希表中移除。</h3><h3 id="6-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统-GC-的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get-set-remove-的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。"><a href="#6-ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统-GC-的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get-set-remove-的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。" class="headerlink" title="6.ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。"></a>6.ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用来引用它，那么系统 GC 的时候，这个ThreadLocal势必会被回收。所以，在ThreadLocal的get(),set(),remove()的时候都会清除线程ThreadLocalMap里所有key为null的value。如果我们不主动调用上述操作，则会导致内存泄露。</h3><h3 id="7-为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove-来清理无用的Entry。这在操作在使用线程池时尤为重要。"><a href="#7-为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove-来清理无用的Entry。这在操作在使用线程池时尤为重要。" class="headerlink" title="7.为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。这在操作在使用线程池时尤为重要。"></a>7.为了安全地使用ThreadLocal，必须要像每次使用完锁就解锁一样，在每次使用完ThreadLocal后都要调用remove()来清理无用的Entry。这在操作在使用线程池时尤为重要。</h3><h3 id="8-ThreadLocal和synchronized的区别：同步机制-synchronized关键字-采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。"><a href="#8-ThreadLocal和synchronized的区别：同步机制-synchronized关键字-采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。" class="headerlink" title="8.ThreadLocal和synchronized的区别：同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。"></a>8.ThreadLocal和synchronized的区别：同步机制(synchronized关键字)采用了以“时间换空间”的方式，提供一份变量，让不同的线程排队访问。而ThreadLocal采用了“以空间换时间”的方式，为每一个线程都提供一份变量的副本，从而实现同时访问而互不影响。</h3><h3 id="9-ThreadLocal主要是解决2种类型的问题：A-解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B-解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。"><a href="#9-ThreadLocal主要是解决2种类型的问题：A-解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B-解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。" class="headerlink" title="9.ThreadLocal主要是解决2种类型的问题：A. 解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B. 解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。"></a>9.ThreadLocal主要是解决2种类型的问题：A. 解决并发问题：使用ThreadLocal代替同步机制解决并发问题。B. 解决数据存储问题：如一个Parameter对象的数据需要在多个模块中使用，如果采用参数传递的方式，显然会增加模块之间的耦合性。此时我们可以使用ThreadLocal解决。</h3><p>作者：liangzzz<br>链接：<a href="https://juejin.im/post/5a0e985df265da430e4ebb92" target="_blank" rel="noopener">https://juejin.im/post/5a0e985df265da430e4ebb92</a><br>来源：掘金<br>中间加上了自己的理解</p>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>高并发</tag>
+        <tag>ThreadLocal</tag>
       </tags>
   </entry>
   <entry>
