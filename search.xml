@@ -1,50 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Java基础部分之String</title>
-    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
-    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
-<p>在Java8中，String内部使用char数组存储数据。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
-<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
-<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
-
-<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
-
-<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
-<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
-<p>而使用new的方式会在堆中创建一个字符串对象。</p>
-<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>String</tag>
-        <tag>Java基础</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>BigDecimal比较大小</title>
     <url>/2019/09/16/BigDecimal%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/</url>
     <content><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class TestBigDecimal &#123;</span><br><span class="line">     public static void main(String[] args) &#123;</span><br><span class="line">        BigDecimal b1 = BigDecimal.valueOf(0.00);</span><br><span class="line">        BigDecimal b2 = new BigDecimal(0.00);</span><br><span class="line">        BigDecimal b3 = new BigDecimal(&quot;0.00&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(b1);</span><br><span class="line">        System.out.println(b2);</span><br><span class="line">        System.out.println(b3);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line">        System.out.println(&quot;equals比较&quot;);</span><br><span class="line">        System.out.println(contrast1(b1,b2));</span><br><span class="line">        System.out.println(contrast1(b1,b3));</span><br><span class="line">        System.out.println(contrast1(b2,b3));</span><br><span class="line">        System.out.println(contrast1(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast1(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;compareTo比较&quot;);</span><br><span class="line">        System.out.println(contrast2(b1,b2));</span><br><span class="line">        System.out.println(contrast2(b1,b3));</span><br><span class="line">        System.out.println(contrast2(b2,b3));</span><br><span class="line">        System.out.println(contrast2(b1,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b2,BigDecimal.ZERO));</span><br><span class="line">        System.out.println(contrast2(b3,BigDecimal.ZERO));</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static boolean contrast1(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.equals(b2);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static int contrast2(BigDecimal b1,BigDecimal b2)&#123;</span><br><span class="line">       return b1.compareTo(b2);</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
@@ -58,8 +14,29 @@
         <category>Java基础</category>
       </categories>
       <tags>
-        <tag>Java基础</tag>
         <tag>BigDecimal</tag>
+        <tag>Java基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一路走来，即将毕业。</title>
+    <url>/2019/09/12/Sentiment/</url>
+    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
+<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
+<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
+<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
+<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
+<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
+<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
+<p>祝我自己前途似锦，万事胜意。</p>
+<p>2019-03-27 20:44更</p>
+]]></content>
+      <categories>
+        <category>个人经历</category>
+      </categories>
+      <tags>
+        <tag>个人经历</tag>
+        <tag>毕业感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -109,24 +86,47 @@
       </tags>
   </entry>
   <entry>
-    <title>一路走来，即将毕业。</title>
-    <url>/2019/09/12/Sentiment/</url>
-    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
-<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
-<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
-<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
-<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
-<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
-<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
-<p>祝我自己前途似锦，万事胜意。</p>
-<p>2019-03-27 20:44更</p>
+    <title>Java基础部分之String</title>
+    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
+    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
+<p>在Java8中，String内部使用char数组存储数据。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
+<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
+
+<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
+
+<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
+<p>而使用new的方式会在堆中创建一个字符串对象。</p>
+<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>个人经历</category>
+        <category>Java基础</category>
       </categories>
       <tags>
-        <tag>个人经历</tag>
-        <tag>毕业感悟</tag>
+        <tag>Java基础</tag>
+        <tag>String</tag>
       </tags>
   </entry>
   <entry>
@@ -1415,91 +1415,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-2</title>
-    <url>/2020/03/17/go-big-or-go-home-2/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stadium</td>
-<td>体育场</td>
-<td>I often play football in the stadium</td>
-</tr>
-<tr>
-<td>reply</td>
-<td>回复</td>
-<td>I’m waiting for your reply</td>
-</tr>
-<tr>
-<td>standard</td>
-<td>标准</td>
-<td>Such a standard figure</td>
-</tr>
-<tr>
-<td>honour</td>
-<td>荣誉</td>
-<td>It’s an honour to graduate from this school</td>
-</tr>
-<tr>
-<td>village</td>
-<td>乡村</td>
-<td>I like village life</td>
-</tr>
-<tr>
-<td>ever since</td>
-<td>自从…时起</td>
-<td>They lived there ever since they married</td>
-</tr>
-<tr>
-<td>turn up</td>
-<td>调高</td>
-<td>Turn up the TV volume</td>
-</tr>
-<tr>
-<td>volume</td>
-<td>音量</td>
-<td>Turn on the volume</td>
-</tr>
-<tr>
-<td>get on with</td>
-<td>与…相处</td>
-<td>She likes get on with animals</td>
-</tr>
-<tr>
-<td>tourism</td>
-<td>旅游</td>
-<td>I like tourism around the world</td>
-</tr>
-<tr>
-<td>industry</td>
-<td>行业</td>
-<td>The tourism industry is getting worse</td>
-</tr>
-<tr>
-<td>experience</td>
-<td>经验</td>
-<td>He has five years of programming experience</td>
-</tr>
-<tr>
-<td>sorrows</td>
-<td>悲伤</td>
-<td>I often share happiness and sorrows with my friends</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-21</title>
     <url>/2020/04/05/go-big-or-go-home-21/</url>
     <content><![CDATA[<table>
@@ -1649,6 +1564,91 @@
 <td>at</td>
 <td>具体时刻</td>
 <td>at 7o’clock</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-2</title>
+    <url>/2020/03/17/go-big-or-go-home-2/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stadium</td>
+<td>体育场</td>
+<td>I often play football in the stadium</td>
+</tr>
+<tr>
+<td>reply</td>
+<td>回复</td>
+<td>I’m waiting for your reply</td>
+</tr>
+<tr>
+<td>standard</td>
+<td>标准</td>
+<td>Such a standard figure</td>
+</tr>
+<tr>
+<td>honour</td>
+<td>荣誉</td>
+<td>It’s an honour to graduate from this school</td>
+</tr>
+<tr>
+<td>village</td>
+<td>乡村</td>
+<td>I like village life</td>
+</tr>
+<tr>
+<td>ever since</td>
+<td>自从…时起</td>
+<td>They lived there ever since they married</td>
+</tr>
+<tr>
+<td>turn up</td>
+<td>调高</td>
+<td>Turn up the TV volume</td>
+</tr>
+<tr>
+<td>volume</td>
+<td>音量</td>
+<td>Turn on the volume</td>
+</tr>
+<tr>
+<td>get on with</td>
+<td>与…相处</td>
+<td>She likes get on with animals</td>
+</tr>
+<tr>
+<td>tourism</td>
+<td>旅游</td>
+<td>I like tourism around the world</td>
+</tr>
+<tr>
+<td>industry</td>
+<td>行业</td>
+<td>The tourism industry is getting worse</td>
+</tr>
+<tr>
+<td>experience</td>
+<td>经验</td>
+<td>He has five years of programming experience</td>
+</tr>
+<tr>
+<td>sorrows</td>
+<td>悲伤</td>
+<td>I often share happiness and sorrows with my friends</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2150,8 +2150,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-25</title>
-    <url>/2020/04/10/go-big-or-go-home-25/</url>
+    <title>go big or go home-27</title>
+    <url>/2020/04/11/go-big-or-go-home-27/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2161,54 +2161,54 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>headmistress</td>
-<td>女校长</td>
-<td>Our headmistress is giving us a speech</td>
+<td>emergency</td>
+<td>紧急情况</td>
+<td>It’s an emergency.Get her to the hospital now!</td>
 </tr>
 <tr>
-<td>conventional</td>
-<td>依据惯例的</td>
-<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
+<td>do one’s best</td>
+<td>尽最大的努力</td>
+<td>Don’t worry so much about the exam.Just do your best</td>
 </tr>
 <tr>
-<td>carry out</td>
-<td>完成</td>
-<td>After the hard work,I finally carried out my plan</td>
+<td>absolute</td>
+<td>绝对的</td>
+<td>Motion is absolute,while stillness is relative</td>
 </tr>
 <tr>
-<td>behaviour</td>
-<td>行为</td>
-<td>I can tell he is happy from his behaviour</td>
+<td>tongue</td>
+<td>舌头</td>
+<td>The boy sticks out his tongue to make a face to me</td>
 </tr>
 <tr>
-<td>mirror</td>
-<td>镜子</td>
-<td>Look at yourselves in the mirror</td>
+<td>instruct</td>
+<td>指导</td>
+<td>My mom instructs me how to play golf</td>
 </tr>
 <tr>
-<td>vast</td>
-<td>辽阔的</td>
-<td>This vast desert looks impossible to pass</td>
+<td>nylon</td>
+<td>尼龙</td>
+<td>The socks,strap and cord are all made of nylon</td>
 </tr>
 <tr>
-<td>toast</td>
-<td>烤面包</td>
-<td>There are two slices of toast and some butter on the table</td>
+<td>strange</td>
+<td>奇怪的</td>
+<td>I met a guy wearing strange clothes on the subway</td>
 </tr>
 <tr>
-<td>cyclist</td>
-<td>骑自行车的人</td>
-<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
+<td>secondhand</td>
+<td>二手的</td>
+<td>The boy bought a secondhand book from the old man</td>
 </tr>
 <tr>
-<td>satisfy</td>
-<td>满意</td>
-<td>-</td>
+<td>expand</td>
+<td>扩大</td>
+<td>Our business is expanding across the whole country</td>
 </tr>
 <tr>
-<td>frightened</td>
-<td>害怕的</td>
-<td>-</td>
+<td>forest</td>
+<td>森林</td>
+<td>The sun shines through the forest</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2580,8 +2580,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-27</title>
-    <url>/2020/04/11/go-big-or-go-home-27/</url>
+    <title>go big or go home-25</title>
+    <url>/2020/04/10/go-big-or-go-home-25/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2591,54 +2591,54 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>emergency</td>
-<td>紧急情况</td>
-<td>It’s an emergency.Get her to the hospital now!</td>
+<td>headmistress</td>
+<td>女校长</td>
+<td>Our headmistress is giving us a speech</td>
 </tr>
 <tr>
-<td>do one’s best</td>
-<td>尽最大的努力</td>
-<td>Don’t worry so much about the exam.Just do your best</td>
+<td>conventional</td>
+<td>依据惯例的</td>
+<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
 </tr>
 <tr>
-<td>absolute</td>
-<td>绝对的</td>
-<td>Motion is absolute,while stillness is relative</td>
+<td>carry out</td>
+<td>完成</td>
+<td>After the hard work,I finally carried out my plan</td>
 </tr>
 <tr>
-<td>tongue</td>
-<td>舌头</td>
-<td>The boy sticks out his tongue to make a face to me</td>
+<td>behaviour</td>
+<td>行为</td>
+<td>I can tell he is happy from his behaviour</td>
 </tr>
 <tr>
-<td>instruct</td>
-<td>指导</td>
-<td>My mom instructs me how to play golf</td>
+<td>mirror</td>
+<td>镜子</td>
+<td>Look at yourselves in the mirror</td>
 </tr>
 <tr>
-<td>nylon</td>
-<td>尼龙</td>
-<td>The socks,strap and cord are all made of nylon</td>
+<td>vast</td>
+<td>辽阔的</td>
+<td>This vast desert looks impossible to pass</td>
 </tr>
 <tr>
-<td>strange</td>
-<td>奇怪的</td>
-<td>I met a guy wearing strange clothes on the subway</td>
+<td>toast</td>
+<td>烤面包</td>
+<td>There are two slices of toast and some butter on the table</td>
 </tr>
 <tr>
-<td>secondhand</td>
-<td>二手的</td>
-<td>The boy bought a secondhand book from the old man</td>
+<td>cyclist</td>
+<td>骑自行车的人</td>
+<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
 </tr>
 <tr>
-<td>expand</td>
-<td>扩大</td>
-<td>Our business is expanding across the whole country</td>
+<td>satisfy</td>
+<td>满意</td>
+<td>-</td>
 </tr>
 <tr>
-<td>forest</td>
-<td>森林</td>
-<td>The sun shines through the forest</td>
+<td>frightened</td>
+<td>害怕的</td>
+<td>-</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2724,6 +2724,81 @@
 <td>night owl</td>
 <td>夜晚的猫头鹰</td>
 <td>When the important exams come,Jack becomes a night owl</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-30</title>
+    <url>/2020/04/14/go-big-or-go-home-30/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apartment</td>
+<td>公寓</td>
+<td>This apartment is so bright with these windows</td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>捕捉</td>
+<td>The goalkeeper caught the ball.What a save!</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+<tr>
+<td>sparrow</td>
+<td>麻雀</td>
+<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
+</tr>
+<tr>
+<td>mud</td>
+<td>泥</td>
+<td>Oh no!I think our car is stuck in the mud!</td>
+</tr>
+<tr>
+<td>stuck</td>
+<td>不能动的</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>shapes</td>
+<td>形状</td>
+<td>I like collecting glasses of all shapes and sizes</td>
+</tr>
+<tr>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversation was interrputed by a knock at the door</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3085,8 +3160,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-30</title>
-    <url>/2020/04/14/go-big-or-go-home-30/</url>
+    <title>go big or go home-33</title>
+    <url>/2020/04/17/go-big-or-go-home-33/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3096,59 +3171,124 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>apartment</td>
-<td>公寓</td>
-<td>This apartment is so bright with these windows</td>
+<td>suspect</td>
+<td>嫌疑犯</td>
+<td>The suspect is talking with his lawyer</td>
 </tr>
 <tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
+<td>hand in</td>
+<td>上交</td>
+<td>He’s handing in his homework to the teacher</td>
 </tr>
 <tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
+<td>ladder</td>
+<td>梯子</td>
+<td>The man is standing on a ladder</td>
 </tr>
 <tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
+<td>weakness</td>
+<td>弱点</td>
+<td>Vampires’s weakness is that they are afraid of sunshine</td>
 </tr>
 <tr>
-<td>catch</td>
-<td>捕捉</td>
-<td>The goalkeeper caught the ball.What a save!</td>
+<td>French</td>
+<td>法国</td>
+<td>The Eiffel tower is a French landmark</td>
 </tr>
 <tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
+<td>million</td>
+<td>百万</td>
+<td>-</td>
 </tr>
 <tr>
-<td>sparrow</td>
-<td>麻雀</td>
-<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
+<td>billion</td>
+<td>十亿</td>
+<td>-</td>
 </tr>
 <tr>
-<td>mud</td>
-<td>泥</td>
-<td>Oh no!I think our car is stuck in the mud!</td>
+<td>minibus</td>
+<td>小巴士</td>
+<td>Let’s take the minibus on a trip!</td>
 </tr>
 <tr>
-<td>stuck</td>
-<td>不能动的</td>
-<td>同上</td>
+<td>junior</td>
+<td>三年级学生</td>
+<td>The junior is preparing for her exams in the dormitory</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-34</title>
+    <url>/2020/04/18/go-big-or-go-home-34/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>point</td>
+<td>指向</td>
+<td>They are pointing at each other</td>
 </tr>
 <tr>
-<td>shapes</td>
-<td>形状</td>
-<td>I like collecting glasses of all shapes and sizes</td>
+<td>department store</td>
+<td>百货商场</td>
+<td>This department store sells many different kinds of goods</td>
 </tr>
 <tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversation was interrputed by a knock at the door</td>
+<td>silver medal</td>
+<td>银牌</td>
+<td>The athlete who took second place got a silver medal</td>
+</tr>
+<tr>
+<td>forgive</td>
+<td>原谅</td>
+<td>The girl says,”Can you forgive me,mom?”</td>
+</tr>
+<tr>
+<td>go on doing</td>
+<td>继续干某事</td>
+<td>Even though he was tired,he went on working for 12 hours</td>
+</tr>
+<tr>
+<td>alone</td>
+<td>孤单</td>
+<td>Seesaws are not very fun when you’re alone</td>
+</tr>
+<tr>
+<td>brotherhood</td>
+<td>手足情谊</td>
+<td>The brotherhood between the boys will keep them close forever</td>
+</tr>
+<tr>
+<td>statistics</td>
+<td>统计数字</td>
+<td>I use facts and statistics to prove my point</td>
+</tr>
+<tr>
+<td>bookstore</td>
+<td>书店</td>
+<td>She’s buying books in the bookstore</td>
+</tr>
+<tr>
+<td>decision</td>
+<td>决定</td>
+<td>I’ve made my decision to buy this beautiful skirt</td>
+</tr>
+<tr>
+<td>suspect</td>
+<td>嫌疑犯</td>
+<td>The suspect is talking with his lawyer</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3265,71 +3405,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-33</title>
-    <url>/2020/04/17/go-big-or-go-home-33/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>suspect</td>
-<td>嫌疑犯</td>
-<td>The suspect is talking with his lawyer</td>
-</tr>
-<tr>
-<td>hand in</td>
-<td>上交</td>
-<td>He’s handing in his homework to the teacher</td>
-</tr>
-<tr>
-<td>ladder</td>
-<td>梯子</td>
-<td>The man is standing on a ladder</td>
-</tr>
-<tr>
-<td>weakness</td>
-<td>弱点</td>
-<td>Vampires’s weakness is that they are afraid of sunshine</td>
-</tr>
-<tr>
-<td>French</td>
-<td>法国</td>
-<td>The Eiffel tower is a French landmark</td>
-</tr>
-<tr>
-<td>million</td>
-<td>百万</td>
-<td>-</td>
-</tr>
-<tr>
-<td>billion</td>
-<td>十亿</td>
-<td>-</td>
-</tr>
-<tr>
-<td>minibus</td>
-<td>小巴士</td>
-<td>Let’s take the minibus on a trip!</td>
-</tr>
-<tr>
-<td>junior</td>
-<td>三年级学生</td>
-<td>The junior is preparing for her exams in the dormitory</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-35</title>
     <url>/2020/04/19/go-big-or-go-home-35/</url>
     <content><![CDATA[<table>
@@ -3395,8 +3470,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-34</title>
-    <url>/2020/04/18/go-big-or-go-home-34/</url>
+    <title>go big or go home-37</title>
+    <url>/2020/04/21/go-big-or-go-home-37/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3406,59 +3481,49 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>point</td>
-<td>指向</td>
-<td>They are pointing at each other</td>
+<td>famous</td>
+<td>著名的</td>
+<td>The lady is a famous actress</td>
 </tr>
 <tr>
-<td>department store</td>
-<td>百货商场</td>
-<td>This department store sells many different kinds of goods</td>
+<td>body building</td>
+<td>健美</td>
+<td>I do body building every day to make my muscles huge</td>
 </tr>
 <tr>
-<td>silver medal</td>
-<td>银牌</td>
-<td>The athlete who took second place got a silver medal</td>
+<td>constant</td>
+<td>持续不断的</td>
+<td>The constant noise from the construction site makes me crazy</td>
 </tr>
 <tr>
-<td>forgive</td>
-<td>原谅</td>
-<td>The girl says,”Can you forgive me,mom?”</td>
+<td>smell</td>
+<td>闻</td>
+<td>The girl is smelling the pink flower with delight</td>
 </tr>
 <tr>
-<td>go on doing</td>
-<td>继续干某事</td>
-<td>Even though he was tired,he went on working for 12 hours</td>
+<td>a bit</td>
+<td>一点点</td>
+<td>There is only a bit of rice left in the pot</td>
 </tr>
 <tr>
-<td>alone</td>
-<td>孤单</td>
-<td>Seesaws are not very fun when you’re alone</td>
+<td>carpenter</td>
+<td>木匠</td>
+<td>The carpenter is making wooden furniture</td>
 </tr>
 <tr>
-<td>brotherhood</td>
-<td>手足情谊</td>
-<td>The brotherhood between the boys will keep them close forever</td>
+<td>abolish</td>
+<td>废除</td>
+<td>In the mid 1800s,slavery was abolished in America</td>
 </tr>
 <tr>
-<td>statistics</td>
-<td>统计数字</td>
-<td>I use facts and statistics to prove my point</td>
+<td>church</td>
+<td>教堂</td>
+<td>The church is located in a beautiful suburb</td>
 </tr>
 <tr>
-<td>bookstore</td>
-<td>书店</td>
-<td>She’s buying books in the bookstore</td>
-</tr>
-<tr>
-<td>decision</td>
-<td>决定</td>
-<td>I’ve made my decision to buy this beautiful skirt</td>
-</tr>
-<tr>
-<td>suspect</td>
-<td>嫌疑犯</td>
-<td>The suspect is talking with his lawyer</td>
+<td>glance</td>
+<td>一瞥</td>
+<td>She glanced at his computer screen to see what he was watching</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3880,6 +3945,71 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-9</title>
+    <url>/2020/03/24/go-big-or-go-home-9/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>actual</td>
+<td>实际的</td>
+<td>The actual fact is that crocodiles walk underwater instead of swimming</td>
+</tr>
+<tr>
+<td>master</td>
+<td>主人</td>
+<td>The dog and its master are close to each other</td>
+</tr>
+<tr>
+<td>fridge</td>
+<td>电冰箱</td>
+<td>I opened the fridge to get some food</td>
+</tr>
+<tr>
+<td>bone</td>
+<td>骨头</td>
+<td>“I really want to eat some bones” the dog said</td>
+</tr>
+<tr>
+<td>represent</td>
+<td>代表</td>
+<td>This hand gesture represents love</td>
+</tr>
+<tr>
+<td>modest</td>
+<td>谦虚的</td>
+<td>These two businssmen may be rich,but they’re still very modest</td>
+</tr>
+<tr>
+<td>ox</td>
+<td>牛/公牛</td>
+<td>The strong ox is angry now</td>
+</tr>
+<tr>
+<td>nut</td>
+<td>坚果</td>
+<td>Nuts are a source of vitamin E for the body</td>
+</tr>
+<tr>
+<td>facial</td>
+<td>面部</td>
+<td>She looks surprized when her facial mask comes off her face</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-8</title>
     <url>/2020/03/23/go-big-or-go-home-8/</url>
     <content><![CDATA[<table>
@@ -3960,71 +4090,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-9</title>
-    <url>/2020/03/24/go-big-or-go-home-9/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>actual</td>
-<td>实际的</td>
-<td>The actual fact is that crocodiles walk underwater instead of swimming</td>
-</tr>
-<tr>
-<td>master</td>
-<td>主人</td>
-<td>The dog and its master are close to each other</td>
-</tr>
-<tr>
-<td>fridge</td>
-<td>电冰箱</td>
-<td>I opened the fridge to get some food</td>
-</tr>
-<tr>
-<td>bone</td>
-<td>骨头</td>
-<td>“I really want to eat some bones” the dog said</td>
-</tr>
-<tr>
-<td>represent</td>
-<td>代表</td>
-<td>This hand gesture represents love</td>
-</tr>
-<tr>
-<td>modest</td>
-<td>谦虚的</td>
-<td>These two businssmen may be rich,but they’re still very modest</td>
-</tr>
-<tr>
-<td>ox</td>
-<td>牛/公牛</td>
-<td>The strong ox is angry now</td>
-</tr>
-<tr>
-<td>nut</td>
-<td>坚果</td>
-<td>Nuts are a source of vitamin E for the body</td>
-</tr>
-<tr>
-<td>facial</td>
-<td>面部</td>
-<td>She looks surprized when her facial mask comes off her face</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode208</title>
     <url>/2019/10/20/leetcode208/</url>
     <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
@@ -4043,6 +4108,25 @@
       <tags>
         <tag>Trie树</tag>
         <tag>leetcode208</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode338</title>
+    <url>/2019/10/20/leetcode338/</url>
+    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
+
+<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode338</tag>
+        <tag>二进制数</tag>
       </tags>
   </entry>
   <entry>
@@ -4102,50 +4186,6 @@
       </tags>
   </entry>
   <entry>
-    <title>leetcode338</title>
-    <url>/2019/10/20/leetcode338/</url>
-    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
-
-<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode338</tag>
-        <tag>二进制数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>redis系列-Redisson分布式锁验证+踩坑</title>
-    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</url>
-    <content><![CDATA[<h3 id="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码"><a href="#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码" class="headerlink" title="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码"></a>本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.redisson&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;redisson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.11.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span>: 秒杀商品接口, 这里为了测试就手动创建三个线程</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> JsonObject</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@exception</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@author</span> mazhq</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2018/11/18 13:46</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis() + TIMEOUT;</span><br><span class="line">        RLock lock=</span><br><span class="line">                redissonClient.getLock(KEY);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Thread a = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程1"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread b = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程2"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread c = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程3"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            a.start();</span><br><span class="line">            b.start();</span><br><span class="line">            c.start();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"--------"</span>);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"111"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 库存减1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下"><a href="#重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下" class="headerlink" title="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下"></a>重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下</h3><p><a href="https://blog.csdn.net/zilong_zilong/article/details/78252037" target="_blank" rel="noopener">https://blog.csdn.net/zilong_zilong/article/details/78252037</a></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里使用了单节点，还有集群模式，哨兵模式，种类很多config.useSingleServer</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedissonClinetConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redissonClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Config config=<span class="keyword">new</span> Config();</span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">"redis://127.0.0.1:6379"</span>)</span><br><span class="line">                .setConnectionPoolSize(<span class="number">500</span>)</span><br><span class="line">                .setIdleConnectionTimeout(<span class="number">10000</span>)</span><br><span class="line">                .setConnectTimeout(<span class="number">30000</span>)</span><br><span class="line">                .setTimeout(<span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line">        RedissonClient redisson=Redisson.create(config);</span><br><span class="line">        <span class="keyword">return</span> redisson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"><a href="#先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功" class="headerlink" title="先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"></a>先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功</h3><p><img src="../image/kill.png" alt="kill.png" title="kill"></p>
-<p><img src="../image/begin.png" alt="begin.png" title="begin"></p>
-<p><img src="../image/end.png" alt="end.png" title="end"></p>
-<h3 id="我们来验证下"><a href="#我们来验证下" class="headerlink" title="我们来验证下"></a>我们来验证下</h3><p><img src="../image/check.png" alt="check.png" title="check"></p>
-]]></content>
-      <categories>
-        <category>redis</category>
-      </categories>
-      <tags>
-        <tag>redis分布式锁</tag>
-        <tag>Redisson框架</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>redis系列-实现一个延时消费队列</title>
     <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%BB%B6%E6%97%B6%E6%B6%88%E8%B4%B9%E9%98%9F%E5%88%97/</url>
     <content><![CDATA[<h3 id="用Zset和Hash实现一个延时队列，话不多说，附上代码"><a href="#用Zset和Hash实现一个延时队列，话不多说，附上代码" class="headerlink" title="用Zset和Hash实现一个延时队列，话不多说，附上代码"></a>用Zset和Hash实现一个延时队列，话不多说，附上代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertToRank</span><span class="params">(String id, String msg, String isNow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score=<span class="keyword">this</span>.getScore(isNow);</span><br><span class="line">        String uuid=UUID.randomUUID().toString().replaceAll(<span class="string">"-"</span>, <span class="string">""</span>);</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=</span><br><span class="line">                stringRedisTemplate.opsForHash();</span><br><span class="line">        Map&lt;String, String&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>, id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>, msg);</span><br><span class="line">        opsForHash.putAll(Constant.KEY_HASH + uuid, map);</span><br><span class="line">        <span class="keyword">this</span>.insertZset(uuid, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入zset，按照score排序</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> score</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertZset</span><span class="params">(String key, <span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=</span><br><span class="line">                stringRedisTemplate.opsForZSet();</span><br><span class="line">        opsForZSet.add(Constant.KEY_ZSET, key, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前时间</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> isNow is时表示实时消息，放入zset前面</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">double</span> <span class="title">getScore</span><span class="params">(String isNow)</span> </span>&#123;</span><br><span class="line">        Date nowTime=<span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">        SimpleDateFormat simpleDateFormat=<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMddHHmmss"</span>);</span><br><span class="line">        String now=simpleDateFormat.format(nowTime);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"is"</span>.equals(isNow)) &#123;</span><br><span class="line">            <span class="keyword">return</span> Double.parseDouble(now.substring(<span class="number">0</span>, <span class="number">12</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Double.parseDouble(now);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 抢锁</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOut</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key, String value, <span class="keyword">long</span> timeOut)</span> </span>&#123;</span><br><span class="line">        Boolean isSuccess=stringRedisTemplate.opsForValue().setIfAbsent(key, value);</span><br><span class="line">        <span class="keyword">if</span> (isSuccess) &#123;</span><br><span class="line">            stringRedisTemplate.expire(key, timeOut, TimeUnit.MINUTES);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isSuccess;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 释放锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delLock</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取zset第一条数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstData</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=stringRedisTemplate.opsForZSet();</span><br><span class="line">        Set&lt;String&gt; range=opsForZSet.range(key, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (!CollectionUtils.isEmpty(range)) &#123;</span><br><span class="line">            String uuid = range.iterator().next();</span><br><span class="line">            opsForZSet.remove(key,uuid);</span><br><span class="line">            <span class="keyword">return</span> uuid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询当前Zset多少个数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getZsetSize</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stringRedisTemplate.opsForZSet().zCard(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取hash数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,Object&gt; <span class="title">getHashData</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=stringRedisTemplate.opsForHash();</span><br><span class="line">        Object id=opsForHash.get(key, <span class="string">"id"</span>);</span><br><span class="line">        Object msg=opsForHash.get(key, <span class="string">"msg"</span>);</span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>,id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>,msg);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">(CountDownLatch countDownLatch,String uuid)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Map&lt;String, Object&gt; hashData=<span class="keyword">this</span>.getHashData(Constant.KEY_HASH + uuid);</span><br><span class="line">            log.info(<span class="string">"开始发送"</span>+hashData.get(<span class="string">"id"</span>)+<span class="string">"消息: "</span>+hashData.get(<span class="string">"msg"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            countDownLatch.countDown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -4179,6 +4219,44 @@
       </tags>
   </entry>
   <entry>
+    <title>redis系列-Redisson分布式锁验证+踩坑</title>
+    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</url>
+    <content><![CDATA[<h3 id="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码"><a href="#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码" class="headerlink" title="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码"></a>本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.redisson&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;redisson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.11.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span>: 秒杀商品接口, 这里为了测试就手动创建三个线程</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> JsonObject</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@exception</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@author</span> mazhq</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2018/11/18 13:46</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis() + TIMEOUT;</span><br><span class="line">        RLock lock=</span><br><span class="line">                redissonClient.getLock(KEY);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Thread a = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程1"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread b = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程2"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread c = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程3"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            a.start();</span><br><span class="line">            b.start();</span><br><span class="line">            c.start();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"--------"</span>);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"111"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 库存减1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下"><a href="#重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下" class="headerlink" title="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下"></a>重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下</h3><p><a href="https://blog.csdn.net/zilong_zilong/article/details/78252037" target="_blank" rel="noopener">https://blog.csdn.net/zilong_zilong/article/details/78252037</a></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里使用了单节点，还有集群模式，哨兵模式，种类很多config.useSingleServer</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedissonClinetConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redissonClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Config config=<span class="keyword">new</span> Config();</span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">"redis://127.0.0.1:6379"</span>)</span><br><span class="line">                .setConnectionPoolSize(<span class="number">500</span>)</span><br><span class="line">                .setIdleConnectionTimeout(<span class="number">10000</span>)</span><br><span class="line">                .setConnectTimeout(<span class="number">30000</span>)</span><br><span class="line">                .setTimeout(<span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line">        RedissonClient redisson=Redisson.create(config);</span><br><span class="line">        <span class="keyword">return</span> redisson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"><a href="#先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功" class="headerlink" title="先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"></a>先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功</h3><p><img src="../image/kill.png" alt="kill.png" title="kill"></p>
+<p><img src="../image/begin.png" alt="begin.png" title="begin"></p>
+<p><img src="../image/end.png" alt="end.png" title="end"></p>
+<h3 id="我们来验证下"><a href="#我们来验证下" class="headerlink" title="我们来验证下"></a>我们来验证下</h3><p><img src="../image/check.png" alt="check.png" title="check"></p>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis分布式锁</tag>
+        <tag>Redisson框架</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>不得不说的Java‘锁’事</title>
+    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
+    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>锁</tag>
+        <tag>高并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>你看着是一坨，它也经历了很多</title>
     <url>/2020/04/15/%E4%BD%A0%E7%9C%8B%E7%9D%80%E6%98%AF%E4%B8%80%E5%9D%A8%EF%BC%8C%E5%AE%83%E4%B9%9F%E7%BB%8F%E5%8E%86%E4%BA%86%E5%BE%88%E5%A4%9A/</url>
     <content><![CDATA[<p>你看着它是一坨，它也经历了很多。</p>
@@ -4194,19 +4272,6 @@
       <tags>
         <tag>个人经历</tag>
         <tag>转正述职</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>不得不说的Java‘锁’事</title>
-    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
-    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>锁</tag>
-        <tag>高并发</tag>
       </tags>
   </entry>
   <entry>

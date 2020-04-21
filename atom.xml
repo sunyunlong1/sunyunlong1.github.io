@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-20T16:06:03.503Z</updated>
+  <updated>2020-04-21T15:19:47.898Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>go big or go home-37</title>
+    <link href="http://yoursite.com/2020/04/21/go-big-or-go-home-37/"/>
+    <id>http://yoursite.com/2020/04/21/go-big-or-go-home-37/</id>
+    <published>2020-04-21T14:55:37.000Z</published>
+    <updated>2020-04-21T15:19:47.898Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;单词/短语&lt;/th&gt;
+&lt;th&gt;中文&lt;/th&gt;
+&lt;th&gt;句子&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;famous&lt;/td&gt;
+&lt;td&gt;著名的&lt;/td&gt;
+&lt;td&gt;The lady is a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="English" scheme="http://yoursite.com/categories/English/"/>
+    
+    
+      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
+    
+  </entry>
   
   <entry>
     <title>go big or go home-36</title>
@@ -710,35 +748,6 @@
     
     
       <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>redis系列-Redisson分布式锁验证+踩坑</title>
-    <link href="http://yoursite.com/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/"/>
-    <id>http://yoursite.com/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</id>
-    <published>2020-04-05T14:01:37.000Z</published>
-    <updated>2020-04-06T02:53:21.747Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h3 id=&quot;本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码&quot;&gt;&lt;a href=&quot;#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="redis" scheme="http://yoursite.com/categories/redis/"/>
-    
-    
-      <category term="redis分布式锁" scheme="http://yoursite.com/tags/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"/>
-    
-      <category term="Redisson框架" scheme="http://yoursite.com/tags/Redisson%E6%A1%86%E6%9E%B6/"/>
     
   </entry>
   
