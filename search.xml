@@ -19,27 +19,6 @@
       </tags>
   </entry>
   <entry>
-    <title>一路走来，即将毕业。</title>
-    <url>/2019/09/12/Sentiment/</url>
-    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
-<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
-<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
-<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
-<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
-<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
-<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
-<p>祝我自己前途似锦，万事胜意。</p>
-<p>2019-03-27 20:44更</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>毕业感悟</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之数据类型</title>
     <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
@@ -130,138 +109,24 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home</title>
-    <url>/2020/03/16/go%20big%20or%20go%20home/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>early birld</td>
-<td>早起的鸟儿</td>
-<td>Early birld gets the worm</td>
-</tr>
-<tr>
-<td>happiness</td>
-<td>开心幸福</td>
-<td>I often share happiness and sorrows with my friends</td>
-</tr>
-<tr>
-<td>jail</td>
-<td>监狱</td>
-<td>He may be jailed for killing</td>
-</tr>
-<tr>
-<td>breaks the law</td>
-<td>打破法律</td>
-<td>He was jailed for breaking the law</td>
-</tr>
-<tr>
-<td>chemical reaction</td>
-<td>化学反应</td>
-<td>When you smiling,you will experience a chemical reaction</td>
-</tr>
-<tr>
-<td>produces good-feeling chemicals</td>
-<td>同上</td>
-<td>When you smiling,you produces good-feeling chemicals</td>
-</tr>
-<tr>
-<td>fake simle</td>
-<td>假笑</td>
-<td>I may be fake simle when I together with my boss</td>
-</tr>
-<tr>
-<td>relax</td>
-<td>放松</td>
-<td>I want to keep relaxing in holiday</td>
-</tr>
-<tr>
-<td>look younger</td>
-<td>看起来年轻</td>
-<td>You look younger than your age</td>
-</tr>
-<tr>
-<td>sick</td>
-<td>生病</td>
-<td>The little girl may be sick</td>
-</tr>
-<tr>
-<td>pressure</td>
-<td>压力</td>
-<td>Post-90s pressure</td>
-</tr>
-<tr>
-<td>mortgage</td>
-<td>房贷</td>
-<td>He feel pressure beacuse of the mortgage</td>
-</tr>
-<tr>
-<td>get sick</td>
-<td>生病</td>
-<td>I don’t want to get sick</td>
-</tr>
-<tr>
-<td>vocabulary</td>
-<td>词汇</td>
-<td>Chinese vocabulary</td>
-</tr>
-<tr>
-<td>busy with</td>
-<td>忙于工作</td>
-<td>I’m too busy with my work</td>
-</tr>
-<tr>
-<td>crying</td>
-<td>哭</td>
-<td>The little girl is crying</td>
-</tr>
-<tr>
-<td>get lost</td>
-<td>走丢</td>
-<td>She got lost</td>
-</tr>
-<tr>
-<td>toothache</td>
-<td>牙痛</td>
-<td>Doctor,I have a toothache</td>
-</tr>
-<tr>
-<td>glass</td>
-<td>杯子</td>
-<td>The glass is broken</td>
-</tr>
-<tr>
-<td>stomachache</td>
-<td>胃痛</td>
-<td>The boy has a stomachache</td>
-</tr>
-<tr>
-<td>live</td>
-<td>注意读音[lɪv , laɪv]</td>
-<td>I live in Beijing；live Spring gala</td>
-</tr>
-<tr>
-<td>farther</td>
-<td>更远</td>
-<td>The higher you climb,The farther you can see</td>
-</tr>
-<tr>
-<td>suffer</td>
-<td>伤害</td>
-<td>The longer the war lasts,the more the people there will suffer</td>
-</tr>
-</tbody></table>
+    <title>一路走来，即将毕业。</title>
+    <url>/2019/09/12/Sentiment/</url>
+    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
+<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
+<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
+<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
+<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
+<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
+<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
+<p>祝我自己前途似锦，万事胜意。</p>
+<p>2019-03-27 20:44更</p>
 ]]></content>
       <categories>
-        <category>English</category>
+        <category>个人经历</category>
       </categories>
       <tags>
-        <tag>单词</tag>
+        <tag>个人经历</tag>
+        <tag>毕业感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -424,6 +289,141 @@
 <td>优雅句子</td>
 <td>当你独自穿过了暴风雨,你就不再是原来那个人了</td>
 <td>Once you walk through the storm alone,You are no longer the same person as before</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home</title>
+    <url>/2020/03/16/go%20big%20or%20go%20home/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>early birld</td>
+<td>早起的鸟儿</td>
+<td>Early birld gets the worm</td>
+</tr>
+<tr>
+<td>happiness</td>
+<td>开心幸福</td>
+<td>I often share happiness and sorrows with my friends</td>
+</tr>
+<tr>
+<td>jail</td>
+<td>监狱</td>
+<td>He may be jailed for killing</td>
+</tr>
+<tr>
+<td>breaks the law</td>
+<td>打破法律</td>
+<td>He was jailed for breaking the law</td>
+</tr>
+<tr>
+<td>chemical reaction</td>
+<td>化学反应</td>
+<td>When you smiling,you will experience a chemical reaction</td>
+</tr>
+<tr>
+<td>produces good-feeling chemicals</td>
+<td>同上</td>
+<td>When you smiling,you produces good-feeling chemicals</td>
+</tr>
+<tr>
+<td>fake simle</td>
+<td>假笑</td>
+<td>I may be fake simle when I together with my boss</td>
+</tr>
+<tr>
+<td>relax</td>
+<td>放松</td>
+<td>I want to keep relaxing in holiday</td>
+</tr>
+<tr>
+<td>look younger</td>
+<td>看起来年轻</td>
+<td>You look younger than your age</td>
+</tr>
+<tr>
+<td>sick</td>
+<td>生病</td>
+<td>The little girl may be sick</td>
+</tr>
+<tr>
+<td>pressure</td>
+<td>压力</td>
+<td>Post-90s pressure</td>
+</tr>
+<tr>
+<td>mortgage</td>
+<td>房贷</td>
+<td>He feel pressure beacuse of the mortgage</td>
+</tr>
+<tr>
+<td>get sick</td>
+<td>生病</td>
+<td>I don’t want to get sick</td>
+</tr>
+<tr>
+<td>vocabulary</td>
+<td>词汇</td>
+<td>Chinese vocabulary</td>
+</tr>
+<tr>
+<td>busy with</td>
+<td>忙于工作</td>
+<td>I’m too busy with my work</td>
+</tr>
+<tr>
+<td>crying</td>
+<td>哭</td>
+<td>The little girl is crying</td>
+</tr>
+<tr>
+<td>get lost</td>
+<td>走丢</td>
+<td>She got lost</td>
+</tr>
+<tr>
+<td>toothache</td>
+<td>牙痛</td>
+<td>Doctor,I have a toothache</td>
+</tr>
+<tr>
+<td>glass</td>
+<td>杯子</td>
+<td>The glass is broken</td>
+</tr>
+<tr>
+<td>stomachache</td>
+<td>胃痛</td>
+<td>The boy has a stomachache</td>
+</tr>
+<tr>
+<td>live</td>
+<td>注意读音[lɪv , laɪv]</td>
+<td>I live in Beijing；live Spring gala</td>
+</tr>
+<tr>
+<td>farther</td>
+<td>更远</td>
+<td>The higher you climb,The farther you can see</td>
+</tr>
+<tr>
+<td>suffer</td>
+<td>伤害</td>
+<td>The longer the war lasts,the more the people there will suffer</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1415,166 +1415,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-21</title>
-    <url>/2020/04/05/go-big-or-go-home-21/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>vertical</td>
-<td>垂直的</td>
-<td>The boy found the only vertical tree in the woods</td>
-</tr>
-<tr>
-<td>extraordinary</td>
-<td>非同寻常的</td>
-<td>The teacher said my daughter has extraordinary musical talent</td>
-</tr>
-<tr>
-<td>object</td>
-<td>物体</td>
-<td>UFO is the short form of Unidentified Flying Object</td>
-</tr>
-<tr>
-<td>ahead</td>
-<td>领先</td>
-<td>I am running ahead of the rest of the group</td>
-</tr>
-<tr>
-<td>for ever</td>
-<td>永远</td>
-<td>Diamonds and gold last for ever, and so will our love</td>
-</tr>
-<tr>
-<td>tip</td>
-<td>小费</td>
-<td>I paid $5 to the waiter for tip</td>
-</tr>
-<tr>
-<td>barber</td>
-<td>理发师</td>
-<td>I asked my barber to give me a new style this time</td>
-</tr>
-<tr>
-<td>coronavirus</td>
-<td>冠状病毒</td>
-<td></td>
-</tr>
-<tr>
-<td>western restaurant</td>
-<td>西餐厅</td>
-<td></td>
-</tr>
-<tr>
-<td>dining table</td>
-<td>餐桌(正餐)</td>
-<td></td>
-</tr>
-<tr>
-<td>6 o’clock sharp</td>
-<td>六点整</td>
-<td></td>
-</tr>
-<tr>
-<td>half past 10</td>
-<td>十点半</td>
-<td></td>
-</tr>
-<tr>
-<td>a quarter past 10</td>
-<td>十点十五</td>
-<td></td>
-</tr>
-<tr>
-<td>make a reservation</td>
-<td>预定(还没有预订)</td>
-<td></td>
-</tr>
-<tr>
-<td>have a reservation</td>
-<td>预定(已经预订了)</td>
-<td></td>
-</tr>
-<tr>
-<td>book a table</td>
-<td>预定一个位置</td>
-<td></td>
-</tr>
-<tr>
-<td>breakfast</td>
-<td>早餐，注意没有r</td>
-<td></td>
-</tr>
-<tr>
-<td>have…for dinner</td>
-<td>晚餐吃什么</td>
-<td>I have fruit for dinner</td>
-</tr>
-<tr>
-<td>receptionist</td>
-<td>前台</td>
-<td></td>
-</tr>
-<tr>
-<td>Certainly</td>
-<td>当然</td>
-<td></td>
-</tr>
-<tr>
-<td>I’d like to</td>
-<td>想要，不是命令</td>
-<td></td>
-</tr>
-<tr>
-<td>I want to</td>
-<td>想要，带有命令</td>
-<td></td>
-</tr>
-<tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
-</tr>
-<tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
-</tr>
-<tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
-</tr>
-<tr>
-<td>on</td>
-<td>具体的一天</td>
-<td>on Saturday</td>
-</tr>
-<tr>
-<td>in</td>
-<td>范围</td>
-<td>in Spring</td>
-</tr>
-<tr>
-<td>at</td>
-<td>具体时刻</td>
-<td>at 7o’clock</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-2</title>
     <url>/2020/03/17/go-big-or-go-home-2/</url>
     <content><![CDATA[<table>
@@ -2070,6 +1910,166 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-21</title>
+    <url>/2020/04/05/go-big-or-go-home-21/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vertical</td>
+<td>垂直的</td>
+<td>The boy found the only vertical tree in the woods</td>
+</tr>
+<tr>
+<td>extraordinary</td>
+<td>非同寻常的</td>
+<td>The teacher said my daughter has extraordinary musical talent</td>
+</tr>
+<tr>
+<td>object</td>
+<td>物体</td>
+<td>UFO is the short form of Unidentified Flying Object</td>
+</tr>
+<tr>
+<td>ahead</td>
+<td>领先</td>
+<td>I am running ahead of the rest of the group</td>
+</tr>
+<tr>
+<td>for ever</td>
+<td>永远</td>
+<td>Diamonds and gold last for ever, and so will our love</td>
+</tr>
+<tr>
+<td>tip</td>
+<td>小费</td>
+<td>I paid $5 to the waiter for tip</td>
+</tr>
+<tr>
+<td>barber</td>
+<td>理发师</td>
+<td>I asked my barber to give me a new style this time</td>
+</tr>
+<tr>
+<td>coronavirus</td>
+<td>冠状病毒</td>
+<td></td>
+</tr>
+<tr>
+<td>western restaurant</td>
+<td>西餐厅</td>
+<td></td>
+</tr>
+<tr>
+<td>dining table</td>
+<td>餐桌(正餐)</td>
+<td></td>
+</tr>
+<tr>
+<td>6 o’clock sharp</td>
+<td>六点整</td>
+<td></td>
+</tr>
+<tr>
+<td>half past 10</td>
+<td>十点半</td>
+<td></td>
+</tr>
+<tr>
+<td>a quarter past 10</td>
+<td>十点十五</td>
+<td></td>
+</tr>
+<tr>
+<td>make a reservation</td>
+<td>预定(还没有预订)</td>
+<td></td>
+</tr>
+<tr>
+<td>have a reservation</td>
+<td>预定(已经预订了)</td>
+<td></td>
+</tr>
+<tr>
+<td>book a table</td>
+<td>预定一个位置</td>
+<td></td>
+</tr>
+<tr>
+<td>breakfast</td>
+<td>早餐，注意没有r</td>
+<td></td>
+</tr>
+<tr>
+<td>have…for dinner</td>
+<td>晚餐吃什么</td>
+<td>I have fruit for dinner</td>
+</tr>
+<tr>
+<td>receptionist</td>
+<td>前台</td>
+<td></td>
+</tr>
+<tr>
+<td>Certainly</td>
+<td>当然</td>
+<td></td>
+</tr>
+<tr>
+<td>I’d like to</td>
+<td>想要，不是命令</td>
+<td></td>
+</tr>
+<tr>
+<td>I want to</td>
+<td>想要，带有命令</td>
+<td></td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>on</td>
+<td>具体的一天</td>
+<td>on Saturday</td>
+</tr>
+<tr>
+<td>in</td>
+<td>范围</td>
+<td>in Spring</td>
+</tr>
+<tr>
+<td>at</td>
+<td>具体时刻</td>
+<td>at 7o’clock</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-23</title>
     <url>/2020/04/07/go-big-or-go-home-23/</url>
     <content><![CDATA[<table>
@@ -2138,6 +2138,76 @@
 <tr>
 <td>slice</td>
 <td>切薄片</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-25</title>
+    <url>/2020/04/10/go-big-or-go-home-25/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>headmistress</td>
+<td>女校长</td>
+<td>Our headmistress is giving us a speech</td>
+</tr>
+<tr>
+<td>conventional</td>
+<td>依据惯例的</td>
+<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
+</tr>
+<tr>
+<td>carry out</td>
+<td>完成</td>
+<td>After the hard work,I finally carried out my plan</td>
+</tr>
+<tr>
+<td>behaviour</td>
+<td>行为</td>
+<td>I can tell he is happy from his behaviour</td>
+</tr>
+<tr>
+<td>mirror</td>
+<td>镜子</td>
+<td>Look at yourselves in the mirror</td>
+</tr>
+<tr>
+<td>vast</td>
+<td>辽阔的</td>
+<td>This vast desert looks impossible to pass</td>
+</tr>
+<tr>
+<td>toast</td>
+<td>烤面包</td>
+<td>There are two slices of toast and some butter on the table</td>
+</tr>
+<tr>
+<td>cyclist</td>
+<td>骑自行车的人</td>
+<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
+</tr>
+<tr>
+<td>satisfy</td>
+<td>满意</td>
+<td>-</td>
+</tr>
+<tr>
+<td>frightened</td>
+<td>害怕的</td>
 <td>-</td>
 </tr>
 </tbody></table>
@@ -2580,76 +2650,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-25</title>
-    <url>/2020/04/10/go-big-or-go-home-25/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>headmistress</td>
-<td>女校长</td>
-<td>Our headmistress is giving us a speech</td>
-</tr>
-<tr>
-<td>conventional</td>
-<td>依据惯例的</td>
-<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
-</tr>
-<tr>
-<td>carry out</td>
-<td>完成</td>
-<td>After the hard work,I finally carried out my plan</td>
-</tr>
-<tr>
-<td>behaviour</td>
-<td>行为</td>
-<td>I can tell he is happy from his behaviour</td>
-</tr>
-<tr>
-<td>mirror</td>
-<td>镜子</td>
-<td>Look at yourselves in the mirror</td>
-</tr>
-<tr>
-<td>vast</td>
-<td>辽阔的</td>
-<td>This vast desert looks impossible to pass</td>
-</tr>
-<tr>
-<td>toast</td>
-<td>烤面包</td>
-<td>There are two slices of toast and some butter on the table</td>
-</tr>
-<tr>
-<td>cyclist</td>
-<td>骑自行车的人</td>
-<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
-</tr>
-<tr>
-<td>satisfy</td>
-<td>满意</td>
-<td>-</td>
-</tr>
-<tr>
-<td>frightened</td>
-<td>害怕的</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-29</title>
     <url>/2020/04/13/go-big-or-go-home-29/</url>
     <content><![CDATA[<table>
@@ -2885,91 +2885,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-32</title>
-    <url>/2020/04/16/go-big-or-go-home-32/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>latter</td>
-<td>后者</td>
-<td>When asked what he would prefer;an apple or pizza,the boy chose the latter</td>
-</tr>
-<tr>
-<td>kitchen</td>
-<td>厨房</td>
-<td>The kitchen is clean and modern</td>
-</tr>
-<tr>
-<td>senior</td>
-<td>年长的</td>
-<td>The senior citizens in the community often have fun talking to each other</td>
-</tr>
-<tr>
-<td>build</td>
-<td>建造</td>
-<td>They are building a block of offices</td>
-</tr>
-<tr>
-<td>parcel</td>
-<td>包裹</td>
-<td>The person has a lot of parcels to send on Novermber 11th</td>
-</tr>
-<tr>
-<td>animal</td>
-<td>动物</td>
-<td>There are many kinds of animals on earth</td>
-</tr>
-<tr>
-<td>take out the rubbish</td>
-<td>倒垃圾</td>
-<td>Could you please take out the rubbish when you leave?</td>
-</tr>
-<tr>
-<td>put it in the trash can</td>
-<td>放进垃圾桶</td>
-<td>Don’t drop the bottle there,please put it in the trash can</td>
-</tr>
-<tr>
-<td>empty the recycle bin</td>
-<td>清理垃圾桶</td>
-<td>-</td>
-</tr>
-<tr>
-<td>garbage</td>
-<td>食物垃圾(美式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>trash</td>
-<td>纸/塑料(美式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>rubbish</td>
-<td>垃圾(英式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-3</title>
     <url>/2020/03/18/go-big-or-go-home-3/</url>
     <content><![CDATA[<table>
@@ -3160,6 +3075,91 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-32</title>
+    <url>/2020/04/16/go-big-or-go-home-32/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>latter</td>
+<td>后者</td>
+<td>When asked what he would prefer;an apple or pizza,the boy chose the latter</td>
+</tr>
+<tr>
+<td>kitchen</td>
+<td>厨房</td>
+<td>The kitchen is clean and modern</td>
+</tr>
+<tr>
+<td>senior</td>
+<td>年长的</td>
+<td>The senior citizens in the community often have fun talking to each other</td>
+</tr>
+<tr>
+<td>build</td>
+<td>建造</td>
+<td>They are building a block of offices</td>
+</tr>
+<tr>
+<td>parcel</td>
+<td>包裹</td>
+<td>The person has a lot of parcels to send on Novermber 11th</td>
+</tr>
+<tr>
+<td>animal</td>
+<td>动物</td>
+<td>There are many kinds of animals on earth</td>
+</tr>
+<tr>
+<td>take out the rubbish</td>
+<td>倒垃圾</td>
+<td>Could you please take out the rubbish when you leave?</td>
+</tr>
+<tr>
+<td>put it in the trash can</td>
+<td>放进垃圾桶</td>
+<td>Don’t drop the bottle there,please put it in the trash can</td>
+</tr>
+<tr>
+<td>empty the recycle bin</td>
+<td>清理垃圾桶</td>
+<td>-</td>
+</tr>
+<tr>
+<td>garbage</td>
+<td>食物垃圾(美式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>trash</td>
+<td>纸/塑料(美式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>rubbish</td>
+<td>垃圾(英式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-33</title>
     <url>/2020/04/17/go-big-or-go-home-33/</url>
     <content><![CDATA[<table>
@@ -3289,111 +3289,6 @@
 <td>suspect</td>
 <td>嫌疑犯</td>
 <td>The suspect is talking with his lawyer</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-36</title>
-    <url>/2020/04/20/go-big-or-go-home-36/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>marble</td>
-<td>大理石</td>
-<td>The floor is made of marble</td>
-</tr>
-<tr>
-<td>tortoise</td>
-<td>乌龟</td>
-<td>Look,the little tortoise is eating leaves</td>
-</tr>
-<tr>
-<td>belong</td>
-<td>属于</td>
-<td>This girl belongs to me!</td>
-</tr>
-<tr>
-<td>acknowledge</td>
-<td>告知收到</td>
-<td>Acknowledge,We will bake the bread soon</td>
-</tr>
-<tr>
-<td>radiation</td>
-<td>辐射物</td>
-<td>Don’t get closer to radiation if you are not in protective suit</td>
-</tr>
-<tr>
-<td>anyhow</td>
-<td>无论如何</td>
-<td>Someone has to wash the dishes anyhow,so I’ll do them</td>
-</tr>
-<tr>
-<td>altitude</td>
-<td>海拔</td>
-<td>The altitude of this mountain in 8844 meters</td>
-</tr>
-<tr>
-<td>make a toast</td>
-<td>敬酒</td>
-<td>-</td>
-</tr>
-<tr>
-<td>blush</td>
-<td>脸红</td>
-<td>-</td>
-</tr>
-<tr>
-<td>tequlia</td>
-<td>龙舌兰</td>
-<td>-</td>
-</tr>
-<tr>
-<td>raise</td>
-<td>举</td>
-<td>-</td>
-</tr>
-<tr>
-<td>mixologist</td>
-<td>调酒师</td>
-<td>-</td>
-</tr>
-<tr>
-<td>bartender</td>
-<td>调酒师</td>
-<td>-</td>
-</tr>
-<tr>
-<td>alcohol</td>
-<td>酒精</td>
-<td>-</td>
-</tr>
-<tr>
-<td>rum</td>
-<td>朗姆酒</td>
-<td>-</td>
-</tr>
-<tr>
-<td>gorgeous</td>
-<td>美丽动人的</td>
-<td>-</td>
-</tr>
-<tr>
-<td>sake</td>
-<td>日本清酒</td>
-<td>-</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3535,6 +3430,111 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-36</title>
+    <url>/2020/04/20/go-big-or-go-home-36/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>marble</td>
+<td>大理石</td>
+<td>The floor is made of marble</td>
+</tr>
+<tr>
+<td>tortoise</td>
+<td>乌龟</td>
+<td>Look,the little tortoise is eating leaves</td>
+</tr>
+<tr>
+<td>belong</td>
+<td>属于</td>
+<td>This girl belongs to me!</td>
+</tr>
+<tr>
+<td>acknowledge</td>
+<td>告知收到</td>
+<td>Acknowledge,We will bake the bread soon</td>
+</tr>
+<tr>
+<td>radiation</td>
+<td>辐射物</td>
+<td>Don’t get closer to radiation if you are not in protective suit</td>
+</tr>
+<tr>
+<td>anyhow</td>
+<td>无论如何</td>
+<td>Someone has to wash the dishes anyhow,so I’ll do them</td>
+</tr>
+<tr>
+<td>altitude</td>
+<td>海拔</td>
+<td>The altitude of this mountain in 8844 meters</td>
+</tr>
+<tr>
+<td>make a toast</td>
+<td>敬酒</td>
+<td>-</td>
+</tr>
+<tr>
+<td>blush</td>
+<td>脸红</td>
+<td>-</td>
+</tr>
+<tr>
+<td>tequlia</td>
+<td>龙舌兰</td>
+<td>-</td>
+</tr>
+<tr>
+<td>raise</td>
+<td>举</td>
+<td>-</td>
+</tr>
+<tr>
+<td>mixologist</td>
+<td>调酒师</td>
+<td>-</td>
+</tr>
+<tr>
+<td>bartender</td>
+<td>调酒师</td>
+<td>-</td>
+</tr>
+<tr>
+<td>alcohol</td>
+<td>酒精</td>
+<td>-</td>
+</tr>
+<tr>
+<td>rum</td>
+<td>朗姆酒</td>
+<td>-</td>
+</tr>
+<tr>
+<td>gorgeous</td>
+<td>美丽动人的</td>
+<td>-</td>
+</tr>
+<tr>
+<td>sake</td>
+<td>日本清酒</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-4</title>
     <url>/2020/03/19/go-big-or-go-home-4/</url>
     <content><![CDATA[<table>
@@ -3589,6 +3589,66 @@
 <td>edge</td>
 <td>边缘</td>
 <td>He edged closer to the telephone, ready to grab it</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-38</title>
+    <url>/2020/04/22/go-big-or-go-home-38/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>call on</td>
+<td>拜访</td>
+<td>The family called on their neighbor on Christmas Day</td>
+</tr>
+<tr>
+<td>dawn</td>
+<td>黎明</td>
+<td>The rooster standing on the field crows at dawn</td>
+</tr>
+<tr>
+<td>laughter</td>
+<td>笑</td>
+<td>The hall is filled with the laughter of the audience</td>
+</tr>
+<tr>
+<td>zip</td>
+<td>拉链</td>
+<td>I zip up my jeans pocket to keep my money safe</td>
+</tr>
+<tr>
+<td>comprehension</td>
+<td>理解力</td>
+<td>There guys must have a high level of comprehension to understand this</td>
+</tr>
+<tr>
+<td>shape</td>
+<td>形状</td>
+<td>The candle on the birthday cake is in the shape of a seven</td>
+</tr>
+<tr>
+<td>grasp</td>
+<td>抓住</td>
+<td>The baby grasped mother’s finger</td>
+</tr>
+<tr>
+<td>film</td>
+<td>电影</td>
+<td>The film has a happy ending</td>
 </tr>
 </tbody></table>
 ]]></content>

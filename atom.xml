@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-21T15:19:47.898Z</updated>
+  <updated>2020-04-22T15:59:19.191Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>go big or go home-38</title>
+    <link href="http://yoursite.com/2020/04/22/go-big-or-go-home-38/"/>
+    <id>http://yoursite.com/2020/04/22/go-big-or-go-home-38/</id>
+    <published>2020-04-22T14:23:19.000Z</published>
+    <updated>2020-04-22T15:59:19.191Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;单词/短语&lt;/th&gt;
+&lt;th&gt;中文&lt;/th&gt;
+&lt;th&gt;句子&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;call on&lt;/td&gt;
+&lt;td&gt;拜访&lt;/td&gt;
+&lt;td&gt;The family called
+        
+      
+    
+    </summary>
+    
+    
+      <category term="English" scheme="http://yoursite.com/categories/English/"/>
+    
+    
+      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
+    
+  </entry>
   
   <entry>
     <title>go big or go home-37</title>
@@ -700,44 +738,6 @@
 &lt;td&gt;bang&lt;/td&gt;
 &lt;td&gt;巨响&lt;/td&gt;
 &lt;td&gt;After a guest of
-        
-      
-    
-    </summary>
-    
-    
-      <category term="English" scheme="http://yoursite.com/categories/English/"/>
-    
-    
-      <category term="单词" scheme="http://yoursite.com/tags/%E5%8D%95%E8%AF%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>go big or go home-21</title>
-    <link href="http://yoursite.com/2020/04/05/go-big-or-go-home-21/"/>
-    <id>http://yoursite.com/2020/04/05/go-big-or-go-home-21/</id>
-    <published>2020-04-05T14:30:50.000Z</published>
-    <updated>2020-04-05T16:44:59.157Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;单词/短语&lt;/th&gt;
-&lt;th&gt;中文&lt;/th&gt;
-&lt;th&gt;句子&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;vertical&lt;/td&gt;
-&lt;td&gt;垂直的&lt;/td&gt;
-&lt;td&gt;The boy found the
         
       
     
