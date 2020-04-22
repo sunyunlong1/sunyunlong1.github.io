@@ -67,6 +67,109 @@
     
     
     
+    <article id="post-Java基础部分之数据类型" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2019/09/23/Java基础部分之数据类型/"
+    >Java基础部分之数据类型</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2019/09/23/Java基础部分之数据类型/" class="article-date">
+  <time datetime="2019-09-23T12:37:02.000Z" itemprop="datePublished">2019-09-23</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
+<p>char/16</p>
+<p>short/16</p>
+<p>int/32</p>
+<p>float/32</p>
+<p>long/64</p>
+<p>double/64</p>
+<p>boolean/~</p>
+<p>boolean只有两个值，ture，false可以使用1bit来存储，但是具体大小没有明确规定，JVM会在编译期将boolean类型的数据转换为int，使用1来表示true，0表示false，JVM支持boolean数组，但是是通过读写byte数组来实现的。</p>
+<h4 id="包装类型"><a href="#包装类型" class="headerlink" title="包装类型"></a>包装类型</h4><p>基本类型都有对应的包装类型，基本类型与其对应的包装类型之间的赋值使用自动装箱与拆箱完成。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer x = 2; //装箱</span><br><span class="line"></span><br><span class="line">int y = x; //拆箱</span><br></pre></td></tr></table></figure>
+
+<h4 id="缓存池"><a href="#缓存池" class="headerlink" title="缓存池"></a>缓存池</h4><p>new Integer(123)与Integer.valueOf(123)的区别在于：</p>
+<p>new Integer(123)每次都会新建一个对象</p>
+<p>Integer.valueOf(123)会使用缓存池中的对象，多次调用会取得同一个对象的引用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Integer x = new Integer(123);</span><br><span class="line">Integer y = new Integer(123);</span><br><span class="line">System.out.println(x == y); //false</span><br><span class="line">Integer z = Integer.valueOf(123);</span><br><span class="line">Integer k = Integer.valueOf(123);</span><br><span class="line">System.out.println(z == k); //true</span><br></pre></td></tr></table></figure>
+
+<p>valueOf()方法的实现比较简单，就是先判断是否在缓存池中，如果在的话就直接返回缓存池的内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static Integer valueOf(int i) &#123;</span><br><span class="line">	if(i &gt;= IntegerCahe.low &amp;&amp; i &lt;= IntegerCahe.high)</span><br><span class="line">		return IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">	return new Integer(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java8中，Integer缓存池的大小默认为-128-127.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">static final int low = -128;</span><br><span class="line">static final int high;</span><br><span class="line">static final Integer cache[];</span><br><span class="line"></span><br><span class="line">static &#123;</span><br><span class="line">	//high value may be configured by property</span><br><span class="line">	int h = 127;</span><br><span class="line">	String integerCacheHighPropValue = </span><br><span class="line">		sum.misc.VM.getSaveProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">	if(integerCacheHighPropValue != null) &#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			int i = parseInt(integerCacheHighPropValue)</span><br><span class="line">			i = Math.max(i,127);</span><br><span class="line">			//Maximum array size is Integer.MAX_VALUE</span><br><span class="line">			h = Math.min(i,Integer.MAX_VALUE - (-low) - 1);</span><br><span class="line">		&#125; catch( NumberFormatException nfe)&#123;</span><br><span class="line">		//If the property cannot be parsed into an int,ignore it.</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	high = h;</span><br><span class="line">	</span><br><span class="line">	cache = new Integer[(high - low) + 1];</span><br><span class="line">	int j = low;</span><br><span class="line">	for(int k = 0; k&lt;cache.length; k++)</span><br><span class="line">		cache[k] = new Integer(j++);</span><br><span class="line">	// range [-128,127] must be interned (JLS7 5.1.7)</span><br><span class="line">	assert IntegerCache.high &gt;= 127;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译器会在自动装箱过程调用valueOf()方法，因此多个值相同且值在缓存池范围内的Integer实例使用自动装箱来创建，那么就会引用相同的对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer m = 123;</span><br><span class="line">Integer n = 123;</span><br><span class="line">System.out.println(m == n); //true</span><br></pre></td></tr></table></figure>
+
+<p>基本类型对应的缓冲池如下：</p>
+<p>boolean values true and false</p>
+<p>all byte values</p>
+<p>short values between -128 and 127</p>
+<p>int values between -128 and 127</p>
+<p>char in the range \u0000 to \u007F</p>
+<p>在使用这些基本类型对应的包装类型时，如果该数值范围在缓冲池范围内，就可以直接使用缓冲池中的对象。</p>
+<p>在jdk1.8所有的数值类缓冲池中，Integer的缓冲池IntegerCache很特殊，这个缓冲池的下届是-128，上届默认是127，但是这个上届是可调的，在启动jvm的时候，通过-XX:AutoBoxCache=<size>来指定这个缓冲池的大小，该选项在JVM初始化的时候会设定一个名为java.lang.IntegerCache.high系统属性，然后IntegerCache初始化的时候就会读取该系统属性来决定上界。</size></p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java基本类型/">Java基本类型</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java基础/">Java基础</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="blog-BigDecimal比较大小" class="article article-type-blog" itemscope
   itemprop="blogPost" data-scroll-reveal>
 

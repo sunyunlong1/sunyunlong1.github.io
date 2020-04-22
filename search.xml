@@ -19,6 +19,50 @@
       </tags>
   </entry>
   <entry>
+    <title>Java基础部分之String</title>
+    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
+    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
+<p>在Java8中，String内部使用char数组存储数据。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
+<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
+
+<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
+
+<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
+<p>而使用new的方式会在堆中创建一个字符串对象。</p>
+<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>String</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java基础部分之数据类型</title>
     <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
@@ -65,50 +109,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础部分之String</title>
-    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
-    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
-<p>在Java8中，String内部使用char数组存储数据。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
-<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
-<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
-
-<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
-
-<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
-<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
-<p>而使用new的方式会在堆中创建一个字符串对象。</p>
-<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>String</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>一路走来，即将毕业。</title>
     <url>/2019/09/12/Sentiment/</url>
     <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
@@ -127,6 +127,141 @@
       <tags>
         <tag>个人经历</tag>
         <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home</title>
+    <url>/2020/03/16/go%20big%20or%20go%20home/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>early birld</td>
+<td>早起的鸟儿</td>
+<td>Early birld gets the worm</td>
+</tr>
+<tr>
+<td>happiness</td>
+<td>开心幸福</td>
+<td>I often share happiness and sorrows with my friends</td>
+</tr>
+<tr>
+<td>jail</td>
+<td>监狱</td>
+<td>He may be jailed for killing</td>
+</tr>
+<tr>
+<td>breaks the law</td>
+<td>打破法律</td>
+<td>He was jailed for breaking the law</td>
+</tr>
+<tr>
+<td>chemical reaction</td>
+<td>化学反应</td>
+<td>When you smiling,you will experience a chemical reaction</td>
+</tr>
+<tr>
+<td>produces good-feeling chemicals</td>
+<td>同上</td>
+<td>When you smiling,you produces good-feeling chemicals</td>
+</tr>
+<tr>
+<td>fake simle</td>
+<td>假笑</td>
+<td>I may be fake simle when I together with my boss</td>
+</tr>
+<tr>
+<td>relax</td>
+<td>放松</td>
+<td>I want to keep relaxing in holiday</td>
+</tr>
+<tr>
+<td>look younger</td>
+<td>看起来年轻</td>
+<td>You look younger than your age</td>
+</tr>
+<tr>
+<td>sick</td>
+<td>生病</td>
+<td>The little girl may be sick</td>
+</tr>
+<tr>
+<td>pressure</td>
+<td>压力</td>
+<td>Post-90s pressure</td>
+</tr>
+<tr>
+<td>mortgage</td>
+<td>房贷</td>
+<td>He feel pressure beacuse of the mortgage</td>
+</tr>
+<tr>
+<td>get sick</td>
+<td>生病</td>
+<td>I don’t want to get sick</td>
+</tr>
+<tr>
+<td>vocabulary</td>
+<td>词汇</td>
+<td>Chinese vocabulary</td>
+</tr>
+<tr>
+<td>busy with</td>
+<td>忙于工作</td>
+<td>I’m too busy with my work</td>
+</tr>
+<tr>
+<td>crying</td>
+<td>哭</td>
+<td>The little girl is crying</td>
+</tr>
+<tr>
+<td>get lost</td>
+<td>走丢</td>
+<td>She got lost</td>
+</tr>
+<tr>
+<td>toothache</td>
+<td>牙痛</td>
+<td>Doctor,I have a toothache</td>
+</tr>
+<tr>
+<td>glass</td>
+<td>杯子</td>
+<td>The glass is broken</td>
+</tr>
+<tr>
+<td>stomachache</td>
+<td>胃痛</td>
+<td>The boy has a stomachache</td>
+</tr>
+<tr>
+<td>live</td>
+<td>注意读音[lɪv , laɪv]</td>
+<td>I live in Beijing；live Spring gala</td>
+</tr>
+<tr>
+<td>farther</td>
+<td>更远</td>
+<td>The higher you climb,The farther you can see</td>
+</tr>
+<tr>
+<td>suffer</td>
+<td>伤害</td>
+<td>The longer the war lasts,the more the people there will suffer</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
       </tags>
   </entry>
   <entry>
@@ -289,141 +424,6 @@
 <td>优雅句子</td>
 <td>当你独自穿过了暴风雨,你就不再是原来那个人了</td>
 <td>Once you walk through the storm alone,You are no longer the same person as before</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home</title>
-    <url>/2020/03/16/go%20big%20or%20go%20home/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>early birld</td>
-<td>早起的鸟儿</td>
-<td>Early birld gets the worm</td>
-</tr>
-<tr>
-<td>happiness</td>
-<td>开心幸福</td>
-<td>I often share happiness and sorrows with my friends</td>
-</tr>
-<tr>
-<td>jail</td>
-<td>监狱</td>
-<td>He may be jailed for killing</td>
-</tr>
-<tr>
-<td>breaks the law</td>
-<td>打破法律</td>
-<td>He was jailed for breaking the law</td>
-</tr>
-<tr>
-<td>chemical reaction</td>
-<td>化学反应</td>
-<td>When you smiling,you will experience a chemical reaction</td>
-</tr>
-<tr>
-<td>produces good-feeling chemicals</td>
-<td>同上</td>
-<td>When you smiling,you produces good-feeling chemicals</td>
-</tr>
-<tr>
-<td>fake simle</td>
-<td>假笑</td>
-<td>I may be fake simle when I together with my boss</td>
-</tr>
-<tr>
-<td>relax</td>
-<td>放松</td>
-<td>I want to keep relaxing in holiday</td>
-</tr>
-<tr>
-<td>look younger</td>
-<td>看起来年轻</td>
-<td>You look younger than your age</td>
-</tr>
-<tr>
-<td>sick</td>
-<td>生病</td>
-<td>The little girl may be sick</td>
-</tr>
-<tr>
-<td>pressure</td>
-<td>压力</td>
-<td>Post-90s pressure</td>
-</tr>
-<tr>
-<td>mortgage</td>
-<td>房贷</td>
-<td>He feel pressure beacuse of the mortgage</td>
-</tr>
-<tr>
-<td>get sick</td>
-<td>生病</td>
-<td>I don’t want to get sick</td>
-</tr>
-<tr>
-<td>vocabulary</td>
-<td>词汇</td>
-<td>Chinese vocabulary</td>
-</tr>
-<tr>
-<td>busy with</td>
-<td>忙于工作</td>
-<td>I’m too busy with my work</td>
-</tr>
-<tr>
-<td>crying</td>
-<td>哭</td>
-<td>The little girl is crying</td>
-</tr>
-<tr>
-<td>get lost</td>
-<td>走丢</td>
-<td>She got lost</td>
-</tr>
-<tr>
-<td>toothache</td>
-<td>牙痛</td>
-<td>Doctor,I have a toothache</td>
-</tr>
-<tr>
-<td>glass</td>
-<td>杯子</td>
-<td>The glass is broken</td>
-</tr>
-<tr>
-<td>stomachache</td>
-<td>胃痛</td>
-<td>The boy has a stomachache</td>
-</tr>
-<tr>
-<td>live</td>
-<td>注意读音[lɪv , laɪv]</td>
-<td>I live in Beijing；live Spring gala</td>
-</tr>
-<tr>
-<td>farther</td>
-<td>更远</td>
-<td>The higher you climb,The farther you can see</td>
-</tr>
-<tr>
-<td>suffer</td>
-<td>伤害</td>
-<td>The longer the war lasts,the more the people there will suffer</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1555,6 +1555,166 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-21</title>
+    <url>/2020/04/05/go-big-or-go-home-21/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vertical</td>
+<td>垂直的</td>
+<td>The boy found the only vertical tree in the woods</td>
+</tr>
+<tr>
+<td>extraordinary</td>
+<td>非同寻常的</td>
+<td>The teacher said my daughter has extraordinary musical talent</td>
+</tr>
+<tr>
+<td>object</td>
+<td>物体</td>
+<td>UFO is the short form of Unidentified Flying Object</td>
+</tr>
+<tr>
+<td>ahead</td>
+<td>领先</td>
+<td>I am running ahead of the rest of the group</td>
+</tr>
+<tr>
+<td>for ever</td>
+<td>永远</td>
+<td>Diamonds and gold last for ever, and so will our love</td>
+</tr>
+<tr>
+<td>tip</td>
+<td>小费</td>
+<td>I paid $5 to the waiter for tip</td>
+</tr>
+<tr>
+<td>barber</td>
+<td>理发师</td>
+<td>I asked my barber to give me a new style this time</td>
+</tr>
+<tr>
+<td>coronavirus</td>
+<td>冠状病毒</td>
+<td></td>
+</tr>
+<tr>
+<td>western restaurant</td>
+<td>西餐厅</td>
+<td></td>
+</tr>
+<tr>
+<td>dining table</td>
+<td>餐桌(正餐)</td>
+<td></td>
+</tr>
+<tr>
+<td>6 o’clock sharp</td>
+<td>六点整</td>
+<td></td>
+</tr>
+<tr>
+<td>half past 10</td>
+<td>十点半</td>
+<td></td>
+</tr>
+<tr>
+<td>a quarter past 10</td>
+<td>十点十五</td>
+<td></td>
+</tr>
+<tr>
+<td>make a reservation</td>
+<td>预定(还没有预订)</td>
+<td></td>
+</tr>
+<tr>
+<td>have a reservation</td>
+<td>预定(已经预订了)</td>
+<td></td>
+</tr>
+<tr>
+<td>book a table</td>
+<td>预定一个位置</td>
+<td></td>
+</tr>
+<tr>
+<td>breakfast</td>
+<td>早餐，注意没有r</td>
+<td></td>
+</tr>
+<tr>
+<td>have…for dinner</td>
+<td>晚餐吃什么</td>
+<td>I have fruit for dinner</td>
+</tr>
+<tr>
+<td>receptionist</td>
+<td>前台</td>
+<td></td>
+</tr>
+<tr>
+<td>Certainly</td>
+<td>当然</td>
+<td></td>
+</tr>
+<tr>
+<td>I’d like to</td>
+<td>想要，不是命令</td>
+<td></td>
+</tr>
+<tr>
+<td>I want to</td>
+<td>想要，带有命令</td>
+<td></td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>on</td>
+<td>具体的一天</td>
+<td>on Saturday</td>
+</tr>
+<tr>
+<td>in</td>
+<td>范围</td>
+<td>in Spring</td>
+</tr>
+<tr>
+<td>at</td>
+<td>具体时刻</td>
+<td>at 7o’clock</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-22</title>
     <url>/2020/04/06/go-big-or-go-home-22/</url>
     <content><![CDATA[<table>
@@ -1910,166 +2070,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-21</title>
-    <url>/2020/04/05/go-big-or-go-home-21/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>vertical</td>
-<td>垂直的</td>
-<td>The boy found the only vertical tree in the woods</td>
-</tr>
-<tr>
-<td>extraordinary</td>
-<td>非同寻常的</td>
-<td>The teacher said my daughter has extraordinary musical talent</td>
-</tr>
-<tr>
-<td>object</td>
-<td>物体</td>
-<td>UFO is the short form of Unidentified Flying Object</td>
-</tr>
-<tr>
-<td>ahead</td>
-<td>领先</td>
-<td>I am running ahead of the rest of the group</td>
-</tr>
-<tr>
-<td>for ever</td>
-<td>永远</td>
-<td>Diamonds and gold last for ever, and so will our love</td>
-</tr>
-<tr>
-<td>tip</td>
-<td>小费</td>
-<td>I paid $5 to the waiter for tip</td>
-</tr>
-<tr>
-<td>barber</td>
-<td>理发师</td>
-<td>I asked my barber to give me a new style this time</td>
-</tr>
-<tr>
-<td>coronavirus</td>
-<td>冠状病毒</td>
-<td></td>
-</tr>
-<tr>
-<td>western restaurant</td>
-<td>西餐厅</td>
-<td></td>
-</tr>
-<tr>
-<td>dining table</td>
-<td>餐桌(正餐)</td>
-<td></td>
-</tr>
-<tr>
-<td>6 o’clock sharp</td>
-<td>六点整</td>
-<td></td>
-</tr>
-<tr>
-<td>half past 10</td>
-<td>十点半</td>
-<td></td>
-</tr>
-<tr>
-<td>a quarter past 10</td>
-<td>十点十五</td>
-<td></td>
-</tr>
-<tr>
-<td>make a reservation</td>
-<td>预定(还没有预订)</td>
-<td></td>
-</tr>
-<tr>
-<td>have a reservation</td>
-<td>预定(已经预订了)</td>
-<td></td>
-</tr>
-<tr>
-<td>book a table</td>
-<td>预定一个位置</td>
-<td></td>
-</tr>
-<tr>
-<td>breakfast</td>
-<td>早餐，注意没有r</td>
-<td></td>
-</tr>
-<tr>
-<td>have…for dinner</td>
-<td>晚餐吃什么</td>
-<td>I have fruit for dinner</td>
-</tr>
-<tr>
-<td>receptionist</td>
-<td>前台</td>
-<td></td>
-</tr>
-<tr>
-<td>Certainly</td>
-<td>当然</td>
-<td></td>
-</tr>
-<tr>
-<td>I’d like to</td>
-<td>想要，不是命令</td>
-<td></td>
-</tr>
-<tr>
-<td>I want to</td>
-<td>想要，带有命令</td>
-<td></td>
-</tr>
-<tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
-</tr>
-<tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
-</tr>
-<tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
-</tr>
-<tr>
-<td>on</td>
-<td>具体的一天</td>
-<td>on Saturday</td>
-</tr>
-<tr>
-<td>in</td>
-<td>范围</td>
-<td>in Spring</td>
-</tr>
-<tr>
-<td>at</td>
-<td>具体时刻</td>
-<td>at 7o’clock</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-23</title>
     <url>/2020/04/07/go-big-or-go-home-23/</url>
     <content><![CDATA[<table>
@@ -2139,146 +2139,6 @@
 <td>slice</td>
 <td>切薄片</td>
 <td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-25</title>
-    <url>/2020/04/10/go-big-or-go-home-25/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>headmistress</td>
-<td>女校长</td>
-<td>Our headmistress is giving us a speech</td>
-</tr>
-<tr>
-<td>conventional</td>
-<td>依据惯例的</td>
-<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
-</tr>
-<tr>
-<td>carry out</td>
-<td>完成</td>
-<td>After the hard work,I finally carried out my plan</td>
-</tr>
-<tr>
-<td>behaviour</td>
-<td>行为</td>
-<td>I can tell he is happy from his behaviour</td>
-</tr>
-<tr>
-<td>mirror</td>
-<td>镜子</td>
-<td>Look at yourselves in the mirror</td>
-</tr>
-<tr>
-<td>vast</td>
-<td>辽阔的</td>
-<td>This vast desert looks impossible to pass</td>
-</tr>
-<tr>
-<td>toast</td>
-<td>烤面包</td>
-<td>There are two slices of toast and some butter on the table</td>
-</tr>
-<tr>
-<td>cyclist</td>
-<td>骑自行车的人</td>
-<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
-</tr>
-<tr>
-<td>satisfy</td>
-<td>满意</td>
-<td>-</td>
-</tr>
-<tr>
-<td>frightened</td>
-<td>害怕的</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-27</title>
-    <url>/2020/04/11/go-big-or-go-home-27/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>emergency</td>
-<td>紧急情况</td>
-<td>It’s an emergency.Get her to the hospital now!</td>
-</tr>
-<tr>
-<td>do one’s best</td>
-<td>尽最大的努力</td>
-<td>Don’t worry so much about the exam.Just do your best</td>
-</tr>
-<tr>
-<td>absolute</td>
-<td>绝对的</td>
-<td>Motion is absolute,while stillness is relative</td>
-</tr>
-<tr>
-<td>tongue</td>
-<td>舌头</td>
-<td>The boy sticks out his tongue to make a face to me</td>
-</tr>
-<tr>
-<td>instruct</td>
-<td>指导</td>
-<td>My mom instructs me how to play golf</td>
-</tr>
-<tr>
-<td>nylon</td>
-<td>尼龙</td>
-<td>The socks,strap and cord are all made of nylon</td>
-</tr>
-<tr>
-<td>strange</td>
-<td>奇怪的</td>
-<td>I met a guy wearing strange clothes on the subway</td>
-</tr>
-<tr>
-<td>secondhand</td>
-<td>二手的</td>
-<td>The boy bought a secondhand book from the old man</td>
-</tr>
-<tr>
-<td>expand</td>
-<td>扩大</td>
-<td>Our business is expanding across the whole country</td>
-</tr>
-<tr>
-<td>forest</td>
-<td>森林</td>
-<td>The sun shines through the forest</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2515,6 +2375,76 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-25</title>
+    <url>/2020/04/10/go-big-or-go-home-25/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>headmistress</td>
+<td>女校长</td>
+<td>Our headmistress is giving us a speech</td>
+</tr>
+<tr>
+<td>conventional</td>
+<td>依据惯例的</td>
+<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
+</tr>
+<tr>
+<td>carry out</td>
+<td>完成</td>
+<td>After the hard work,I finally carried out my plan</td>
+</tr>
+<tr>
+<td>behaviour</td>
+<td>行为</td>
+<td>I can tell he is happy from his behaviour</td>
+</tr>
+<tr>
+<td>mirror</td>
+<td>镜子</td>
+<td>Look at yourselves in the mirror</td>
+</tr>
+<tr>
+<td>vast</td>
+<td>辽阔的</td>
+<td>This vast desert looks impossible to pass</td>
+</tr>
+<tr>
+<td>toast</td>
+<td>烤面包</td>
+<td>There are two slices of toast and some butter on the table</td>
+</tr>
+<tr>
+<td>cyclist</td>
+<td>骑自行车的人</td>
+<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
+</tr>
+<tr>
+<td>satisfy</td>
+<td>满意</td>
+<td>-</td>
+</tr>
+<tr>
+<td>frightened</td>
+<td>害怕的</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-26</title>
     <url>/2020/04/10/go-big-or-go-home-26/</url>
     <content><![CDATA[<table>
@@ -2569,6 +2499,76 @@
 <td>aboard</td>
 <td>在…上</td>
 <td>In Thailand,fishers often cook and have meals aboard their boats</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-27</title>
+    <url>/2020/04/11/go-big-or-go-home-27/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>emergency</td>
+<td>紧急情况</td>
+<td>It’s an emergency.Get her to the hospital now!</td>
+</tr>
+<tr>
+<td>do one’s best</td>
+<td>尽最大的努力</td>
+<td>Don’t worry so much about the exam.Just do your best</td>
+</tr>
+<tr>
+<td>absolute</td>
+<td>绝对的</td>
+<td>Motion is absolute,while stillness is relative</td>
+</tr>
+<tr>
+<td>tongue</td>
+<td>舌头</td>
+<td>The boy sticks out his tongue to make a face to me</td>
+</tr>
+<tr>
+<td>instruct</td>
+<td>指导</td>
+<td>My mom instructs me how to play golf</td>
+</tr>
+<tr>
+<td>nylon</td>
+<td>尼龙</td>
+<td>The socks,strap and cord are all made of nylon</td>
+</tr>
+<tr>
+<td>strange</td>
+<td>奇怪的</td>
+<td>I met a guy wearing strange clothes on the subway</td>
+</tr>
+<tr>
+<td>secondhand</td>
+<td>二手的</td>
+<td>The boy bought a secondhand book from the old man</td>
+</tr>
+<tr>
+<td>expand</td>
+<td>扩大</td>
+<td>Our business is expanding across the whole country</td>
+</tr>
+<tr>
+<td>forest</td>
+<td>森林</td>
+<td>The sun shines through the forest</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2724,156 +2724,6 @@
 <td>night owl</td>
 <td>夜晚的猫头鹰</td>
 <td>When the important exams come,Jack becomes a night owl</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-30</title>
-    <url>/2020/04/14/go-big-or-go-home-30/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>apartment</td>
-<td>公寓</td>
-<td>This apartment is so bright with these windows</td>
-</tr>
-<tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
-</tr>
-<tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
-</tr>
-<tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
-</tr>
-<tr>
-<td>catch</td>
-<td>捕捉</td>
-<td>The goalkeeper caught the ball.What a save!</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-<tr>
-<td>sparrow</td>
-<td>麻雀</td>
-<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
-</tr>
-<tr>
-<td>mud</td>
-<td>泥</td>
-<td>Oh no!I think our car is stuck in the mud!</td>
-</tr>
-<tr>
-<td>stuck</td>
-<td>不能动的</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>shapes</td>
-<td>形状</td>
-<td>I like collecting glasses of all shapes and sizes</td>
-</tr>
-<tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversation was interrputed by a knock at the door</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-31</title>
-    <url>/2020/04/15/go-big-or-go-home-31/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>colleague</td>
-<td>同事</td>
-<td>I really learned a lot of discussing with my colleagues</td>
-</tr>
-<tr>
-<td>arrow</td>
-<td>箭</td>
-<td>Traditional hunters use arrows to catch animals</td>
-</tr>
-<tr>
-<td>empty</td>
-<td>空的</td>
-<td>The man’s wallet is empty</td>
-</tr>
-<tr>
-<td>associate</td>
-<td>联想</td>
-<td>I associate this picture with a star</td>
-</tr>
-<tr>
-<td>easy-going</td>
-<td>随和</td>
-<td>My friend and I are easy-going</td>
-</tr>
-<tr>
-<td>carry off</td>
-<td>夺走</td>
-<td>He’s gonna carry off her bag!Stop him!</td>
-</tr>
-<tr>
-<td>lost</td>
-<td>迷路的</td>
-<td>The hikers are lost walking in the forest</td>
-</tr>
-<tr>
-<td>lock</td>
-<td>锁</td>
-<td>The door is locked;we can’t get in</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>切片</td>
-<td>The man thinly slices the beef</td>
-</tr>
-<tr>
-<td>might</td>
-<td>或许</td>
-<td>I think it might rain later,so I should take an umbrella</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3064,6 +2914,156 @@
 <td>How’s your business?</td>
 <td>最近怎么样</td>
 <td>Not so good</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-30</title>
+    <url>/2020/04/14/go-big-or-go-home-30/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apartment</td>
+<td>公寓</td>
+<td>This apartment is so bright with these windows</td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>捕捉</td>
+<td>The goalkeeper caught the ball.What a save!</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+<tr>
+<td>sparrow</td>
+<td>麻雀</td>
+<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
+</tr>
+<tr>
+<td>mud</td>
+<td>泥</td>
+<td>Oh no!I think our car is stuck in the mud!</td>
+</tr>
+<tr>
+<td>stuck</td>
+<td>不能动的</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>shapes</td>
+<td>形状</td>
+<td>I like collecting glasses of all shapes and sizes</td>
+</tr>
+<tr>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversation was interrputed by a knock at the door</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-31</title>
+    <url>/2020/04/15/go-big-or-go-home-31/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>colleague</td>
+<td>同事</td>
+<td>I really learned a lot of discussing with my colleagues</td>
+</tr>
+<tr>
+<td>arrow</td>
+<td>箭</td>
+<td>Traditional hunters use arrows to catch animals</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>空的</td>
+<td>The man’s wallet is empty</td>
+</tr>
+<tr>
+<td>associate</td>
+<td>联想</td>
+<td>I associate this picture with a star</td>
+</tr>
+<tr>
+<td>easy-going</td>
+<td>随和</td>
+<td>My friend and I are easy-going</td>
+</tr>
+<tr>
+<td>carry off</td>
+<td>夺走</td>
+<td>He’s gonna carry off her bag!Stop him!</td>
+</tr>
+<tr>
+<td>lost</td>
+<td>迷路的</td>
+<td>The hikers are lost walking in the forest</td>
+</tr>
+<tr>
+<td>lock</td>
+<td>锁</td>
+<td>The door is locked;we can’t get in</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切片</td>
+<td>The man thinly slices the beef</td>
+</tr>
+<tr>
+<td>might</td>
+<td>或许</td>
+<td>I think it might rain later,so I should take an umbrella</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3365,71 +3365,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-37</title>
-    <url>/2020/04/21/go-big-or-go-home-37/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>famous</td>
-<td>著名的</td>
-<td>The lady is a famous actress</td>
-</tr>
-<tr>
-<td>body building</td>
-<td>健美</td>
-<td>I do body building every day to make my muscles huge</td>
-</tr>
-<tr>
-<td>constant</td>
-<td>持续不断的</td>
-<td>The constant noise from the construction site makes me crazy</td>
-</tr>
-<tr>
-<td>smell</td>
-<td>闻</td>
-<td>The girl is smelling the pink flower with delight</td>
-</tr>
-<tr>
-<td>a bit</td>
-<td>一点点</td>
-<td>There is only a bit of rice left in the pot</td>
-</tr>
-<tr>
-<td>carpenter</td>
-<td>木匠</td>
-<td>The carpenter is making wooden furniture</td>
-</tr>
-<tr>
-<td>abolish</td>
-<td>废除</td>
-<td>In the mid 1800s,slavery was abolished in America</td>
-</tr>
-<tr>
-<td>church</td>
-<td>教堂</td>
-<td>The church is located in a beautiful suburb</td>
-</tr>
-<tr>
-<td>glance</td>
-<td>一瞥</td>
-<td>She glanced at his computer screen to see what he was watching</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-36</title>
     <url>/2020/04/20/go-big-or-go-home-36/</url>
     <content><![CDATA[<table>
@@ -3535,8 +3470,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-4</title>
-    <url>/2020/03/19/go-big-or-go-home-4/</url>
+    <title>go big or go home-37</title>
+    <url>/2020/04/21/go-big-or-go-home-37/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3546,49 +3481,49 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>desperate</td>
-<td>绝望的</td>
-<td>The unemployed man looks so desperate</td>
+<td>famous</td>
+<td>著名的</td>
+<td>The lady is a famous actress</td>
 </tr>
 <tr>
-<td>beyond</td>
-<td>更远的/超出…能力</td>
-<td>The birds flew far beyond the land’s edge</td>
+<td>body building</td>
+<td>健美</td>
+<td>I do body building every day to make my muscles huge</td>
 </tr>
 <tr>
-<td>in need of</td>
-<td>需要</td>
-<td>The dry field is in need of rain</td>
+<td>constant</td>
+<td>持续不断的</td>
+<td>The constant noise from the construction site makes me crazy</td>
 </tr>
 <tr>
-<td>gesture</td>
-<td>手势</td>
-<td>This gesture means you are very good</td>
+<td>smell</td>
+<td>闻</td>
+<td>The girl is smelling the pink flower with delight</td>
 </tr>
 <tr>
-<td>production</td>
-<td>生产</td>
-<td>Thousands of cars are under production</td>
+<td>a bit</td>
+<td>一点点</td>
+<td>There is only a bit of rice left in the pot</td>
 </tr>
 <tr>
-<td>pregnant</td>
-<td>怀孕的</td>
-<td>The pregnant woman is drinking water</td>
+<td>carpenter</td>
+<td>木匠</td>
+<td>The carpenter is making wooden furniture</td>
 </tr>
 <tr>
-<td>complain</td>
-<td>抱怨</td>
-<td>She complains that the homework is difficult</td>
+<td>abolish</td>
+<td>废除</td>
+<td>In the mid 1800s,slavery was abolished in America</td>
 </tr>
 <tr>
-<td>unemployed</td>
-<td>失业</td>
-<td>Have you been unemployed for over six months?</td>
+<td>church</td>
+<td>教堂</td>
+<td>The church is located in a beautiful suburb</td>
 </tr>
 <tr>
-<td>edge</td>
-<td>边缘</td>
-<td>He edged closer to the telephone, ready to grab it</td>
+<td>glance</td>
+<td>一瞥</td>
+<td>She glanced at his computer screen to see what he was watching</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3649,6 +3584,71 @@
 <td>film</td>
 <td>电影</td>
 <td>The film has a happy ending</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-4</title>
+    <url>/2020/03/19/go-big-or-go-home-4/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>desperate</td>
+<td>绝望的</td>
+<td>The unemployed man looks so desperate</td>
+</tr>
+<tr>
+<td>beyond</td>
+<td>更远的/超出…能力</td>
+<td>The birds flew far beyond the land’s edge</td>
+</tr>
+<tr>
+<td>in need of</td>
+<td>需要</td>
+<td>The dry field is in need of rain</td>
+</tr>
+<tr>
+<td>gesture</td>
+<td>手势</td>
+<td>This gesture means you are very good</td>
+</tr>
+<tr>
+<td>production</td>
+<td>生产</td>
+<td>Thousands of cars are under production</td>
+</tr>
+<tr>
+<td>pregnant</td>
+<td>怀孕的</td>
+<td>The pregnant woman is drinking water</td>
+</tr>
+<tr>
+<td>complain</td>
+<td>抱怨</td>
+<td>She complains that the homework is difficult</td>
+</tr>
+<tr>
+<td>unemployed</td>
+<td>失业</td>
+<td>Have you been unemployed for over six months?</td>
+</tr>
+<tr>
+<td>edge</td>
+<td>边缘</td>
+<td>He edged closer to the telephone, ready to grab it</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -4005,71 +4005,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-9</title>
-    <url>/2020/03/24/go-big-or-go-home-9/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>actual</td>
-<td>实际的</td>
-<td>The actual fact is that crocodiles walk underwater instead of swimming</td>
-</tr>
-<tr>
-<td>master</td>
-<td>主人</td>
-<td>The dog and its master are close to each other</td>
-</tr>
-<tr>
-<td>fridge</td>
-<td>电冰箱</td>
-<td>I opened the fridge to get some food</td>
-</tr>
-<tr>
-<td>bone</td>
-<td>骨头</td>
-<td>“I really want to eat some bones” the dog said</td>
-</tr>
-<tr>
-<td>represent</td>
-<td>代表</td>
-<td>This hand gesture represents love</td>
-</tr>
-<tr>
-<td>modest</td>
-<td>谦虚的</td>
-<td>These two businssmen may be rich,but they’re still very modest</td>
-</tr>
-<tr>
-<td>ox</td>
-<td>牛/公牛</td>
-<td>The strong ox is angry now</td>
-</tr>
-<tr>
-<td>nut</td>
-<td>坚果</td>
-<td>Nuts are a source of vitamin E for the body</td>
-</tr>
-<tr>
-<td>facial</td>
-<td>面部</td>
-<td>She looks surprized when her facial mask comes off her face</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-8</title>
     <url>/2020/03/23/go-big-or-go-home-8/</url>
     <content><![CDATA[<table>
@@ -4139,6 +4074,71 @@
 <td>says</td>
 <td>说的话</td>
 <td>The bird is repeating what the girl says</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-9</title>
+    <url>/2020/03/24/go-big-or-go-home-9/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>actual</td>
+<td>实际的</td>
+<td>The actual fact is that crocodiles walk underwater instead of swimming</td>
+</tr>
+<tr>
+<td>master</td>
+<td>主人</td>
+<td>The dog and its master are close to each other</td>
+</tr>
+<tr>
+<td>fridge</td>
+<td>电冰箱</td>
+<td>I opened the fridge to get some food</td>
+</tr>
+<tr>
+<td>bone</td>
+<td>骨头</td>
+<td>“I really want to eat some bones” the dog said</td>
+</tr>
+<tr>
+<td>represent</td>
+<td>代表</td>
+<td>This hand gesture represents love</td>
+</tr>
+<tr>
+<td>modest</td>
+<td>谦虚的</td>
+<td>These two businssmen may be rich,but they’re still very modest</td>
+</tr>
+<tr>
+<td>ox</td>
+<td>牛/公牛</td>
+<td>The strong ox is angry now</td>
+</tr>
+<tr>
+<td>nut</td>
+<td>坚果</td>
+<td>Nuts are a source of vitamin E for the body</td>
+</tr>
+<tr>
+<td>facial</td>
+<td>面部</td>
+<td>She looks surprized when her facial mask comes off her face</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -4246,6 +4246,31 @@
       </tags>
   </entry>
   <entry>
+    <title>redis系列-Redisson分布式锁验证+踩坑</title>
+    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</url>
+    <content><![CDATA[<h3 id="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码"><a href="#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码" class="headerlink" title="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码"></a>本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.redisson&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;redisson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.11.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span>: 秒杀商品接口, 这里为了测试就手动创建三个线程</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> JsonObject</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@exception</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@author</span> mazhq</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2018/11/18 13:46</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis() + TIMEOUT;</span><br><span class="line">        RLock lock=</span><br><span class="line">                redissonClient.getLock(KEY);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Thread a = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程1"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread b = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程2"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread c = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程3"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            a.start();</span><br><span class="line">            b.start();</span><br><span class="line">            c.start();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"--------"</span>);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"111"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 库存减1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下"><a href="#重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下" class="headerlink" title="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下"></a>重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下</h3><p><a href="https://blog.csdn.net/zilong_zilong/article/details/78252037" target="_blank" rel="noopener">https://blog.csdn.net/zilong_zilong/article/details/78252037</a></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里使用了单节点，还有集群模式，哨兵模式，种类很多config.useSingleServer</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedissonClinetConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redissonClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Config config=<span class="keyword">new</span> Config();</span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">"redis://127.0.0.1:6379"</span>)</span><br><span class="line">                .setConnectionPoolSize(<span class="number">500</span>)</span><br><span class="line">                .setIdleConnectionTimeout(<span class="number">10000</span>)</span><br><span class="line">                .setConnectTimeout(<span class="number">30000</span>)</span><br><span class="line">                .setTimeout(<span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line">        RedissonClient redisson=Redisson.create(config);</span><br><span class="line">        <span class="keyword">return</span> redisson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"><a href="#先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功" class="headerlink" title="先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"></a>先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功</h3><p><img src="../image/kill.png" alt="kill.png" title="kill"></p>
+<p><img src="../image/begin.png" alt="begin.png" title="begin"></p>
+<p><img src="../image/end.png" alt="end.png" title="end"></p>
+<h3 id="我们来验证下"><a href="#我们来验证下" class="headerlink" title="我们来验证下"></a>我们来验证下</h3><p><img src="../image/check.png" alt="check.png" title="check"></p>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis分布式锁</tag>
+        <tag>Redisson框架</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>redis系列-实现一个延时消费队列</title>
     <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%BB%B6%E6%97%B6%E6%B6%88%E8%B4%B9%E9%98%9F%E5%88%97/</url>
     <content><![CDATA[<h3 id="用Zset和Hash实现一个延时队列，话不多说，附上代码"><a href="#用Zset和Hash实现一个延时队列，话不多说，附上代码" class="headerlink" title="用Zset和Hash实现一个延时队列，话不多说，附上代码"></a>用Zset和Hash实现一个延时队列，话不多说，附上代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertToRank</span><span class="params">(String id, String msg, String isNow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score=<span class="keyword">this</span>.getScore(isNow);</span><br><span class="line">        String uuid=UUID.randomUUID().toString().replaceAll(<span class="string">"-"</span>, <span class="string">""</span>);</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=</span><br><span class="line">                stringRedisTemplate.opsForHash();</span><br><span class="line">        Map&lt;String, String&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>, id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>, msg);</span><br><span class="line">        opsForHash.putAll(Constant.KEY_HASH + uuid, map);</span><br><span class="line">        <span class="keyword">this</span>.insertZset(uuid, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入zset，按照score排序</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> score</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertZset</span><span class="params">(String key, <span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=</span><br><span class="line">                stringRedisTemplate.opsForZSet();</span><br><span class="line">        opsForZSet.add(Constant.KEY_ZSET, key, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前时间</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> isNow is时表示实时消息，放入zset前面</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">double</span> <span class="title">getScore</span><span class="params">(String isNow)</span> </span>&#123;</span><br><span class="line">        Date nowTime=<span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">        SimpleDateFormat simpleDateFormat=<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMddHHmmss"</span>);</span><br><span class="line">        String now=simpleDateFormat.format(nowTime);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"is"</span>.equals(isNow)) &#123;</span><br><span class="line">            <span class="keyword">return</span> Double.parseDouble(now.substring(<span class="number">0</span>, <span class="number">12</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Double.parseDouble(now);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 抢锁</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOut</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key, String value, <span class="keyword">long</span> timeOut)</span> </span>&#123;</span><br><span class="line">        Boolean isSuccess=stringRedisTemplate.opsForValue().setIfAbsent(key, value);</span><br><span class="line">        <span class="keyword">if</span> (isSuccess) &#123;</span><br><span class="line">            stringRedisTemplate.expire(key, timeOut, TimeUnit.MINUTES);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isSuccess;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 释放锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delLock</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取zset第一条数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstData</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=stringRedisTemplate.opsForZSet();</span><br><span class="line">        Set&lt;String&gt; range=opsForZSet.range(key, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (!CollectionUtils.isEmpty(range)) &#123;</span><br><span class="line">            String uuid = range.iterator().next();</span><br><span class="line">            opsForZSet.remove(key,uuid);</span><br><span class="line">            <span class="keyword">return</span> uuid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询当前Zset多少个数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getZsetSize</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stringRedisTemplate.opsForZSet().zCard(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取hash数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,Object&gt; <span class="title">getHashData</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=stringRedisTemplate.opsForHash();</span><br><span class="line">        Object id=opsForHash.get(key, <span class="string">"id"</span>);</span><br><span class="line">        Object msg=opsForHash.get(key, <span class="string">"msg"</span>);</span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>,id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>,msg);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">(CountDownLatch countDownLatch,String uuid)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Map&lt;String, Object&gt; hashData=<span class="keyword">this</span>.getHashData(Constant.KEY_HASH + uuid);</span><br><span class="line">            log.info(<span class="string">"开始发送"</span>+hashData.get(<span class="string">"id"</span>)+<span class="string">"消息: "</span>+hashData.get(<span class="string">"msg"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            countDownLatch.countDown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -4279,59 +4304,35 @@
       </tags>
   </entry>
   <entry>
-    <title>redis系列-Redisson分布式锁验证+踩坑</title>
-    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-Redission%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E9%AA%8C%E8%AF%81-%E8%B8%A9%E5%9D%91/</url>
-    <content><![CDATA[<h3 id="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码"><a href="#本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx-expire封装原子性操作，上代码" class="headerlink" title="本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码"></a>本篇来验证一下Redisson框架，分布式锁，底层其实就是Lua脚本，setnx+expire封装原子性操作，上代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.redisson&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;redisson&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.11.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span>: 秒杀商品接口, 这里为了测试就手动创建三个线程</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> JsonObject</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@exception</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@author</span> mazhq</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2018/11/18 13:46</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis() + TIMEOUT;</span><br><span class="line">        RLock lock=</span><br><span class="line">                redissonClient.getLock(KEY);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Thread a = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程1"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread b = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程2"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread c = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    Thread.currentThread().setName(<span class="string">"线程3"</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> isSuccess=lock.tryLock(<span class="number">0</span>,<span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">                        <span class="keyword">if</span> (isSuccess)&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"获得锁，开始秒杀"</span>);</span><br><span class="line">                            redisUtil.sub(KEY_NUM);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            log.info(Thread.currentThread().getName()+<span class="string">"强锁失败"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        log.info(Thread.currentThread().getName()+<span class="string">"强锁异常"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            a.start();</span><br><span class="line">            b.start();</span><br><span class="line">            c.start();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"--------"</span>);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"111"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 库存减1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下"><a href="#重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败-这篇博客写的很详细，可以看一下" class="headerlink" title="重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下"></a>重点是RedissonClinet如何注入，如果不手动配置的话会出现注入Bean失败,这篇博客写的很详细，可以看一下</h3><p><a href="https://blog.csdn.net/zilong_zilong/article/details/78252037" target="_blank" rel="noopener">https://blog.csdn.net/zilong_zilong/article/details/78252037</a></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里使用了单节点，还有集群模式，哨兵模式，种类很多config.useSingleServer</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedissonClinetConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedissonClient <span class="title">redissonClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Config config=<span class="keyword">new</span> Config();</span><br><span class="line">        config.useSingleServer().setAddress(<span class="string">"redis://127.0.0.1:6379"</span>)</span><br><span class="line">                .setConnectionPoolSize(<span class="number">500</span>)</span><br><span class="line">                .setIdleConnectionTimeout(<span class="number">10000</span>)</span><br><span class="line">                .setConnectTimeout(<span class="number">30000</span>)</span><br><span class="line">                .setTimeout(<span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line">        RedissonClient redisson=Redisson.create(config);</span><br><span class="line">        <span class="keyword">return</span> redisson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"><a href="#先将key-num-设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功" class="headerlink" title="先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功"></a>先将key-num 设置为10000，然后在postman上调用请求，这里设置为20次，间隔1s，正好与锁的过期时间一致，保证三个线程里每次都有秒杀成功</h3><p><img src="../image/kill.png" alt="kill.png" title="kill"></p>
-<p><img src="../image/begin.png" alt="begin.png" title="begin"></p>
-<p><img src="../image/end.png" alt="end.png" title="end"></p>
-<h3 id="我们来验证下"><a href="#我们来验证下" class="headerlink" title="我们来验证下"></a>我们来验证下</h3><p><img src="../image/check.png" alt="check.png" title="check"></p>
-]]></content>
+    <title>《深入理解Java虚拟机》第三章垃圾收集器与内存分配策略</title>
+    <url>/2020/04/22/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5/</url>
+    <content><![CDATA[<h2 id="第一部分-对象已死吗？"><a href="#第一部分-对象已死吗？" class="headerlink" title="第一部分:对象已死吗？"></a>第一部分:对象已死吗？</h2><h3 id="1-1-引用计数算法"><a href="#1-1-引用计数算法" class="headerlink" title="1.1 引用计数算法"></a>1.1 引用计数算法</h3><h4 id="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"><a href="#引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。" class="headerlink" title="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"></a>引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。</h4><p>//互相引用.png</p>
+<h3 id="1-2-可达性分析算法"><a href="#1-2-可达性分析算法" class="headerlink" title="1.2 可达性分析算法"></a>1.2 可达性分析算法</h3><h4 id="可达性分析算法：引入了GC-Roots对象，从GC-Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6-objecct7来说，虽然互相有关联，但是它们到GC-Roots是不可达的，所以他们会被判断为是可回收的对象。"><a href="#可达性分析算法：引入了GC-Roots对象，从GC-Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6-objecct7来说，虽然互相有关联，但是它们到GC-Roots是不可达的，所以他们会被判断为是可回收的对象。" class="headerlink" title="可达性分析算法：引入了GC Roots对象，从GC Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6,objecct7来说，虽然互相有关联，但是它们到GC Roots是不可达的，所以他们会被判断为是可回收的对象。"></a>可达性分析算法：引入了GC Roots对象，从GC Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6,objecct7来说，虽然互相有关联，但是它们到GC Roots是不可达的，所以他们会被判断为是可回收的对象。</h4><h4 id="1-2-1-那么什么样的对象可以作为GC-Roots对象呢？"><a href="#1-2-1-那么什么样的对象可以作为GC-Roots对象呢？" class="headerlink" title="1.2.1 那么什么样的对象可以作为GC Roots对象呢？"></a>1.2.1 那么什么样的对象可以作为GC Roots对象呢？</h4><p>《深入理解Java虚拟机》书中给出的定义是：</p>
+<ol>
+<li>虚拟机栈中引用的对象</li>
+<li>方法区中类静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中引用的对象</li>
+</ol>
+<h3 id="1-3-在谈引用"><a href="#1-3-在谈引用" class="headerlink" title="1.3 在谈引用"></a>1.3 在谈引用</h3><ol>
+<li>强引用：在代码中普遍存在的，类似“Object obj = new Object()”,这类的引用，只要强引用还存在，垃圾收集器永远不会回收掉这类对象</li>
+<li>软引用：总结起来就是当内存不够发生GC时才会回收的对象。JDK1.2之后，提供了SoftReference类来实现软引用。</li>
+<li>弱引用：被弱引用关联的对象，只能存活到下一次发生垃圾回收之前，当垃圾收集器工作时，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。</li>
+<li>虚引用：是一种最弱的引用关系，存在的意义只是在这个对象被收集器回收时收到一个系统通知。</li>
+</ol>
+<h3 id="1-4死之前的“HP药水”"><a href="#1-4死之前的“HP药水”" class="headerlink" title="1.4死之前的“HP药水”"></a>1.4死之前的“HP药水”</h3><h4 id="1-4-1-即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize-方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC-Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize-方法。当对象没有覆盖finalize-方法，或者finalize-方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。"><a href="#1-4-1-即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize-方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC-Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize-方法。当对象没有覆盖finalize-方法，或者finalize-方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。" class="headerlink" title="1.4.1 即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize()方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize()方法。当对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。"></a>1.4.1 即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize()方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize()方法。当对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。</h4><h4 id="1-4-2-如果这个对象被判定为有必要执行finalize-方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize-方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。"><a href="#1-4-2-如果这个对象被判定为有必要执行finalize-方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize-方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。" class="headerlink" title="1.4.2 如果这个对象被判定为有必要执行finalize()方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize()方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。"></a>1.4.2 如果这个对象被判定为有必要执行finalize()方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize()方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。</h4><h4 id="1-4-3-如果对象要在finalize-中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。"><a href="#1-4-3-如果对象要在finalize-中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。" class="headerlink" title="1.4.3 如果对象要在finalize()中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。"></a>1.4.3 如果对象要在finalize()中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。</h4><h2 id="第二部分-GC场所"><a href="#第二部分-GC场所" class="headerlink" title="第二部分:GC场所"></a>第二部分:GC场所</h2><h3 id="1-堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。"><a href="#1-堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。" class="headerlink" title="1.堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。"></a>1.堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。</h3><h3 id="2-方法区-也叫永久代，针对HotSpot虚拟机来说-，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低"><a href="#2-方法区-也叫永久代，针对HotSpot虚拟机来说-，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低" class="headerlink" title="2.方法区(也叫永久代，针对HotSpot虚拟机来说)，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低"></a>2.方法区(也叫永久代，针对HotSpot虚拟机来说)，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低</h3><h3 id="方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？"><a href="#方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？" class="headerlink" title="方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？"></a>方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？</h3><h4 id="2-1-废弃常量：假如一个字符串“abc”-放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。"><a href="#2-1-废弃常量：假如一个字符串“abc”-放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。" class="headerlink" title="2.1 废弃常量：假如一个字符串“abc”,放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。"></a>2.1 废弃常量：假如一个字符串“abc”,放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。</h4><h4 id="2-2-无用的类："><a href="#2-2-无用的类：" class="headerlink" title="2.2 无用的类："></a>2.2 无用的类：</h4><ol>
+<li>该类所有的实例都已经被回收，也就是Java堆中不存在该类的任何实例。</li>
+<li>加载该类的ClassLoader已经被回收。</li>
+<li>该类对象的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
+</ol>
+<h2 id="第三部分-垃圾回收算法"><a href="#第三部分-垃圾回收算法" class="headerlink" title="第三部分:垃圾回收算法"></a>第三部分:垃圾回收算法</h2><h3 id="3-1-标记清除算法"><a href="#3-1-标记清除算法" class="headerlink" title="3.1 标记清除算法"></a>3.1 标记清除算法</h3><h3 id="3-2-复制算法"><a href="#3-2-复制算法" class="headerlink" title="3.2 复制算法"></a>3.2 复制算法</h3><h3 id="3-3-标记-整理算法"><a href="#3-3-标记-整理算法" class="headerlink" title="3.3 标记-整理算法"></a>3.3 标记-整理算法</h3><h3 id="3-4-分代收集算法"><a href="#3-4-分代收集算法" class="headerlink" title="3.4 分代收集算法"></a>3.4 分代收集算法</h3><h2 id="第四部分-内存分配"><a href="#第四部分-内存分配" class="headerlink" title="第四部分:内存分配"></a>第四部分:内存分配</h2><h3 id="4-1-新生代，老年代"><a href="#4-1-新生代，老年代" class="headerlink" title="4.1 新生代，老年代"></a>4.1 新生代，老年代</h3><p>//内存展示.png</p>
+<h3 id="4-2-Minor-GC和Full-GC"><a href="#4-2-Minor-GC和Full-GC" class="headerlink" title="4.2 Minor GC和Full GC"></a>4.2 Minor GC和Full GC</h3><h3 id="4-3-为什么新生代中有两个Survivor？"><a href="#4-3-为什么新生代中有两个Survivor？" class="headerlink" title="4.3 为什么新生代中有两个Survivor？"></a>4.3 为什么新生代中有两个Survivor？</h3>]]></content>
       <categories>
-        <category>redis</category>
+        <category>JVM</category>
       </categories>
       <tags>
-        <tag>redis分布式锁</tag>
-        <tag>Redisson框架</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>不得不说的Java‘锁’事</title>
-    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
-    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>锁</tag>
-        <tag>高并发</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>你看着是一坨，它也经历了很多</title>
-    <url>/2020/04/15/%E4%BD%A0%E7%9C%8B%E7%9D%80%E6%98%AF%E4%B8%80%E5%9D%A8%EF%BC%8C%E5%AE%83%E4%B9%9F%E7%BB%8F%E5%8E%86%E4%BA%86%E5%BE%88%E5%A4%9A/</url>
-    <content><![CDATA[<p>你看着它是一坨，它也经历了很多。</p>
-<p>今天发生了一个bug，钉钉推送数据时出现错误，目标用户收到的数据发生错乱，推送了目标用户的数据子集</p>
-<p>起因：我们的数据权限依赖于商分的一张手工维护的底表，这张底表可以理解为hr在录入员工信息的一张表。只不过这里维护的不是员工信息，是数据权限，既然是手工维护，难免会出现差错。一起背锅。</p>
-<p>以上是背景，加上原来的产品离职，换了新的产品，可能在设计上两位观念不符，以这个为起因，这位新的产品一直在diss我们的系统，这里是bug，那里是bug，只要不按照她的思维方式，那就被认为是bug。</p>
-<p>这款产品我从实习的时候就在做，已经马上一年了，认真迭代，提出自己的想法，从重复代码如何自动化，减少工作量，为这款产品做了各种辅助的工具，各种脚本，各种统计的信息，最近才加上了PVUV的统计(因为觉得公司统计的数据不准确，所以从后端接口的角度去进行了统计)，到现在产品已经趋于稳定，虽然承认这个系统技术含量不高，但确实解决了一些人的问题，还是有他的价值的，今天听到这么diss这款产品，这么diss我们的小伙伴，心里真不是滋味，凭什么我们迭代了这么久的东西，她在不看之前prd的前提下可以这样说，今天是我在这里工作之后第一次感觉到不快乐，你看着是一坨的东西，也经历了很多人的心血。</p>
-<p>同时大公司内部才会出现的一个问题是，可能会出现多种产品满足了同样的业务需求，如果说是内部竞争，像腾讯一样，谁做成了是谁的，这是良心的竞争，而我要说的是，在已经有了满足业务需求的产品的时候，还要从头在做一款几乎是一样的产品，为什么耗费这样的人力财力？不仅我们部门，其他部门也存在，不为了公司，真正的去考虑，而是为了那所谓的绩效，当然为了钱无可厚非，但如果这样做就能打高绩效的公司真的不知道待下去的意义，我觉得如果我离职这个应该算一点原因。</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>转正述职</tag>
+        <tag>深入理解Java虚拟机</tag>
+        <tag>垃圾收集器与内存分配策略</tag>
       </tags>
   </entry>
   <entry>
@@ -4366,6 +4367,37 @@
       <tags>
         <tag>深入理解Java虚拟机</tag>
         <tag>Java内存区域与内存溢出异常</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>不得不说的Java‘锁’事</title>
+    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
+    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>锁</tag>
+        <tag>高并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>你看着是一坨，它也经历了很多</title>
+    <url>/2020/04/15/%E4%BD%A0%E7%9C%8B%E7%9D%80%E6%98%AF%E4%B8%80%E5%9D%A8%EF%BC%8C%E5%AE%83%E4%B9%9F%E7%BB%8F%E5%8E%86%E4%BA%86%E5%BE%88%E5%A4%9A/</url>
+    <content><![CDATA[<p>你看着它是一坨，它也经历了很多。</p>
+<p>今天发生了一个bug，钉钉推送数据时出现错误，目标用户收到的数据发生错乱，推送了目标用户的数据子集</p>
+<p>起因：我们的数据权限依赖于商分的一张手工维护的底表，这张底表可以理解为hr在录入员工信息的一张表。只不过这里维护的不是员工信息，是数据权限，既然是手工维护，难免会出现差错。一起背锅。</p>
+<p>以上是背景，加上原来的产品离职，换了新的产品，可能在设计上两位观念不符，以这个为起因，这位新的产品一直在diss我们的系统，这里是bug，那里是bug，只要不按照她的思维方式，那就被认为是bug。</p>
+<p>这款产品我从实习的时候就在做，已经马上一年了，认真迭代，提出自己的想法，从重复代码如何自动化，减少工作量，为这款产品做了各种辅助的工具，各种脚本，各种统计的信息，最近才加上了PVUV的统计(因为觉得公司统计的数据不准确，所以从后端接口的角度去进行了统计)，到现在产品已经趋于稳定，虽然承认这个系统技术含量不高，但确实解决了一些人的问题，还是有他的价值的，今天听到这么diss这款产品，这么diss我们的小伙伴，心里真不是滋味，凭什么我们迭代了这么久的东西，她在不看之前prd的前提下可以这样说，今天是我在这里工作之后第一次感觉到不快乐，你看着是一坨的东西，也经历了很多人的心血。</p>
+<p>同时大公司内部才会出现的一个问题是，可能会出现多种产品满足了同样的业务需求，如果说是内部竞争，像腾讯一样，谁做成了是谁的，这是良心的竞争，而我要说的是，在已经有了满足业务需求的产品的时候，还要从头在做一款几乎是一样的产品，为什么耗费这样的人力财力？不仅我们部门，其他部门也存在，不为了公司，真正的去考虑，而是为了那所谓的绩效，当然为了钱无可厚非，但如果这样做就能打高绩效的公司真的不知道待下去的意义，我觉得如果我离职这个应该算一点原因。</p>
+]]></content>
+      <categories>
+        <category>个人经历</category>
+      </categories>
+      <tags>
+        <tag>个人经历</tag>
+        <tag>转正述职</tag>
       </tags>
   </entry>
   <entry>
@@ -4494,6 +4526,92 @@
       </tags>
   </entry>
   <entry>
+    <title>深入浅出索引</title>
+    <url>/2019/10/26/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<p>这节讲的是索引的相关知识，提到索引相信大家都不会陌生，在工作中或多或少都会接触过，建立索引主要是用来提升SQL查询速度的一种解决方案。<br>那么索引是什么？<br>一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。  </p>
+<h3 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h3><p>这里引入三种模型，哈希表有序数组和搜索树  </p>
+<p>哈希表是一种以建-值（key-value）存储的数据结构，我们只要输入待查找的key，就能找到value。哈希的思路很简单，把值放在数组里，用一个哈希函数把key换算成一个确定的位置，然后把value放在数组的这个位置。<br>不可避免的，多个key经过哈希函数的换算会出现同一个值的情况，处理这种情况的方式是，拉出一个链表。<br>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字。这时对应的哈希索引的示意图如下所示。  </p>
+<p><img src="../image/%E5%93%88%E5%B8%8C%E8%A1%A8.png" alt="哈希表.png" title="哈希表">  </p>
+<p>需要注意的是，图中四个ID_card_n的值并不是递增的，这样做的好处是增加新的User时速度会很快，只需要往后追加。但缺点是，因为不是有序的，所以哈希索引做区间查询速度是很慢的。  </p>
+<p>所以，哈希表这种结构适用于只有等值查询的场景，比如 Memcached 及其他一些 NoSQL 引擎。  </p>
+<p>而有序数组在等值查询和范围查询场景的性能就都非常优秀。还是根据上面这个例子，如果用有序数组来实现的话，示意图如下所示：  </p>
+<p><img src="../image/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84.png" alt="有序数组.png" title="有序数组">  </p>
+<p>这里假设身份证号没有重复，这个数组就是按照身份证号递增的顺序保存的，这个时候如果你要查ID_card_n2对应的名字，用二分法就可以快速得到，这个时间复杂度是O(log(N)).<br>同时很显然，这个索引结构支持范围查询。你要查身份证号在[ID_card_X,ID_card_Y]区间的User，可以先用二分法找到ID_card_X(如果不存在ID_card_X，就找到大于ID_card_X的第一个User)，然后向右遍历，直到查到第一个大于ID_card_Y的身份证号，推出循环。<br>如果仅仅看查询效率，有序数组就是最好的数据结构了，但是在更新数据的时候，如果有新增的数据，就需要挪动后续所有的记录，成本太高。<br>所以，有序数组只适用于静态存储引擎，比如你要保存的是2019年某个城市所有人口的信息，这类不会再修改的数据。<br>二叉搜索树是经典的数据结构了，还是根据上面的例子，如果我们用二叉搜索树来实现的话，示意图如下所示，</p>
+<p><img src="../image/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="二叉搜索树.png" title="二叉搜索树">  </p>
+<p>二叉搜索树的特点是：每个节点的左儿子小于父节点，父节点又小于右儿子，这样如果你要查ID_card_2的话按照图中的顺序就是按照UserA -&gt; UserC -&gt; UserF -&gt; User2这个路径得到。这个时间复杂度是O(log(N))。<br>当然为了维持O(log(N))的查询复杂度，你就需要保持这颗树是平衡二叉树，为了做这个保证，更新的时间复杂度也是O(log(N))。<br>树可以有二叉，也可以有多叉，多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉搜索树的效率是最高的，但是实际上大多数数据库存储却并不适用二叉树。其原因是，索引不止存在于内存中，还要写到磁盘上。<br>你可以想象一下一棵100万节点的平衡二叉树，树高20，一次查询可能需要访问20个数据块，在机械硬盘时代，从磁盘随机读取一个数据块需要10ms的寻址时间，也就是说，对于一个100万行的表，如果使用二叉树来存储，单独访问一个行可能需要20个10ms的时间，这个查询可真够慢的，为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。以 InnoDB 的一个整数字段索引为例，这个 N 差不多是 1200。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p>
+<p>N 叉树由于在读写上的性能优点，以及适配磁盘的访问模式，已经被广泛应用在数据库引擎中了。  </p>
+<h3 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h3><p>大家都知道InnoDB的索引模型是B+树，假设我们有一个主键列为ID的表，表中有字段K，并且在K上有索引，如下图所示：  </p>
+<p><img src="../image/InnoDB%E7%B4%A2%E5%BC%95.png" alt="InnoDB索引.png" title="InnoDB索引">  </p>
+<p>从图中不难看出，根据叶子节点的内容，索引类型分为主键索引和非主键索引。</p>
+<p>主键索引的叶子节点存的是整行数据。在 InnoDB 里，主键索引也被称为聚簇索引（clustered index）。  </p>
+<p>非主键索引的叶子节点内容是主键的值。在 InnoDB 里，非主键索引也被称为二级索引（secondary index）。</p>
+<p>根据上面的索引结构说明，我们来讨论一个问题：基于主键索引和普通索引的查询有什么区别？</p>
+<p>如果语句是 select * from T where ID=500，即主键查询方式，则只需要搜索 ID 这棵 B+ 树；<br>如果语句是 select * from T where k=5，即普通索引查询方式，则需要先搜索 k 索引树，得到 ID 的值为 500，再到 ID 索引树搜索一次。这个过程称为_回表_。<br>也就是说，基于非主键索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。   </p>
+<p>除了性能外，页分裂操作还影响数据页的利用率。原本放在一个页的数据，现在分到两个页中，整体空间利用率降低大约 50%。</p>
+<p>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。</p>
+<p>基于上面的索引维护过程说明，我们来讨论一个案例：</p>
+<p>你可能在一些建表规范里面见到过类似的描述，要求建表语句里一定要有自增主键。当然事无绝对，我们来分析一下哪些场景下应该使用自增主键，而哪些场景下不应该。</p>
+<p>自增主键是指自增列上定义的主键，在建表语句中一般是这么定义的： NOT NULL PRIMARY KEY AUTO_INCREMENT。</p>
+<p>插入新记录的时候可以不指定 ID 的值，系统会获取当前 ID 最大值加 1 作为下一条记录的 ID 值。</p>
+<p>也就是说，自增主键的插入数据模式，正符合了我们前面提到的递增插入的场景。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。</p>
+<p>而有业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。</p>
+<p>除了考虑性能外，我们还可以从存储空间的角度来看。假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？</p>
+<p>由于每个非主键索引的叶子节点上都是主键的值。如果用身份证号做主键，那么每个二级索引的叶子节点占用约 20 个字节，而如果用整型做主键，则只要 4 个字节，如果是长整型（bigint）则是 8 个字节。</p>
+<p>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</p>
+<p>所以，从性能和存储空间方面考量，自增主键往往是更合理的选择。</p>
+<p>有没有什么场景适合用业务字段直接做主键的呢？还是有的。比如，有些业务的场景需求是这样的：</p>
+<p>只有一个索引；</p>
+<p>该索引必须是唯一索引。</p>
+<p>你一定看出来了，这就是典型的 KV 场景。</p>
+<p>由于没有其他索引，所以也就不用考虑其他索引的叶子节点大小的问题。</p>
+<p>这时候我们就要优先考虑上一段提到的“尽量使用主键查询”原则，直接将这个索引设置为主键，可以避免每次查询需要搜索两棵树。 </p>
+<p>对于一张表可以这么理解：<br>每一张表其实就是好几个B+树，树结点的key值就是某一行的主键，value是该行的其他数据。新建索引就是新增一个B+树，查询不走索引就是遍历主B+树。</p>
+<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>如果执行的语句是 select ID from T where k between 3 and 5，这时只需要查 ID 的值，而 ID 的值已经在 k 索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，索引 k 已经“覆盖了”我们的查询需求，我们称为覆盖索引。</p>
+<p>由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以使用覆盖索引是一个常用的性能优化手段。</p>
+<p>需要注意的是，在引擎内部使用覆盖索引在索引 k 上其实读了三个记录，R3~R5（对应的索引 k 上的记录项），但是对于 MySQL 的 Server 层来说，它就是找引擎拿到了两条记录，因此 MySQL 认为扫描行数是 2。  </p>
+<p>基于上面覆盖索引的说明，我们来讨论一个问题：在一个市民信息表上，是否有必要将身份证号和名字建立联合索引？  </p>
+<p>我们知道，身份证号是市民的唯一标识。也就是说，如果有根据身份证号查询市民信息的需求，我们只要在身份证号字段上建立索引就够了。而再建立一个（身份证号、姓名）的联合索引，是不是浪费空间？</p>
+<p>如果现在有一个高频请求，要根据市民的身份证号查询他的姓名，这个联合索引就有意义了。它可以在这个高频请求上用到覆盖索引，不再需要回表查整行记录，减少语句的执行时间。</p>
+<p>当然，索引字段的维护总是有代价的。因此，在建立冗余索引来支持覆盖索引时就需要权衡考虑了。这正是业务 DBA，或者称为业务数据架构师的工作。  </p>
+<h3 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h3><p>对于最左前缀原则大家都应该轻车熟路了，就不过多介绍，有些重点内容可以考虑一下：<br>基于上面对最左前缀索引的说明，我们来讨论一个问题：在建立联合索引的时候，如何安排索引内的字段顺序。</p>
+<p>这里我们的评估标准是，索引的复用能力。因为可以支持最左前缀，所以当已经有了 (a,b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。  </p>
+<p>所以现在你知道了，这段开头的问题里，我们要为高频请求创建 (身份证号，姓名）这个联合索引，并用这个索引支持“根据身份证号查询地址”的需求。</p>
+<p>那么，如果既有联合查询，又有基于 a、b 各自的查询呢？查询条件里面只有 b 的语句，是无法使用 (a,b) 这个联合索引的，这时候你不得不维护另外一个索引，也就是说你需要同时维护 (a,b)、(b) 这两个索引。</p>
+<p>这时候，我们要考虑的原则就是空间了。比如上面这个市民表的情况，name 字段是比 age 字段大的 ，那我就建议你创建一个（name,age) 的联合索引和一个 (age) 的单字段索引。  </p>
+<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>上一段我们说到满足最左前缀原则的时候，最左前缀可以用于在索引中定位记录。这时，你可能要问，那些不符合最左前缀的部分，会怎么样呢？</p>
+<p>我们还是以市民表的联合索引（name, age）为例。如果现在有一个需求：检索出表中“名字第一个字是张，而且年龄是 10 岁的所有男孩”。那么，SQL 语句是这么写的：   </p>
+<p><code>mysql&gt; select * from tuser where name like &#39;张 %&#39; and age=10 and ismale=1;</code></p>
+<p>你已经知道了前缀索引规则，所以这个语句在搜索索引树的时候，只能用 “张”，找到第一个满足条件的记录 ID3。当然，这还不错，总比全表扫描要好。</p>
+<p>然后呢？</p>
+<p>当然是判断其他条件是否满足。</p>
+<p>在 MySQL 5.6 之前，只能从 ID3 开始一个个回表。到主键索引上找出数据行，再对比字段值。</p>
+<p>而 MySQL 5.6 引入的索引下推优化（index condition pushdown)， 可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
+<p>图 3 和图 4，是这两个过程的执行流程图。</p>
+<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
+<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
+<p>在图 3 和 4 这两个图里面，每一个虚线箭头表示回表一次。</p>
+<p>图 3 中，在 (name,age) 索引里面我特意去掉了 age 的值，这个过程 InnoDB 并不会去看 age 的值，只是按顺序把“name 第一个字是’张’”的记录一条条取出来回表。因此，需要回表 4 次。</p>
+<p>图 4 跟图 3 的区别是，InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
+<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>实际上主键索引也是可以使用多个字段的。DBA 小吕在入职新公司的时候，就发现自己接手维护的库里面，有这么一个表，表结构定义类似这样的：</p>
+<figure class="highlight plain"><figcaption><span>TABLE `geek` (</span></figcaption><table><tr><td class="code"><pre><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">公司的同事告诉他说，由于历史原因，这个表需要 a、b 做联合主键，这个小吕理解了。</span><br><span class="line"></span><br><span class="line">但是，学过本章内容的小吕又纳闷了，既然主键包含了 a、b 这两个字段，那意味着单独在字段 c 上创建一个索引，就已经包含了三个字段了呀，为什么要创建“ca”“cb”这两个索引？</span><br><span class="line"></span><br><span class="line">同事告诉他，是因为他们的业务里面有这样的两种语句：</span><br></pre></td></tr></table></figure>
+
+<p>select * from geek where c=N order by a limit 1;<br>select * from geek where c=N order by b limit 1;<br>```  </p>
+<p>我给你的问题是，这位同事的解释对吗，为了这两个查询模式，这两个索引是否都是必须的？为什么呢？  </p>
+<p>解答：  </p>
+<p>表记录<br>–a–|–b–|–c–|–d–<br>1 2 3 d<br>1 3 2 d<br>1 4 3 d<br>2 1 3 d<br>2 2 2 d<br>2 3 4 d<br>主键 a，b 的聚簇索引组织顺序相当于 order by a,b ，也就是先按 a 排序，再按 b 排序，c 无序。</p>
+<p>索引 ca 的组织是先按 c 排序，再按 a 排序，同时记录主键<br>–c–|–a–|–主键部分b– （注意，这里不是 ab，而是只有 b）<br>2 1 3<br>2 2 2<br>3 1 2<br>3 1 4<br>3 2 1<br>4 2 3<br>这个跟索引 c 的数据是一模一样的。</p>
+<p>索引 cb 的组织是先按 c 排序，在按 b 排序，同时记录主键<br>–c–|–b–|–主键部分a– （同上）<br>2 2 2<br>2 3 1<br>3 1 2<br>3 2 1<br>3 4 1<br>4 3 2  </p>
+<p>所以，结论是 ca 可以去掉，cb 需要保留。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>索引</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>浅谈MVCC</title>
     <url>/2020/03/23/%E6%B5%85%E8%B0%88MVCC/</url>
     <content><![CDATA[<h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><h3 id="版本链"><a href="#版本链" class="headerlink" title="版本链"></a>版本链</h3><p>对于使用InnoDB存储引擎的表来说，它的聚簇索引记录中都包含两个必要的隐藏列（row_id并不是必要的，我们创建的表中有主键或者非NULL唯一键时都不会包含row_id列）：</p>
@@ -4597,92 +4715,6 @@
       <tags>
         <tag>数据库</tag>
         <tag>MVCC</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深入浅出索引</title>
-    <url>/2019/10/26/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%B4%A2%E5%BC%95/</url>
-    <content><![CDATA[<p>这节讲的是索引的相关知识，提到索引相信大家都不会陌生，在工作中或多或少都会接触过，建立索引主要是用来提升SQL查询速度的一种解决方案。<br>那么索引是什么？<br>一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。  </p>
-<h3 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h3><p>这里引入三种模型，哈希表有序数组和搜索树  </p>
-<p>哈希表是一种以建-值（key-value）存储的数据结构，我们只要输入待查找的key，就能找到value。哈希的思路很简单，把值放在数组里，用一个哈希函数把key换算成一个确定的位置，然后把value放在数组的这个位置。<br>不可避免的，多个key经过哈希函数的换算会出现同一个值的情况，处理这种情况的方式是，拉出一个链表。<br>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字。这时对应的哈希索引的示意图如下所示。  </p>
-<p><img src="../image/%E5%93%88%E5%B8%8C%E8%A1%A8.png" alt="哈希表.png" title="哈希表">  </p>
-<p>需要注意的是，图中四个ID_card_n的值并不是递增的，这样做的好处是增加新的User时速度会很快，只需要往后追加。但缺点是，因为不是有序的，所以哈希索引做区间查询速度是很慢的。  </p>
-<p>所以，哈希表这种结构适用于只有等值查询的场景，比如 Memcached 及其他一些 NoSQL 引擎。  </p>
-<p>而有序数组在等值查询和范围查询场景的性能就都非常优秀。还是根据上面这个例子，如果用有序数组来实现的话，示意图如下所示：  </p>
-<p><img src="../image/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84.png" alt="有序数组.png" title="有序数组">  </p>
-<p>这里假设身份证号没有重复，这个数组就是按照身份证号递增的顺序保存的，这个时候如果你要查ID_card_n2对应的名字，用二分法就可以快速得到，这个时间复杂度是O(log(N)).<br>同时很显然，这个索引结构支持范围查询。你要查身份证号在[ID_card_X,ID_card_Y]区间的User，可以先用二分法找到ID_card_X(如果不存在ID_card_X，就找到大于ID_card_X的第一个User)，然后向右遍历，直到查到第一个大于ID_card_Y的身份证号，推出循环。<br>如果仅仅看查询效率，有序数组就是最好的数据结构了，但是在更新数据的时候，如果有新增的数据，就需要挪动后续所有的记录，成本太高。<br>所以，有序数组只适用于静态存储引擎，比如你要保存的是2019年某个城市所有人口的信息，这类不会再修改的数据。<br>二叉搜索树是经典的数据结构了，还是根据上面的例子，如果我们用二叉搜索树来实现的话，示意图如下所示，</p>
-<p><img src="../image/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="二叉搜索树.png" title="二叉搜索树">  </p>
-<p>二叉搜索树的特点是：每个节点的左儿子小于父节点，父节点又小于右儿子，这样如果你要查ID_card_2的话按照图中的顺序就是按照UserA -&gt; UserC -&gt; UserF -&gt; User2这个路径得到。这个时间复杂度是O(log(N))。<br>当然为了维持O(log(N))的查询复杂度，你就需要保持这颗树是平衡二叉树，为了做这个保证，更新的时间复杂度也是O(log(N))。<br>树可以有二叉，也可以有多叉，多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉搜索树的效率是最高的，但是实际上大多数数据库存储却并不适用二叉树。其原因是，索引不止存在于内存中，还要写到磁盘上。<br>你可以想象一下一棵100万节点的平衡二叉树，树高20，一次查询可能需要访问20个数据块，在机械硬盘时代，从磁盘随机读取一个数据块需要10ms的寻址时间，也就是说，对于一个100万行的表，如果使用二叉树来存储，单独访问一个行可能需要20个10ms的时间，这个查询可真够慢的，为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。以 InnoDB 的一个整数字段索引为例，这个 N 差不多是 1200。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p>
-<p>N 叉树由于在读写上的性能优点，以及适配磁盘的访问模式，已经被广泛应用在数据库引擎中了。  </p>
-<h3 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h3><p>大家都知道InnoDB的索引模型是B+树，假设我们有一个主键列为ID的表，表中有字段K，并且在K上有索引，如下图所示：  </p>
-<p><img src="../image/InnoDB%E7%B4%A2%E5%BC%95.png" alt="InnoDB索引.png" title="InnoDB索引">  </p>
-<p>从图中不难看出，根据叶子节点的内容，索引类型分为主键索引和非主键索引。</p>
-<p>主键索引的叶子节点存的是整行数据。在 InnoDB 里，主键索引也被称为聚簇索引（clustered index）。  </p>
-<p>非主键索引的叶子节点内容是主键的值。在 InnoDB 里，非主键索引也被称为二级索引（secondary index）。</p>
-<p>根据上面的索引结构说明，我们来讨论一个问题：基于主键索引和普通索引的查询有什么区别？</p>
-<p>如果语句是 select * from T where ID=500，即主键查询方式，则只需要搜索 ID 这棵 B+ 树；<br>如果语句是 select * from T where k=5，即普通索引查询方式，则需要先搜索 k 索引树，得到 ID 的值为 500，再到 ID 索引树搜索一次。这个过程称为_回表_。<br>也就是说，基于非主键索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。   </p>
-<p>除了性能外，页分裂操作还影响数据页的利用率。原本放在一个页的数据，现在分到两个页中，整体空间利用率降低大约 50%。</p>
-<p>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。</p>
-<p>基于上面的索引维护过程说明，我们来讨论一个案例：</p>
-<p>你可能在一些建表规范里面见到过类似的描述，要求建表语句里一定要有自增主键。当然事无绝对，我们来分析一下哪些场景下应该使用自增主键，而哪些场景下不应该。</p>
-<p>自增主键是指自增列上定义的主键，在建表语句中一般是这么定义的： NOT NULL PRIMARY KEY AUTO_INCREMENT。</p>
-<p>插入新记录的时候可以不指定 ID 的值，系统会获取当前 ID 最大值加 1 作为下一条记录的 ID 值。</p>
-<p>也就是说，自增主键的插入数据模式，正符合了我们前面提到的递增插入的场景。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。</p>
-<p>而有业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。</p>
-<p>除了考虑性能外，我们还可以从存储空间的角度来看。假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？</p>
-<p>由于每个非主键索引的叶子节点上都是主键的值。如果用身份证号做主键，那么每个二级索引的叶子节点占用约 20 个字节，而如果用整型做主键，则只要 4 个字节，如果是长整型（bigint）则是 8 个字节。</p>
-<p>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</p>
-<p>所以，从性能和存储空间方面考量，自增主键往往是更合理的选择。</p>
-<p>有没有什么场景适合用业务字段直接做主键的呢？还是有的。比如，有些业务的场景需求是这样的：</p>
-<p>只有一个索引；</p>
-<p>该索引必须是唯一索引。</p>
-<p>你一定看出来了，这就是典型的 KV 场景。</p>
-<p>由于没有其他索引，所以也就不用考虑其他索引的叶子节点大小的问题。</p>
-<p>这时候我们就要优先考虑上一段提到的“尽量使用主键查询”原则，直接将这个索引设置为主键，可以避免每次查询需要搜索两棵树。 </p>
-<p>对于一张表可以这么理解：<br>每一张表其实就是好几个B+树，树结点的key值就是某一行的主键，value是该行的其他数据。新建索引就是新增一个B+树，查询不走索引就是遍历主B+树。</p>
-<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>如果执行的语句是 select ID from T where k between 3 and 5，这时只需要查 ID 的值，而 ID 的值已经在 k 索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，索引 k 已经“覆盖了”我们的查询需求，我们称为覆盖索引。</p>
-<p>由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以使用覆盖索引是一个常用的性能优化手段。</p>
-<p>需要注意的是，在引擎内部使用覆盖索引在索引 k 上其实读了三个记录，R3~R5（对应的索引 k 上的记录项），但是对于 MySQL 的 Server 层来说，它就是找引擎拿到了两条记录，因此 MySQL 认为扫描行数是 2。  </p>
-<p>基于上面覆盖索引的说明，我们来讨论一个问题：在一个市民信息表上，是否有必要将身份证号和名字建立联合索引？  </p>
-<p>我们知道，身份证号是市民的唯一标识。也就是说，如果有根据身份证号查询市民信息的需求，我们只要在身份证号字段上建立索引就够了。而再建立一个（身份证号、姓名）的联合索引，是不是浪费空间？</p>
-<p>如果现在有一个高频请求，要根据市民的身份证号查询他的姓名，这个联合索引就有意义了。它可以在这个高频请求上用到覆盖索引，不再需要回表查整行记录，减少语句的执行时间。</p>
-<p>当然，索引字段的维护总是有代价的。因此，在建立冗余索引来支持覆盖索引时就需要权衡考虑了。这正是业务 DBA，或者称为业务数据架构师的工作。  </p>
-<h3 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h3><p>对于最左前缀原则大家都应该轻车熟路了，就不过多介绍，有些重点内容可以考虑一下：<br>基于上面对最左前缀索引的说明，我们来讨论一个问题：在建立联合索引的时候，如何安排索引内的字段顺序。</p>
-<p>这里我们的评估标准是，索引的复用能力。因为可以支持最左前缀，所以当已经有了 (a,b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。  </p>
-<p>所以现在你知道了，这段开头的问题里，我们要为高频请求创建 (身份证号，姓名）这个联合索引，并用这个索引支持“根据身份证号查询地址”的需求。</p>
-<p>那么，如果既有联合查询，又有基于 a、b 各自的查询呢？查询条件里面只有 b 的语句，是无法使用 (a,b) 这个联合索引的，这时候你不得不维护另外一个索引，也就是说你需要同时维护 (a,b)、(b) 这两个索引。</p>
-<p>这时候，我们要考虑的原则就是空间了。比如上面这个市民表的情况，name 字段是比 age 字段大的 ，那我就建议你创建一个（name,age) 的联合索引和一个 (age) 的单字段索引。  </p>
-<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>上一段我们说到满足最左前缀原则的时候，最左前缀可以用于在索引中定位记录。这时，你可能要问，那些不符合最左前缀的部分，会怎么样呢？</p>
-<p>我们还是以市民表的联合索引（name, age）为例。如果现在有一个需求：检索出表中“名字第一个字是张，而且年龄是 10 岁的所有男孩”。那么，SQL 语句是这么写的：   </p>
-<p><code>mysql&gt; select * from tuser where name like &#39;张 %&#39; and age=10 and ismale=1;</code></p>
-<p>你已经知道了前缀索引规则，所以这个语句在搜索索引树的时候，只能用 “张”，找到第一个满足条件的记录 ID3。当然，这还不错，总比全表扫描要好。</p>
-<p>然后呢？</p>
-<p>当然是判断其他条件是否满足。</p>
-<p>在 MySQL 5.6 之前，只能从 ID3 开始一个个回表。到主键索引上找出数据行，再对比字段值。</p>
-<p>而 MySQL 5.6 引入的索引下推优化（index condition pushdown)， 可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
-<p>图 3 和图 4，是这两个过程的执行流程图。</p>
-<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
-<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
-<p>在图 3 和 4 这两个图里面，每一个虚线箭头表示回表一次。</p>
-<p>图 3 中，在 (name,age) 索引里面我特意去掉了 age 的值，这个过程 InnoDB 并不会去看 age 的值，只是按顺序把“name 第一个字是’张’”的记录一条条取出来回表。因此，需要回表 4 次。</p>
-<p>图 4 跟图 3 的区别是，InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
-<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>实际上主键索引也是可以使用多个字段的。DBA 小吕在入职新公司的时候，就发现自己接手维护的库里面，有这么一个表，表结构定义类似这样的：</p>
-<figure class="highlight plain"><figcaption><span>TABLE `geek` (</span></figcaption><table><tr><td class="code"><pre><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">公司的同事告诉他说，由于历史原因，这个表需要 a、b 做联合主键，这个小吕理解了。</span><br><span class="line"></span><br><span class="line">但是，学过本章内容的小吕又纳闷了，既然主键包含了 a、b 这两个字段，那意味着单独在字段 c 上创建一个索引，就已经包含了三个字段了呀，为什么要创建“ca”“cb”这两个索引？</span><br><span class="line"></span><br><span class="line">同事告诉他，是因为他们的业务里面有这样的两种语句：</span><br></pre></td></tr></table></figure>
-
-<p>select * from geek where c=N order by a limit 1;<br>select * from geek where c=N order by b limit 1;<br>```  </p>
-<p>我给你的问题是，这位同事的解释对吗，为了这两个查询模式，这两个索引是否都是必须的？为什么呢？  </p>
-<p>解答：  </p>
-<p>表记录<br>–a–|–b–|–c–|–d–<br>1 2 3 d<br>1 3 2 d<br>1 4 3 d<br>2 1 3 d<br>2 2 2 d<br>2 3 4 d<br>主键 a，b 的聚簇索引组织顺序相当于 order by a,b ，也就是先按 a 排序，再按 b 排序，c 无序。</p>
-<p>索引 ca 的组织是先按 c 排序，再按 a 排序，同时记录主键<br>–c–|–a–|–主键部分b– （注意，这里不是 ab，而是只有 b）<br>2 1 3<br>2 2 2<br>3 1 2<br>3 1 4<br>3 2 1<br>4 2 3<br>这个跟索引 c 的数据是一模一样的。</p>
-<p>索引 cb 的组织是先按 c 排序，在按 b 排序，同时记录主键<br>–c–|–b–|–主键部分a– （同上）<br>2 2 2<br>2 3 1<br>3 1 2<br>3 2 1<br>3 4 1<br>4 3 2  </p>
-<p>所以，结论是 ca 可以去掉，cb 需要保留。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>索引</tag>
       </tags>
   </entry>
   <entry>
