@@ -51,13 +51,9 @@
     
     <div class="article-meta">
       <a href="/2020/04/22/《深入理解Java虚拟机》第三章垃圾收集器与内存分配策略/" class="article-date">
-  <time datetime="2020-04-22T15:48:45.000Z" itemprop="datePublished">2020-04-22</time>
+  <time datetime="2020-04-22T11:48:45.000Z" itemprop="datePublished">2020-04-22</time>
 </a>
       
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JVM/">JVM</a>
-  </div>
-
       
       
 <div class="word_count">
@@ -65,7 +61,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1.3k</span>
+            <span class="post-count">2.2k</span>
         </span>
     </span>
 
@@ -74,7 +70,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">4 min</span>
+            <span class="post-count">7 min</span>
         </span>
     </span>
 </div>
@@ -99,7 +95,7 @@
       
 
       
-      <h2 id="第一部分-对象已死吗？"><a href="#第一部分-对象已死吗？" class="headerlink" title="第一部分:对象已死吗？"></a>第一部分:对象已死吗？</h2><h3 id="1-1-引用计数算法"><a href="#1-1-引用计数算法" class="headerlink" title="1.1 引用计数算法"></a>1.1 引用计数算法</h3><h4 id="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"><a href="#引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。" class="headerlink" title="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"></a>引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。</h4><p>//互相引用.png</p>
+      <h2 id="第一部分-对象已死吗？"><a href="#第一部分-对象已死吗？" class="headerlink" title="第一部分:对象已死吗？"></a>第一部分:对象已死吗？</h2><h3 id="1-1-引用计数算法"><a href="#1-1-引用计数算法" class="headerlink" title="1.1 引用计数算法"></a>1.1 引用计数算法</h3><h4 id="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"><a href="#引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。" class="headerlink" title="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"></a>引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。</h4><p><img src="../image/%E4%BA%92%E7%9B%B8%E5%BC%95%E7%94%A8.png" alt="互相引用.png" title="互相引用"></p>
 <h3 id="1-2-可达性分析算法"><a href="#1-2-可达性分析算法" class="headerlink" title="1.2 可达性分析算法"></a>1.2 可达性分析算法</h3><h4 id="可达性分析算法：引入了GC-Roots对象，从GC-Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6-objecct7来说，虽然互相有关联，但是它们到GC-Roots是不可达的，所以他们会被判断为是可回收的对象。"><a href="#可达性分析算法：引入了GC-Roots对象，从GC-Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6-objecct7来说，虽然互相有关联，但是它们到GC-Roots是不可达的，所以他们会被判断为是可回收的对象。" class="headerlink" title="可达性分析算法：引入了GC Roots对象，从GC Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6,objecct7来说，虽然互相有关联，但是它们到GC Roots是不可达的，所以他们会被判断为是可回收的对象。"></a>可达性分析算法：引入了GC Roots对象，从GC Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6,objecct7来说，虽然互相有关联，但是它们到GC Roots是不可达的，所以他们会被判断为是可回收的对象。</h4><h4 id="1-2-1-那么什么样的对象可以作为GC-Roots对象呢？"><a href="#1-2-1-那么什么样的对象可以作为GC-Roots对象呢？" class="headerlink" title="1.2.1 那么什么样的对象可以作为GC Roots对象呢？"></a>1.2.1 那么什么样的对象可以作为GC Roots对象呢？</h4><p>《深入理解Java虚拟机》书中给出的定义是：</p>
 <ol>
 <li>虚拟机栈中引用的对象</li>
@@ -118,8 +114,28 @@
 <li>加载该类的ClassLoader已经被回收。</li>
 <li>该类对象的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
 </ol>
-<h2 id="第三部分-垃圾回收算法"><a href="#第三部分-垃圾回收算法" class="headerlink" title="第三部分:垃圾回收算法"></a>第三部分:垃圾回收算法</h2><h3 id="3-1-标记清除算法"><a href="#3-1-标记清除算法" class="headerlink" title="3.1 标记清除算法"></a>3.1 标记清除算法</h3><h3 id="3-2-复制算法"><a href="#3-2-复制算法" class="headerlink" title="3.2 复制算法"></a>3.2 复制算法</h3><h3 id="3-3-标记-整理算法"><a href="#3-3-标记-整理算法" class="headerlink" title="3.3 标记-整理算法"></a>3.3 标记-整理算法</h3><h3 id="3-4-分代收集算法"><a href="#3-4-分代收集算法" class="headerlink" title="3.4 分代收集算法"></a>3.4 分代收集算法</h3><h2 id="第四部分-内存分配"><a href="#第四部分-内存分配" class="headerlink" title="第四部分:内存分配"></a>第四部分:内存分配</h2><h3 id="4-1-新生代，老年代"><a href="#4-1-新生代，老年代" class="headerlink" title="4.1 新生代，老年代"></a>4.1 新生代，老年代</h3><p>//内存展示.png</p>
-<h3 id="4-2-Minor-GC和Full-GC"><a href="#4-2-Minor-GC和Full-GC" class="headerlink" title="4.2 Minor GC和Full GC"></a>4.2 Minor GC和Full GC</h3><h3 id="4-3-为什么新生代中有两个Survivor？"><a href="#4-3-为什么新生代中有两个Survivor？" class="headerlink" title="4.3 为什么新生代中有两个Survivor？"></a>4.3 为什么新生代中有两个Survivor？</h3>
+<h2 id="第三部分-垃圾回收算法"><a href="#第三部分-垃圾回收算法" class="headerlink" title="第三部分:垃圾回收算法"></a>第三部分:垃圾回收算法</h2><h3 id="3-1-标记清除算法"><a href="#3-1-标记清除算法" class="headerlink" title="3.1 标记清除算法"></a>3.1 标记清除算法</h3><p>缺点有内存碎片产生，缺点比较明显。</p>
+<p><img src="../image/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4.png" alt="标记清除.png" title="标记清除"></p>
+<h3 id="3-2-复制算法-新生代"><a href="#3-2-复制算法-新生代" class="headerlink" title="3.2 复制算法(新生代)"></a>3.2 复制算法(新生代)</h3><p>思想是将内存一分为二，每次值用一半的内存，发生GC的时候将存活的对象放入另一半内存，以此往复。</p>
+<p>新生代的对象IBM研究98%都是朝生夕死的，所以没必要按照1:1的比例分配，经过研究8：1:1是最优的，为什么有两个Survivor区下文有解释。</p>
+<p>对象优先存入Eden区和一个Survivor区中，将发生Minor GC，之后将存活的对象放入另一个Survivor区，然后下一次存入对象，与Eden区一起的是有存活对象的Sruvivor区</p>
+<p><img src="../image/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95.png" alt="复制算法.png" title="复制算法"></p>
+<h3 id="3-3-标记-整理算法-老年代"><a href="#3-3-标记-整理算法-老年代" class="headerlink" title="3.3 标记-整理算法(老年代)"></a>3.3 标记-整理算法(老年代)</h3><p>大体上与标记清除算法一致，将存活的对象集中放到一起，避免了内存分片，因为老年代上存活的对象大部分都是大对象。</p>
+<p><img src="../image/%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86.png" alt="标记整理.png" title="标记整理"></p>
+<h3 id="3-4-分代收集算法"><a href="#3-4-分代收集算法" class="headerlink" title="3.4 分代收集算法"></a>3.4 分代收集算法</h3><p>判断新生代就用复制算法，判断老年代就用标记-整理算法，那么如何判断新生代，老年代？接着看</p>
+<h2 id="第四部分-内存分配"><a href="#第四部分-内存分配" class="headerlink" title="第四部分:内存分配"></a>第四部分:内存分配</h2><h3 id="4-1-新生代，老年代"><a href="#4-1-新生代，老年代" class="headerlink" title="4.1 新生代，老年代"></a>4.1 新生代，老年代</h3><p><img src="../image/%E6%96%B0%E7%94%9F%E4%BB%A3.png" alt="新生代.png" title="新生代"></p>
+<p><img src="../image/%E8%80%81%E5%B9%B4%E4%BB%A3.png" alt="老年代.png" title="老年代"></p>
+<h3 id="4-2-Minor-GC和Full-GC-Major-GC"><a href="#4-2-Minor-GC和Full-GC-Major-GC" class="headerlink" title="4.2 Minor GC和Full GC(Major GC)"></a>4.2 Minor GC和Full GC(Major GC)</h3><h4 id="4-2-1-Minor-GC是发生在新生代的GC-因为新生代都是朝生夕死的对象，所以发生非常频繁，速度也较快。"><a href="#4-2-1-Minor-GC是发生在新生代的GC-因为新生代都是朝生夕死的对象，所以发生非常频繁，速度也较快。" class="headerlink" title="4.2.1 Minor GC是发生在新生代的GC,因为新生代都是朝生夕死的对象，所以发生非常频繁，速度也较快。"></a>4.2.1 Minor GC是发生在新生代的GC,因为新生代都是朝生夕死的对象，所以发生非常频繁，速度也较快。</h4><h4 id="4-2-2-Full-GC也叫Major-GC是发生在老年代的GC，出现了Full-GC一般情况下同时也会伴随着Major-GC，当然这不绝对，通常情况下Full-GC的速度会比Minor-GC速度慢10倍以上。"><a href="#4-2-2-Full-GC也叫Major-GC是发生在老年代的GC，出现了Full-GC一般情况下同时也会伴随着Major-GC，当然这不绝对，通常情况下Full-GC的速度会比Minor-GC速度慢10倍以上。" class="headerlink" title="4.2.2 Full GC也叫Major GC是发生在老年代的GC，出现了Full GC一般情况下同时也会伴随着Major GC，当然这不绝对，通常情况下Full GC的速度会比Minor GC速度慢10倍以上。"></a>4.2.2 Full GC也叫Major GC是发生在老年代的GC，出现了Full GC一般情况下同时也会伴随着Major GC，当然这不绝对，通常情况下Full GC的速度会比Minor GC速度慢10倍以上。</h4><h3 id="4-3-为什么新生代中有两个Survivor？"><a href="#4-3-为什么新生代中有两个Survivor？" class="headerlink" title="4.3 为什么新生代中有两个Survivor？"></a>4.3 为什么新生代中有两个Survivor？</h3><p>4.3.1 这里就提到了为什么新生代中要有两个Survivor区？</p>
+<p>提前说下结论：防止内存碎片的发生。</p>
+<p>在此之前先来讨论下为什么要分新生代和老年代？</p>
+<p>如果不分新生代和老年代的话那么每发生一次GC，就会对堆中的所有对象遍历，想象是不是都痛苦？</p>
+<p>那么继续讨论为什么会有Survivor区？</p>
+<p>如果没有Survivor区的话，那么发生一次Minor GC就会将存活的对象放入老年代，导致老年代被很快打满，发生Full GC，发生Full GC消耗的时间和资源是非常大的。这是不是也很坑？</p>
+<p>那么为什么要有两个Survivor区？</p>
+<p>之前讨论了为什么要有Survivor区，现在假设只有一个Survivor区，第一次发生Minor GC,Eden区中存活的对象放入Survivor区中，在下一次Minor GC发生的时候，Eden区中存活的对象在此放入Survivor区中,要知道此时Survivor中是存在对象的，可想而知这两次放入的对象是不连续的，会发生内存碎片。这样就顺理成章的要有两个Survivor区。</p>
+<p>这时有一个问题，如果Eden + Survior区中存活的对象大于Survivor的大小，就会需要老年代进行担保，那么每次发生minor GC的时候，虚拟机会先检查老年代最大可用的连续空间是否大于新生代所有对象的总空间，如果这个条件成立，那么Minor GC可以确保安全的执行，如果不成立，则虚拟机会查看HandlePromotionFailure设置值是否允许担保失败，如果允许那么会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试进行一次Minor GC,尽管这次Minor GC是有风险的；如果小于或者HandlePromotionFailure设置为不允许冒险，那这时也要改为一个Full GC。</p>
+<h3 id="附上一些垃圾收集器的参数"><a href="#附上一些垃圾收集器的参数" class="headerlink" title="附上一些垃圾收集器的参数"></a>附上一些垃圾收集器的参数</h3><p><img src="../image/1.png" alt="1.png" title="1"><br><img src="../image/2.png" alt="2.png" title="2"></p>
+
       
       <!-- reward -->
       
@@ -190,8 +206,6 @@
 <div id="share-mask"></div>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/垃圾收集器与内存分配策略/">垃圾收集器与内存分配策略</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深入理解Java虚拟机/">深入理解Java虚拟机</a></li></ul>
-
 
     </footer>
 
@@ -201,10 +215,19 @@
   
   <nav class="article-nav">
     
-    
       <a href="/2020/04/22/go-big-or-go-home-38/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            go big or go home-38
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/04/21/go-big-or-go-home-37/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">go big or go home-38</div>
+        <div class="article-nav-title">go big or go home-37</div>
       </a>
     
   </nav>

@@ -19,50 +19,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础部分之String</title>
-    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
-    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
-<p>在Java8中，String内部使用char数组存储数据。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
-<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
-<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
-
-<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
-
-<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
-<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
-<p>而使用new的方式会在堆中创建一个字符串对象。</p>
-<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>String</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之数据类型</title>
     <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
@@ -127,6 +83,50 @@
       <tags>
         <tag>个人经历</tag>
         <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础部分之String</title>
+    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
+    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
+<p>在Java8中，String内部使用char数组存储数据。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final char value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final class String</span><br><span class="line">	implements java.io.serializable,Comparable,CharSequence &#123;</span><br><span class="line">	/** The value is used for character storage. */</span><br><span class="line">	private final byte[] value;</span><br><span class="line">	</span><br><span class="line">	/** The identifier of the encoding used to encode the bytes in &#123;@code value&#125;. */</span><br><span class="line">	private final byte coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
+<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s1 = new String(&quot;aaa&quot;);</span><br><span class="line">Stirng s2 = new String(&quot;aaa&quot;);</span><br><span class="line">System.out.println(s1 == s2); //false</span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); //true</span><br></pre></td></tr></table></figure>
+
+<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String s5 = &quot;bbb&quot;;</span><br><span class="line">String s6 = &quot;bbb&quot;;</span><br><span class="line">System.out.println(s5 == s6); //true</span><br></pre></td></tr></table></figure>
+
+<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
+<p>而使用new的方式会在堆中创建一个字符串对象。</p>
+<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewStirngTest&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Stirng s = new String(&quot;abc&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String(String original)&#123;</span><br><span class="line">	this.value = original.value;</span><br><span class="line">	this.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>String</tag>
       </tags>
   </entry>
   <entry>
@@ -2070,86 +2070,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-23</title>
-    <url>/2020/04/07/go-big-or-go-home-23/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pure</td>
-<td>纯净的</td>
-<td>The water seems so pure and clean</td>
-</tr>
-<tr>
-<td>regulation</td>
-<td>法规</td>
-<td>The traffic police is introducing traffic rules and regulations to us</td>
-</tr>
-<tr>
-<td>Africa</td>
-<td>非洲</td>
-<td>Africa is home to some of the world’s oldest cultures</td>
-</tr>
-<tr>
-<td>motherland</td>
-<td>祖国</td>
-<td>Everyone has their own motherland</td>
-</tr>
-<tr>
-<td>liberty</td>
-<td>自由</td>
-<td>The bird flew from the cage and got liberty</td>
-</tr>
-<tr>
-<td>pair</td>
-<td>一对</td>
-<td>Here is a pair of black shoes</td>
-</tr>
-<tr>
-<td>irrigate</td>
-<td>灌溉</td>
-<td>This machine can irrigate the field</td>
-</tr>
-<tr>
-<td>accompany</td>
-<td>陪伴</td>
-<td>I always accompany my children to their school</td>
-</tr>
-<tr>
-<td>typist</td>
-<td>打字员</td>
-<td>The typist is finishing her documents</td>
-</tr>
-<tr>
-<td>barrier</td>
-<td>路障</td>
-<td>The road was closed by a barrier</td>
-</tr>
-<tr>
-<td>octopus</td>
-<td>章鱼</td>
-<td>-</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>切薄片</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-24</title>
     <url>/2020/04/08/go-big-or-go-home-24/</url>
     <content><![CDATA[<table>
@@ -2375,8 +2295,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-25</title>
-    <url>/2020/04/10/go-big-or-go-home-25/</url>
+    <title>go big or go home-23</title>
+    <url>/2020/04/07/go-big-or-go-home-23/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2386,53 +2306,63 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>headmistress</td>
-<td>女校长</td>
-<td>Our headmistress is giving us a speech</td>
+<td>pure</td>
+<td>纯净的</td>
+<td>The water seems so pure and clean</td>
 </tr>
 <tr>
-<td>conventional</td>
-<td>依据惯例的</td>
-<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
+<td>regulation</td>
+<td>法规</td>
+<td>The traffic police is introducing traffic rules and regulations to us</td>
 </tr>
 <tr>
-<td>carry out</td>
-<td>完成</td>
-<td>After the hard work,I finally carried out my plan</td>
+<td>Africa</td>
+<td>非洲</td>
+<td>Africa is home to some of the world’s oldest cultures</td>
 </tr>
 <tr>
-<td>behaviour</td>
-<td>行为</td>
-<td>I can tell he is happy from his behaviour</td>
+<td>motherland</td>
+<td>祖国</td>
+<td>Everyone has their own motherland</td>
 </tr>
 <tr>
-<td>mirror</td>
-<td>镜子</td>
-<td>Look at yourselves in the mirror</td>
+<td>liberty</td>
+<td>自由</td>
+<td>The bird flew from the cage and got liberty</td>
 </tr>
 <tr>
-<td>vast</td>
-<td>辽阔的</td>
-<td>This vast desert looks impossible to pass</td>
+<td>pair</td>
+<td>一对</td>
+<td>Here is a pair of black shoes</td>
 </tr>
 <tr>
-<td>toast</td>
-<td>烤面包</td>
-<td>There are two slices of toast and some butter on the table</td>
+<td>irrigate</td>
+<td>灌溉</td>
+<td>This machine can irrigate the field</td>
 </tr>
 <tr>
-<td>cyclist</td>
-<td>骑自行车的人</td>
-<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
+<td>accompany</td>
+<td>陪伴</td>
+<td>I always accompany my children to their school</td>
 </tr>
 <tr>
-<td>satisfy</td>
-<td>满意</td>
+<td>typist</td>
+<td>打字员</td>
+<td>The typist is finishing her documents</td>
+</tr>
+<tr>
+<td>barrier</td>
+<td>路障</td>
+<td>The road was closed by a barrier</td>
+</tr>
+<tr>
+<td>octopus</td>
+<td>章鱼</td>
 <td>-</td>
 </tr>
 <tr>
-<td>frightened</td>
-<td>害怕的</td>
+<td>slice</td>
+<td>切薄片</td>
 <td>-</td>
 </tr>
 </tbody></table>
@@ -3160,8 +3090,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-33</title>
-    <url>/2020/04/17/go-big-or-go-home-33/</url>
+    <title>go big or go home-35</title>
+    <url>/2020/04/19/go-big-or-go-home-35/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3171,49 +3101,49 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>suspect</td>
-<td>嫌疑犯</td>
-<td>The suspect is talking with his lawyer</td>
+<td>south</td>
+<td>南方</td>
+<td>A large number of birds fly south every winter</td>
 </tr>
 <tr>
-<td>hand in</td>
-<td>上交</td>
-<td>He’s handing in his homework to the teacher</td>
+<td>typhoon</td>
+<td>台风</td>
+<td>The typhoon destroyed many houses last year</td>
 </tr>
 <tr>
-<td>ladder</td>
-<td>梯子</td>
-<td>The man is standing on a ladder</td>
+<td>rid</td>
+<td>污点</td>
+<td>The stain is gotten rid of easily</td>
 </tr>
 <tr>
-<td>weakness</td>
-<td>弱点</td>
-<td>Vampires’s weakness is that they are afraid of sunshine</td>
+<td>topic</td>
+<td>话题</td>
+<td>He wrote down a topic for us to discuss</td>
 </tr>
 <tr>
-<td>French</td>
-<td>法国</td>
-<td>The Eiffel tower is a French landmark</td>
+<td>get on</td>
+<td>上车</td>
+<td>Let’s get on the airplane</td>
 </tr>
 <tr>
-<td>million</td>
-<td>百万</td>
-<td>-</td>
+<td>direction</td>
+<td>方向</td>
+<td>The man is asking a stranger for directions</td>
 </tr>
 <tr>
-<td>billion</td>
-<td>十亿</td>
-<td>-</td>
+<td>survival</td>
+<td>生存</td>
+<td>He taught me survival skills,like how to start a fire in the forest</td>
 </tr>
 <tr>
-<td>minibus</td>
-<td>小巴士</td>
-<td>Let’s take the minibus on a trip!</td>
+<td>zebra</td>
+<td>斑马</td>
+<td>The zebras are running across the river</td>
 </tr>
 <tr>
-<td>junior</td>
-<td>三年级学生</td>
-<td>The junior is preparing for her exams in the dormitory</td>
+<td>amateur</td>
+<td>业余爱好者</td>
+<td>The office worker is also an amateur soccer player</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3289,71 +3219,6 @@
 <td>suspect</td>
 <td>嫌疑犯</td>
 <td>The suspect is talking with his lawyer</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-35</title>
-    <url>/2020/04/19/go-big-or-go-home-35/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>south</td>
-<td>南方</td>
-<td>A large number of birds fly south every winter</td>
-</tr>
-<tr>
-<td>typhoon</td>
-<td>台风</td>
-<td>The typhoon destroyed many houses last year</td>
-</tr>
-<tr>
-<td>rid</td>
-<td>污点</td>
-<td>The stain is gotten rid of easily</td>
-</tr>
-<tr>
-<td>topic</td>
-<td>话题</td>
-<td>He wrote down a topic for us to discuss</td>
-</tr>
-<tr>
-<td>get on</td>
-<td>上车</td>
-<td>Let’s get on the airplane</td>
-</tr>
-<tr>
-<td>direction</td>
-<td>方向</td>
-<td>The man is asking a stranger for directions</td>
-</tr>
-<tr>
-<td>survival</td>
-<td>生存</td>
-<td>He taught me survival skills,like how to start a fire in the forest</td>
-</tr>
-<tr>
-<td>zebra</td>
-<td>斑马</td>
-<td>The zebras are running across the river</td>
-</tr>
-<tr>
-<td>amateur</td>
-<td>业余爱好者</td>
-<td>The office worker is also an amateur soccer player</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -4085,6 +3950,76 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-25</title>
+    <url>/2020/04/10/go-big-or-go-home-25/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>headmistress</td>
+<td>女校长</td>
+<td>Our headmistress is giving us a speech</td>
+</tr>
+<tr>
+<td>conventional</td>
+<td>依据惯例的</td>
+<td>Although we can now pay online,some people still prefer the conventional method of cash</td>
+</tr>
+<tr>
+<td>carry out</td>
+<td>完成</td>
+<td>After the hard work,I finally carried out my plan</td>
+</tr>
+<tr>
+<td>behaviour</td>
+<td>行为</td>
+<td>I can tell he is happy from his behaviour</td>
+</tr>
+<tr>
+<td>mirror</td>
+<td>镜子</td>
+<td>Look at yourselves in the mirror</td>
+</tr>
+<tr>
+<td>vast</td>
+<td>辽阔的</td>
+<td>This vast desert looks impossible to pass</td>
+</tr>
+<tr>
+<td>toast</td>
+<td>烤面包</td>
+<td>There are two slices of toast and some butter on the table</td>
+</tr>
+<tr>
+<td>cyclist</td>
+<td>骑自行车的人</td>
+<td>The cyclist stopped to enjoy the beautiful natuial scenery</td>
+</tr>
+<tr>
+<td>satisfy</td>
+<td>满意</td>
+<td>-</td>
+</tr>
+<tr>
+<td>frightened</td>
+<td>害怕的</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-9</title>
     <url>/2020/03/24/go-big-or-go-home-9/</url>
     <content><![CDATA[<table>
@@ -4150,6 +4085,71 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-33</title>
+    <url>/2020/04/17/go-big-or-go-home-33/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>suspect</td>
+<td>嫌疑犯</td>
+<td>The suspect is talking with his lawyer</td>
+</tr>
+<tr>
+<td>hand in</td>
+<td>上交</td>
+<td>He’s handing in his homework to the teacher</td>
+</tr>
+<tr>
+<td>ladder</td>
+<td>梯子</td>
+<td>The man is standing on a ladder</td>
+</tr>
+<tr>
+<td>weakness</td>
+<td>弱点</td>
+<td>Vampires’s weakness is that they are afraid of sunshine</td>
+</tr>
+<tr>
+<td>French</td>
+<td>法国</td>
+<td>The Eiffel tower is a French landmark</td>
+</tr>
+<tr>
+<td>million</td>
+<td>百万</td>
+<td>-</td>
+</tr>
+<tr>
+<td>billion</td>
+<td>十亿</td>
+<td>-</td>
+</tr>
+<tr>
+<td>minibus</td>
+<td>小巴士</td>
+<td>Let’s take the minibus on a trip!</td>
+</tr>
+<tr>
+<td>junior</td>
+<td>三年级学生</td>
+<td>The junior is preparing for her exams in the dormitory</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode208</title>
     <url>/2019/10/20/leetcode208/</url>
     <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
@@ -4168,25 +4168,6 @@
       <tags>
         <tag>Trie树</tag>
         <tag>leetcode208</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode338</title>
-    <url>/2019/10/20/leetcode338/</url>
-    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
-
-<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode338</tag>
-        <tag>二进制数</tag>
       </tags>
   </entry>
   <entry>
@@ -4213,6 +4194,25 @@
       <tags>
         <tag>二维网格</tag>
         <tag>leetcode79</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode338</title>
+    <url>/2019/10/20/leetcode338/</url>
+    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例 1:</span><br><span class="line"></span><br><span class="line">输入: 2</span><br><span class="line">输出: [0,1,1]</span><br><span class="line">示例 2:</span><br><span class="line"></span><br><span class="line">输入: 5</span><br><span class="line">输出: [0,1,1,2,1,2]</span><br></pre></td></tr></table></figure>
+
+<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public int[] countBits(int num) &#123;</span><br><span class="line">        int[] result = new int[num+1];</span><br><span class="line">        for (int i = 1; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] ints = new Solution().countBits(2);</span><br><span class="line">        for(int i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">24的二进制是11000</span><br><span class="line">24-1=23的二进制是10111</span><br><span class="line">11000&amp;10111 = 10000</span><br><span class="line">这样就把24的最后的1去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-1)] + 1;</span><br><span class="line">首先i&amp;(i-1)一定比i小，所以这段代码可以保证result[i&amp;(i-1)]一定是之前计算过的，然后在后面加上1就是一共有的1的个数</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode338</tag>
+        <tag>二进制数</tag>
       </tags>
   </entry>
   <entry>
@@ -4301,38 +4301,6 @@
       <tags>
         <tag>走进Java</tag>
         <tag>深入理解Java虚拟机</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《深入理解Java虚拟机》第三章垃圾收集器与内存分配策略</title>
-    <url>/2020/04/22/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5/</url>
-    <content><![CDATA[<h2 id="第一部分-对象已死吗？"><a href="#第一部分-对象已死吗？" class="headerlink" title="第一部分:对象已死吗？"></a>第一部分:对象已死吗？</h2><h3 id="1-1-引用计数算法"><a href="#1-1-引用计数算法" class="headerlink" title="1.1 引用计数算法"></a>1.1 引用计数算法</h3><h4 id="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"><a href="#引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。" class="headerlink" title="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"></a>引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。</h4><p>//互相引用.png</p>
-<h3 id="1-2-可达性分析算法"><a href="#1-2-可达性分析算法" class="headerlink" title="1.2 可达性分析算法"></a>1.2 可达性分析算法</h3><h4 id="可达性分析算法：引入了GC-Roots对象，从GC-Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6-objecct7来说，虽然互相有关联，但是它们到GC-Roots是不可达的，所以他们会被判断为是可回收的对象。"><a href="#可达性分析算法：引入了GC-Roots对象，从GC-Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6-objecct7来说，虽然互相有关联，但是它们到GC-Roots是不可达的，所以他们会被判断为是可回收的对象。" class="headerlink" title="可达性分析算法：引入了GC Roots对象，从GC Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6,objecct7来说，虽然互相有关联，但是它们到GC Roots是不可达的，所以他们会被判断为是可回收的对象。"></a>可达性分析算法：引入了GC Roots对象，从GC Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6,objecct7来说，虽然互相有关联，但是它们到GC Roots是不可达的，所以他们会被判断为是可回收的对象。</h4><h4 id="1-2-1-那么什么样的对象可以作为GC-Roots对象呢？"><a href="#1-2-1-那么什么样的对象可以作为GC-Roots对象呢？" class="headerlink" title="1.2.1 那么什么样的对象可以作为GC Roots对象呢？"></a>1.2.1 那么什么样的对象可以作为GC Roots对象呢？</h4><p>《深入理解Java虚拟机》书中给出的定义是：</p>
-<ol>
-<li>虚拟机栈中引用的对象</li>
-<li>方法区中类静态属性引用的对象</li>
-<li>方法区中常量引用的对象</li>
-<li>本地方法栈中引用的对象</li>
-</ol>
-<h3 id="1-3-在谈引用"><a href="#1-3-在谈引用" class="headerlink" title="1.3 在谈引用"></a>1.3 在谈引用</h3><ol>
-<li>强引用：在代码中普遍存在的，类似“Object obj = new Object()”,这类的引用，只要强引用还存在，垃圾收集器永远不会回收掉这类对象</li>
-<li>软引用：总结起来就是当内存不够发生GC时才会回收的对象。JDK1.2之后，提供了SoftReference类来实现软引用。</li>
-<li>弱引用：被弱引用关联的对象，只能存活到下一次发生垃圾回收之前，当垃圾收集器工作时，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。</li>
-<li>虚引用：是一种最弱的引用关系，存在的意义只是在这个对象被收集器回收时收到一个系统通知。</li>
-</ol>
-<h3 id="1-4死之前的“HP药水”"><a href="#1-4死之前的“HP药水”" class="headerlink" title="1.4死之前的“HP药水”"></a>1.4死之前的“HP药水”</h3><h4 id="1-4-1-即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize-方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC-Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize-方法。当对象没有覆盖finalize-方法，或者finalize-方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。"><a href="#1-4-1-即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize-方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC-Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize-方法。当对象没有覆盖finalize-方法，或者finalize-方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。" class="headerlink" title="1.4.1 即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize()方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize()方法。当对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。"></a>1.4.1 即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize()方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize()方法。当对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。</h4><h4 id="1-4-2-如果这个对象被判定为有必要执行finalize-方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize-方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。"><a href="#1-4-2-如果这个对象被判定为有必要执行finalize-方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize-方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。" class="headerlink" title="1.4.2 如果这个对象被判定为有必要执行finalize()方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize()方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。"></a>1.4.2 如果这个对象被判定为有必要执行finalize()方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize()方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。</h4><h4 id="1-4-3-如果对象要在finalize-中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。"><a href="#1-4-3-如果对象要在finalize-中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。" class="headerlink" title="1.4.3 如果对象要在finalize()中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。"></a>1.4.3 如果对象要在finalize()中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。</h4><h2 id="第二部分-GC场所"><a href="#第二部分-GC场所" class="headerlink" title="第二部分:GC场所"></a>第二部分:GC场所</h2><h3 id="1-堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。"><a href="#1-堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。" class="headerlink" title="1.堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。"></a>1.堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。</h3><h3 id="2-方法区-也叫永久代，针对HotSpot虚拟机来说-，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低"><a href="#2-方法区-也叫永久代，针对HotSpot虚拟机来说-，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低" class="headerlink" title="2.方法区(也叫永久代，针对HotSpot虚拟机来说)，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低"></a>2.方法区(也叫永久代，针对HotSpot虚拟机来说)，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低</h3><h3 id="方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？"><a href="#方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？" class="headerlink" title="方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？"></a>方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？</h3><h4 id="2-1-废弃常量：假如一个字符串“abc”-放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。"><a href="#2-1-废弃常量：假如一个字符串“abc”-放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。" class="headerlink" title="2.1 废弃常量：假如一个字符串“abc”,放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。"></a>2.1 废弃常量：假如一个字符串“abc”,放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。</h4><h4 id="2-2-无用的类："><a href="#2-2-无用的类：" class="headerlink" title="2.2 无用的类："></a>2.2 无用的类：</h4><ol>
-<li>该类所有的实例都已经被回收，也就是Java堆中不存在该类的任何实例。</li>
-<li>加载该类的ClassLoader已经被回收。</li>
-<li>该类对象的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
-</ol>
-<h2 id="第三部分-垃圾回收算法"><a href="#第三部分-垃圾回收算法" class="headerlink" title="第三部分:垃圾回收算法"></a>第三部分:垃圾回收算法</h2><h3 id="3-1-标记清除算法"><a href="#3-1-标记清除算法" class="headerlink" title="3.1 标记清除算法"></a>3.1 标记清除算法</h3><h3 id="3-2-复制算法"><a href="#3-2-复制算法" class="headerlink" title="3.2 复制算法"></a>3.2 复制算法</h3><h3 id="3-3-标记-整理算法"><a href="#3-3-标记-整理算法" class="headerlink" title="3.3 标记-整理算法"></a>3.3 标记-整理算法</h3><h3 id="3-4-分代收集算法"><a href="#3-4-分代收集算法" class="headerlink" title="3.4 分代收集算法"></a>3.4 分代收集算法</h3><h2 id="第四部分-内存分配"><a href="#第四部分-内存分配" class="headerlink" title="第四部分:内存分配"></a>第四部分:内存分配</h2><h3 id="4-1-新生代，老年代"><a href="#4-1-新生代，老年代" class="headerlink" title="4.1 新生代，老年代"></a>4.1 新生代，老年代</h3><p>//内存展示.png</p>
-<h3 id="4-2-Minor-GC和Full-GC"><a href="#4-2-Minor-GC和Full-GC" class="headerlink" title="4.2 Minor GC和Full GC"></a>4.2 Minor GC和Full GC</h3><h3 id="4-3-为什么新生代中有两个Survivor？"><a href="#4-3-为什么新生代中有两个Survivor？" class="headerlink" title="4.3 为什么新生代中有两个Survivor？"></a>4.3 为什么新生代中有两个Survivor？</h3>]]></content>
-      <categories>
-        <category>JVM</category>
-      </categories>
-      <tags>
-        <tag>深入理解Java虚拟机</tag>
-        <tag>垃圾收集器与内存分配策略</tag>
       </tags>
   </entry>
   <entry>
@@ -4444,6 +4412,51 @@
       </tags>
   </entry>
   <entry>
+    <title>《深入理解Java虚拟机》第三章垃圾收集器与内存分配策略</title>
+    <url>/2020/04/22/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5/</url>
+    <content><![CDATA[<h2 id="第一部分-对象已死吗？"><a href="#第一部分-对象已死吗？" class="headerlink" title="第一部分:对象已死吗？"></a>第一部分:对象已死吗？</h2><h3 id="1-1-引用计数算法"><a href="#1-1-引用计数算法" class="headerlink" title="1.1 引用计数算法"></a>1.1 引用计数算法</h3><h4 id="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"><a href="#引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。" class="headerlink" title="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"></a>引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。</h4><p><img src="../image/%E4%BA%92%E7%9B%B8%E5%BC%95%E7%94%A8.png" alt="互相引用.png" title="互相引用"></p>
+<h3 id="1-2-可达性分析算法"><a href="#1-2-可达性分析算法" class="headerlink" title="1.2 可达性分析算法"></a>1.2 可达性分析算法</h3><h4 id="可达性分析算法：引入了GC-Roots对象，从GC-Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6-objecct7来说，虽然互相有关联，但是它们到GC-Roots是不可达的，所以他们会被判断为是可回收的对象。"><a href="#可达性分析算法：引入了GC-Roots对象，从GC-Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6-objecct7来说，虽然互相有关联，但是它们到GC-Roots是不可达的，所以他们会被判断为是可回收的对象。" class="headerlink" title="可达性分析算法：引入了GC Roots对象，从GC Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6,objecct7来说，虽然互相有关联，但是它们到GC Roots是不可达的，所以他们会被判断为是可回收的对象。"></a>可达性分析算法：引入了GC Roots对象，从GC Roots到这个对象不可达时，则证明这个对象是不可用的，如图object5，object6,objecct7来说，虽然互相有关联，但是它们到GC Roots是不可达的，所以他们会被判断为是可回收的对象。</h4><h4 id="1-2-1-那么什么样的对象可以作为GC-Roots对象呢？"><a href="#1-2-1-那么什么样的对象可以作为GC-Roots对象呢？" class="headerlink" title="1.2.1 那么什么样的对象可以作为GC Roots对象呢？"></a>1.2.1 那么什么样的对象可以作为GC Roots对象呢？</h4><p>《深入理解Java虚拟机》书中给出的定义是：</p>
+<ol>
+<li>虚拟机栈中引用的对象</li>
+<li>方法区中类静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中引用的对象</li>
+</ol>
+<h3 id="1-3-在谈引用"><a href="#1-3-在谈引用" class="headerlink" title="1.3 在谈引用"></a>1.3 在谈引用</h3><ol>
+<li>强引用：在代码中普遍存在的，类似“Object obj = new Object()”,这类的引用，只要强引用还存在，垃圾收集器永远不会回收掉这类对象</li>
+<li>软引用：总结起来就是当内存不够发生GC时才会回收的对象。JDK1.2之后，提供了SoftReference类来实现软引用。</li>
+<li>弱引用：被弱引用关联的对象，只能存活到下一次发生垃圾回收之前，当垃圾收集器工作时，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。</li>
+<li>虚引用：是一种最弱的引用关系，存在的意义只是在这个对象被收集器回收时收到一个系统通知。</li>
+</ol>
+<h3 id="1-4死之前的“HP药水”"><a href="#1-4死之前的“HP药水”" class="headerlink" title="1.4死之前的“HP药水”"></a>1.4死之前的“HP药水”</h3><h4 id="1-4-1-即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize-方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC-Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize-方法。当对象没有覆盖finalize-方法，或者finalize-方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。"><a href="#1-4-1-即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize-方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC-Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize-方法。当对象没有覆盖finalize-方法，或者finalize-方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。" class="headerlink" title="1.4.1 即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize()方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize()方法。当对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。"></a>1.4.1 即使在可达性分析算法中不可达的对象，也并不是“非死不可”，这时候处于濒危状态，但他们还有一瓶HP药水，那就是finalize()方法，要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会第一次标记并且进行一次筛选，筛选的条件时此对象是否有必要执行finalize()方法。当对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。</h4><h4 id="1-4-2-如果这个对象被判定为有必要执行finalize-方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize-方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。"><a href="#1-4-2-如果这个对象被判定为有必要执行finalize-方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize-方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。" class="headerlink" title="1.4.2 如果这个对象被判定为有必要执行finalize()方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize()方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。"></a>1.4.2 如果这个对象被判定为有必要执行finalize()方法，那么这个对象将会被放置在一个叫做F-Queue的队列之中，并在稍后由一个虚拟机自动建立的，低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果在finalize()方法中执行缓慢，或者发生了死循环，将很可能会导致F-Queue队列中其他的对象永久处于等待。</h4><h4 id="1-4-3-如果对象要在finalize-中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。"><a href="#1-4-3-如果对象要在finalize-中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。" class="headerlink" title="1.4.3 如果对象要在finalize()中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。"></a>1.4.3 如果对象要在finalize()中拯救自己-只需要重新与引用连上的任何一个对象建立关联即可。</h4><h2 id="第二部分-GC场所"><a href="#第二部分-GC场所" class="headerlink" title="第二部分:GC场所"></a>第二部分:GC场所</h2><h3 id="1-堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。"><a href="#1-堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。" class="headerlink" title="1.堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。"></a>1.堆作为垃圾回收的主要场所，所有新建的对象都存储在堆上，但栈并不会发生垃圾回收，因为栈中存储的是线程私有的，随着线程关闭就自动释放。将堆中的内存分为新生代和老年代，这里在后面谈到垃圾回收算法时会详细说。</h3><h3 id="2-方法区-也叫永久代，针对HotSpot虚拟机来说-，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低"><a href="#2-方法区-也叫永久代，针对HotSpot虚拟机来说-，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低" class="headerlink" title="2.方法区(也叫永久代，针对HotSpot虚拟机来说)，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低"></a>2.方法区(也叫永久代，针对HotSpot虚拟机来说)，很多人都认为方法区中时没有垃圾回收的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾回收，主要是垃圾收集的“性价比”比较低</h3><h3 id="方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？"><a href="#方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？" class="headerlink" title="方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？"></a>方法区的垃圾回收主要回收两部分内容：废弃常量和无用的类。那么如何判断废弃常量和无用的类？</h3><h4 id="2-1-废弃常量：假如一个字符串“abc”-放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。"><a href="#2-1-废弃常量：假如一个字符串“abc”-放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。" class="headerlink" title="2.1 废弃常量：假如一个字符串“abc”,放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。"></a>2.1 废弃常量：假如一个字符串“abc”,放入了常量池，只要当前系统中没有有任何一个String对象引用常量池中的“abc”常量，如果这个时候发生了内存回收，而且必要的话，那么这个“abc”常量就会被系统清理出常量池。</h4><h4 id="2-2-无用的类："><a href="#2-2-无用的类：" class="headerlink" title="2.2 无用的类："></a>2.2 无用的类：</h4><ol>
+<li>该类所有的实例都已经被回收，也就是Java堆中不存在该类的任何实例。</li>
+<li>加载该类的ClassLoader已经被回收。</li>
+<li>该类对象的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
+</ol>
+<h2 id="第三部分-垃圾回收算法"><a href="#第三部分-垃圾回收算法" class="headerlink" title="第三部分:垃圾回收算法"></a>第三部分:垃圾回收算法</h2><h3 id="3-1-标记清除算法"><a href="#3-1-标记清除算法" class="headerlink" title="3.1 标记清除算法"></a>3.1 标记清除算法</h3><p>缺点有内存碎片产生，缺点比较明显。</p>
+<p><img src="../image/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4.png" alt="标记清除.png" title="标记清除"></p>
+<h3 id="3-2-复制算法-新生代"><a href="#3-2-复制算法-新生代" class="headerlink" title="3.2 复制算法(新生代)"></a>3.2 复制算法(新生代)</h3><p>思想是将内存一分为二，每次值用一半的内存，发生GC的时候将存活的对象放入另一半内存，以此往复。</p>
+<p>新生代的对象IBM研究98%都是朝生夕死的，所以没必要按照1:1的比例分配，经过研究8：1:1是最优的，为什么有两个Survivor区下文有解释。</p>
+<p>对象优先存入Eden区和一个Survivor区中，将发生Minor GC，之后将存活的对象放入另一个Survivor区，然后下一次存入对象，与Eden区一起的是有存活对象的Sruvivor区</p>
+<p><img src="../image/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95.png" alt="复制算法.png" title="复制算法"></p>
+<h3 id="3-3-标记-整理算法-老年代"><a href="#3-3-标记-整理算法-老年代" class="headerlink" title="3.3 标记-整理算法(老年代)"></a>3.3 标记-整理算法(老年代)</h3><p>大体上与标记清除算法一致，将存活的对象集中放到一起，避免了内存分片，因为老年代上存活的对象大部分都是大对象。</p>
+<p><img src="../image/%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86.png" alt="标记整理.png" title="标记整理"></p>
+<h3 id="3-4-分代收集算法"><a href="#3-4-分代收集算法" class="headerlink" title="3.4 分代收集算法"></a>3.4 分代收集算法</h3><p>判断新生代就用复制算法，判断老年代就用标记-整理算法，那么如何判断新生代，老年代？接着看</p>
+<h2 id="第四部分-内存分配"><a href="#第四部分-内存分配" class="headerlink" title="第四部分:内存分配"></a>第四部分:内存分配</h2><h3 id="4-1-新生代，老年代"><a href="#4-1-新生代，老年代" class="headerlink" title="4.1 新生代，老年代"></a>4.1 新生代，老年代</h3><p><img src="../image/%E6%96%B0%E7%94%9F%E4%BB%A3.png" alt="新生代.png" title="新生代"></p>
+<p><img src="../image/%E8%80%81%E5%B9%B4%E4%BB%A3.png" alt="老年代.png" title="老年代"></p>
+<h3 id="4-2-Minor-GC和Full-GC-Major-GC"><a href="#4-2-Minor-GC和Full-GC-Major-GC" class="headerlink" title="4.2 Minor GC和Full GC(Major GC)"></a>4.2 Minor GC和Full GC(Major GC)</h3><h4 id="4-2-1-Minor-GC是发生在新生代的GC-因为新生代都是朝生夕死的对象，所以发生非常频繁，速度也较快。"><a href="#4-2-1-Minor-GC是发生在新生代的GC-因为新生代都是朝生夕死的对象，所以发生非常频繁，速度也较快。" class="headerlink" title="4.2.1 Minor GC是发生在新生代的GC,因为新生代都是朝生夕死的对象，所以发生非常频繁，速度也较快。"></a>4.2.1 Minor GC是发生在新生代的GC,因为新生代都是朝生夕死的对象，所以发生非常频繁，速度也较快。</h4><h4 id="4-2-2-Full-GC也叫Major-GC是发生在老年代的GC，出现了Full-GC一般情况下同时也会伴随着Major-GC，当然这不绝对，通常情况下Full-GC的速度会比Minor-GC速度慢10倍以上。"><a href="#4-2-2-Full-GC也叫Major-GC是发生在老年代的GC，出现了Full-GC一般情况下同时也会伴随着Major-GC，当然这不绝对，通常情况下Full-GC的速度会比Minor-GC速度慢10倍以上。" class="headerlink" title="4.2.2 Full GC也叫Major GC是发生在老年代的GC，出现了Full GC一般情况下同时也会伴随着Major GC，当然这不绝对，通常情况下Full GC的速度会比Minor GC速度慢10倍以上。"></a>4.2.2 Full GC也叫Major GC是发生在老年代的GC，出现了Full GC一般情况下同时也会伴随着Major GC，当然这不绝对，通常情况下Full GC的速度会比Minor GC速度慢10倍以上。</h4><h3 id="4-3-为什么新生代中有两个Survivor？"><a href="#4-3-为什么新生代中有两个Survivor？" class="headerlink" title="4.3 为什么新生代中有两个Survivor？"></a>4.3 为什么新生代中有两个Survivor？</h3><p>4.3.1 这里就提到了为什么新生代中要有两个Survivor区？</p>
+<p>提前说下结论：防止内存碎片的发生。</p>
+<p>在此之前先来讨论下为什么要分新生代和老年代？</p>
+<p>如果不分新生代和老年代的话那么每发生一次GC，就会对堆中的所有对象遍历，想象是不是都痛苦？</p>
+<p>那么继续讨论为什么会有Survivor区？</p>
+<p>如果没有Survivor区的话，那么发生一次Minor GC就会将存活的对象放入老年代，导致老年代被很快打满，发生Full GC，发生Full GC消耗的时间和资源是非常大的。这是不是也很坑？</p>
+<p>那么为什么要有两个Survivor区？</p>
+<p>之前讨论了为什么要有Survivor区，现在假设只有一个Survivor区，第一次发生Minor GC,Eden区中存活的对象放入Survivor区中，在下一次Minor GC发生的时候，Eden区中存活的对象在此放入Survivor区中,要知道此时Survivor中是存在对象的，可想而知这两次放入的对象是不连续的，会发生内存碎片。这样就顺理成章的要有两个Survivor区。</p>
+<p>这时有一个问题，如果Eden + Survior区中存活的对象大于Survivor的大小，就会需要老年代进行担保，那么每次发生minor GC的时候，虚拟机会先检查老年代最大可用的连续空间是否大于新生代所有对象的总空间，如果这个条件成立，那么Minor GC可以确保安全的执行，如果不成立，则虚拟机会查看HandlePromotionFailure设置值是否允许担保失败，如果允许那么会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试进行一次Minor GC,尽管这次Minor GC是有风险的；如果小于或者HandlePromotionFailure设置为不允许冒险，那这时也要改为一个Full GC。</p>
+<h3 id="附上一些垃圾收集器的参数"><a href="#附上一些垃圾收集器的参数" class="headerlink" title="附上一些垃圾收集器的参数"></a>附上一些垃圾收集器的参数</h3><p><img src="../image/1.png" alt="1.png" title="1"><br><img src="../image/2.png" alt="2.png" title="2"></p>
+]]></content>
+  </entry>
+  <entry>
     <title>volatile关键字</title>
     <url>/2020/03/11/volatile%E5%85%B3%E9%94%AE%E5%AD%97/</url>
     <content><![CDATA[<h3 id="本文还是以面试提问的方式来说一下volatile"><a href="#本文还是以面试提问的方式来说一下volatile" class="headerlink" title="本文还是以面试提问的方式来说一下volatile"></a>本文还是以面试提问的方式来说一下volatile</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.Java并发这块了解的怎么样？说说对volatile的理解？</span><br><span class="line">答:</span><br><span class="line">  (1).保证了不同线程对该变量操作的内存可见性</span><br><span class="line">  (2).禁止指令重排</span><br></pre></td></tr></table></figure>
@@ -4523,92 +4536,6 @@
         <tag>数据库</tag>
         <tag>bin log</tag>
         <tag>redo log</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深入浅出索引</title>
-    <url>/2019/10/26/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%B4%A2%E5%BC%95/</url>
-    <content><![CDATA[<p>这节讲的是索引的相关知识，提到索引相信大家都不会陌生，在工作中或多或少都会接触过，建立索引主要是用来提升SQL查询速度的一种解决方案。<br>那么索引是什么？<br>一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。  </p>
-<h3 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h3><p>这里引入三种模型，哈希表有序数组和搜索树  </p>
-<p>哈希表是一种以建-值（key-value）存储的数据结构，我们只要输入待查找的key，就能找到value。哈希的思路很简单，把值放在数组里，用一个哈希函数把key换算成一个确定的位置，然后把value放在数组的这个位置。<br>不可避免的，多个key经过哈希函数的换算会出现同一个值的情况，处理这种情况的方式是，拉出一个链表。<br>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字。这时对应的哈希索引的示意图如下所示。  </p>
-<p><img src="../image/%E5%93%88%E5%B8%8C%E8%A1%A8.png" alt="哈希表.png" title="哈希表">  </p>
-<p>需要注意的是，图中四个ID_card_n的值并不是递增的，这样做的好处是增加新的User时速度会很快，只需要往后追加。但缺点是，因为不是有序的，所以哈希索引做区间查询速度是很慢的。  </p>
-<p>所以，哈希表这种结构适用于只有等值查询的场景，比如 Memcached 及其他一些 NoSQL 引擎。  </p>
-<p>而有序数组在等值查询和范围查询场景的性能就都非常优秀。还是根据上面这个例子，如果用有序数组来实现的话，示意图如下所示：  </p>
-<p><img src="../image/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84.png" alt="有序数组.png" title="有序数组">  </p>
-<p>这里假设身份证号没有重复，这个数组就是按照身份证号递增的顺序保存的，这个时候如果你要查ID_card_n2对应的名字，用二分法就可以快速得到，这个时间复杂度是O(log(N)).<br>同时很显然，这个索引结构支持范围查询。你要查身份证号在[ID_card_X,ID_card_Y]区间的User，可以先用二分法找到ID_card_X(如果不存在ID_card_X，就找到大于ID_card_X的第一个User)，然后向右遍历，直到查到第一个大于ID_card_Y的身份证号，推出循环。<br>如果仅仅看查询效率，有序数组就是最好的数据结构了，但是在更新数据的时候，如果有新增的数据，就需要挪动后续所有的记录，成本太高。<br>所以，有序数组只适用于静态存储引擎，比如你要保存的是2019年某个城市所有人口的信息，这类不会再修改的数据。<br>二叉搜索树是经典的数据结构了，还是根据上面的例子，如果我们用二叉搜索树来实现的话，示意图如下所示，</p>
-<p><img src="../image/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="二叉搜索树.png" title="二叉搜索树">  </p>
-<p>二叉搜索树的特点是：每个节点的左儿子小于父节点，父节点又小于右儿子，这样如果你要查ID_card_2的话按照图中的顺序就是按照UserA -&gt; UserC -&gt; UserF -&gt; User2这个路径得到。这个时间复杂度是O(log(N))。<br>当然为了维持O(log(N))的查询复杂度，你就需要保持这颗树是平衡二叉树，为了做这个保证，更新的时间复杂度也是O(log(N))。<br>树可以有二叉，也可以有多叉，多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉搜索树的效率是最高的，但是实际上大多数数据库存储却并不适用二叉树。其原因是，索引不止存在于内存中，还要写到磁盘上。<br>你可以想象一下一棵100万节点的平衡二叉树，树高20，一次查询可能需要访问20个数据块，在机械硬盘时代，从磁盘随机读取一个数据块需要10ms的寻址时间，也就是说，对于一个100万行的表，如果使用二叉树来存储，单独访问一个行可能需要20个10ms的时间，这个查询可真够慢的，为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。以 InnoDB 的一个整数字段索引为例，这个 N 差不多是 1200。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p>
-<p>N 叉树由于在读写上的性能优点，以及适配磁盘的访问模式，已经被广泛应用在数据库引擎中了。  </p>
-<h3 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h3><p>大家都知道InnoDB的索引模型是B+树，假设我们有一个主键列为ID的表，表中有字段K，并且在K上有索引，如下图所示：  </p>
-<p><img src="../image/InnoDB%E7%B4%A2%E5%BC%95.png" alt="InnoDB索引.png" title="InnoDB索引">  </p>
-<p>从图中不难看出，根据叶子节点的内容，索引类型分为主键索引和非主键索引。</p>
-<p>主键索引的叶子节点存的是整行数据。在 InnoDB 里，主键索引也被称为聚簇索引（clustered index）。  </p>
-<p>非主键索引的叶子节点内容是主键的值。在 InnoDB 里，非主键索引也被称为二级索引（secondary index）。</p>
-<p>根据上面的索引结构说明，我们来讨论一个问题：基于主键索引和普通索引的查询有什么区别？</p>
-<p>如果语句是 select * from T where ID=500，即主键查询方式，则只需要搜索 ID 这棵 B+ 树；<br>如果语句是 select * from T where k=5，即普通索引查询方式，则需要先搜索 k 索引树，得到 ID 的值为 500，再到 ID 索引树搜索一次。这个过程称为_回表_。<br>也就是说，基于非主键索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。   </p>
-<p>除了性能外，页分裂操作还影响数据页的利用率。原本放在一个页的数据，现在分到两个页中，整体空间利用率降低大约 50%。</p>
-<p>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。</p>
-<p>基于上面的索引维护过程说明，我们来讨论一个案例：</p>
-<p>你可能在一些建表规范里面见到过类似的描述，要求建表语句里一定要有自增主键。当然事无绝对，我们来分析一下哪些场景下应该使用自增主键，而哪些场景下不应该。</p>
-<p>自增主键是指自增列上定义的主键，在建表语句中一般是这么定义的： NOT NULL PRIMARY KEY AUTO_INCREMENT。</p>
-<p>插入新记录的时候可以不指定 ID 的值，系统会获取当前 ID 最大值加 1 作为下一条记录的 ID 值。</p>
-<p>也就是说，自增主键的插入数据模式，正符合了我们前面提到的递增插入的场景。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。</p>
-<p>而有业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。</p>
-<p>除了考虑性能外，我们还可以从存储空间的角度来看。假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？</p>
-<p>由于每个非主键索引的叶子节点上都是主键的值。如果用身份证号做主键，那么每个二级索引的叶子节点占用约 20 个字节，而如果用整型做主键，则只要 4 个字节，如果是长整型（bigint）则是 8 个字节。</p>
-<p>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</p>
-<p>所以，从性能和存储空间方面考量，自增主键往往是更合理的选择。</p>
-<p>有没有什么场景适合用业务字段直接做主键的呢？还是有的。比如，有些业务的场景需求是这样的：</p>
-<p>只有一个索引；</p>
-<p>该索引必须是唯一索引。</p>
-<p>你一定看出来了，这就是典型的 KV 场景。</p>
-<p>由于没有其他索引，所以也就不用考虑其他索引的叶子节点大小的问题。</p>
-<p>这时候我们就要优先考虑上一段提到的“尽量使用主键查询”原则，直接将这个索引设置为主键，可以避免每次查询需要搜索两棵树。 </p>
-<p>对于一张表可以这么理解：<br>每一张表其实就是好几个B+树，树结点的key值就是某一行的主键，value是该行的其他数据。新建索引就是新增一个B+树，查询不走索引就是遍历主B+树。</p>
-<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>如果执行的语句是 select ID from T where k between 3 and 5，这时只需要查 ID 的值，而 ID 的值已经在 k 索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，索引 k 已经“覆盖了”我们的查询需求，我们称为覆盖索引。</p>
-<p>由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以使用覆盖索引是一个常用的性能优化手段。</p>
-<p>需要注意的是，在引擎内部使用覆盖索引在索引 k 上其实读了三个记录，R3~R5（对应的索引 k 上的记录项），但是对于 MySQL 的 Server 层来说，它就是找引擎拿到了两条记录，因此 MySQL 认为扫描行数是 2。  </p>
-<p>基于上面覆盖索引的说明，我们来讨论一个问题：在一个市民信息表上，是否有必要将身份证号和名字建立联合索引？  </p>
-<p>我们知道，身份证号是市民的唯一标识。也就是说，如果有根据身份证号查询市民信息的需求，我们只要在身份证号字段上建立索引就够了。而再建立一个（身份证号、姓名）的联合索引，是不是浪费空间？</p>
-<p>如果现在有一个高频请求，要根据市民的身份证号查询他的姓名，这个联合索引就有意义了。它可以在这个高频请求上用到覆盖索引，不再需要回表查整行记录，减少语句的执行时间。</p>
-<p>当然，索引字段的维护总是有代价的。因此，在建立冗余索引来支持覆盖索引时就需要权衡考虑了。这正是业务 DBA，或者称为业务数据架构师的工作。  </p>
-<h3 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h3><p>对于最左前缀原则大家都应该轻车熟路了，就不过多介绍，有些重点内容可以考虑一下：<br>基于上面对最左前缀索引的说明，我们来讨论一个问题：在建立联合索引的时候，如何安排索引内的字段顺序。</p>
-<p>这里我们的评估标准是，索引的复用能力。因为可以支持最左前缀，所以当已经有了 (a,b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。  </p>
-<p>所以现在你知道了，这段开头的问题里，我们要为高频请求创建 (身份证号，姓名）这个联合索引，并用这个索引支持“根据身份证号查询地址”的需求。</p>
-<p>那么，如果既有联合查询，又有基于 a、b 各自的查询呢？查询条件里面只有 b 的语句，是无法使用 (a,b) 这个联合索引的，这时候你不得不维护另外一个索引，也就是说你需要同时维护 (a,b)、(b) 这两个索引。</p>
-<p>这时候，我们要考虑的原则就是空间了。比如上面这个市民表的情况，name 字段是比 age 字段大的 ，那我就建议你创建一个（name,age) 的联合索引和一个 (age) 的单字段索引。  </p>
-<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>上一段我们说到满足最左前缀原则的时候，最左前缀可以用于在索引中定位记录。这时，你可能要问，那些不符合最左前缀的部分，会怎么样呢？</p>
-<p>我们还是以市民表的联合索引（name, age）为例。如果现在有一个需求：检索出表中“名字第一个字是张，而且年龄是 10 岁的所有男孩”。那么，SQL 语句是这么写的：   </p>
-<p><code>mysql&gt; select * from tuser where name like &#39;张 %&#39; and age=10 and ismale=1;</code></p>
-<p>你已经知道了前缀索引规则，所以这个语句在搜索索引树的时候，只能用 “张”，找到第一个满足条件的记录 ID3。当然，这还不错，总比全表扫描要好。</p>
-<p>然后呢？</p>
-<p>当然是判断其他条件是否满足。</p>
-<p>在 MySQL 5.6 之前，只能从 ID3 开始一个个回表。到主键索引上找出数据行，再对比字段值。</p>
-<p>而 MySQL 5.6 引入的索引下推优化（index condition pushdown)， 可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
-<p>图 3 和图 4，是这两个过程的执行流程图。</p>
-<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
-<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
-<p>在图 3 和 4 这两个图里面，每一个虚线箭头表示回表一次。</p>
-<p>图 3 中，在 (name,age) 索引里面我特意去掉了 age 的值，这个过程 InnoDB 并不会去看 age 的值，只是按顺序把“name 第一个字是’张’”的记录一条条取出来回表。因此，需要回表 4 次。</p>
-<p>图 4 跟图 3 的区别是，InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
-<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>实际上主键索引也是可以使用多个字段的。DBA 小吕在入职新公司的时候，就发现自己接手维护的库里面，有这么一个表，表结构定义类似这样的：</p>
-<figure class="highlight plain"><figcaption><span>TABLE `geek` (</span></figcaption><table><tr><td class="code"><pre><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">公司的同事告诉他说，由于历史原因，这个表需要 a、b 做联合主键，这个小吕理解了。</span><br><span class="line"></span><br><span class="line">但是，学过本章内容的小吕又纳闷了，既然主键包含了 a、b 这两个字段，那意味着单独在字段 c 上创建一个索引，就已经包含了三个字段了呀，为什么要创建“ca”“cb”这两个索引？</span><br><span class="line"></span><br><span class="line">同事告诉他，是因为他们的业务里面有这样的两种语句：</span><br></pre></td></tr></table></figure>
-
-<p>select * from geek where c=N order by a limit 1;<br>select * from geek where c=N order by b limit 1;<br>```  </p>
-<p>我给你的问题是，这位同事的解释对吗，为了这两个查询模式，这两个索引是否都是必须的？为什么呢？  </p>
-<p>解答：  </p>
-<p>表记录<br>–a–|–b–|–c–|–d–<br>1 2 3 d<br>1 3 2 d<br>1 4 3 d<br>2 1 3 d<br>2 2 2 d<br>2 3 4 d<br>主键 a，b 的聚簇索引组织顺序相当于 order by a,b ，也就是先按 a 排序，再按 b 排序，c 无序。</p>
-<p>索引 ca 的组织是先按 c 排序，再按 a 排序，同时记录主键<br>–c–|–a–|–主键部分b– （注意，这里不是 ab，而是只有 b）<br>2 1 3<br>2 2 2<br>3 1 2<br>3 1 4<br>3 2 1<br>4 2 3<br>这个跟索引 c 的数据是一模一样的。</p>
-<p>索引 cb 的组织是先按 c 排序，在按 b 排序，同时记录主键<br>–c–|–b–|–主键部分a– （同上）<br>2 2 2<br>2 3 1<br>3 1 2<br>3 2 1<br>3 4 1<br>4 3 2  </p>
-<p>所以，结论是 ca 可以去掉，cb 需要保留。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>索引</tag>
       </tags>
   </entry>
   <entry>
@@ -4715,6 +4642,92 @@
       <tags>
         <tag>数据库</tag>
         <tag>MVCC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深入浅出索引</title>
+    <url>/2019/10/26/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<p>这节讲的是索引的相关知识，提到索引相信大家都不会陌生，在工作中或多或少都会接触过，建立索引主要是用来提升SQL查询速度的一种解决方案。<br>那么索引是什么？<br>一句话简单来说，索引的出现其实就是为了提高数据查询的效率，就像书的目录一样。  </p>
+<h3 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h3><p>这里引入三种模型，哈希表有序数组和搜索树  </p>
+<p>哈希表是一种以建-值（key-value）存储的数据结构，我们只要输入待查找的key，就能找到value。哈希的思路很简单，把值放在数组里，用一个哈希函数把key换算成一个确定的位置，然后把value放在数组的这个位置。<br>不可避免的，多个key经过哈希函数的换算会出现同一个值的情况，处理这种情况的方式是，拉出一个链表。<br>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字。这时对应的哈希索引的示意图如下所示。  </p>
+<p><img src="../image/%E5%93%88%E5%B8%8C%E8%A1%A8.png" alt="哈希表.png" title="哈希表">  </p>
+<p>需要注意的是，图中四个ID_card_n的值并不是递增的，这样做的好处是增加新的User时速度会很快，只需要往后追加。但缺点是，因为不是有序的，所以哈希索引做区间查询速度是很慢的。  </p>
+<p>所以，哈希表这种结构适用于只有等值查询的场景，比如 Memcached 及其他一些 NoSQL 引擎。  </p>
+<p>而有序数组在等值查询和范围查询场景的性能就都非常优秀。还是根据上面这个例子，如果用有序数组来实现的话，示意图如下所示：  </p>
+<p><img src="../image/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84.png" alt="有序数组.png" title="有序数组">  </p>
+<p>这里假设身份证号没有重复，这个数组就是按照身份证号递增的顺序保存的，这个时候如果你要查ID_card_n2对应的名字，用二分法就可以快速得到，这个时间复杂度是O(log(N)).<br>同时很显然，这个索引结构支持范围查询。你要查身份证号在[ID_card_X,ID_card_Y]区间的User，可以先用二分法找到ID_card_X(如果不存在ID_card_X，就找到大于ID_card_X的第一个User)，然后向右遍历，直到查到第一个大于ID_card_Y的身份证号，推出循环。<br>如果仅仅看查询效率，有序数组就是最好的数据结构了，但是在更新数据的时候，如果有新增的数据，就需要挪动后续所有的记录，成本太高。<br>所以，有序数组只适用于静态存储引擎，比如你要保存的是2019年某个城市所有人口的信息，这类不会再修改的数据。<br>二叉搜索树是经典的数据结构了，还是根据上面的例子，如果我们用二叉搜索树来实现的话，示意图如下所示，</p>
+<p><img src="../image/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91.png" alt="二叉搜索树.png" title="二叉搜索树">  </p>
+<p>二叉搜索树的特点是：每个节点的左儿子小于父节点，父节点又小于右儿子，这样如果你要查ID_card_2的话按照图中的顺序就是按照UserA -&gt; UserC -&gt; UserF -&gt; User2这个路径得到。这个时间复杂度是O(log(N))。<br>当然为了维持O(log(N))的查询复杂度，你就需要保持这颗树是平衡二叉树，为了做这个保证，更新的时间复杂度也是O(log(N))。<br>树可以有二叉，也可以有多叉，多叉树就是每个节点有多个儿子，儿子之间的大小保证从左到右递增。二叉搜索树的效率是最高的，但是实际上大多数数据库存储却并不适用二叉树。其原因是，索引不止存在于内存中，还要写到磁盘上。<br>你可以想象一下一棵100万节点的平衡二叉树，树高20，一次查询可能需要访问20个数据块，在机械硬盘时代，从磁盘随机读取一个数据块需要10ms的寻址时间，也就是说，对于一个100万行的表，如果使用二叉树来存储，单独访问一个行可能需要20个10ms的时间，这个查询可真够慢的，为了让一个查询尽量少地读磁盘，就必须让查询过程访问尽量少的数据块。那么，我们就不应该使用二叉树，而是要使用“N 叉”树。这里，“N 叉”树中的“N”取决于数据块的大小。以 InnoDB 的一个整数字段索引为例，这个 N 差不多是 1200。这棵树高是 4 的时候，就可以存 1200 的 3 次方个值，这已经 17 亿了。考虑到树根的数据块总是在内存中的，一个 10 亿行的表上一个整数字段的索引，查找一个值最多只需要访问 3 次磁盘。其实，树的第二层也有很大概率在内存中，那么访问磁盘的平均次数就更少了。</p>
+<p>N 叉树由于在读写上的性能优点，以及适配磁盘的访问模式，已经被广泛应用在数据库引擎中了。  </p>
+<h3 id="InnoDB的索引模型"><a href="#InnoDB的索引模型" class="headerlink" title="InnoDB的索引模型"></a>InnoDB的索引模型</h3><p>大家都知道InnoDB的索引模型是B+树，假设我们有一个主键列为ID的表，表中有字段K，并且在K上有索引，如下图所示：  </p>
+<p><img src="../image/InnoDB%E7%B4%A2%E5%BC%95.png" alt="InnoDB索引.png" title="InnoDB索引">  </p>
+<p>从图中不难看出，根据叶子节点的内容，索引类型分为主键索引和非主键索引。</p>
+<p>主键索引的叶子节点存的是整行数据。在 InnoDB 里，主键索引也被称为聚簇索引（clustered index）。  </p>
+<p>非主键索引的叶子节点内容是主键的值。在 InnoDB 里，非主键索引也被称为二级索引（secondary index）。</p>
+<p>根据上面的索引结构说明，我们来讨论一个问题：基于主键索引和普通索引的查询有什么区别？</p>
+<p>如果语句是 select * from T where ID=500，即主键查询方式，则只需要搜索 ID 这棵 B+ 树；<br>如果语句是 select * from T where k=5，即普通索引查询方式，则需要先搜索 k 索引树，得到 ID 的值为 500，再到 ID 索引树搜索一次。这个过程称为_回表_。<br>也就是说，基于非主键索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询。   </p>
+<p>除了性能外，页分裂操作还影响数据页的利用率。原本放在一个页的数据，现在分到两个页中，整体空间利用率降低大约 50%。</p>
+<p>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。</p>
+<p>基于上面的索引维护过程说明，我们来讨论一个案例：</p>
+<p>你可能在一些建表规范里面见到过类似的描述，要求建表语句里一定要有自增主键。当然事无绝对，我们来分析一下哪些场景下应该使用自增主键，而哪些场景下不应该。</p>
+<p>自增主键是指自增列上定义的主键，在建表语句中一般是这么定义的： NOT NULL PRIMARY KEY AUTO_INCREMENT。</p>
+<p>插入新记录的时候可以不指定 ID 的值，系统会获取当前 ID 最大值加 1 作为下一条记录的 ID 值。</p>
+<p>也就是说，自增主键的插入数据模式，正符合了我们前面提到的递增插入的场景。每次插入一条新记录，都是追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂。</p>
+<p>而有业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。</p>
+<p>除了考虑性能外，我们还可以从存储空间的角度来看。假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？</p>
+<p>由于每个非主键索引的叶子节点上都是主键的值。如果用身份证号做主键，那么每个二级索引的叶子节点占用约 20 个字节，而如果用整型做主键，则只要 4 个字节，如果是长整型（bigint）则是 8 个字节。</p>
+<p>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</p>
+<p>所以，从性能和存储空间方面考量，自增主键往往是更合理的选择。</p>
+<p>有没有什么场景适合用业务字段直接做主键的呢？还是有的。比如，有些业务的场景需求是这样的：</p>
+<p>只有一个索引；</p>
+<p>该索引必须是唯一索引。</p>
+<p>你一定看出来了，这就是典型的 KV 场景。</p>
+<p>由于没有其他索引，所以也就不用考虑其他索引的叶子节点大小的问题。</p>
+<p>这时候我们就要优先考虑上一段提到的“尽量使用主键查询”原则，直接将这个索引设置为主键，可以避免每次查询需要搜索两棵树。 </p>
+<p>对于一张表可以这么理解：<br>每一张表其实就是好几个B+树，树结点的key值就是某一行的主键，value是该行的其他数据。新建索引就是新增一个B+树，查询不走索引就是遍历主B+树。</p>
+<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>如果执行的语句是 select ID from T where k between 3 and 5，这时只需要查 ID 的值，而 ID 的值已经在 k 索引树上了，因此可以直接提供查询结果，不需要回表。也就是说，在这个查询里面，索引 k 已经“覆盖了”我们的查询需求，我们称为覆盖索引。</p>
+<p>由于覆盖索引可以减少树的搜索次数，显著提升查询性能，所以使用覆盖索引是一个常用的性能优化手段。</p>
+<p>需要注意的是，在引擎内部使用覆盖索引在索引 k 上其实读了三个记录，R3~R5（对应的索引 k 上的记录项），但是对于 MySQL 的 Server 层来说，它就是找引擎拿到了两条记录，因此 MySQL 认为扫描行数是 2。  </p>
+<p>基于上面覆盖索引的说明，我们来讨论一个问题：在一个市民信息表上，是否有必要将身份证号和名字建立联合索引？  </p>
+<p>我们知道，身份证号是市民的唯一标识。也就是说，如果有根据身份证号查询市民信息的需求，我们只要在身份证号字段上建立索引就够了。而再建立一个（身份证号、姓名）的联合索引，是不是浪费空间？</p>
+<p>如果现在有一个高频请求，要根据市民的身份证号查询他的姓名，这个联合索引就有意义了。它可以在这个高频请求上用到覆盖索引，不再需要回表查整行记录，减少语句的执行时间。</p>
+<p>当然，索引字段的维护总是有代价的。因此，在建立冗余索引来支持覆盖索引时就需要权衡考虑了。这正是业务 DBA，或者称为业务数据架构师的工作。  </p>
+<h3 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h3><p>对于最左前缀原则大家都应该轻车熟路了，就不过多介绍，有些重点内容可以考虑一下：<br>基于上面对最左前缀索引的说明，我们来讨论一个问题：在建立联合索引的时候，如何安排索引内的字段顺序。</p>
+<p>这里我们的评估标准是，索引的复用能力。因为可以支持最左前缀，所以当已经有了 (a,b) 这个联合索引后，一般就不需要单独在 a 上建立索引了。因此，第一原则是，如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的。  </p>
+<p>所以现在你知道了，这段开头的问题里，我们要为高频请求创建 (身份证号，姓名）这个联合索引，并用这个索引支持“根据身份证号查询地址”的需求。</p>
+<p>那么，如果既有联合查询，又有基于 a、b 各自的查询呢？查询条件里面只有 b 的语句，是无法使用 (a,b) 这个联合索引的，这时候你不得不维护另外一个索引，也就是说你需要同时维护 (a,b)、(b) 这两个索引。</p>
+<p>这时候，我们要考虑的原则就是空间了。比如上面这个市民表的情况，name 字段是比 age 字段大的 ，那我就建议你创建一个（name,age) 的联合索引和一个 (age) 的单字段索引。  </p>
+<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>上一段我们说到满足最左前缀原则的时候，最左前缀可以用于在索引中定位记录。这时，你可能要问，那些不符合最左前缀的部分，会怎么样呢？</p>
+<p>我们还是以市民表的联合索引（name, age）为例。如果现在有一个需求：检索出表中“名字第一个字是张，而且年龄是 10 岁的所有男孩”。那么，SQL 语句是这么写的：   </p>
+<p><code>mysql&gt; select * from tuser where name like &#39;张 %&#39; and age=10 and ismale=1;</code></p>
+<p>你已经知道了前缀索引规则，所以这个语句在搜索索引树的时候，只能用 “张”，找到第一个满足条件的记录 ID3。当然，这还不错，总比全表扫描要好。</p>
+<p>然后呢？</p>
+<p>当然是判断其他条件是否满足。</p>
+<p>在 MySQL 5.6 之前，只能从 ID3 开始一个个回表。到主键索引上找出数据行，再对比字段值。</p>
+<p>而 MySQL 5.6 引入的索引下推优化（index condition pushdown)， 可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
+<p>图 3 和图 4，是这两个过程的执行流程图。</p>
+<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
+<p><img src="../image/%E5%9B%BE3.png" alt="图3.png" title="图3">  </p>
+<p>在图 3 和 4 这两个图里面，每一个虚线箭头表示回表一次。</p>
+<p>图 3 中，在 (name,age) 索引里面我特意去掉了 age 的值，这个过程 InnoDB 并不会去看 age 的值，只是按顺序把“name 第一个字是’张’”的记录一条条取出来回表。因此，需要回表 4 次。</p>
+<p>图 4 跟图 3 的区别是，InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
+<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>实际上主键索引也是可以使用多个字段的。DBA 小吕在入职新公司的时候，就发现自己接手维护的库里面，有这么一个表，表结构定义类似这样的：</p>
+<figure class="highlight plain"><figcaption><span>TABLE `geek` (</span></figcaption><table><tr><td class="code"><pre><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">公司的同事告诉他说，由于历史原因，这个表需要 a、b 做联合主键，这个小吕理解了。</span><br><span class="line"></span><br><span class="line">但是，学过本章内容的小吕又纳闷了，既然主键包含了 a、b 这两个字段，那意味着单独在字段 c 上创建一个索引，就已经包含了三个字段了呀，为什么要创建“ca”“cb”这两个索引？</span><br><span class="line"></span><br><span class="line">同事告诉他，是因为他们的业务里面有这样的两种语句：</span><br></pre></td></tr></table></figure>
+
+<p>select * from geek where c=N order by a limit 1;<br>select * from geek where c=N order by b limit 1;<br>```  </p>
+<p>我给你的问题是，这位同事的解释对吗，为了这两个查询模式，这两个索引是否都是必须的？为什么呢？  </p>
+<p>解答：  </p>
+<p>表记录<br>–a–|–b–|–c–|–d–<br>1 2 3 d<br>1 3 2 d<br>1 4 3 d<br>2 1 3 d<br>2 2 2 d<br>2 3 4 d<br>主键 a，b 的聚簇索引组织顺序相当于 order by a,b ，也就是先按 a 排序，再按 b 排序，c 无序。</p>
+<p>索引 ca 的组织是先按 c 排序，再按 a 排序，同时记录主键<br>–c–|–a–|–主键部分b– （注意，这里不是 ab，而是只有 b）<br>2 1 3<br>2 2 2<br>3 1 2<br>3 1 4<br>3 2 1<br>4 2 3<br>这个跟索引 c 的数据是一模一样的。</p>
+<p>索引 cb 的组织是先按 c 排序，在按 b 排序，同时记录主键<br>–c–|–b–|–主键部分a– （同上）<br>2 2 2<br>2 3 1<br>3 1 2<br>3 2 1<br>3 4 1<br>4 3 2  </p>
+<p>所以，结论是 ca 可以去掉，cb 需要保留。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>索引</tag>
       </tags>
   </entry>
   <entry>
