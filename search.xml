@@ -19,50 +19,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础部分之String</title>
-    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
-    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
-<p>在Java8中，String内部使用char数组存储数据。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/** The identifier of the encoding used to encode the bytes in &#123;<span class="doctag">@code</span> value&#125;. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span> coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
-<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
-<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">Stirng s2 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">System.out.println(s1 == s2); <span class="comment">//false</span></span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
-<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s5 = <span class="string">"bbb"</span>;</span><br><span class="line">String s6 = <span class="string">"bbb"</span>;</span><br><span class="line">System.out.println(s5 == s6); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
-<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
-<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
-<p>而使用new的方式会在堆中创建一个字符串对象。</p>
-<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewStirngTest</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		Stirng s = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.value = original.value;</span><br><span class="line">	<span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>String</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之数据类型</title>
     <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
@@ -127,6 +83,50 @@
       <tags>
         <tag>个人经历</tag>
         <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础部分之String</title>
+    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
+    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
+<p>在Java8中，String内部使用char数组存储数据。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/** The identifier of the encoding used to encode the bytes in &#123;<span class="doctag">@code</span> value&#125;. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span> coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
+<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">Stirng s2 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">System.out.println(s1 == s2); <span class="comment">//false</span></span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s5 = <span class="string">"bbb"</span>;</span><br><span class="line">String s6 = <span class="string">"bbb"</span>;</span><br><span class="line">System.out.println(s5 == s6); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
+<p>而使用new的方式会在堆中创建一个字符串对象。</p>
+<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewStirngTest</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		Stirng s = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.value = original.value;</span><br><span class="line">	<span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>String</tag>
       </tags>
   </entry>
   <entry>
@@ -1035,6 +1035,91 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-2</title>
+    <url>/2020/03/17/go-big-or-go-home-2/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stadium</td>
+<td>体育场</td>
+<td>I often play football in the stadium</td>
+</tr>
+<tr>
+<td>reply</td>
+<td>回复</td>
+<td>I’m waiting for your reply</td>
+</tr>
+<tr>
+<td>standard</td>
+<td>标准</td>
+<td>Such a standard figure</td>
+</tr>
+<tr>
+<td>honour</td>
+<td>荣誉</td>
+<td>It’s an honour to graduate from this school</td>
+</tr>
+<tr>
+<td>village</td>
+<td>乡村</td>
+<td>I like village life</td>
+</tr>
+<tr>
+<td>ever since</td>
+<td>自从…时起</td>
+<td>They lived there ever since they married</td>
+</tr>
+<tr>
+<td>turn up</td>
+<td>调高</td>
+<td>Turn up the TV volume</td>
+</tr>
+<tr>
+<td>volume</td>
+<td>音量</td>
+<td>Turn on the volume</td>
+</tr>
+<tr>
+<td>get on with</td>
+<td>与…相处</td>
+<td>She likes get on with animals</td>
+</tr>
+<tr>
+<td>tourism</td>
+<td>旅游</td>
+<td>I like tourism around the world</td>
+</tr>
+<tr>
+<td>industry</td>
+<td>行业</td>
+<td>The tourism industry is getting worse</td>
+</tr>
+<tr>
+<td>experience</td>
+<td>经验</td>
+<td>He has five years of programming experience</td>
+</tr>
+<tr>
+<td>sorrows</td>
+<td>悲伤</td>
+<td>I often share happiness and sorrows with my friends</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-17</title>
     <url>/2020/04/01/go-big-or-go-home-17/</url>
     <content><![CDATA[<table>
@@ -1404,91 +1489,6 @@
 <td>shrimp</td>
 <td>虾肉</td>
 <td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-2</title>
-    <url>/2020/03/17/go-big-or-go-home-2/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stadium</td>
-<td>体育场</td>
-<td>I often play football in the stadium</td>
-</tr>
-<tr>
-<td>reply</td>
-<td>回复</td>
-<td>I’m waiting for your reply</td>
-</tr>
-<tr>
-<td>standard</td>
-<td>标准</td>
-<td>Such a standard figure</td>
-</tr>
-<tr>
-<td>honour</td>
-<td>荣誉</td>
-<td>It’s an honour to graduate from this school</td>
-</tr>
-<tr>
-<td>village</td>
-<td>乡村</td>
-<td>I like village life</td>
-</tr>
-<tr>
-<td>ever since</td>
-<td>自从…时起</td>
-<td>They lived there ever since they married</td>
-</tr>
-<tr>
-<td>turn up</td>
-<td>调高</td>
-<td>Turn up the TV volume</td>
-</tr>
-<tr>
-<td>volume</td>
-<td>音量</td>
-<td>Turn on the volume</td>
-</tr>
-<tr>
-<td>get on with</td>
-<td>与…相处</td>
-<td>She likes get on with animals</td>
-</tr>
-<tr>
-<td>tourism</td>
-<td>旅游</td>
-<td>I like tourism around the world</td>
-</tr>
-<tr>
-<td>industry</td>
-<td>行业</td>
-<td>The tourism industry is getting worse</td>
-</tr>
-<tr>
-<td>experience</td>
-<td>经验</td>
-<td>He has five years of programming experience</td>
-</tr>
-<tr>
-<td>sorrows</td>
-<td>悲伤</td>
-<td>I often share happiness and sorrows with my friends</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2150,6 +2150,76 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-27</title>
+    <url>/2020/04/11/go-big-or-go-home-27/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>emergency</td>
+<td>紧急情况</td>
+<td>It’s an emergency.Get her to the hospital now!</td>
+</tr>
+<tr>
+<td>do one’s best</td>
+<td>尽最大的努力</td>
+<td>Don’t worry so much about the exam.Just do your best</td>
+</tr>
+<tr>
+<td>absolute</td>
+<td>绝对的</td>
+<td>Motion is absolute,while stillness is relative</td>
+</tr>
+<tr>
+<td>tongue</td>
+<td>舌头</td>
+<td>The boy sticks out his tongue to make a face to me</td>
+</tr>
+<tr>
+<td>instruct</td>
+<td>指导</td>
+<td>My mom instructs me how to play golf</td>
+</tr>
+<tr>
+<td>nylon</td>
+<td>尼龙</td>
+<td>The socks,strap and cord are all made of nylon</td>
+</tr>
+<tr>
+<td>strange</td>
+<td>奇怪的</td>
+<td>I met a guy wearing strange clothes on the subway</td>
+</tr>
+<tr>
+<td>secondhand</td>
+<td>二手的</td>
+<td>The boy bought a secondhand book from the old man</td>
+</tr>
+<tr>
+<td>expand</td>
+<td>扩大</td>
+<td>Our business is expanding across the whole country</td>
+</tr>
+<tr>
+<td>forest</td>
+<td>森林</td>
+<td>The sun shines through the forest</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-24</title>
     <url>/2020/04/08/go-big-or-go-home-24/</url>
     <content><![CDATA[<table>
@@ -2445,141 +2515,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-26</title>
-    <url>/2020/04/10/go-big-or-go-home-26/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>give in</td>
-<td>投降</td>
-<td>He finally gave in to me and admintted that I’m the winner</td>
-</tr>
-<tr>
-<td>transform</td>
-<td>改变</td>
-<td>You will transform into a beautiful butterfly one day</td>
-</tr>
-<tr>
-<td>department</td>
-<td>部门</td>
-<td>Our company consists of financial department,sales department,and technical department</td>
-</tr>
-<tr>
-<td>put off</td>
-<td>推迟</td>
-<td>The sports meeting will be put off because of the rain</td>
-</tr>
-<tr>
-<td>mass</td>
-<td>众多</td>
-<td>A mass of people are waiting</td>
-</tr>
-<tr>
-<td>allow</td>
-<td>允许</td>
-<td>The green light allows you to go</td>
-</tr>
-<tr>
-<td>serious</td>
-<td>认真的</td>
-<td>He is always very serious while working</td>
-</tr>
-<tr>
-<td>seem</td>
-<td>看起来</td>
-<td>It seems his car has a serious problem</td>
-</tr>
-<tr>
-<td>aboard</td>
-<td>在…上</td>
-<td>In Thailand,fishers often cook and have meals aboard their boats</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-27</title>
-    <url>/2020/04/11/go-big-or-go-home-27/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>emergency</td>
-<td>紧急情况</td>
-<td>It’s an emergency.Get her to the hospital now!</td>
-</tr>
-<tr>
-<td>do one’s best</td>
-<td>尽最大的努力</td>
-<td>Don’t worry so much about the exam.Just do your best</td>
-</tr>
-<tr>
-<td>absolute</td>
-<td>绝对的</td>
-<td>Motion is absolute,while stillness is relative</td>
-</tr>
-<tr>
-<td>tongue</td>
-<td>舌头</td>
-<td>The boy sticks out his tongue to make a face to me</td>
-</tr>
-<tr>
-<td>instruct</td>
-<td>指导</td>
-<td>My mom instructs me how to play golf</td>
-</tr>
-<tr>
-<td>nylon</td>
-<td>尼龙</td>
-<td>The socks,strap and cord are all made of nylon</td>
-</tr>
-<tr>
-<td>strange</td>
-<td>奇怪的</td>
-<td>I met a guy wearing strange clothes on the subway</td>
-</tr>
-<tr>
-<td>secondhand</td>
-<td>二手的</td>
-<td>The boy bought a secondhand book from the old man</td>
-</tr>
-<tr>
-<td>expand</td>
-<td>扩大</td>
-<td>Our business is expanding across the whole country</td>
-</tr>
-<tr>
-<td>forest</td>
-<td>森林</td>
-<td>The sun shines through the forest</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-28</title>
     <url>/2020/04/12/go-big-or-go-home-28/</url>
     <content><![CDATA[<table>
@@ -2724,6 +2659,306 @@
 <td>night owl</td>
 <td>夜晚的猫头鹰</td>
 <td>When the important exams come,Jack becomes a night owl</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-30</title>
+    <url>/2020/04/14/go-big-or-go-home-30/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apartment</td>
+<td>公寓</td>
+<td>This apartment is so bright with these windows</td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>捕捉</td>
+<td>The goalkeeper caught the ball.What a save!</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+<tr>
+<td>sparrow</td>
+<td>麻雀</td>
+<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
+</tr>
+<tr>
+<td>mud</td>
+<td>泥</td>
+<td>Oh no!I think our car is stuck in the mud!</td>
+</tr>
+<tr>
+<td>stuck</td>
+<td>不能动的</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>shapes</td>
+<td>形状</td>
+<td>I like collecting glasses of all shapes and sizes</td>
+</tr>
+<tr>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversation was interrputed by a knock at the door</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-26</title>
+    <url>/2020/04/10/go-big-or-go-home-26/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>give in</td>
+<td>投降</td>
+<td>He finally gave in to me and admintted that I’m the winner</td>
+</tr>
+<tr>
+<td>transform</td>
+<td>改变</td>
+<td>You will transform into a beautiful butterfly one day</td>
+</tr>
+<tr>
+<td>department</td>
+<td>部门</td>
+<td>Our company consists of financial department,sales department,and technical department</td>
+</tr>
+<tr>
+<td>put off</td>
+<td>推迟</td>
+<td>The sports meeting will be put off because of the rain</td>
+</tr>
+<tr>
+<td>mass</td>
+<td>众多</td>
+<td>A mass of people are waiting</td>
+</tr>
+<tr>
+<td>allow</td>
+<td>允许</td>
+<td>The green light allows you to go</td>
+</tr>
+<tr>
+<td>serious</td>
+<td>认真的</td>
+<td>He is always very serious while working</td>
+</tr>
+<tr>
+<td>seem</td>
+<td>看起来</td>
+<td>It seems his car has a serious problem</td>
+</tr>
+<tr>
+<td>aboard</td>
+<td>在…上</td>
+<td>In Thailand,fishers often cook and have meals aboard their boats</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-31</title>
+    <url>/2020/04/15/go-big-or-go-home-31/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>colleague</td>
+<td>同事</td>
+<td>I really learned a lot of discussing with my colleagues</td>
+</tr>
+<tr>
+<td>arrow</td>
+<td>箭</td>
+<td>Traditional hunters use arrows to catch animals</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>空的</td>
+<td>The man’s wallet is empty</td>
+</tr>
+<tr>
+<td>associate</td>
+<td>联想</td>
+<td>I associate this picture with a star</td>
+</tr>
+<tr>
+<td>easy-going</td>
+<td>随和</td>
+<td>My friend and I are easy-going</td>
+</tr>
+<tr>
+<td>carry off</td>
+<td>夺走</td>
+<td>He’s gonna carry off her bag!Stop him!</td>
+</tr>
+<tr>
+<td>lost</td>
+<td>迷路的</td>
+<td>The hikers are lost walking in the forest</td>
+</tr>
+<tr>
+<td>lock</td>
+<td>锁</td>
+<td>The door is locked;we can’t get in</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切片</td>
+<td>The man thinly slices the beef</td>
+</tr>
+<tr>
+<td>might</td>
+<td>或许</td>
+<td>I think it might rain later,so I should take an umbrella</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-32</title>
+    <url>/2020/04/16/go-big-or-go-home-32/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>latter</td>
+<td>后者</td>
+<td>When asked what he would prefer;an apple or pizza,the boy chose the latter</td>
+</tr>
+<tr>
+<td>kitchen</td>
+<td>厨房</td>
+<td>The kitchen is clean and modern</td>
+</tr>
+<tr>
+<td>senior</td>
+<td>年长的</td>
+<td>The senior citizens in the community often have fun talking to each other</td>
+</tr>
+<tr>
+<td>build</td>
+<td>建造</td>
+<td>They are building a block of offices</td>
+</tr>
+<tr>
+<td>parcel</td>
+<td>包裹</td>
+<td>The person has a lot of parcels to send on Novermber 11th</td>
+</tr>
+<tr>
+<td>animal</td>
+<td>动物</td>
+<td>There are many kinds of animals on earth</td>
+</tr>
+<tr>
+<td>take out the rubbish</td>
+<td>倒垃圾</td>
+<td>Could you please take out the rubbish when you leave?</td>
+</tr>
+<tr>
+<td>put it in the trash can</td>
+<td>放进垃圾桶</td>
+<td>Don’t drop the bottle there,please put it in the trash can</td>
+</tr>
+<tr>
+<td>empty the recycle bin</td>
+<td>清理垃圾桶</td>
+<td>-</td>
+</tr>
+<tr>
+<td>garbage</td>
+<td>食物垃圾(美式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>trash</td>
+<td>纸/塑料(美式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>rubbish</td>
+<td>垃圾(英式)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2914,241 +3149,6 @@
 <td>How’s your business?</td>
 <td>最近怎么样</td>
 <td>Not so good</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-30</title>
-    <url>/2020/04/14/go-big-or-go-home-30/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>apartment</td>
-<td>公寓</td>
-<td>This apartment is so bright with these windows</td>
-</tr>
-<tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
-</tr>
-<tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
-</tr>
-<tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
-</tr>
-<tr>
-<td>catch</td>
-<td>捕捉</td>
-<td>The goalkeeper caught the ball.What a save!</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-<tr>
-<td>sparrow</td>
-<td>麻雀</td>
-<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
-</tr>
-<tr>
-<td>mud</td>
-<td>泥</td>
-<td>Oh no!I think our car is stuck in the mud!</td>
-</tr>
-<tr>
-<td>stuck</td>
-<td>不能动的</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>shapes</td>
-<td>形状</td>
-<td>I like collecting glasses of all shapes and sizes</td>
-</tr>
-<tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversation was interrputed by a knock at the door</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-31</title>
-    <url>/2020/04/15/go-big-or-go-home-31/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>colleague</td>
-<td>同事</td>
-<td>I really learned a lot of discussing with my colleagues</td>
-</tr>
-<tr>
-<td>arrow</td>
-<td>箭</td>
-<td>Traditional hunters use arrows to catch animals</td>
-</tr>
-<tr>
-<td>empty</td>
-<td>空的</td>
-<td>The man’s wallet is empty</td>
-</tr>
-<tr>
-<td>associate</td>
-<td>联想</td>
-<td>I associate this picture with a star</td>
-</tr>
-<tr>
-<td>easy-going</td>
-<td>随和</td>
-<td>My friend and I are easy-going</td>
-</tr>
-<tr>
-<td>carry off</td>
-<td>夺走</td>
-<td>He’s gonna carry off her bag!Stop him!</td>
-</tr>
-<tr>
-<td>lost</td>
-<td>迷路的</td>
-<td>The hikers are lost walking in the forest</td>
-</tr>
-<tr>
-<td>lock</td>
-<td>锁</td>
-<td>The door is locked;we can’t get in</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>切片</td>
-<td>The man thinly slices the beef</td>
-</tr>
-<tr>
-<td>might</td>
-<td>或许</td>
-<td>I think it might rain later,so I should take an umbrella</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-32</title>
-    <url>/2020/04/16/go-big-or-go-home-32/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>latter</td>
-<td>后者</td>
-<td>When asked what he would prefer;an apple or pizza,the boy chose the latter</td>
-</tr>
-<tr>
-<td>kitchen</td>
-<td>厨房</td>
-<td>The kitchen is clean and modern</td>
-</tr>
-<tr>
-<td>senior</td>
-<td>年长的</td>
-<td>The senior citizens in the community often have fun talking to each other</td>
-</tr>
-<tr>
-<td>build</td>
-<td>建造</td>
-<td>They are building a block of offices</td>
-</tr>
-<tr>
-<td>parcel</td>
-<td>包裹</td>
-<td>The person has a lot of parcels to send on Novermber 11th</td>
-</tr>
-<tr>
-<td>animal</td>
-<td>动物</td>
-<td>There are many kinds of animals on earth</td>
-</tr>
-<tr>
-<td>take out the rubbish</td>
-<td>倒垃圾</td>
-<td>Could you please take out the rubbish when you leave?</td>
-</tr>
-<tr>
-<td>put it in the trash can</td>
-<td>放进垃圾桶</td>
-<td>Don’t drop the bottle there,please put it in the trash can</td>
-</tr>
-<tr>
-<td>empty the recycle bin</td>
-<td>清理垃圾桶</td>
-<td>-</td>
-</tr>
-<tr>
-<td>garbage</td>
-<td>食物垃圾(美式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>trash</td>
-<td>纸/塑料(美式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>rubbish</td>
-<td>垃圾(英式)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3710,71 +3710,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-4</title>
-    <url>/2020/03/19/go-big-or-go-home-4/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>desperate</td>
-<td>绝望的</td>
-<td>The unemployed man looks so desperate</td>
-</tr>
-<tr>
-<td>beyond</td>
-<td>更远的/超出…能力</td>
-<td>The birds flew far beyond the land’s edge</td>
-</tr>
-<tr>
-<td>in need of</td>
-<td>需要</td>
-<td>The dry field is in need of rain</td>
-</tr>
-<tr>
-<td>gesture</td>
-<td>手势</td>
-<td>This gesture means you are very good</td>
-</tr>
-<tr>
-<td>production</td>
-<td>生产</td>
-<td>Thousands of cars are under production</td>
-</tr>
-<tr>
-<td>pregnant</td>
-<td>怀孕的</td>
-<td>The pregnant woman is drinking water</td>
-</tr>
-<tr>
-<td>complain</td>
-<td>抱怨</td>
-<td>She complains that the homework is difficult</td>
-</tr>
-<tr>
-<td>unemployed</td>
-<td>失业</td>
-<td>Have you been unemployed for over six months?</td>
-</tr>
-<tr>
-<td>edge</td>
-<td>边缘</td>
-<td>He edged closer to the telephone, ready to grab it</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-40</title>
     <url>/2020/04/24/go-big-or-go-home-40/</url>
     <content><![CDATA[<table>
@@ -3860,8 +3795,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-41</title>
-    <url>/2020/04/25/go-big-or-go-home-41/</url>
+    <title>go big or go home-4</title>
+    <url>/2020/03/19/go-big-or-go-home-4/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3871,54 +3806,49 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>cow</td>
-<td>奶牛</td>
-<td>Cows provide us with delicious beef and milk</td>
+<td>desperate</td>
+<td>绝望的</td>
+<td>The unemployed man looks so desperate</td>
 </tr>
 <tr>
-<td>world-famous</td>
-<td>世界著名的</td>
-<td>Jack is a world-famous actress</td>
+<td>beyond</td>
+<td>更远的/超出…能力</td>
+<td>The birds flew far beyond the land’s edge</td>
 </tr>
 <tr>
-<td>collection</td>
-<td>收藏品</td>
-<td>He has a fine collection stamps</td>
+<td>in need of</td>
+<td>需要</td>
+<td>The dry field is in need of rain</td>
 </tr>
 <tr>
-<td>hobby</td>
-<td>业务爱好</td>
-<td>People have different hobbies;some like reading books and some like playing football</td>
+<td>gesture</td>
+<td>手势</td>
+<td>This gesture means you are very good</td>
 </tr>
 <tr>
-<td>extremely</td>
-<td>非常</td>
-<td>He was extremely tired because he had worked all night</td>
+<td>production</td>
+<td>生产</td>
+<td>Thousands of cars are under production</td>
 </tr>
 <tr>
-<td>wall</td>
-<td>墙</td>
-<td>This wall is made up of oddly shaped bricks</td>
+<td>pregnant</td>
+<td>怀孕的</td>
+<td>The pregnant woman is drinking water</td>
 </tr>
 <tr>
-<td>set off</td>
-<td>出发</td>
-<td>The pirates set off from the island</td>
+<td>complain</td>
+<td>抱怨</td>
+<td>She complains that the homework is difficult</td>
 </tr>
 <tr>
-<td>break in</td>
-<td>进入</td>
-<td>Without keys for the door,the man is trying to break in through the window</td>
+<td>unemployed</td>
+<td>失业</td>
+<td>Have you been unemployed for over six months?</td>
 </tr>
 <tr>
-<td>Switzerland</td>
-<td>瑞士</td>
-<td>There are many snowy mountains in Switzerland.It’s so cold!</td>
-</tr>
-<tr>
-<td>port</td>
-<td>港口</td>
-<td>There are hundreds of containers in the port</td>
+<td>edge</td>
+<td>边缘</td>
+<td>He edged closer to the telephone, ready to grab it</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -4040,6 +3970,76 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-41</title>
+    <url>/2020/04/25/go-big-or-go-home-41/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cow</td>
+<td>奶牛</td>
+<td>Cows provide us with delicious beef and milk</td>
+</tr>
+<tr>
+<td>world-famous</td>
+<td>世界著名的</td>
+<td>Jack is a world-famous actress</td>
+</tr>
+<tr>
+<td>collection</td>
+<td>收藏品</td>
+<td>He has a fine collection stamps</td>
+</tr>
+<tr>
+<td>hobby</td>
+<td>业务爱好</td>
+<td>People have different hobbies;some like reading books and some like playing football</td>
+</tr>
+<tr>
+<td>extremely</td>
+<td>非常</td>
+<td>He was extremely tired because he had worked all night</td>
+</tr>
+<tr>
+<td>wall</td>
+<td>墙</td>
+<td>This wall is made up of oddly shaped bricks</td>
+</tr>
+<tr>
+<td>set off</td>
+<td>出发</td>
+<td>The pirates set off from the island</td>
+</tr>
+<tr>
+<td>break in</td>
+<td>进入</td>
+<td>Without keys for the door,the man is trying to break in through the window</td>
+</tr>
+<tr>
+<td>Switzerland</td>
+<td>瑞士</td>
+<td>There are many snowy mountains in Switzerland.It’s so cold!</td>
+</tr>
+<tr>
+<td>port</td>
+<td>港口</td>
+<td>There are hundreds of containers in the port</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-6</title>
     <url>/2020/03/21/go-big-or-go-home-6/</url>
     <content><![CDATA[<table>
@@ -4109,6 +4109,86 @@
 <td>backache</td>
 <td>背痛</td>
 <td>Since I got an office job,my backache has gotton much worse</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-8</title>
+    <url>/2020/03/23/go-big-or-go-home-8/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fit</td>
+<td>匹配</td>
+<td>They two are a perfect fit and I’m sure they are good friends</td>
+</tr>
+<tr>
+<td>insure</td>
+<td>为…投保</td>
+<td>He insures the car against traffic accidents</td>
+</tr>
+<tr>
+<td>ring sb. back</td>
+<td>回电话</td>
+<td>Oh,I missed a call from my mother.I’ll ring her back</td>
+</tr>
+<tr>
+<td>try sth. out</td>
+<td>试验</td>
+<td>I’m going to try out my new experiment on some mice</td>
+</tr>
+<tr>
+<td>come off</td>
+<td>从…掉下</td>
+<td>She looks surprised when her facial mask comes off her face</td>
+</tr>
+<tr>
+<td>postbox</td>
+<td>邮箱</td>
+<td>I take letters out from the postbox everyday</td>
+</tr>
+<tr>
+<td>over and over again</td>
+<td>重复多次</td>
+<td>He said no over and over again</td>
+</tr>
+<tr>
+<td>questionnaire</td>
+<td>调查问卷</td>
+<td>Please complete this questionnaire</td>
+</tr>
+<tr>
+<td>savage</td>
+<td>野蛮人</td>
+<td>Their wordy conversion made me feel like a total savage</td>
+</tr>
+<tr>
+<td>wallet</td>
+<td>口袋</td>
+<td>He takes out some money from his wallet</td>
+</tr>
+<tr>
+<td>platform</td>
+<td>平台</td>
+<td>Bigger platform</td>
+</tr>
+<tr>
+<td>says</td>
+<td>说的话</td>
+<td>The bird is repeating what the girl says</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -4275,83 +4355,43 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-8</title>
-    <url>/2020/03/23/go-big-or-go-home-8/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>fit</td>
-<td>匹配</td>
-<td>They two are a perfect fit and I’m sure they are good friends</td>
-</tr>
-<tr>
-<td>insure</td>
-<td>为…投保</td>
-<td>He insures the car against traffic accidents</td>
-</tr>
-<tr>
-<td>ring sb. back</td>
-<td>回电话</td>
-<td>Oh,I missed a call from my mother.I’ll ring her back</td>
-</tr>
-<tr>
-<td>try sth. out</td>
-<td>试验</td>
-<td>I’m going to try out my new experiment on some mice</td>
-</tr>
-<tr>
-<td>come off</td>
-<td>从…掉下</td>
-<td>She looks surprised when her facial mask comes off her face</td>
-</tr>
-<tr>
-<td>postbox</td>
-<td>邮箱</td>
-<td>I take letters out from the postbox everyday</td>
-</tr>
-<tr>
-<td>over and over again</td>
-<td>重复多次</td>
-<td>He said no over and over again</td>
-</tr>
-<tr>
-<td>questionnaire</td>
-<td>调查问卷</td>
-<td>Please complete this questionnaire</td>
-</tr>
-<tr>
-<td>savage</td>
-<td>野蛮人</td>
-<td>Their wordy conversion made me feel like a total savage</td>
-</tr>
-<tr>
-<td>wallet</td>
-<td>口袋</td>
-<td>He takes out some money from his wallet</td>
-</tr>
-<tr>
-<td>platform</td>
-<td>平台</td>
-<td>Bigger platform</td>
-</tr>
-<tr>
-<td>says</td>
-<td>说的话</td>
-<td>The bird is repeating what the girl says</td>
-</tr>
-</tbody></table>
+    <title>leetcode208</title>
+    <url>/2019/10/20/leetcode208/</url>
+    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
+<p>示例:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Trie trie = <span class="keyword">new</span> Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(<span class="string">"apple"</span>);</span><br><span class="line">trie.search(<span class="string">"apple"</span>);   <span class="comment">// 返回 true</span></span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 false</span></span><br><span class="line">trie.startsWith(<span class="string">"app"</span>); <span class="comment">// 返回 true</span></span><br><span class="line">trie.insert(<span class="string">"app"</span>);   </span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 true</span></span><br></pre></td></tr></table></figure>
+
+<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isWord;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">        TrieNode node = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Initialize your data structure here.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Trie</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        root = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        root.val = <span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Inserts a word into the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                t.children[c - <span class="string">'a'</span>] = <span class="keyword">new</span> TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if the word is in the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">search</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if there is any word in the trie that starts with the given prefix.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">startsWith</span><span class="params">(String prefix)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> c = prefix.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = <span class="keyword">new</span> Trie();</span><br><span class="line">        obj.insert(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_2 = obj.search(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_3 = obj.startsWith(<span class="string">"trie"</span>);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>English</category>
+        <category>leetcode</category>
       </categories>
       <tags>
-        <tag>单词</tag>
+        <tag>Trie树</tag>
+        <tag>leetcode208</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode338</title>
+    <url>/2019/10/20/leetcode338/</url>
+    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">示例 <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">输入: <span class="number">2</span></span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line">示例 <span class="number">2</span>:</span><br><span class="line"></span><br><span class="line">输入: <span class="number">5</span></span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
+<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> num) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[num+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-<span class="number">1</span>)] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] ints = <span class="keyword">new</span> Solution().countBits(<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">24</span>的二进制是<span class="number">11000</span></span><br><span class="line"><span class="number">24</span>-<span class="number">1</span>=<span class="number">23</span>的二进制是<span class="number">10111</span></span><br><span class="line"><span class="number">11000</span>&amp;<span class="number">10111</span> = <span class="number">10000</span></span><br><span class="line">这样就把<span class="number">24</span>的最后的<span class="number">1</span>去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-<span class="number">1</span>)] + <span class="number">1</span>;</span><br><span class="line">首先i&amp;(i-<span class="number">1</span>)一定比i小，所以这段代码可以保证result[i&amp;(i-<span class="number">1</span>)]一定是之前计算过的，然后在后面加上<span class="number">1</span>就是一共有的<span class="number">1</span>的个数</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode338</tag>
+        <tag>二进制数</tag>
       </tags>
   </entry>
   <entry>
@@ -4417,46 +4457,6 @@
       </categories>
       <tags>
         <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode208</title>
-    <url>/2019/10/20/leetcode208/</url>
-    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
-<p>示例:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Trie trie = <span class="keyword">new</span> Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(<span class="string">"apple"</span>);</span><br><span class="line">trie.search(<span class="string">"apple"</span>);   <span class="comment">// 返回 true</span></span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 false</span></span><br><span class="line">trie.startsWith(<span class="string">"app"</span>); <span class="comment">// 返回 true</span></span><br><span class="line">trie.insert(<span class="string">"app"</span>);   </span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 true</span></span><br></pre></td></tr></table></figure>
-
-<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isWord;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">        TrieNode node = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Initialize your data structure here.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Trie</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        root = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        root.val = <span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Inserts a word into the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                t.children[c - <span class="string">'a'</span>] = <span class="keyword">new</span> TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if the word is in the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">search</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if there is any word in the trie that starts with the given prefix.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">startsWith</span><span class="params">(String prefix)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> c = prefix.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = <span class="keyword">new</span> Trie();</span><br><span class="line">        obj.insert(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_2 = obj.search(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_3 = obj.startsWith(<span class="string">"trie"</span>);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>Trie树</tag>
-        <tag>leetcode208</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode338</title>
-    <url>/2019/10/20/leetcode338/</url>
-    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">示例 <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">输入: <span class="number">2</span></span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line">示例 <span class="number">2</span>:</span><br><span class="line"></span><br><span class="line">输入: <span class="number">5</span></span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
-
-<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> num) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[num+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-<span class="number">1</span>)] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] ints = <span class="keyword">new</span> Solution().countBits(<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">24</span>的二进制是<span class="number">11000</span></span><br><span class="line"><span class="number">24</span>-<span class="number">1</span>=<span class="number">23</span>的二进制是<span class="number">10111</span></span><br><span class="line"><span class="number">11000</span>&amp;<span class="number">10111</span> = <span class="number">10000</span></span><br><span class="line">这样就把<span class="number">24</span>的最后的<span class="number">1</span>去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-<span class="number">1</span>)] + <span class="number">1</span>;</span><br><span class="line">首先i&amp;(i-<span class="number">1</span>)一定比i小，所以这段代码可以保证result[i&amp;(i-<span class="number">1</span>)]一定是之前计算过的，然后在后面加上<span class="number">1</span>就是一共有的<span class="number">1</span>的个数</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode338</tag>
-        <tag>二进制数</tag>
       </tags>
   </entry>
   <entry>
@@ -4574,6 +4574,19 @@
       </tags>
   </entry>
   <entry>
+    <title>不得不说的Java‘锁’事</title>
+    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
+    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>锁</tag>
+        <tag>高并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《深入理解Java虚拟机》第二章 Java内存区域与内存溢出异常</title>
     <url>/2020/04/19/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%BA%8C%E7%AB%A0-Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E4%B8%8E%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E5%BC%82%E5%B8%B8/</url>
     <content><![CDATA[<h3 id="此篇为第二章-Java内存区域与内存溢出异常，主要从两部分介绍"><a href="#此篇为第二章-Java内存区域与内存溢出异常，主要从两部分介绍" class="headerlink" title="此篇为第二章 Java内存区域与内存溢出异常，主要从两部分介绍"></a>此篇为第二章 Java内存区域与内存溢出异常，主要从两部分介绍</h3><h3 id="1-内存区域"><a href="#1-内存区域" class="headerlink" title="1.内存区域"></a>1.内存区域</h3><h3 id="话不多说，先上图"><a href="#话不多说，先上图" class="headerlink" title="话不多说，先上图"></a>话不多说，先上图</h3><p><img src="../image/%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F.png" alt="内存区域.png" title="内存区域"></p>
@@ -4605,19 +4618,6 @@
       <tags>
         <tag>深入理解Java虚拟机</tag>
         <tag>Java内存区域与内存溢出异常</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>不得不说的Java‘锁’事</title>
-    <url>/2020/03/09/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E2%80%98%E9%94%81%E2%80%99%E4%BA%8B/</url>
-    <content><![CDATA[<p>水文一篇<br>转载<br><a href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener">https://tech.meituan.com/2018/11/15/java-lock.html</a></p>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>锁</tag>
-        <tag>高并发</tag>
       </tags>
   </entry>
   <entry>
@@ -5263,7 +5263,7 @@
 <li>HyperLogLog:<ul>
 <li>常见的业务场景，需要统计每个网页的UV数据，会如何实现？<ul>
 <li>如果是PV非常好办，给每个网页一个独立的Redis计数器就可以了，key后缀加上当天的日期，请求一次incrby一次</li>
-<li>但是UV就不同了，需要去重，每个用户一天之内的多次访问只能计数一次，一般的解决方案是为每个页面设置一个独立的set，将用户的id放进去，然后统计set集合的大小，但是有没有想过，加入是一个访问量非常大的页面，比如淘宝，那么集合会非常大，占用内存，那么有没有更优质的解决办法呢？其实对于业务来说100W和101W其实影响并不大</li>
+<li>但是UV就不同了，需要去重，每个用户一天之内的多次访问只能计数一次，一般的解决方案是为每个页面设置一个独立的set，将用户的id放进去，然后统计set集合的大小，但是有没有想过，假如是一个访问量非常大的页面，比如淘宝，那么集合会非常大，占用内存，那么有没有更优质的解决办法呢？其实对于业务来说100W和101W其实影响并不大</li>
 <li>引入HyperLogLog，就是专门用来统计一些允许容错的数据结构，标准误差是0.81%，还是可以接受的</li>
 <li>有三个命令 pfadd,pfcount,pfmerge通过字面上意思很好理解，这个结构需要的内存大小为12k，这于上亿用户量的set来比简直是九牛一毛</li>
 </ul>
