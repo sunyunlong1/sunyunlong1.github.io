@@ -67,6 +67,93 @@
     
     
     
+    <article id="blog-mysql一条sql查询语句是如何执行的" class="article article-type-blog" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2019/10/20/mysql一条sql查询语句是如何执行的/"
+    >MySQL一条sql查询语句是如何执行的?</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2019/10/20/mysql一条sql查询语句是如何执行的/" class="article-date">
+  <time datetime="2019-10-19T16:48:46.000Z" itemprop="datePublished">2019-10-20</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <p>[2019-10-13，2019-10-20]周计划：</p>
+<p>1⃣️三道leetcode中等难度算法题<br>2⃣️MySQL实战45讲-基础篇1，2，3讲<br>3⃣️周六，日总结，写博客</p>
+<p>本周学习了极客时间的MySQL实战45讲一课，本篇做一个总结。<br>先看一个普通的查询语句  </p>
+<p><code>select * from user where id = 1</code>  </p>
+<p>这条语句的执行过程是什么样的呢？废话不多说先上图：<br><img src="../image/MySQL.png" alt="MySQL.png" title="MySQL"><br>大体来说MySQL可以分为server层和引擎层两部分，server层包括连接器，查询缓存，分析器，优化器，查询器等，覆盖MySQL的绝大多数核心服务功能，包括内置函数，存储过程，触发器，视图等都是在这一层实现的。<br>而引擎层则是负责数据的存储和提取，其架构模式是插件式的，比如InnoDB，MyISAM，Memory等多个存储引擎，现在最常用的是InnoDB，在MySQL5.5.5版本成为了默认引擎。接下来具体介绍一下每一个部分的作用：  </p>
+<h3 id="1⃣️连接器："><a href="#1⃣️连接器：" class="headerlink" title="1⃣️连接器："></a>1⃣️连接器：</h3><p>如果要使用MySQL首先要做的事与MySQL建立连接，输入账户密码MySQL会到连接器中对该账号进行权限的验证，以后的所有操作都基于此时的权限，及时在这段时间管理员对你的账号修改了权限也不会影响到本次连接的其他操作。同时这里涉及到了长链接与短链接，大家知道与数据库的连接是比较消耗资源的，所以要尽可能的在一次连接做尽量多的事，不让资源浪费，这就是长链接，客户端如果太长时间没有操作，连接器会自动将它断开，这是wait_timeout控制的，默认是8个小时，当然可以根据自己的业务场景进行修改，综上所述更推荐使用长链接。  </p>
+<h3 id="2⃣️查询缓存："><a href="#2⃣️查询缓存：" class="headerlink" title="2⃣️查询缓存："></a>2⃣️查询缓存：</h3><p>通过了连接器就可以到下一步，也就是查询缓存了，大多数情况下并不推荐使用查询缓存，为什么呢？<br>我们先来了解下查询缓存的工作原理，其实MySQL会把执行过的查询语句以key-value的形式储存起来，key是查询语句，value是结果，如果在查询缓存中可以找到匹配的key那么直接返回value，但有人说这不是很方便吗提高了查询速度，为什么不推荐使用呢？因为不仅仅存储这些语句和结果需要占用空间，还有个最关键的原因是当有任何对某张表的更新那么基于这张表的所有查询缓存全部清空，除非你是有一张静态表，很长时间不更新那么可以使用查询缓存。<br>使用方式？只需要设置参数query_cache_type（0—&gt;关闭，1—&gt;开始，2—&gt;只有在执行查询语句时，显示指定开始如下例子）</p>
+<p><code>select SQL_CACHE * form user where id = 1</code>  </p>
+<h3 id="3⃣️分析器："><a href="#3⃣️分析器：" class="headerlink" title="3⃣️分析器："></a>3⃣️分析器：</h3><p>如果没有命中查询缓存就要真正开始执行语句了，首先MySQL要知道你执行的是什么操作，分析器会先做词法分析，你输入的是一串字符串，MySQL会识别出关键词比如select，那么MySQL会知道这是一条查询语句，在把user识别为表名，当然也会有写错的时候，那么语法错误就是在这一层做的。</p>
+<h3 id="4⃣️优化器："><a href="#4⃣️优化器：" class="headerlink" title="4⃣️优化器："></a>4⃣️优化器：</h3><p>通过了分析器证明sql语句写的没有问题，那么MySQL会根据你写的语句在内部做一个优化，是在有多个索引的时候进行比较，提到索引，可能大家都知道最左前缀原则，比如user表有联合索引 ‘A_B’ 当查询语句为下面这样时：  </p>
+<p><code>select name from user where B = 10</code>  </p>
+<p>这样写的话并不会命中索引是因为没有满足最左前缀原则，但如果我把语句改成：  </p>
+<p><code>select name from user where B = 10 and A = 15</code><br>如果这样写msyql会通过分析器来去寻找索引，发现你的where条件里有A = 15那么MySQL会先执行A = 15这样就会命中索引。  </p>
+<h3 id="5⃣️执行器："><a href="#5⃣️执行器：" class="headerlink" title="5⃣️执行器："></a>5⃣️执行器：</h3><p>终于通过重重关卡可以真正去执行语句了，执行的时候会先判断一下是否有这张表的权限（如果命中查询索引，那么会在返回结果是做权限验证），如果有权限就打开表继续执行，拿最开始语句举个例子：<br>(1)默认引擎是InnoDB，调用InnoDB引擎接口取user表的第一行，判断id是不是等于1，如果不是则跳过，如果是则将这行存在结果集中<br>(2)调用引擎接口“下一行”,重复(1)，直到user表的最后一行。<br>(3)执行器将上述遍历过程中所有满足条件的行组成记录集作为结果集返回给客户端。  </p>
+<p>至此这个语句就执行完成了。</p>
+<h3 id="1⃣️课后问题："><a href="#1⃣️课后问题：" class="headerlink" title="1⃣️课后问题："></a>1⃣️课后问题：</h3><p>比如执行 <code>select * form user where t = 10</code> 如果不存在t这一列，那么一定会报错，这个报错是在哪个阶段报出的？</p>
+<p>答：在分析器，MySQL其实很大程度上受了oracle的影响。</p>
+<h3 id="2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？"><a href="#2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？" class="headerlink" title="2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？"></a>2⃣️看课后有同学问了一个问题：为什么对权限的检查不在优化器之前做呢？</h3><p>答：有些时候，SQL要操作的表不仅仅是字面上那些，比如有个触发器，得在执行器阶段(过程中)才能确定，优化器前是无能为力的。</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql查询语句执行/">mysql查询语句执行</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="blog-Java基础部分之String" class="article article-type-blog" itemscope
   itemprop="blogPost" data-scroll-reveal>
 

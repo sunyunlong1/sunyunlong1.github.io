@@ -19,6 +19,50 @@
       </tags>
   </entry>
   <entry>
+    <title>Java基础部分之String</title>
+    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
+    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
+<p>在Java8中，String内部使用char数组存储数据。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/** The identifier of the encoding used to encode the bytes in &#123;<span class="doctag">@code</span> value&#125;. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span> coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
+<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">Stirng s2 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">System.out.println(s1 == s2); <span class="comment">//false</span></span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s5 = <span class="string">"bbb"</span>;</span><br><span class="line">String s6 = <span class="string">"bbb"</span>;</span><br><span class="line">System.out.println(s5 == s6); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
+<p>而使用new的方式会在堆中创建一个字符串对象。</p>
+<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewStirngTest</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		Stirng s = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.value = original.value;</span><br><span class="line">	<span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>String</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java基础部分之数据类型</title>
     <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
@@ -62,50 +106,6 @@
       <tags>
         <tag>Java基础</tag>
         <tag>Java基本类型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java基础部分之String</title>
-    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
-    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
-<p>在Java8中，String内部使用char数组存储数据。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/** The identifier of the encoding used to encode the bytes in &#123;<span class="doctag">@code</span> value&#125;. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span> coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
-<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
-<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">Stirng s2 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">System.out.println(s1 == s2); <span class="comment">//false</span></span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
-<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s5 = <span class="string">"bbb"</span>;</span><br><span class="line">String s6 = <span class="string">"bbb"</span>;</span><br><span class="line">System.out.println(s5 == s6); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
-<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
-<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
-<p>而使用new的方式会在堆中创建一个字符串对象。</p>
-<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewStirngTest</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		Stirng s = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.value = original.value;</span><br><span class="line">	<span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>String</tag>
       </tags>
   </entry>
   <entry>
@@ -715,71 +715,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-15</title>
-    <url>/2020/03/30/go-big-or-go-home-15/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>development</td>
-<td>发展</td>
-<td>This picture shows the development of phones over time</td>
-</tr>
-<tr>
-<td>work out</td>
-<td>计算出</td>
-<td>He worked out the math problem on the blackboard</td>
-</tr>
-<tr>
-<td>take the place of</td>
-<td>取代</td>
-<td>Gradually,robots have taken the place of manual workers</td>
-</tr>
-<tr>
-<td>pardon</td>
-<td>原谅</td>
-<td>The king pardoned the prisoner</td>
-</tr>
-<tr>
-<td>strap</td>
-<td>绑住</td>
-<td>The man is driving a jeep with luggage strapped to the roof</td>
-</tr>
-<tr>
-<td>fur</td>
-<td>毛皮</td>
-<td>A fur coat is very warm,bur very expensive</td>
-</tr>
-<tr>
-<td>yet</td>
-<td>尚/还</td>
-<td>I’m tired,but I haven’t finished studying yet</td>
-</tr>
-<tr>
-<td>jet</td>
-<td>喷气式</td>
-<td>Nowadays most long-distance travel is by jet plane</td>
-</tr>
-<tr>
-<td>bacterium</td>
-<td>细菌</td>
-<td>This kind of bacterium can cause a very dangerous disease</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-14</title>
     <url>/2020/03/29/go-big-or-go-home-14/</url>
     <content><![CDATA[<table>
@@ -834,6 +769,71 @@
 <td>hug</td>
 <td>拥抱</td>
 <td>The happy couple hug in front of their new home</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-15</title>
+    <url>/2020/03/30/go-big-or-go-home-15/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>development</td>
+<td>发展</td>
+<td>This picture shows the development of phones over time</td>
+</tr>
+<tr>
+<td>work out</td>
+<td>计算出</td>
+<td>He worked out the math problem on the blackboard</td>
+</tr>
+<tr>
+<td>take the place of</td>
+<td>取代</td>
+<td>Gradually,robots have taken the place of manual workers</td>
+</tr>
+<tr>
+<td>pardon</td>
+<td>原谅</td>
+<td>The king pardoned the prisoner</td>
+</tr>
+<tr>
+<td>strap</td>
+<td>绑住</td>
+<td>The man is driving a jeep with luggage strapped to the roof</td>
+</tr>
+<tr>
+<td>fur</td>
+<td>毛皮</td>
+<td>A fur coat is very warm,bur very expensive</td>
+</tr>
+<tr>
+<td>yet</td>
+<td>尚/还</td>
+<td>I’m tired,but I haven’t finished studying yet</td>
+</tr>
+<tr>
+<td>jet</td>
+<td>喷气式</td>
+<td>Nowadays most long-distance travel is by jet plane</td>
+</tr>
+<tr>
+<td>bacterium</td>
+<td>细菌</td>
+<td>This kind of bacterium can cause a very dangerous disease</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1350,6 +1350,71 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-19</title>
+    <url>/2020/04/03/go-big-or-go-home-19/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pilot</td>
+<td>飞行员</td>
+<td>The heroic pilot managed to land the damaged plane safely</td>
+</tr>
+<tr>
+<td>mustard</td>
+<td>芥末</td>
+<td>Would you like some mustard on your sandwich?</td>
+</tr>
+<tr>
+<td>agriculture</td>
+<td>农业</td>
+<td>We depend on agriculture to give us food</td>
+</tr>
+<tr>
+<td>proposal</td>
+<td>建议</td>
+<td>He’s against the teacher’s proposal</td>
+</tr>
+<tr>
+<td>mailbox</td>
+<td>邮箱</td>
+<td>Hey！You’ve got a leeter in your mailbox</td>
+</tr>
+<tr>
+<td>cap</td>
+<td>帽子</td>
+<td>This is a blue police cap</td>
+</tr>
+<tr>
+<td>straight</td>
+<td>直的</td>
+<td>How did you get your hair so straight?</td>
+</tr>
+<tr>
+<td>restaurant</td>
+<td>饭馆</td>
+<td>The happy family are dining together at a restaurant</td>
+</tr>
+<tr>
+<td>shrimp</td>
+<td>虾肉</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-2</title>
     <url>/2020/03/17/go-big-or-go-home-2/</url>
     <content><![CDATA[<table>
@@ -1424,71 +1489,6 @@
 <td>sorrows</td>
 <td>悲伤</td>
 <td>I often share happiness and sorrows with my friends</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-19</title>
-    <url>/2020/04/03/go-big-or-go-home-19/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pilot</td>
-<td>飞行员</td>
-<td>The heroic pilot managed to land the damaged plane safely</td>
-</tr>
-<tr>
-<td>mustard</td>
-<td>芥末</td>
-<td>Would you like some mustard on your sandwich?</td>
-</tr>
-<tr>
-<td>agriculture</td>
-<td>农业</td>
-<td>We depend on agriculture to give us food</td>
-</tr>
-<tr>
-<td>proposal</td>
-<td>建议</td>
-<td>He’s against the teacher’s proposal</td>
-</tr>
-<tr>
-<td>mailbox</td>
-<td>邮箱</td>
-<td>Hey！You’ve got a leeter in your mailbox</td>
-</tr>
-<tr>
-<td>cap</td>
-<td>帽子</td>
-<td>This is a blue police cap</td>
-</tr>
-<tr>
-<td>straight</td>
-<td>直的</td>
-<td>How did you get your hair so straight?</td>
-</tr>
-<tr>
-<td>restaurant</td>
-<td>饭馆</td>
-<td>The happy family are dining together at a restaurant</td>
-</tr>
-<tr>
-<td>shrimp</td>
-<td>虾肉</td>
-<td>-</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2070,6 +2070,86 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-23</title>
+    <url>/2020/04/07/go-big-or-go-home-23/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pure</td>
+<td>纯净的</td>
+<td>The water seems so pure and clean</td>
+</tr>
+<tr>
+<td>regulation</td>
+<td>法规</td>
+<td>The traffic police is introducing traffic rules and regulations to us</td>
+</tr>
+<tr>
+<td>Africa</td>
+<td>非洲</td>
+<td>Africa is home to some of the world’s oldest cultures</td>
+</tr>
+<tr>
+<td>motherland</td>
+<td>祖国</td>
+<td>Everyone has their own motherland</td>
+</tr>
+<tr>
+<td>liberty</td>
+<td>自由</td>
+<td>The bird flew from the cage and got liberty</td>
+</tr>
+<tr>
+<td>pair</td>
+<td>一对</td>
+<td>Here is a pair of black shoes</td>
+</tr>
+<tr>
+<td>irrigate</td>
+<td>灌溉</td>
+<td>This machine can irrigate the field</td>
+</tr>
+<tr>
+<td>accompany</td>
+<td>陪伴</td>
+<td>I always accompany my children to their school</td>
+</tr>
+<tr>
+<td>typist</td>
+<td>打字员</td>
+<td>The typist is finishing her documents</td>
+</tr>
+<tr>
+<td>barrier</td>
+<td>路障</td>
+<td>The road was closed by a barrier</td>
+</tr>
+<tr>
+<td>octopus</td>
+<td>章鱼</td>
+<td>-</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切薄片</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-24</title>
     <url>/2020/04/08/go-big-or-go-home-24/</url>
     <content><![CDATA[<table>
@@ -2295,86 +2375,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-23</title>
-    <url>/2020/04/07/go-big-or-go-home-23/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pure</td>
-<td>纯净的</td>
-<td>The water seems so pure and clean</td>
-</tr>
-<tr>
-<td>regulation</td>
-<td>法规</td>
-<td>The traffic police is introducing traffic rules and regulations to us</td>
-</tr>
-<tr>
-<td>Africa</td>
-<td>非洲</td>
-<td>Africa is home to some of the world’s oldest cultures</td>
-</tr>
-<tr>
-<td>motherland</td>
-<td>祖国</td>
-<td>Everyone has their own motherland</td>
-</tr>
-<tr>
-<td>liberty</td>
-<td>自由</td>
-<td>The bird flew from the cage and got liberty</td>
-</tr>
-<tr>
-<td>pair</td>
-<td>一对</td>
-<td>Here is a pair of black shoes</td>
-</tr>
-<tr>
-<td>irrigate</td>
-<td>灌溉</td>
-<td>This machine can irrigate the field</td>
-</tr>
-<tr>
-<td>accompany</td>
-<td>陪伴</td>
-<td>I always accompany my children to their school</td>
-</tr>
-<tr>
-<td>typist</td>
-<td>打字员</td>
-<td>The typist is finishing her documents</td>
-</tr>
-<tr>
-<td>barrier</td>
-<td>路障</td>
-<td>The road was closed by a barrier</td>
-</tr>
-<tr>
-<td>octopus</td>
-<td>章鱼</td>
-<td>-</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>切薄片</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-25</title>
     <url>/2020/04/10/go-big-or-go-home-25/</url>
     <content><![CDATA[<table>
@@ -2434,6 +2434,71 @@
 <td>frightened</td>
 <td>害怕的</td>
 <td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-26</title>
+    <url>/2020/04/10/go-big-or-go-home-26/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>give in</td>
+<td>投降</td>
+<td>He finally gave in to me and admintted that I’m the winner</td>
+</tr>
+<tr>
+<td>transform</td>
+<td>改变</td>
+<td>You will transform into a beautiful butterfly one day</td>
+</tr>
+<tr>
+<td>department</td>
+<td>部门</td>
+<td>Our company consists of financial department,sales department,and technical department</td>
+</tr>
+<tr>
+<td>put off</td>
+<td>推迟</td>
+<td>The sports meeting will be put off because of the rain</td>
+</tr>
+<tr>
+<td>mass</td>
+<td>众多</td>
+<td>A mass of people are waiting</td>
+</tr>
+<tr>
+<td>allow</td>
+<td>允许</td>
+<td>The green light allows you to go</td>
+</tr>
+<tr>
+<td>serious</td>
+<td>认真的</td>
+<td>He is always very serious while working</td>
+</tr>
+<tr>
+<td>seem</td>
+<td>看起来</td>
+<td>It seems his car has a serious problem</td>
+</tr>
+<tr>
+<td>aboard</td>
+<td>在…上</td>
+<td>In Thailand,fishers often cook and have meals aboard their boats</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2670,8 +2735,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-26</title>
-    <url>/2020/04/10/go-big-or-go-home-26/</url>
+    <title>go big or go home-3</title>
+    <url>/2020/03/18/go-big-or-go-home-3/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2681,49 +2746,174 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>give in</td>
-<td>投降</td>
-<td>He finally gave in to me and admintted that I’m the winner</td>
+<td>output</td>
+<td>生产</td>
+<td>You need to have the output of the code</td>
 </tr>
 <tr>
-<td>transform</td>
-<td>改变</td>
-<td>You will transform into a beautiful butterfly one day</td>
+<td>pocket</td>
+<td>口袋</td>
+<td>My pocket is full of money</td>
 </tr>
 <tr>
-<td>department</td>
-<td>部门</td>
-<td>Our company consists of financial department,sales department,and technical department</td>
+<td>dioxide</td>
+<td>氧化物</td>
+<td>Carbon dioxide causes global warming</td>
 </tr>
 <tr>
-<td>put off</td>
-<td>推迟</td>
-<td>The sports meeting will be put off because of the rain</td>
+<td>several</td>
+<td>几个</td>
+<td>I hava several apples</td>
 </tr>
 <tr>
-<td>mass</td>
-<td>众多</td>
-<td>A mass of people are waiting</td>
+<td>award</td>
+<td>奖</td>
+<td>He won the ACM award</td>
 </tr>
 <tr>
-<td>allow</td>
-<td>允许</td>
-<td>The green light allows you to go</td>
+<td>physical education</td>
+<td>体育课</td>
+<td>I like physical education when I was a student</td>
 </tr>
 <tr>
-<td>serious</td>
-<td>认真的</td>
-<td>He is always very serious while working</td>
+<td>physics</td>
+<td>物理</td>
+<td>Physics is amazing</td>
 </tr>
 <tr>
-<td>seem</td>
-<td>看起来</td>
-<td>It seems his car has a serious problem</td>
+<td>past tense</td>
+<td>过去式</td>
+<td>It was all in the past</td>
 </tr>
 <tr>
-<td>aboard</td>
-<td>在…上</td>
-<td>In Thailand,fishers often cook and have meals aboard their boats</td>
+<td>primary school</td>
+<td>小学</td>
+<td>He’s only eight years old in primary school</td>
+</tr>
+<tr>
+<td>junior high school/middle school</td>
+<td>初中</td>
+<td>He studied physics in junior high school</td>
+</tr>
+<tr>
+<td>high school</td>
+<td>高中</td>
+<td>He studied biology in high school</td>
+</tr>
+<tr>
+<td>approachable</td>
+<td>亲和力的</td>
+<td>My teacher is very approachable</td>
+</tr>
+<tr>
+<td>chemistry</td>
+<td>化学</td>
+<td>I like chemistry</td>
+</tr>
+<tr>
+<td>biology</td>
+<td>生物</td>
+<td>Biology is a very difficult subject</td>
+</tr>
+<tr>
+<td>science classes</td>
+<td>理科</td>
+<td>I studied science classes in my high school</td>
+</tr>
+<tr>
+<td>art classes</td>
+<td>文科</td>
+<td>I studied art classes in my high school</td>
+</tr>
+<tr>
+<td>geography</td>
+<td>地理</td>
+<td>Geography was my weak subject</td>
+</tr>
+<tr>
+<td>politics</td>
+<td>政治</td>
+<td>He quickly involved himself in local politics</td>
+</tr>
+<tr>
+<td>have a test</td>
+<td>测试</td>
+<td>There is a test this week</td>
+</tr>
+<tr>
+<td>have an exam</td>
+<td>考试</td>
+<td>There is an exam this week about biology</td>
+</tr>
+<tr>
+<td>exercise</td>
+<td>锻炼</td>
+<td>I run every day to exercise my legs</td>
+</tr>
+<tr>
+<td>spacious and bright</td>
+<td>宽敞明亮</td>
+<td>My house is spacious and bright</td>
+</tr>
+<tr>
+<td>play outside–&gt;针对小孩儿</td>
+<td>出去玩儿</td>
+<td>In spring,we can play outside all day</td>
+</tr>
+<tr>
+<td>do outdoor activities–&gt;对成年人</td>
+<td>出去玩儿</td>
+<td>Classes are over, and it’s time for students to do some outdoor activities</td>
+</tr>
+<tr>
+<td>不能与成年人说play with要说hang out</td>
+<td>与。。。玩儿</td>
+<td>Children like to play with water/Let’s hang out again tomorrow</td>
+</tr>
+<tr>
+<td>besides</td>
+<td>除。。。之外</td>
+<td>He gave me a book, a pen and some money besides</td>
+</tr>
+<tr>
+<td>house意为别墅/apartment公寓/home意为家</td>
+<td>家</td>
+<td>All you have to do is make a home video</td>
+</tr>
+<tr>
+<td>volume</td>
+<td>声音</td>
+<td>turn on the TV volume</td>
+</tr>
+<tr>
+<td>prepare</td>
+<td>准备</td>
+<td>I’m preparing to tell you</td>
+</tr>
+<tr>
+<td>How are you？</td>
+<td>最近怎么样</td>
+<td>Couldn’t be better</td>
+</tr>
+<tr>
+<td>How are you doing?</td>
+<td>最近怎么样</td>
+<td>Keeping busy</td>
+</tr>
+<tr>
+<td>How’s everything?</td>
+<td>最近怎么样</td>
+<td>Can’t complain</td>
+</tr>
+<tr>
+<td>How’s it going?</td>
+<td>最近怎么样</td>
+<td>Been getting by</td>
+</tr>
+<tr>
+<td>How’s your business?</td>
+<td>最近怎么样</td>
+<td>Not so good</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2959,196 +3149,6 @@
 <td>dead</td>
 <td>死的</td>
 <td>The fish is dead</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-3</title>
-    <url>/2020/03/18/go-big-or-go-home-3/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>output</td>
-<td>生产</td>
-<td>You need to have the output of the code</td>
-</tr>
-<tr>
-<td>pocket</td>
-<td>口袋</td>
-<td>My pocket is full of money</td>
-</tr>
-<tr>
-<td>dioxide</td>
-<td>氧化物</td>
-<td>Carbon dioxide causes global warming</td>
-</tr>
-<tr>
-<td>several</td>
-<td>几个</td>
-<td>I hava several apples</td>
-</tr>
-<tr>
-<td>award</td>
-<td>奖</td>
-<td>He won the ACM award</td>
-</tr>
-<tr>
-<td>physical education</td>
-<td>体育课</td>
-<td>I like physical education when I was a student</td>
-</tr>
-<tr>
-<td>physics</td>
-<td>物理</td>
-<td>Physics is amazing</td>
-</tr>
-<tr>
-<td>past tense</td>
-<td>过去式</td>
-<td>It was all in the past</td>
-</tr>
-<tr>
-<td>primary school</td>
-<td>小学</td>
-<td>He’s only eight years old in primary school</td>
-</tr>
-<tr>
-<td>junior high school/middle school</td>
-<td>初中</td>
-<td>He studied physics in junior high school</td>
-</tr>
-<tr>
-<td>high school</td>
-<td>高中</td>
-<td>He studied biology in high school</td>
-</tr>
-<tr>
-<td>approachable</td>
-<td>亲和力的</td>
-<td>My teacher is very approachable</td>
-</tr>
-<tr>
-<td>chemistry</td>
-<td>化学</td>
-<td>I like chemistry</td>
-</tr>
-<tr>
-<td>biology</td>
-<td>生物</td>
-<td>Biology is a very difficult subject</td>
-</tr>
-<tr>
-<td>science classes</td>
-<td>理科</td>
-<td>I studied science classes in my high school</td>
-</tr>
-<tr>
-<td>art classes</td>
-<td>文科</td>
-<td>I studied art classes in my high school</td>
-</tr>
-<tr>
-<td>geography</td>
-<td>地理</td>
-<td>Geography was my weak subject</td>
-</tr>
-<tr>
-<td>politics</td>
-<td>政治</td>
-<td>He quickly involved himself in local politics</td>
-</tr>
-<tr>
-<td>have a test</td>
-<td>测试</td>
-<td>There is a test this week</td>
-</tr>
-<tr>
-<td>have an exam</td>
-<td>考试</td>
-<td>There is an exam this week about biology</td>
-</tr>
-<tr>
-<td>exercise</td>
-<td>锻炼</td>
-<td>I run every day to exercise my legs</td>
-</tr>
-<tr>
-<td>spacious and bright</td>
-<td>宽敞明亮</td>
-<td>My house is spacious and bright</td>
-</tr>
-<tr>
-<td>play outside–&gt;针对小孩儿</td>
-<td>出去玩儿</td>
-<td>In spring,we can play outside all day</td>
-</tr>
-<tr>
-<td>do outdoor activities–&gt;对成年人</td>
-<td>出去玩儿</td>
-<td>Classes are over, and it’s time for students to do some outdoor activities</td>
-</tr>
-<tr>
-<td>不能与成年人说play with要说hang out</td>
-<td>与。。。玩儿</td>
-<td>Children like to play with water/Let’s hang out again tomorrow</td>
-</tr>
-<tr>
-<td>besides</td>
-<td>除。。。之外</td>
-<td>He gave me a book, a pen and some money besides</td>
-</tr>
-<tr>
-<td>house意为别墅/apartment公寓/home意为家</td>
-<td>家</td>
-<td>All you have to do is make a home video</td>
-</tr>
-<tr>
-<td>volume</td>
-<td>声音</td>
-<td>turn on the TV volume</td>
-</tr>
-<tr>
-<td>prepare</td>
-<td>准备</td>
-<td>I’m preparing to tell you</td>
-</tr>
-<tr>
-<td>How are you？</td>
-<td>最近怎么样</td>
-<td>Couldn’t be better</td>
-</tr>
-<tr>
-<td>How are you doing?</td>
-<td>最近怎么样</td>
-<td>Keeping busy</td>
-</tr>
-<tr>
-<td>How’s everything?</td>
-<td>最近怎么样</td>
-<td>Can’t complain</td>
-</tr>
-<tr>
-<td>How’s it going?</td>
-<td>最近怎么样</td>
-<td>Been getting by</td>
-</tr>
-<tr>
-<td>How’s your business?</td>
-<td>最近怎么样</td>
-<td>Not so good</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3710,6 +3710,71 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-4</title>
+    <url>/2020/03/19/go-big-or-go-home-4/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>desperate</td>
+<td>绝望的</td>
+<td>The unemployed man looks so desperate</td>
+</tr>
+<tr>
+<td>beyond</td>
+<td>更远的/超出…能力</td>
+<td>The birds flew far beyond the land’s edge</td>
+</tr>
+<tr>
+<td>in need of</td>
+<td>需要</td>
+<td>The dry field is in need of rain</td>
+</tr>
+<tr>
+<td>gesture</td>
+<td>手势</td>
+<td>This gesture means you are very good</td>
+</tr>
+<tr>
+<td>production</td>
+<td>生产</td>
+<td>Thousands of cars are under production</td>
+</tr>
+<tr>
+<td>pregnant</td>
+<td>怀孕的</td>
+<td>The pregnant woman is drinking water</td>
+</tr>
+<tr>
+<td>complain</td>
+<td>抱怨</td>
+<td>She complains that the homework is difficult</td>
+</tr>
+<tr>
+<td>unemployed</td>
+<td>失业</td>
+<td>Have you been unemployed for over six months?</td>
+</tr>
+<tr>
+<td>edge</td>
+<td>边缘</td>
+<td>He edged closer to the telephone, ready to grab it</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-40</title>
     <url>/2020/04/24/go-big-or-go-home-40/</url>
     <content><![CDATA[<table>
@@ -3795,8 +3860,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-4</title>
-    <url>/2020/03/19/go-big-or-go-home-4/</url>
+    <title>go big or go home-41</title>
+    <url>/2020/04/25/go-big-or-go-home-41/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -3806,49 +3871,54 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>desperate</td>
-<td>绝望的</td>
-<td>The unemployed man looks so desperate</td>
+<td>cow</td>
+<td>奶牛</td>
+<td>Cows provide us with delicious beef and milk</td>
 </tr>
 <tr>
-<td>beyond</td>
-<td>更远的/超出…能力</td>
-<td>The birds flew far beyond the land’s edge</td>
+<td>world-famous</td>
+<td>世界著名的</td>
+<td>Jack is a world-famous actress</td>
 </tr>
 <tr>
-<td>in need of</td>
-<td>需要</td>
-<td>The dry field is in need of rain</td>
+<td>collection</td>
+<td>收藏品</td>
+<td>He has a fine collection stamps</td>
 </tr>
 <tr>
-<td>gesture</td>
-<td>手势</td>
-<td>This gesture means you are very good</td>
+<td>hobby</td>
+<td>业务爱好</td>
+<td>People have different hobbies;some like reading books and some like playing football</td>
 </tr>
 <tr>
-<td>production</td>
-<td>生产</td>
-<td>Thousands of cars are under production</td>
+<td>extremely</td>
+<td>非常</td>
+<td>He was extremely tired because he had worked all night</td>
 </tr>
 <tr>
-<td>pregnant</td>
-<td>怀孕的</td>
-<td>The pregnant woman is drinking water</td>
+<td>wall</td>
+<td>墙</td>
+<td>This wall is made up of oddly shaped bricks</td>
 </tr>
 <tr>
-<td>complain</td>
-<td>抱怨</td>
-<td>She complains that the homework is difficult</td>
+<td>set off</td>
+<td>出发</td>
+<td>The pirates set off from the island</td>
 </tr>
 <tr>
-<td>unemployed</td>
-<td>失业</td>
-<td>Have you been unemployed for over six months?</td>
+<td>break in</td>
+<td>进入</td>
+<td>Without keys for the door,the man is trying to break in through the window</td>
 </tr>
 <tr>
-<td>edge</td>
-<td>边缘</td>
-<td>He edged closer to the telephone, ready to grab it</td>
+<td>Switzerland</td>
+<td>瑞士</td>
+<td>There are many snowy mountains in Switzerland.It’s so cold!</td>
+</tr>
+<tr>
+<td>port</td>
+<td>港口</td>
+<td>There are hundreds of containers in the port</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -4285,27 +4355,6 @@
       </tags>
   </entry>
   <entry>
-    <title>leetcode208</title>
-    <url>/2019/10/20/leetcode208/</url>
-    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
-<p>示例:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Trie trie = <span class="keyword">new</span> Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(<span class="string">"apple"</span>);</span><br><span class="line">trie.search(<span class="string">"apple"</span>);   <span class="comment">// 返回 true</span></span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 false</span></span><br><span class="line">trie.startsWith(<span class="string">"app"</span>); <span class="comment">// 返回 true</span></span><br><span class="line">trie.insert(<span class="string">"app"</span>);   </span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 true</span></span><br></pre></td></tr></table></figure>
-
-<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isWord;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">        TrieNode node = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Initialize your data structure here.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Trie</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        root = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        root.val = <span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Inserts a word into the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                t.children[c - <span class="string">'a'</span>] = <span class="keyword">new</span> TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if the word is in the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">search</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if there is any word in the trie that starts with the given prefix.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">startsWith</span><span class="params">(String prefix)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> c = prefix.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = <span class="keyword">new</span> Trie();</span><br><span class="line">        obj.insert(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_2 = obj.search(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_3 = obj.startsWith(<span class="string">"trie"</span>);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>Trie树</tag>
-        <tag>leetcode208</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-9</title>
     <url>/2020/03/24/go-big-or-go-home-9/</url>
     <content><![CDATA[<table>
@@ -4371,6 +4420,46 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode208</title>
+    <url>/2019/10/20/leetcode208/</url>
+    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
+<p>示例:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Trie trie = <span class="keyword">new</span> Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(<span class="string">"apple"</span>);</span><br><span class="line">trie.search(<span class="string">"apple"</span>);   <span class="comment">// 返回 true</span></span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 false</span></span><br><span class="line">trie.startsWith(<span class="string">"app"</span>); <span class="comment">// 返回 true</span></span><br><span class="line">trie.insert(<span class="string">"app"</span>);   </span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 true</span></span><br></pre></td></tr></table></figure>
+
+<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isWord;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">        TrieNode node = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Initialize your data structure here.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Trie</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        root = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        root.val = <span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Inserts a word into the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                t.children[c - <span class="string">'a'</span>] = <span class="keyword">new</span> TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if the word is in the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">search</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if there is any word in the trie that starts with the given prefix.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">startsWith</span><span class="params">(String prefix)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> c = prefix.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = <span class="keyword">new</span> Trie();</span><br><span class="line">        obj.insert(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_2 = obj.search(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_3 = obj.startsWith(<span class="string">"trie"</span>);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>Trie树</tag>
+        <tag>leetcode208</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode338</title>
+    <url>/2019/10/20/leetcode338/</url>
+    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">示例 <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">输入: <span class="number">2</span></span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line">示例 <span class="number">2</span>:</span><br><span class="line"></span><br><span class="line">输入: <span class="number">5</span></span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
+<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> num) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[num+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-<span class="number">1</span>)] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] ints = <span class="keyword">new</span> Solution().countBits(<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">24</span>的二进制是<span class="number">11000</span></span><br><span class="line"><span class="number">24</span>-<span class="number">1</span>=<span class="number">23</span>的二进制是<span class="number">10111</span></span><br><span class="line"><span class="number">11000</span>&amp;<span class="number">10111</span> = <span class="number">10000</span></span><br><span class="line">这样就把<span class="number">24</span>的最后的<span class="number">1</span>去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-<span class="number">1</span>)] + <span class="number">1</span>;</span><br><span class="line">首先i&amp;(i-<span class="number">1</span>)一定比i小，所以这段代码可以保证result[i&amp;(i-<span class="number">1</span>)]一定是之前计算过的，然后在后面加上<span class="number">1</span>就是一共有的<span class="number">1</span>的个数</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode338</tag>
+        <tag>二进制数</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode79</title>
     <url>/2019/10/20/leetcode79/</url>
     <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
@@ -4394,25 +4483,6 @@
       <tags>
         <tag>二维网格</tag>
         <tag>leetcode79</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode338</title>
-    <url>/2019/10/20/leetcode338/</url>
-    <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">示例 <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">输入: <span class="number">2</span></span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line">示例 <span class="number">2</span>:</span><br><span class="line"></span><br><span class="line">输入: <span class="number">5</span></span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
-
-<p>进阶:<br>给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？<br>要求算法的空间复杂度为O(n)。<br>你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> num) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[num+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= num; i++) &#123;</span><br><span class="line">            result[i] = result[i&amp;(i-<span class="number">1</span>)] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] ints = <span class="keyword">new</span> Solution().countBits(<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i : ints)&#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最主要的是i&amp;(i-1)是将二进制的最后的1去掉，举个例子：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">24</span>的二进制是<span class="number">11000</span></span><br><span class="line"><span class="number">24</span>-<span class="number">1</span>=<span class="number">23</span>的二进制是<span class="number">10111</span></span><br><span class="line"><span class="number">11000</span>&amp;<span class="number">10111</span> = <span class="number">10000</span></span><br><span class="line">这样就把<span class="number">24</span>的最后的<span class="number">1</span>去掉了 </span><br><span class="line">result[i] = result[i&amp;(i-<span class="number">1</span>)] + <span class="number">1</span>;</span><br><span class="line">首先i&amp;(i-<span class="number">1</span>)一定比i小，所以这段代码可以保证result[i&amp;(i-<span class="number">1</span>)]一定是之前计算过的，然后在后面加上<span class="number">1</span>就是一共有的<span class="number">1</span>的个数</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode338</tag>
-        <tag>二进制数</tag>
       </tags>
   </entry>
   <entry>
@@ -4471,6 +4541,26 @@
       </tags>
   </entry>
   <entry>
+    <title>redis系列-实现一个延时消费队列</title>
+    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%BB%B6%E6%97%B6%E6%B6%88%E8%B4%B9%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<h3 id="用Zset和Hash实现一个延时队列，话不多说，附上代码"><a href="#用Zset和Hash实现一个延时队列，话不多说，附上代码" class="headerlink" title="用Zset和Hash实现一个延时队列，话不多说，附上代码"></a>用Zset和Hash实现一个延时队列，话不多说，附上代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertToRank</span><span class="params">(String id, String msg, String isNow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score=<span class="keyword">this</span>.getScore(isNow);</span><br><span class="line">        String uuid=UUID.randomUUID().toString().replaceAll(<span class="string">"-"</span>, <span class="string">""</span>);</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=</span><br><span class="line">                stringRedisTemplate.opsForHash();</span><br><span class="line">        Map&lt;String, String&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>, id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>, msg);</span><br><span class="line">        opsForHash.putAll(Constant.KEY_HASH + uuid, map);</span><br><span class="line">        <span class="keyword">this</span>.insertZset(uuid, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入zset，按照score排序</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> score</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertZset</span><span class="params">(String key, <span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=</span><br><span class="line">                stringRedisTemplate.opsForZSet();</span><br><span class="line">        opsForZSet.add(Constant.KEY_ZSET, key, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前时间</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> isNow is时表示实时消息，放入zset前面</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">double</span> <span class="title">getScore</span><span class="params">(String isNow)</span> </span>&#123;</span><br><span class="line">        Date nowTime=<span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">        SimpleDateFormat simpleDateFormat=<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMddHHmmss"</span>);</span><br><span class="line">        String now=simpleDateFormat.format(nowTime);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"is"</span>.equals(isNow)) &#123;</span><br><span class="line">            <span class="keyword">return</span> Double.parseDouble(now.substring(<span class="number">0</span>, <span class="number">12</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Double.parseDouble(now);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 抢锁</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOut</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key, String value, <span class="keyword">long</span> timeOut)</span> </span>&#123;</span><br><span class="line">        Boolean isSuccess=stringRedisTemplate.opsForValue().setIfAbsent(key, value);</span><br><span class="line">        <span class="keyword">if</span> (isSuccess) &#123;</span><br><span class="line">            stringRedisTemplate.expire(key, timeOut, TimeUnit.MINUTES);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isSuccess;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 释放锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delLock</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取zset第一条数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstData</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=stringRedisTemplate.opsForZSet();</span><br><span class="line">        Set&lt;String&gt; range=opsForZSet.range(key, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (!CollectionUtils.isEmpty(range)) &#123;</span><br><span class="line">            String uuid = range.iterator().next();</span><br><span class="line">            opsForZSet.remove(key,uuid);</span><br><span class="line">            <span class="keyword">return</span> uuid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询当前Zset多少个数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getZsetSize</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stringRedisTemplate.opsForZSet().zCard(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取hash数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,Object&gt; <span class="title">getHashData</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=stringRedisTemplate.opsForHash();</span><br><span class="line">        Object id=opsForHash.get(key, <span class="string">"id"</span>);</span><br><span class="line">        Object msg=opsForHash.get(key, <span class="string">"msg"</span>);</span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>,id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>,msg);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">(CountDownLatch countDownLatch,String uuid)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Map&lt;String, Object&gt; hashData=<span class="keyword">this</span>.getHashData(Constant.KEY_HASH + uuid);</span><br><span class="line">            log.info(<span class="string">"开始发送"</span>+hashData.get(<span class="string">"id"</span>)+<span class="string">"消息: "</span>+hashData.get(<span class="string">"msg"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            countDownLatch.countDown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis-Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写-注意删除也是写的一种-，那么就要注意是不是cluster模式。"><a href="#用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis-Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写-注意删除也是写的一种-，那么就要注意是不是cluster模式。" class="headerlink" title="用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写(注意删除也是写的一种)，那么就要注意是不是cluster模式。"></a>用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写(注意删除也是写的一种)，那么就要注意是不是cluster模式。</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TaskRedis</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisUtil redisUtil;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Scheduled</span>(cron=<span class="string">"0 */1 * * * ?"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> b=redisUtil.tryLock(Constant.KEY_LOCK, <span class="string">"1"</span>, <span class="number">5</span>);</span><br><span class="line">        <span class="keyword">if</span> (!b) &#123;</span><br><span class="line">            log.info(<span class="string">"抢锁失败"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Long zsetSize=redisUtil.getZsetSize(Constant.KEY_ZSET);</span><br><span class="line">            <span class="keyword">if</span> (zsetSize == <span class="number">0L</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> ;</span><br><span class="line">            &#125;</span><br><span class="line">            CountDownLatch countDownLatch=<span class="keyword">new</span> CountDownLatch(<span class="number">500</span>);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; zsetSize; i++) &#123;</span><br><span class="line">                String uuid=redisUtil.getFirstData(Constant.KEY_ZSET);</span><br><span class="line">                redisUtil.sendMsg(countDownLatch, uuid);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                countDownLatch.await(<span class="number">50L</span>, TimeUnit.SECONDS);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                log.info(<span class="string">"e:&#123;&#125;"</span>, e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>, e);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            redisUtil.delLock(Constant.KEY_LOCK);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="这是Controller"><a href="#这是Controller" class="headerlink" title="这是Controller"></a>这是Controller</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/redis"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RedisMsgService redisMsgService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/sendMsg"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sendMsg</span><span class="params">(String id,String msg,String isNow)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.sendMsg(id,msg,isNow);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/insert"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">insert</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.insert();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/kill"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.kill();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过postman调用测试"><a href="#通过postman调用测试" class="headerlink" title="通过postman调用测试"></a>通过postman调用测试</h3><p><img src="../image/postman.png" alt="postman.png" title="postman"></p>
+<h3 id="控制台打印"><a href="#控制台打印" class="headerlink" title="控制台打印"></a>控制台打印</h3><p><img src="../image/sys.png" alt="sys.png" title="sys"></p>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+        <tag>延时队列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《深入理解Java虚拟机》第一章 走进Java</title>
     <url>/2020/04/19/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%80%E7%AB%A0/</url>
     <content><![CDATA[<h3 id="结束了Redis系列问题，现在开始JVM虚拟机的篇章，第一讲，此系列不定时更新，因为想把这本书看透是需要时间的，所以我打算把JVM当作调味品，最近打算学习一下大数据知识，所以JVM当作放松的“课外书籍”来看。"><a href="#结束了Redis系列问题，现在开始JVM虚拟机的篇章，第一讲，此系列不定时更新，因为想把这本书看透是需要时间的，所以我打算把JVM当作调味品，最近打算学习一下大数据知识，所以JVM当作放松的“课外书籍”来看。" class="headerlink" title="结束了Redis系列问题，现在开始JVM虚拟机的篇章，第一讲，此系列不定时更新，因为想把这本书看透是需要时间的，所以我打算把JVM当作调味品，最近打算学习一下大数据知识，所以JVM当作放松的“课外书籍”来看。"></a>结束了Redis系列问题，现在开始JVM虚拟机的篇章，第一讲，此系列不定时更新，因为想把这本书看透是需要时间的，所以我打算把JVM当作调味品，最近打算学习一下大数据知识，所以JVM当作放松的“课外书籍”来看。</h3><h3 id="第一章书上只是说了一些Java的发展史，我只想总结下JDK，JVM，JRE的关系"><a href="#第一章书上只是说了一些Java的发展史，我只想总结下JDK，JVM，JRE的关系" class="headerlink" title="第一章书上只是说了一些Java的发展史，我只想总结下JDK，JVM，JRE的关系"></a>第一章书上只是说了一些Java的发展史，我只想总结下JDK，JVM，JRE的关系</h3><p><img src="../image/JDK.png" alt="JDK.png" title="JDK"></p>
@@ -4515,26 +4605,6 @@
       <tags>
         <tag>深入理解Java虚拟机</tag>
         <tag>Java内存区域与内存溢出异常</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>redis系列-实现一个延时消费队列</title>
-    <url>/2020/04/05/redis%E7%B3%BB%E5%88%97-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%BB%B6%E6%97%B6%E6%B6%88%E8%B4%B9%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<h3 id="用Zset和Hash实现一个延时队列，话不多说，附上代码"><a href="#用Zset和Hash实现一个延时队列，话不多说，附上代码" class="headerlink" title="用Zset和Hash实现一个延时队列，话不多说，附上代码"></a>用Zset和Hash实现一个延时队列，话不多说，附上代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertToRank</span><span class="params">(String id, String msg, String isNow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score=<span class="keyword">this</span>.getScore(isNow);</span><br><span class="line">        String uuid=UUID.randomUUID().toString().replaceAll(<span class="string">"-"</span>, <span class="string">""</span>);</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=</span><br><span class="line">                stringRedisTemplate.opsForHash();</span><br><span class="line">        Map&lt;String, String&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>, id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>, msg);</span><br><span class="line">        opsForHash.putAll(Constant.KEY_HASH + uuid, map);</span><br><span class="line">        <span class="keyword">this</span>.insertZset(uuid, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入zset，按照score排序</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> score</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertZset</span><span class="params">(String key, <span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=</span><br><span class="line">                stringRedisTemplate.opsForZSet();</span><br><span class="line">        opsForZSet.add(Constant.KEY_ZSET, key, score);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前时间</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> isNow is时表示实时消息，放入zset前面</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">double</span> <span class="title">getScore</span><span class="params">(String isNow)</span> </span>&#123;</span><br><span class="line">        Date nowTime=<span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">        SimpleDateFormat simpleDateFormat=<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMddHHmmss"</span>);</span><br><span class="line">        String now=simpleDateFormat.format(nowTime);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"is"</span>.equals(isNow)) &#123;</span><br><span class="line">            <span class="keyword">return</span> Double.parseDouble(now.substring(<span class="number">0</span>, <span class="number">12</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Double.parseDouble(now);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 抢锁</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> timeOut</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key, String value, <span class="keyword">long</span> timeOut)</span> </span>&#123;</span><br><span class="line">        Boolean isSuccess=stringRedisTemplate.opsForValue().setIfAbsent(key, value);</span><br><span class="line">        <span class="keyword">if</span> (isSuccess) &#123;</span><br><span class="line">            stringRedisTemplate.expire(key, timeOut, TimeUnit.MINUTES);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> isSuccess;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 释放锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delLock</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取zset第一条数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstData</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        ZSetOperations&lt;String, String&gt; opsForZSet=stringRedisTemplate.opsForZSet();</span><br><span class="line">        Set&lt;String&gt; range=opsForZSet.range(key, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (!CollectionUtils.isEmpty(range)) &#123;</span><br><span class="line">            String uuid = range.iterator().next();</span><br><span class="line">            opsForZSet.remove(key,uuid);</span><br><span class="line">            <span class="keyword">return</span> uuid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询当前Zset多少个数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getZsetSize</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stringRedisTemplate.opsForZSet().zCard(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取hash数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String,Object&gt; <span class="title">getHashData</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        HashOperations&lt;String, Object, Object&gt; opsForHash=stringRedisTemplate.opsForHash();</span><br><span class="line">        Object id=opsForHash.get(key, <span class="string">"id"</span>);</span><br><span class="line">        Object msg=opsForHash.get(key, <span class="string">"msg"</span>);</span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">"id"</span>,id);</span><br><span class="line">        map.put(<span class="string">"msg"</span>,msg);</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">(CountDownLatch countDownLatch,String uuid)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Map&lt;String, Object&gt; hashData=<span class="keyword">this</span>.getHashData(Constant.KEY_HASH + uuid);</span><br><span class="line">            log.info(<span class="string">"开始发送"</span>+hashData.get(<span class="string">"id"</span>)+<span class="string">"消息: "</span>+hashData.get(<span class="string">"msg"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            countDownLatch.countDown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 插入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String key,String num)</span></span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; opsForValue</span><br><span class="line">                =stringRedisTemplate.opsForValue();</span><br><span class="line">        opsForValue.set(key,num);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().increment(key, -<span class="number">1</span>);</span><br><span class="line">        log.info(<span class="string">"当前剩余库存"</span>+stringRedisTemplate.opsForValue().get(key));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis-Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写-注意删除也是写的一种-，那么就要注意是不是cluster模式。"><a href="#用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis-Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写-注意删除也是写的一种-，那么就要注意是不是cluster模式。" class="headerlink" title="用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写(注意删除也是写的一种)，那么就要注意是不是cluster模式。"></a>用定时任务去消费，这里有一个问题，对定时任务使用分布式锁是为了避免定时任务如果部署在两台机器上重复执行，保证每次只有一台机器执行，但有个问题，如果是Redis Cluster模式是没有问题，但如果是哨兵模式或者一主二从模式，slave是不允许写入的，因为我们涉及到了将zset中的数据删除，所以会报错，但如果你的定时任务只是读，那么就没有问题，但如果涉及写(注意删除也是写的一种)，那么就要注意是不是cluster模式。</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TaskRedis</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisUtil redisUtil;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Scheduled</span>(cron=<span class="string">"0 */1 * * * ?"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMsg</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> b=redisUtil.tryLock(Constant.KEY_LOCK, <span class="string">"1"</span>, <span class="number">5</span>);</span><br><span class="line">        <span class="keyword">if</span> (!b) &#123;</span><br><span class="line">            log.info(<span class="string">"抢锁失败"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Long zsetSize=redisUtil.getZsetSize(Constant.KEY_ZSET);</span><br><span class="line">            <span class="keyword">if</span> (zsetSize == <span class="number">0L</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> ;</span><br><span class="line">            &#125;</span><br><span class="line">            CountDownLatch countDownLatch=<span class="keyword">new</span> CountDownLatch(<span class="number">500</span>);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; zsetSize; i++) &#123;</span><br><span class="line">                String uuid=redisUtil.getFirstData(Constant.KEY_ZSET);</span><br><span class="line">                redisUtil.sendMsg(countDownLatch, uuid);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                countDownLatch.await(<span class="number">50L</span>, TimeUnit.SECONDS);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                log.info(<span class="string">"e:&#123;&#125;"</span>, e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.info(<span class="string">"e:&#123;&#125;"</span>, e);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            redisUtil.delLock(Constant.KEY_LOCK);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="这是Controller"><a href="#这是Controller" class="headerlink" title="这是Controller"></a>这是Controller</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/redis"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RedisMsgService redisMsgService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/sendMsg"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sendMsg</span><span class="params">(String id,String msg,String isNow)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.sendMsg(id,msg,isNow);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/insert"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">insert</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.insert();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/kill"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">kill</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> redisMsgService.kill();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="通过postman调用测试"><a href="#通过postman调用测试" class="headerlink" title="通过postman调用测试"></a>通过postman调用测试</h3><p><img src="../image/postman.png" alt="postman.png" title="postman"></p>
-<h3 id="控制台打印"><a href="#控制台打印" class="headerlink" title="控制台打印"></a>控制台打印</h3><p><img src="../image/sys.png" alt="sys.png" title="sys"></p>
-]]></content>
-      <categories>
-        <category>redis</category>
-      </categories>
-      <tags>
-        <tag>redis</tag>
-        <tag>延时队列</tag>
       </tags>
   </entry>
   <entry>
@@ -4612,6 +4682,55 @@
       </tags>
   </entry>
   <entry>
+    <title>volatile关键字</title>
+    <url>/2020/03/11/volatile%E5%85%B3%E9%94%AE%E5%AD%97/</url>
+    <content><![CDATA[<h3 id="本文还是以面试提问的方式来说一下volatile"><a href="#本文还是以面试提问的方式来说一下volatile" class="headerlink" title="本文还是以面试提问的方式来说一下volatile"></a>本文还是以面试提问的方式来说一下volatile</h3><h4 id="1-Java并发这块了解的怎么样？说说对volatile的理解？"><a href="#1-Java并发这块了解的怎么样？说说对volatile的理解？" class="headerlink" title="1.Java并发这块了解的怎么样？说说对volatile的理解？"></a>1.Java并发这块了解的怎么样？说说对volatile的理解？</h4><ol>
+<li>保证了不同线程对该变量操作的内存可见性</li>
+<li>禁止指令重排</li>
+</ol>
+<h4 id="2-能不能详细说说什么是内存可见性，什么又是重排序呢？"><a href="#2-能不能详细说说什么是内存可见性，什么又是重排序呢？" class="headerlink" title="2.能不能详细说说什么是内存可见性，什么又是重排序呢？"></a>2.能不能详细说说什么是内存可见性，什么又是重排序呢？</h4><p>  这里先从Java内存模型说起。<br>  Java虚拟机规范一种Java内存模型(JMM) 用来屏蔽各种硬件和操作系统的内存访问差异，让Java程序在各种平台上都能达到一致的内存访问效果。<br>  JMM规定所有变量都是存在主存中的，每个线程又包含自己的工作内存，方便理解就可以看成CPU上的寄存器或者高速缓存，所以线程的操作都是以工作内存为主，它们只能访问自己的工作内存，且前后都要把值同步回主内存。<br>  在线程执行时，首先会从主存中读变量值，在下载到工作内存的副本中，然后在传给处理器执行，执行完毕后再给工作内存中的副本赋值，随后工作内存再把值传回给主存，主存中的值才更新。<br>  这就引出了一个问题，比如执行 i = i + 1或i++<br>  假设初始i值为0，当只有一个线程执行它时，结果肯定得到1，当两个线程执行时，会得到结果2吗？可能会出现这种情况：</p>
+<p>线程1： load i from 主存    // i = 0<br>        i + 1  // i = 1<br>线程2： load i from主存  // 因为线程1还没将i的值写回主存，所以i还是0<br>        i +  1 //i = 1<br>线程1:  save i to 主存<br>线程2： save i to 主存<br>  如果两个线程按照上面的执行流程，那么最后i的值会是1，如果最后的写回生效的慢，在读取i的值，都有可能是0，这就是缓存不一致问题。<br>分析<br>结合内存屏障这个概念对volatile的读写操作深入理解的话：</p>
+<p>第一步：读<br>在第一步操作的指令后，会增加两个内存屏障：</p>
+<p>在Volatile读操作后插入LoadLoad屏障，防止前面的Volatile读与后面的普通读重排序<br>在Volatile读操作后插入LoadStore屏障，防止前面的Volatile读与后面的普通写重排序<br>因此第一个指令和它后续的普通读写操作会被保证没有重排序来捣乱。通常是去内存中去读。</p>
+<p>那么问题又来了，为什么通常去内存中读？</p>
+<p>其实这个问题要说细的话可以很细，大概就两个关键点吧：</p>
+<p>volatile的写操作的缓存失效机制<br>最后一个对volatile变量执行写操作的CPU，由于在它对应的缓存中保有最新的值，因此可以不用再去主存里面获取<br>具体看下面第三步的分析。</p>
+<p>第二步：自增<br>这个步骤没什么特别的，就是在CPU自身的高速缓存(寄存器，L1-L3 Cache)中完成。不涉及到缓存和内存的交互。</p>
+<p>第三步：写<br>volatile写算是一个重点。</p>
+<p>根据JMM对于volatile变量类型的语义规范：volatile在编译之后，会在变量写操作时添加LOCK前缀指令。这个LOCK前缀指令在多核处理器的环境中，有这样的作用：</p>
+<p>通知CPU将当前处理器缓存行的数据写回到系统主存中<br>该写回操作将使其他CPU缓存了该内存地址的数据无效<br>另外，内存屏障在volatile的写操作中起到了很大的作用，来保证上面两点能够实现：</p>
+<p>在Volatile写操作前插入StoreStore屏障，防止前面其他写与本次Volatile写重排序<br>在Volatile写操作后插入StoreLoad屏障，防止本次的Volatile写与后面的读操作重排序</p>
+<p>JMM主要就是围绕着如何在并发过程中如何处理原子性，可见性和有序性这三个特征来建立的，通过解决着三个问题，可以接触缓存不一致的问题，而volatile跟可见性和有序性都有关。</p>
+<h4 id="3-那你具体说说这三个特性呢？"><a href="#3-那你具体说说这三个特性呢？" class="headerlink" title="3.那你具体说说这三个特性呢？"></a>3.那你具体说说这三个特性呢？</h4><p>  (1).原子性：Java中，对基本数据类型的读取和赋值操作是原子性操作，也就是这些操作是不可中断的，要做一定做完。JMM只实现了基本的原子性，像上面i++那样的操作，必须借助synchronized和Lock来保证整块代码的原子性了，线程在锁释放之前，必然会把i的值刷回到主存的。<br>  (2).可见性：可见性Java就是利用volatile来提供可见性的，当一个变量被volatile修饰时，那么对它的修改会立刻刷新到主存，当其他线程需要读取该变量时，会去内存中读取新值。而普通变量则不能保证这一点。<br>  其实通过synchronized和Lock也能够保证可见性，线程在释放锁之前，会把共享变量值都刷回主存，但是synchronized和Lock的开销都更大。<br>  (3).有序性：JMM是允许编译器和处理器对指令重排序的，但是规定了as-if-serial语义，即不管怎么重排序，程序的执行结果不能改变。比如下面的程序段：<br>double pi = 3.14;    //A<br>double r = 1;        //B<br>double s= pi * r * r;//C<br>上面的语句，可以按照A-&gt;B-&gt;C执行，结果为3.14,但是也可以按照B-&gt;A-&gt;C的顺序执行，因为A、B是两句独立的语句，而C则依赖于A、B，所以A、B可以重排序，但是C却不能排到A、B的前面。JMM保证了重排序不会影响到单线程的执行，但是在多线程中却容易出问题。<br>比如这样的代码:<br>int a = 0;<br>bool flag = false;</p>
+<p>public void write() {<br>    a = 2;              //1<br>    flag = true;        //2<br>}</p>
+<p>public void multiply() {<br>    if (flag) {         //3<br>        int ret = a * a;//4<br>    }</p>
+<p>}</p>
+<p>write方法里的1和2做了重排序，线程1先对flag赋值为true，随后执行到线程2，ret直接计算出结果，再到线程1，这时候a才赋值为2,很明显迟了一步。<br>这时候可以为flag加上volatile关键字，禁止重排序，可以确保程序的“有序性”，也可以上重量级的synchronized和Lock来保证有序性,它们能保证那一块区域里的代码都是一次性执行完毕的。<br>ps：这里提一句：volatile的禁止指令重排是在jdk1.6之后才做了修复，这也是jdk1.6之前用双重锁校验的synchronized单例模式会有线程不安全的问题原因。<br>另外，JMM具备一些先天的有序性,即不需要通过任何手段就可以保证的有序性，通常称为happens-before原则。具体如下：<br>1.程序顺序规则： 一个线程中的每个操作，happens-before于该线程中的任意后续操作<br>2.监视器锁规则：对一个线程的解锁，happens-before于随后对这个线程的加锁<br>3.volatile变量规则： 对一个volatile域的写，happens-before于后续对这个volatile域的读<br>4.传递性：如果A happens-before B ,且 B happens-before C, 那么 A happens-before C<br>5.start()规则： 如果线程A执行操作ThreadB_start()(启动线程B) ,  那么A线程的ThreadB_start()happens-before 于B中的任意操作<br>6.join()原则： 如果A执行ThreadB.join()并且成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。<br>7.interrupt()原则： 对线程interrupt()方法的调用先行发生于被中断线程代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测是否有中断发生<br>8.finalize()原则：一个对象的初始化完成先行发生于它的finalize()方法的开始</p>
+<h4 id="4-volatile关键字如何满足并发编程的三大特性的？"><a href="#4-volatile关键字如何满足并发编程的三大特性的？" class="headerlink" title="4.volatile关键字如何满足并发编程的三大特性的？"></a>4.volatile关键字如何满足并发编程的三大特性的？</h4><p>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存<br>当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效，线程接下来将从主存中读取共享变量。</p>
+<h4 id="5-volatile可以保证可见性和有序性，但是能保证原子性吗？"><a href="#5-volatile可以保证可见性和有序性，但是能保证原子性吗？" class="headerlink" title="5.volatile可以保证可见性和有序性，但是能保证原子性吗？"></a>5.volatile可以保证可见性和有序性，但是能保证原子性吗？</h4><p>  首先我回答是不能保证原子性，要是说能保证，也只是对单个volatile变量的读/写具有原子性，但是对于类似volatile++这样的复合操作就无能为力了，比如下面的例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">int</span> inc=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">increase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        inc++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Test test=<span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j &lt; <span class="number">1000</span>; j++)</span><br><span class="line">                        test.increase();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                ;</span><br><span class="line">            &#125;.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (Thread.activeCount() &gt; <span class="number">1</span>)  <span class="comment">//保证前面的线程都执行完</span></span><br><span class="line">            Thread.yield();</span><br><span class="line">        System.out.println(test.inc);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按道理来说结果是10000，但是运行下很可能是个小于10000的值。有人可能会说volatile不是保证了可见性啊，一个线程对inc的修改，另外一个线程应该立刻看到啊！可是这里的操作inc++是个复合操作啊，包括读取inc的值，对其自增，然后再写回主存。<br>假设线程A，读取了inc的值为10，这时候被阻塞了，因为没有对变量进行修改，触发不了volatile规则。<br>线程B此时也读读inc的值，主存里inc的值依旧为10，做自增，然后立刻就被写回主存了，为11。<br>此时又轮到线程A执行，由于工作内存里保存的是10，所以继续做自增，再写回主存，11又被写了一遍。所以虽然两个线程执行了两次increase()，结果却只加了一次。<br>有人说，volatile不是会使缓存行无效的吗？但是这里线程A读取到线程B也进行操作之前，并没有修改inc值，所以线程B读取的时候，还是读的10。<br>又有人说，线程B将11写回主存，不会把线程A的缓存行设为无效吗？但是线程A的读取操作已经做过了啊，只有在做读取操作时，发现自己缓存行无效，才会去读主存的值，所以这里线程A只能继续做自增了。<br>综上所述，在这种复合操作的情景下，原子性的功能是维持不了了。但是volatile在上面那种设置flag值的例子里，由于对flag的读/写操作都是单步的，所以还是能保证原子性的。<br>要想保证原子性，只能借助于synchronized,Lock以及并发包下的atomic的原子操作类了，即对基本数据类型的 自增（加1操作），自减（减1操作）、以及加法操作（加一个数），减法操作（减一个数）进行了封装，保证这些操作是原子性操作。</p>
+<h4 id="6-那你知道volatile的底层实现机制吗？"><a href="#6-那你知道volatile的底层实现机制吗？" class="headerlink" title="6.那你知道volatile的底层实现机制吗？"></a>6.那你知道volatile的底层实现机制吗？</h4><p>如果把加入volatile关键字的代码和未加入volatile关键字的代码都生成汇编代码，会发现加入volatile关键字的代码会多出一个lock前缀指令。<br>lock前缀指令实际相当于一个内存屏障，内存屏障提供了以下功能：</p>
+<ol>
+<li>重排序时不能把后面的指令重排序到内存屏障之前的位置</li>
+<li>使得本CPU的Cache写入内存</li>
+<li>写入动作也会引起别的CPU或者别的内核无效化其Cache，相当于让新写入的值对别的线程可见。</li>
+</ol>
+<h4 id="7-你在哪里会使用到volatile，举几个例子？"><a href="#7-你在哪里会使用到volatile，举几个例子？" class="headerlink" title="7.你在哪里会使用到volatile，举几个例子？"></a>7.你在哪里会使用到volatile，举几个例子？</h4><ol>
+<li>状态量标记，true/false</li>
+<li>单例模式双重检查锁</li>
+</ol>
+]]></content>
+      <categories>
+        <category>高并发系列</category>
+      </categories>
+      <tags>
+        <tag>高并发</tag>
+        <tag>volatile</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《深入理解Java虚拟机》第三章垃圾收集器与内存分配策略</title>
     <url>/2020/04/22/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5/</url>
     <content><![CDATA[<h2 id="第一部分-对象已死吗？"><a href="#第一部分-对象已死吗？" class="headerlink" title="第一部分:对象已死吗？"></a>第一部分:对象已死吗？</h2><h3 id="1-1-引用计数算法"><a href="#1-1-引用计数算法" class="headerlink" title="1.1 引用计数算法"></a>1.1 引用计数算法</h3><h4 id="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"><a href="#引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就-1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。" class="headerlink" title="引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。"></a>引用计数算法：指的是给对象添加一个引用计数器，每当有一个地方引用它的时候，计数器就+1，当引用失效时，计数器就-1，这样就会出现一个问题，无法判断互相引用的对象已死。</h4><p><img src="../image/%E4%BA%92%E7%9B%B8%E5%BC%95%E7%94%A8.png" alt="互相引用.png" title="互相引用"></p>
@@ -4661,55 +4780,6 @@
       <tags>
         <tag>深入理解Java虚拟机</tag>
         <tag>Java内存区域与内存溢出异常</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>volatile关键字</title>
-    <url>/2020/03/11/volatile%E5%85%B3%E9%94%AE%E5%AD%97/</url>
-    <content><![CDATA[<h3 id="本文还是以面试提问的方式来说一下volatile"><a href="#本文还是以面试提问的方式来说一下volatile" class="headerlink" title="本文还是以面试提问的方式来说一下volatile"></a>本文还是以面试提问的方式来说一下volatile</h3><h4 id="1-Java并发这块了解的怎么样？说说对volatile的理解？"><a href="#1-Java并发这块了解的怎么样？说说对volatile的理解？" class="headerlink" title="1.Java并发这块了解的怎么样？说说对volatile的理解？"></a>1.Java并发这块了解的怎么样？说说对volatile的理解？</h4><ol>
-<li>保证了不同线程对该变量操作的内存可见性</li>
-<li>禁止指令重排</li>
-</ol>
-<h4 id="2-能不能详细说说什么是内存可见性，什么又是重排序呢？"><a href="#2-能不能详细说说什么是内存可见性，什么又是重排序呢？" class="headerlink" title="2.能不能详细说说什么是内存可见性，什么又是重排序呢？"></a>2.能不能详细说说什么是内存可见性，什么又是重排序呢？</h4><p>  这里先从Java内存模型说起。<br>  Java虚拟机规范一种Java内存模型(JMM) 用来屏蔽各种硬件和操作系统的内存访问差异，让Java程序在各种平台上都能达到一致的内存访问效果。<br>  JMM规定所有变量都是存在主存中的，每个线程又包含自己的工作内存，方便理解就可以看成CPU上的寄存器或者高速缓存，所以线程的操作都是以工作内存为主，它们只能访问自己的工作内存，且前后都要把值同步回主内存。<br>  在线程执行时，首先会从主存中读变量值，在下载到工作内存的副本中，然后在传给处理器执行，执行完毕后再给工作内存中的副本赋值，随后工作内存再把值传回给主存，主存中的值才更新。<br>  这就引出了一个问题，比如执行 i = i + 1或i++<br>  假设初始i值为0，当只有一个线程执行它时，结果肯定得到1，当两个线程执行时，会得到结果2吗？可能会出现这种情况：</p>
-<p>线程1： load i from 主存    // i = 0<br>        i + 1  // i = 1<br>线程2： load i from主存  // 因为线程1还没将i的值写回主存，所以i还是0<br>        i +  1 //i = 1<br>线程1:  save i to 主存<br>线程2： save i to 主存<br>  如果两个线程按照上面的执行流程，那么最后i的值会是1，如果最后的写回生效的慢，在读取i的值，都有可能是0，这就是缓存不一致问题。<br>分析<br>结合内存屏障这个概念对volatile的读写操作深入理解的话：</p>
-<p>第一步：读<br>在第一步操作的指令后，会增加两个内存屏障：</p>
-<p>在Volatile读操作后插入LoadLoad屏障，防止前面的Volatile读与后面的普通读重排序<br>在Volatile读操作后插入LoadStore屏障，防止前面的Volatile读与后面的普通写重排序<br>因此第一个指令和它后续的普通读写操作会被保证没有重排序来捣乱。通常是去内存中去读。</p>
-<p>那么问题又来了，为什么通常去内存中读？</p>
-<p>其实这个问题要说细的话可以很细，大概就两个关键点吧：</p>
-<p>volatile的写操作的缓存失效机制<br>最后一个对volatile变量执行写操作的CPU，由于在它对应的缓存中保有最新的值，因此可以不用再去主存里面获取<br>具体看下面第三步的分析。</p>
-<p>第二步：自增<br>这个步骤没什么特别的，就是在CPU自身的高速缓存(寄存器，L1-L3 Cache)中完成。不涉及到缓存和内存的交互。</p>
-<p>第三步：写<br>volatile写算是一个重点。</p>
-<p>根据JMM对于volatile变量类型的语义规范：volatile在编译之后，会在变量写操作时添加LOCK前缀指令。这个LOCK前缀指令在多核处理器的环境中，有这样的作用：</p>
-<p>通知CPU将当前处理器缓存行的数据写回到系统主存中<br>该写回操作将使其他CPU缓存了该内存地址的数据无效<br>另外，内存屏障在volatile的写操作中起到了很大的作用，来保证上面两点能够实现：</p>
-<p>在Volatile写操作前插入StoreStore屏障，防止前面其他写与本次Volatile写重排序<br>在Volatile写操作后插入StoreLoad屏障，防止本次的Volatile写与后面的读操作重排序</p>
-<p>JMM主要就是围绕着如何在并发过程中如何处理原子性，可见性和有序性这三个特征来建立的，通过解决着三个问题，可以接触缓存不一致的问题，而volatile跟可见性和有序性都有关。</p>
-<h4 id="3-那你具体说说这三个特性呢？"><a href="#3-那你具体说说这三个特性呢？" class="headerlink" title="3.那你具体说说这三个特性呢？"></a>3.那你具体说说这三个特性呢？</h4><p>  (1).原子性：Java中，对基本数据类型的读取和赋值操作是原子性操作，也就是这些操作是不可中断的，要做一定做完。JMM只实现了基本的原子性，像上面i++那样的操作，必须借助synchronized和Lock来保证整块代码的原子性了，线程在锁释放之前，必然会把i的值刷回到主存的。<br>  (2).可见性：可见性Java就是利用volatile来提供可见性的，当一个变量被volatile修饰时，那么对它的修改会立刻刷新到主存，当其他线程需要读取该变量时，会去内存中读取新值。而普通变量则不能保证这一点。<br>  其实通过synchronized和Lock也能够保证可见性，线程在释放锁之前，会把共享变量值都刷回主存，但是synchronized和Lock的开销都更大。<br>  (3).有序性：JMM是允许编译器和处理器对指令重排序的，但是规定了as-if-serial语义，即不管怎么重排序，程序的执行结果不能改变。比如下面的程序段：<br>double pi = 3.14;    //A<br>double r = 1;        //B<br>double s= pi * r * r;//C<br>上面的语句，可以按照A-&gt;B-&gt;C执行，结果为3.14,但是也可以按照B-&gt;A-&gt;C的顺序执行，因为A、B是两句独立的语句，而C则依赖于A、B，所以A、B可以重排序，但是C却不能排到A、B的前面。JMM保证了重排序不会影响到单线程的执行，但是在多线程中却容易出问题。<br>比如这样的代码:<br>int a = 0;<br>bool flag = false;</p>
-<p>public void write() {<br>    a = 2;              //1<br>    flag = true;        //2<br>}</p>
-<p>public void multiply() {<br>    if (flag) {         //3<br>        int ret = a * a;//4<br>    }</p>
-<p>}</p>
-<p>write方法里的1和2做了重排序，线程1先对flag赋值为true，随后执行到线程2，ret直接计算出结果，再到线程1，这时候a才赋值为2,很明显迟了一步。<br>这时候可以为flag加上volatile关键字，禁止重排序，可以确保程序的“有序性”，也可以上重量级的synchronized和Lock来保证有序性,它们能保证那一块区域里的代码都是一次性执行完毕的。<br>ps：这里提一句：volatile的禁止指令重排是在jdk1.6之后才做了修复，这也是jdk1.6之前用双重锁校验的synchronized单例模式会有线程不安全的问题原因。<br>另外，JMM具备一些先天的有序性,即不需要通过任何手段就可以保证的有序性，通常称为happens-before原则。具体如下：<br>1.程序顺序规则： 一个线程中的每个操作，happens-before于该线程中的任意后续操作<br>2.监视器锁规则：对一个线程的解锁，happens-before于随后对这个线程的加锁<br>3.volatile变量规则： 对一个volatile域的写，happens-before于后续对这个volatile域的读<br>4.传递性：如果A happens-before B ,且 B happens-before C, 那么 A happens-before C<br>5.start()规则： 如果线程A执行操作ThreadB_start()(启动线程B) ,  那么A线程的ThreadB_start()happens-before 于B中的任意操作<br>6.join()原则： 如果A执行ThreadB.join()并且成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。<br>7.interrupt()原则： 对线程interrupt()方法的调用先行发生于被中断线程代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测是否有中断发生<br>8.finalize()原则：一个对象的初始化完成先行发生于它的finalize()方法的开始</p>
-<h4 id="4-volatile关键字如何满足并发编程的三大特性的？"><a href="#4-volatile关键字如何满足并发编程的三大特性的？" class="headerlink" title="4.volatile关键字如何满足并发编程的三大特性的？"></a>4.volatile关键字如何满足并发编程的三大特性的？</h4><p>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存<br>当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效，线程接下来将从主存中读取共享变量。</p>
-<h4 id="5-volatile可以保证可见性和有序性，但是能保证原子性吗？"><a href="#5-volatile可以保证可见性和有序性，但是能保证原子性吗？" class="headerlink" title="5.volatile可以保证可见性和有序性，但是能保证原子性吗？"></a>5.volatile可以保证可见性和有序性，但是能保证原子性吗？</h4><p>  首先我回答是不能保证原子性，要是说能保证，也只是对单个volatile变量的读/写具有原子性，但是对于类似volatile++这样的复合操作就无能为力了，比如下面的例子：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">int</span> inc=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">increase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        inc++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Test test=<span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j &lt; <span class="number">1000</span>; j++)</span><br><span class="line">                        test.increase();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                ;</span><br><span class="line">            &#125;.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (Thread.activeCount() &gt; <span class="number">1</span>)  <span class="comment">//保证前面的线程都执行完</span></span><br><span class="line">            Thread.yield();</span><br><span class="line">        System.out.println(test.inc);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>按道理来说结果是10000，但是运行下很可能是个小于10000的值。有人可能会说volatile不是保证了可见性啊，一个线程对inc的修改，另外一个线程应该立刻看到啊！可是这里的操作inc++是个复合操作啊，包括读取inc的值，对其自增，然后再写回主存。<br>假设线程A，读取了inc的值为10，这时候被阻塞了，因为没有对变量进行修改，触发不了volatile规则。<br>线程B此时也读读inc的值，主存里inc的值依旧为10，做自增，然后立刻就被写回主存了，为11。<br>此时又轮到线程A执行，由于工作内存里保存的是10，所以继续做自增，再写回主存，11又被写了一遍。所以虽然两个线程执行了两次increase()，结果却只加了一次。<br>有人说，volatile不是会使缓存行无效的吗？但是这里线程A读取到线程B也进行操作之前，并没有修改inc值，所以线程B读取的时候，还是读的10。<br>又有人说，线程B将11写回主存，不会把线程A的缓存行设为无效吗？但是线程A的读取操作已经做过了啊，只有在做读取操作时，发现自己缓存行无效，才会去读主存的值，所以这里线程A只能继续做自增了。<br>综上所述，在这种复合操作的情景下，原子性的功能是维持不了了。但是volatile在上面那种设置flag值的例子里，由于对flag的读/写操作都是单步的，所以还是能保证原子性的。<br>要想保证原子性，只能借助于synchronized,Lock以及并发包下的atomic的原子操作类了，即对基本数据类型的 自增（加1操作），自减（减1操作）、以及加法操作（加一个数），减法操作（减一个数）进行了封装，保证这些操作是原子性操作。</p>
-<h4 id="6-那你知道volatile的底层实现机制吗？"><a href="#6-那你知道volatile的底层实现机制吗？" class="headerlink" title="6.那你知道volatile的底层实现机制吗？"></a>6.那你知道volatile的底层实现机制吗？</h4><p>如果把加入volatile关键字的代码和未加入volatile关键字的代码都生成汇编代码，会发现加入volatile关键字的代码会多出一个lock前缀指令。<br>lock前缀指令实际相当于一个内存屏障，内存屏障提供了以下功能：</p>
-<ol>
-<li>重排序时不能把后面的指令重排序到内存屏障之前的位置</li>
-<li>使得本CPU的Cache写入内存</li>
-<li>写入动作也会引起别的CPU或者别的内核无效化其Cache，相当于让新写入的值对别的线程可见。</li>
-</ol>
-<h4 id="7-你在哪里会使用到volatile，举几个例子？"><a href="#7-你在哪里会使用到volatile，举几个例子？" class="headerlink" title="7.你在哪里会使用到volatile，举几个例子？"></a>7.你在哪里会使用到volatile，举几个例子？</h4><ol>
-<li>状态量标记，true/false</li>
-<li>单例模式双重检查锁</li>
-</ol>
-]]></content>
-      <categories>
-        <category>高并发系列</category>
-      </categories>
-      <tags>
-        <tag>高并发</tag>
-        <tag>volatile</tag>
       </tags>
   </entry>
   <entry>
