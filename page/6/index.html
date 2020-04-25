@@ -67,6 +67,112 @@
     
     
     
+    <article id="bloe-volatile关键字" class="article article-type-bloe" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2020/03/11/volatile关键字/"
+    >volatile关键字</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/03/11/volatile关键字/" class="article-date">
+  <time datetime="2020-03-11T11:19:42.000Z" itemprop="datePublished">2020-03-11</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/高并发系列/">高并发系列</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h3 id="本文还是以面试提问的方式来说一下volatile"><a href="#本文还是以面试提问的方式来说一下volatile" class="headerlink" title="本文还是以面试提问的方式来说一下volatile"></a>本文还是以面试提问的方式来说一下volatile</h3><h4 id="1-Java并发这块了解的怎么样？说说对volatile的理解？"><a href="#1-Java并发这块了解的怎么样？说说对volatile的理解？" class="headerlink" title="1.Java并发这块了解的怎么样？说说对volatile的理解？"></a>1.Java并发这块了解的怎么样？说说对volatile的理解？</h4><ol>
+<li>保证了不同线程对该变量操作的内存可见性</li>
+<li>禁止指令重排</li>
+</ol>
+<h4 id="2-能不能详细说说什么是内存可见性，什么又是重排序呢？"><a href="#2-能不能详细说说什么是内存可见性，什么又是重排序呢？" class="headerlink" title="2.能不能详细说说什么是内存可见性，什么又是重排序呢？"></a>2.能不能详细说说什么是内存可见性，什么又是重排序呢？</h4><p>  这里先从Java内存模型说起。<br>  Java虚拟机规范一种Java内存模型(JMM) 用来屏蔽各种硬件和操作系统的内存访问差异，让Java程序在各种平台上都能达到一致的内存访问效果。<br>  JMM规定所有变量都是存在主存中的，每个线程又包含自己的工作内存，方便理解就可以看成CPU上的寄存器或者高速缓存，所以线程的操作都是以工作内存为主，它们只能访问自己的工作内存，且前后都要把值同步回主内存。<br>  在线程执行时，首先会从主存中读变量值，在下载到工作内存的副本中，然后在传给处理器执行，执行完毕后再给工作内存中的副本赋值，随后工作内存再把值传回给主存，主存中的值才更新。<br>  这就引出了一个问题，比如执行 i = i + 1或i++<br>  假设初始i值为0，当只有一个线程执行它时，结果肯定得到1，当两个线程执行时，会得到结果2吗？可能会出现这种情况：</p>
+<p>线程1： load i from 主存    // i = 0<br>        i + 1  // i = 1<br>线程2： load i from主存  // 因为线程1还没将i的值写回主存，所以i还是0<br>        i +  1 //i = 1<br>线程1:  save i to 主存<br>线程2： save i to 主存<br>  如果两个线程按照上面的执行流程，那么最后i的值会是1，如果最后的写回生效的慢，在读取i的值，都有可能是0，这就是缓存不一致问题。<br>分析<br>结合内存屏障这个概念对volatile的读写操作深入理解的话：</p>
+<p>第一步：读<br>在第一步操作的指令后，会增加两个内存屏障：</p>
+<p>在Volatile读操作后插入LoadLoad屏障，防止前面的Volatile读与后面的普通读重排序<br>在Volatile读操作后插入LoadStore屏障，防止前面的Volatile读与后面的普通写重排序<br>因此第一个指令和它后续的普通读写操作会被保证没有重排序来捣乱。通常是去内存中去读。</p>
+<p>那么问题又来了，为什么通常去内存中读？</p>
+<p>其实这个问题要说细的话可以很细，大概就两个关键点吧：</p>
+<p>volatile的写操作的缓存失效机制<br>最后一个对volatile变量执行写操作的CPU，由于在它对应的缓存中保有最新的值，因此可以不用再去主存里面获取<br>具体看下面第三步的分析。</p>
+<p>第二步：自增<br>这个步骤没什么特别的，就是在CPU自身的高速缓存(寄存器，L1-L3 Cache)中完成。不涉及到缓存和内存的交互。</p>
+<p>第三步：写<br>volatile写算是一个重点。</p>
+<p>根据JMM对于volatile变量类型的语义规范：volatile在编译之后，会在变量写操作时添加LOCK前缀指令。这个LOCK前缀指令在多核处理器的环境中，有这样的作用：</p>
+<p>通知CPU将当前处理器缓存行的数据写回到系统主存中<br>该写回操作将使其他CPU缓存了该内存地址的数据无效<br>另外，内存屏障在volatile的写操作中起到了很大的作用，来保证上面两点能够实现：</p>
+<p>在Volatile写操作前插入StoreStore屏障，防止前面其他写与本次Volatile写重排序<br>在Volatile写操作后插入StoreLoad屏障，防止本次的Volatile写与后面的读操作重排序</p>
+<p>JMM主要就是围绕着如何在并发过程中如何处理原子性，可见性和有序性这三个特征来建立的，通过解决着三个问题，可以接触缓存不一致的问题，而volatile跟可见性和有序性都有关。</p>
+<h4 id="3-那你具体说说这三个特性呢？"><a href="#3-那你具体说说这三个特性呢？" class="headerlink" title="3.那你具体说说这三个特性呢？"></a>3.那你具体说说这三个特性呢？</h4><p>  (1).原子性：Java中，对基本数据类型的读取和赋值操作是原子性操作，也就是这些操作是不可中断的，要做一定做完。JMM只实现了基本的原子性，像上面i++那样的操作，必须借助synchronized和Lock来保证整块代码的原子性了，线程在锁释放之前，必然会把i的值刷回到主存的。<br>  (2).可见性：可见性Java就是利用volatile来提供可见性的，当一个变量被volatile修饰时，那么对它的修改会立刻刷新到主存，当其他线程需要读取该变量时，会去内存中读取新值。而普通变量则不能保证这一点。<br>  其实通过synchronized和Lock也能够保证可见性，线程在释放锁之前，会把共享变量值都刷回主存，但是synchronized和Lock的开销都更大。<br>  (3).有序性：JMM是允许编译器和处理器对指令重排序的，但是规定了as-if-serial语义，即不管怎么重排序，程序的执行结果不能改变。比如下面的程序段：<br>double pi = 3.14;    //A<br>double r = 1;        //B<br>double s= pi * r * r;//C<br>上面的语句，可以按照A-&gt;B-&gt;C执行，结果为3.14,但是也可以按照B-&gt;A-&gt;C的顺序执行，因为A、B是两句独立的语句，而C则依赖于A、B，所以A、B可以重排序，但是C却不能排到A、B的前面。JMM保证了重排序不会影响到单线程的执行，但是在多线程中却容易出问题。<br>比如这样的代码:<br>int a = 0;<br>bool flag = false;</p>
+<p>public void write() {<br>    a = 2;              //1<br>    flag = true;        //2<br>}</p>
+<p>public void multiply() {<br>    if (flag) {         //3<br>        int ret = a * a;//4<br>    }</p>
+<p>}</p>
+<p>write方法里的1和2做了重排序，线程1先对flag赋值为true，随后执行到线程2，ret直接计算出结果，再到线程1，这时候a才赋值为2,很明显迟了一步。<br>这时候可以为flag加上volatile关键字，禁止重排序，可以确保程序的“有序性”，也可以上重量级的synchronized和Lock来保证有序性,它们能保证那一块区域里的代码都是一次性执行完毕的。<br>ps：这里提一句：volatile的禁止指令重排是在jdk1.6之后才做了修复，这也是jdk1.6之前用双重锁校验的synchronized单例模式会有线程不安全的问题原因。<br>另外，JMM具备一些先天的有序性,即不需要通过任何手段就可以保证的有序性，通常称为happens-before原则。具体如下：<br>1.程序顺序规则： 一个线程中的每个操作，happens-before于该线程中的任意后续操作<br>2.监视器锁规则：对一个线程的解锁，happens-before于随后对这个线程的加锁<br>3.volatile变量规则： 对一个volatile域的写，happens-before于后续对这个volatile域的读<br>4.传递性：如果A happens-before B ,且 B happens-before C, 那么 A happens-before C<br>5.start()规则： 如果线程A执行操作ThreadB_start()(启动线程B) ,  那么A线程的ThreadB_start()happens-before 于B中的任意操作<br>6.join()原则： 如果A执行ThreadB.join()并且成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。<br>7.interrupt()原则： 对线程interrupt()方法的调用先行发生于被中断线程代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测是否有中断发生<br>8.finalize()原则：一个对象的初始化完成先行发生于它的finalize()方法的开始</p>
+<h4 id="4-volatile关键字如何满足并发编程的三大特性的？"><a href="#4-volatile关键字如何满足并发编程的三大特性的？" class="headerlink" title="4.volatile关键字如何满足并发编程的三大特性的？"></a>4.volatile关键字如何满足并发编程的三大特性的？</h4><p>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存<br>当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效，线程接下来将从主存中读取共享变量。</p>
+<h4 id="5-volatile可以保证可见性和有序性，但是能保证原子性吗？"><a href="#5-volatile可以保证可见性和有序性，但是能保证原子性吗？" class="headerlink" title="5.volatile可以保证可见性和有序性，但是能保证原子性吗？"></a>5.volatile可以保证可见性和有序性，但是能保证原子性吗？</h4><p>  首先我回答是不能保证原子性，要是说能保证，也只是对单个volatile变量的读/写具有原子性，但是对于类似volatile++这样的复合操作就无能为力了，比如下面的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">int</span> inc=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">increase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        inc++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Test test=<span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j &lt; <span class="number">1000</span>; j++)</span><br><span class="line">                        test.increase();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                ;</span><br><span class="line">            &#125;.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (Thread.activeCount() &gt; <span class="number">1</span>)  <span class="comment">//保证前面的线程都执行完</span></span><br><span class="line">            Thread.yield();</span><br><span class="line">        System.out.println(test.inc);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按道理来说结果是10000，但是运行下很可能是个小于10000的值。有人可能会说volatile不是保证了可见性啊，一个线程对inc的修改，另外一个线程应该立刻看到啊！可是这里的操作inc++是个复合操作啊，包括读取inc的值，对其自增，然后再写回主存。<br>假设线程A，读取了inc的值为10，这时候被阻塞了，因为没有对变量进行修改，触发不了volatile规则。<br>线程B此时也读读inc的值，主存里inc的值依旧为10，做自增，然后立刻就被写回主存了，为11。<br>此时又轮到线程A执行，由于工作内存里保存的是10，所以继续做自增，再写回主存，11又被写了一遍。所以虽然两个线程执行了两次increase()，结果却只加了一次。<br>有人说，volatile不是会使缓存行无效的吗？但是这里线程A读取到线程B也进行操作之前，并没有修改inc值，所以线程B读取的时候，还是读的10。<br>又有人说，线程B将11写回主存，不会把线程A的缓存行设为无效吗？但是线程A的读取操作已经做过了啊，只有在做读取操作时，发现自己缓存行无效，才会去读主存的值，所以这里线程A只能继续做自增了。<br>综上所述，在这种复合操作的情景下，原子性的功能是维持不了了。但是volatile在上面那种设置flag值的例子里，由于对flag的读/写操作都是单步的，所以还是能保证原子性的。<br>要想保证原子性，只能借助于synchronized,Lock以及并发包下的atomic的原子操作类了，即对基本数据类型的 自增（加1操作），自减（减1操作）、以及加法操作（加一个数），减法操作（减一个数）进行了封装，保证这些操作是原子性操作。</p>
+<h4 id="6-那你知道volatile的底层实现机制吗？"><a href="#6-那你知道volatile的底层实现机制吗？" class="headerlink" title="6.那你知道volatile的底层实现机制吗？"></a>6.那你知道volatile的底层实现机制吗？</h4><p>如果把加入volatile关键字的代码和未加入volatile关键字的代码都生成汇编代码，会发现加入volatile关键字的代码会多出一个lock前缀指令。<br>lock前缀指令实际相当于一个内存屏障，内存屏障提供了以下功能：</p>
+<ol>
+<li>重排序时不能把后面的指令重排序到内存屏障之前的位置</li>
+<li>使得本CPU的Cache写入内存</li>
+<li>写入动作也会引起别的CPU或者别的内核无效化其Cache，相当于让新写入的值对别的线程可见。</li>
+</ol>
+<h4 id="7-你在哪里会使用到volatile，举几个例子？"><a href="#7-你在哪里会使用到volatile，举几个例子？" class="headerlink" title="7.你在哪里会使用到volatile，举几个例子？"></a>7.你在哪里会使用到volatile，举几个例子？</h4><ol>
+<li>状态量标记，true/false</li>
+<li>单例模式双重检查锁</li>
+</ol>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/volatile/">volatile</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高并发/">高并发</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="blog-彻底搞懂ThreadLocal" class="article article-type-blog" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
@@ -1138,87 +1244,6 @@
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-
-</article>
-    
-    <article id="blog-日志系统：一条SQL更新语句是如何执行的？" class="article article-type-blog" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2019/10/20/日志系统：一条SQL更新语句是如何执行的？/"
-    >日志系统：一条SQL更新语句是如何执行的？</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2019/10/20/日志系统：一条SQL更新语句是如何执行的？/" class="article-date">
-  <time datetime="2019-10-20T10:55:53.000Z" itemprop="datePublished">2019-10-20</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/数据库/">数据库</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <h3 id="MySQL实战45讲-第二讲"><a href="#MySQL实战45讲-第二讲" class="headerlink" title="MySQL实战45讲-第二讲"></a>MySQL实战45讲-第二讲</h3><p>上一节讲了一条查询语句是如何执行的，这节讲述的是一条更新语句的执行过程。<br>常听DBA的同事说，MySQL可以恢复到半个月内任意一秒的状态，那么是如何做到的呢？<br>还是以一条SQL语句开始<br><code>create table user(ID int primary key,c int)</code><br>如果要将ID = 2这一行的值加1，SQL语句会这么写：<br><code>update user set c = c + 1 where ID = 2</code><br>之前说的查询的链路，在执行更新语句的时候也会走一遍，因为对某张表的更新，需要先找到这张表。<br>与查询流程不一样的是，更新流程还涉及两个重要的日志模块redolog(重做日志)和binlog(归档日志)。接下来详细讨论下。 </p>
-<h3 id="重要的日志模块：redo-log"><a href="#重要的日志模块：redo-log" class="headerlink" title="重要的日志模块：redo log"></a>重要的日志模块：redo log</h3><p>老师举了一个例子，是拿《孔乙己》里酒店掌柜有一个粉板，专门用来记录客人的赊帐记录。如果赊帐的人不多，那么他可以先讲顾客和账单记录在粉板上；但如果赊帐的人多了，就一定有一个专门记录赊帐的账本。<br>如果有人要赊帐或者还帐的话，掌柜有两种做法：<br>1⃣️：先讲顾客和账单记录在粉板上，等不忙的时候在去账本上更新一下。<br>2⃣️：有人来就拿出账本去找到顾客的记录来更新。<br>当店里生意红火的时候很明显的看出来是第一种方式更加的高效。<br>同样的MySQL里更新数据库的时候也会有同样的问题，如果每次更新操作都写入磁盘里，然后磁盘也要找到对应的那条记录，然后在更细，整个过程的IO成本，查询成本都很高，为了解决这个问题，MySQL的设计者，就用了类似酒店掌柜的粉板思路来提升更新效率。<br>而粉板和账本配合的过程中，就是MySQL说的WAL技术，WAL的全称是Write-Ahead Logging,简单解释就是先写日志，在写磁盘，也就是先写粉板，等不忙的时候在写磁盘。<br>具体来说，当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log(粉板)里，并更新内存，这个时候就算更新完成了，同时InnoDB引擎会在适当时候，讲这个操作更新到磁盘里，而这个更新往往是在系统比较空闲的时候做。<br>但如果某一天赊帐的人突然很多，粉板记录不下怎么办？这个时候掌柜只好停下手中的活儿，把粉板中的一部分赊帐记录更新到账本中，然后将这些记录从粉板上擦掉，为新账腾出空间。<br>与此类似，InnoDB的redo log大小是固定的，比如可以配置一组4个文件，每个文件的大小是1GB，所以这块粉板就可以存储4GB的操作，从头开始写，写到末尾就又从头开始写，如下面这个图一样  </p>
-<p><img src="../image/redolog.png" alt="redolog.png" title="redolog">  </p>
-<p>write pos是当前记录的位置，一边写一边后移，写到第3号文件末尾后就回到0号文件开头。checkpoint是当前要擦出的位置，也是往后推移并且循环的，擦出记录前要把记录更新到数据文件，<br>write pos和checkpoint之间的“粉板”上还空着的部分，可以用来记录新的操作，如果write pos追上checkpoint，表示“粉板”满了，这时候不能在执行新的更新，得停下来先擦掉一些记录，把checkpoint推进一下。<br>有了redo log，InnoDB就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为crash-safe。 </p>
-<h3 id="什么是crash-safe？"><a href="#什么是crash-safe？" class="headerlink" title="什么是crash-safe？"></a>什么是crash-safe？</h3><p>crash-safe是MySQL5.6版本的新特性，要理解crash-safe这个概念，可以想想我们前面赊帐记录的例子。只要赊帐记录记在了粉板或者写在了账本上，之后即便掌柜忘记了，比如突然停业几天，恢复生意后依然可以通过账本和粉板上的数据明确赊帐账目。  </p>
-<h3 id="crash-unsafe"><a href="#crash-unsafe" class="headerlink" title="crash-unsafe?"></a>crash-unsafe?</h3><p>在了解crash-safe前，先分析一下在MySQL5.6版本之前出现slave(从) crash-unsafe的原因。我们知道在一套主从结构体系中，slave包含两个线程：即IO thread和SQL thread。两个线程的执行进度（偏移量）都保存在文件中。<br><code>IO thread负责从master拉取binlog文件（下面会讲到）并保存到本地的relay-log文件中</code><br><code>SQL thread负责执行重复sql，执行relay-log记录的日志</code><br>IO thread的执行状态信息保存在master.info文件，SQL thread的执行状态信息保存在relay-log.info文件。salve运行正常的情况下，记录位点没有问题，但是每当系统发生crash，存储的偏移量可能是不准确的（需要注意的是这些文件被修改后不是同步写入磁盘的）。因为应用binlog和更新位点信息到文件不是原子操作，而是两个独立的步骤。比如SQL thread已经应用relay-log.01的4个事务<br><code>trx1(pos:10)</code><br><code>trx2(pos:20)</code><br><code>trx3(pos:30)</code><br><code>trx4(pos:40)</code><br>但是SQL thread更新位点（relay-log.01,30）到relay-log.info文件中，slave实例重启的时候sql thread会重复执行trx4。<br>看到这里我们大概了解了，发生crash-unsafe的主要原因是应用binlog和更新位点不是原子操作，所以MySQL的解决办法是将两个操作融合成一个事务，这样就保证了原子性。  </p>
-<h3 id="重要的日志模块：binlog"><a href="#重要的日志模块：binlog" class="headerlink" title="重要的日志模块：binlog"></a>重要的日志模块：binlog</h3><p>前面说过，MySQL整体来看，其实就有两大部分，一部分是server层，它主要做的是MySQL功能层面的事情，还有一块是引擎层，负责存储相关的具体事宜，上面我们聊到的粉板redo log是InnoDB引擎层特有日志，而Server层也有自己的日志，称为binlog（归档日志).<br>为什么会有两份日志呢？<br>因为最开始MySQL中并没有InnoDB引擎，MySQL自带的是MyISAM，但是MyISAM没有crash-safe的能力，binlog日志只能用于归档，而InnoDB是另一个公司以插件形式引入MySQL中的，既然只靠binlog是没有crash-safe能力的，所以InnoDB使用另外一套日志系统-也就是redo log来实现crash-safe能力。<br>这两种日志有以下三点不同。<br>1.redo log是InnoDB引擎特有的，binlog是MySQL的Server层实现的，所有引擎层都可以使用。<br>2.redo log是物理日志，记录的是“在某个数据页上做了什么修改”；binlog是逻辑日志，记录的是这个语句的原始逻辑，比如”给ID = 2这一行的c字段加1“<br>3.redo log是循环写的，空间固定会用完；binlog是可以追加写入的。”追加写“是指binlog文件写到一定大小后会切换到下一个，并不户覆盖以前的日志。<br>有了对这两个日志的概念性的理解，我们再来看执行器InnoDB引擎在执行这个简单的update语句时的内部流程。<br>(1).执行器先找引擎取ID = 2这一行，ID是主键，引擎直接用树搜索找到这一行，如果ID = 2这一行所在的数据页本来就在内存中，就直接返回给执行器，否则，需要先从磁盘读入内存，然后在返回。<br>(2).执行器拿到引擎给的行数据，把这个值加上1，比如原来是N，现在就是N+1，得到新的一行数据，在调用引擎接口写入这行新数据。<br>(3).引擎将这行新数据更新到内存中，同时将这个更新操作记录到redo log里，此时redo log处于prepare状态，然后告知执行器执行完成了，随时可以提交事务。<br>(4).执行器生成这个操作的binlog，并把binlog写入磁盘。<br>(5).执行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成。<br>下面给出的是课程中给出的流程图，浅色框表示实在InnoDB内部执行的，深色框表示是在执行器中执行的。   </p>
-<p><img src="../image/update%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png" alt="update执行流程.png" title="update执行流程">  </p>
-<p>后面三步为什么把redo log拆成两个步骤：prepare和commit，这就是“两阶段提交“  </p>
-<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>还记不记得开头的那个问题：怎样让数据库恢复到半个月内任意一秒的状态？<br>前面我们说过，binlog会记录所有的逻辑操作，并且是采用“追加写”的形式。如果你的DBA承诺说半个月内可以恢复，那么备份系统中一定会保存最近半个月内的所有binlog，同时系统会定期做整库备份。这里的“定期”取决于系统的重要性，可以是一天一备，也可以是一周一备。<br>当需要恢复到指定的某一秒时，比如某天下午两点发现中午十二点有一次误删表，需要找回数据，那你可以这么做：<br>首先，找到最近的一次全量备份，如果你运气好，可能就是昨天晚上的一个备份，从这个备份恢复到临时库；<br>然后，从备份的时间点开始，将备份的binlog依次取出来，重放到中午误删表之前的那个时刻。<br>这样你的临时库就喝误删之前的线上库一样了，然后你可以把表数据从临时库取出来，按需恢复到线上库去。说完了这个问题，再回过头来说为什么一定要有”两阶段提交“ ，为什么必须有”两阶段提交“呢？这是为了让两份日志之间的逻辑一致，如果不用两阶段提交看看会发生什么？<br>不使用两阶段提交无非两种情况：<br>1.先写redo log后写binlog。假设在redo写完，binlog还没有写完的时候，MySQL进程异常重启，由于前面说过，redo log写完之后，系统及时崩溃，仍然能够把数据恢复回来，所以恢复这一行c的值是1。<br>但是由于binlog没写完就crash了，这时候binlog里面就没有记录这个语句，因此，之后备份日志的时候，存起来的binlog里面就没有这条语句。然后你会发现，如果需要用这个binlog来恢复临时库的话，由于语句的binlog丢失，这个临时库就会少了一次更新，恢复出来的这一行c的值就是0，与原库的值不同。<br>2.先写binlog后写redo log。如果在binlog写完之后异常重启，由于redo log还没写，崩溃恢复以后这个事务无效，所以这一行c的值是0，但是binlog里面记录了“把c从0改成1”这个日志，所以，在之后用binlog恢复临时库的时候就多了一个事务出来，恢复出来的这一行c的值就是1，与原库的值不同。<br>可以看到如果不使用“两阶段提交”，那么数据库的状态就有可能和用它的日志恢复出来的库状态不一致。<br>可能会有疑问，这个概率是不是很低，平时也没有什么动不动就需要恢复临时库的场景呀？<br>其实不是，不只是误操作后需要用这个过程来恢复数据，当你需要扩容的时候，也就是需要再多搭建一些备库来增加系统的读能力的时候，现在常见的做法也是用全量备份加上应用binlog来实现的，这个“不一致”就会导致你的线上出现主从数据库不一致的情况。<br>简单说，redo log和binlog都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致。  </p>
-<p>其实redo log记录的就是数据，而binlog有两种模式，statement格式的话是记sql语句，row格式会记录行的内容，记两条，更新前和更新后都有。  </p>
-<h3 id="课后问题"><a href="#课后问题" class="headerlink" title="课后问题"></a>课后问题</h3><p>一天一备和一周一备的对比？<br>好处是“最长恢复时间”更短。<br>在一天一备的模式里，最坏情况下需要应用一天的binlog，比如，每天0点做一次全量备份，而要恢复出一个到昨天晚上23点的备份。<br>一周一备的最坏情况就要应用一周的binlog了。系统对应指标就是RTO了。</p>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bin-log/">bin log</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redo-log/">redo log</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
 
 
     </footer>
