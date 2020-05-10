@@ -19,50 +19,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础部分之String</title>
-    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
-    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
-<p>在Java8中，String内部使用char数组存储数据。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/** The identifier of the encoding used to encode the bytes in &#123;<span class="doctag">@code</span> value&#125;. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span> coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
-<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
-<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
-<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
-<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
-<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
-<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
-<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
-<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">Stirng s2 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">System.out.println(s1 == s2); <span class="comment">//false</span></span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
-<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s5 = <span class="string">"bbb"</span>;</span><br><span class="line">String s6 = <span class="string">"bbb"</span>;</span><br><span class="line">System.out.println(s5 == s6); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
-<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
-<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
-<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
-<p>而使用new的方式会在堆中创建一个字符串对象。</p>
-<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewStirngTest</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		Stirng s = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.value = original.value;</span><br><span class="line">	<span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java基础</category>
-      </categories>
-      <tags>
-        <tag>Java基础</tag>
-        <tag>String</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础部分之数据类型</title>
     <url>/2019/09/23/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<h3 id="一-数据类型"><a href="#一-数据类型" class="headerlink" title="一 数据类型"></a>一 数据类型</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>byte/8</p>
@@ -106,27 +62,6 @@
       <tags>
         <tag>Java基础</tag>
         <tag>Java基本类型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>一路走来，即将毕业。</title>
-    <url>/2019/09/12/Sentiment/</url>
-    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
-<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
-<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
-<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
-<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
-<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
-<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
-<p>祝我自己前途似锦，万事胜意。</p>
-<p>2019-03-27 20:44更</p>
-]]></content>
-      <categories>
-        <category>个人经历</category>
-      </categories>
-      <tags>
-        <tag>个人经历</tag>
-        <tag>毕业感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -262,6 +197,71 @@
       </categories>
       <tags>
         <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一路走来，即将毕业。</title>
+    <url>/2019/09/12/Sentiment/</url>
+    <content><![CDATA[<p>第一次写博客是大三上学期，现在是大四下学期，虽然也就一年半的时间，从最初的懵懂无知，以一个小白的身份出去找实习，就因为厌倦了学校的生活，每每看见室友在玩儿游戏总感觉和他们格格不入，但我当时也并没有很努力的去学习，只是在迷惑自己，觉得自己学习了但其实什么都没学，当时就连ssh框架整合都搞不定，后来去找实习，有幸进入了用友金融，虽然是一家技术比较老的公司，但是对我的启蒙来说还是很好了，后来又去了京东，不得不说在京东的时间对我的技术帮助是最大的，不仅独立完成功能开发，虽然大部分也都是增删改查，只不过做了数据展示上的不同，比如导出excel，合并单元格，这些基础的东西能写好已经很不错了，而且还在部门分享自己学到的东西，这都是对我的锻炼，虽然那段日子自己一个人住在小屋子里，而且要早起赶班车，晚上还加班，不过真的很有意义，后来又很可惜没留下来，hc锁了，之后参加了饿了么校招也算半个阿里的人了，到现在一切终于尘埃落定了，就是想到什么写什么，过年在家里休息了两个月，现在重新来实习，我觉得我的技术水平确实增长了，有些问题真的能自己解决了，现在也不再是停留在只会用的层面了，也很想要知道原理，但是看源码还是有点吃力，我的学习路线呢大概是</p>
+<p>java基础—-&gt;mysql—-&gt;jdbc/servlet—&gt;hibernate—&gt;spring mvc—&gt;spring—&gt;spring boot—&gt;PortgreSQL—&gt;kafka</p>
+<p>这些是按时间线来说的，当然python，c，c++，js也是会一点点都是在学校学的，真的是从小小白到小白到白</p>
+<p>现在马上大学生活就结束了，总结一下大学四年，有过开心，有过迷茫，有过无助，有过离别，有过失恋，有过失落，有过自信，有了成熟。</p>
+<p>每一个形容词都是一个故事，这些故事组成了我的大学四年，也陪伴了我大学四年，想想一路走来，一切真的真的都是最好的安排，要每一天热爱生活，要热爱工作，要为自己的梦想打好基础，要学会处理好人际关系，我现在很幸福，家里和睦，生活愉快，我为自己自豪，唯一的遗憾就是大一大二没有把基础打好，但有些许的遗憾才是人生。</p>
+<p>面对未来我一点都不迷茫，我有自己的目标，我和谁都说我要创业，未来的我还要去读MBA，要干的事还很多，我觉得我能改变世界，我相信我以后也会作出可以改变世界的产品，就算创业失败了我也去尝试了，年轻人就要去试一下，无论成功失败，不然老了会后悔的，未来的世界是我们的。</p>
+<p>也许很多人说不了解社会的险恶，早晚会被磨平棱角，那只要做到心不是社会的形状就好了。</p>
+<p>祝我自己前途似锦，万事胜意。</p>
+<p>2019-03-27 20:44更</p>
+]]></content>
+      <categories>
+        <category>个人经历</category>
+      </categories>
+      <tags>
+        <tag>个人经历</tag>
+        <tag>毕业感悟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础部分之String</title>
+    <url>/2019/09/27/Java%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86%E4%B9%8BString/</url>
+    <content><![CDATA[<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>String被声明为final，因此它不可被继承。</p>
+<p>在Java8中，String内部使用char数组存储数据。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java9之后，String类的实现改用byte数组存储字符串，同时使用coder来标识使用了哪种编码。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">serializable</span>,<span class="title">Comparable</span>,<span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">	<span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/** The identifier of the encoding used to encode the bytes in &#123;<span class="doctag">@code</span> value&#125;. */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span> coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>value数组被声明为final，这意味着value数组初始化之后就不能再引用其他数组，并且String内部没有改变value数组的方法，因此可以保证String不可变。</p>
+<h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><h4 id="1-可以缓存hash值"><a href="#1-可以缓存hash值" class="headerlink" title="1.可以缓存hash值"></a>1.可以缓存hash值</h4><p>因为String的hash值经常被使用，例如String用做HashMap的key，不可变的特性可以使得hash值也不可变，因此只需要进行一次计算。</p>
+<h4 id="2-String-Pool的需要"><a href="#2-String-Pool的需要" class="headerlink" title="2.String Pool的需要"></a>2.String Pool的需要</h4><p>如果一个String对象已经被创建过了，那么就会从String Pool中取得引用，只有String是不可变的，才可能使用Spring Pool</p>
+<h4 id="3-安全性"><a href="#3-安全性" class="headerlink" title="3.安全性"></a>3.安全性</h4><p>String经常作为参数，String不可变性可以保证参数不可变，例如在作为网络连接参数的情况下如果String是可变的，那么在网络连接过程中，String被改变，改变String对象的那一方以为现在连接的是其他主机，而实际情况却不一定是。</p>
+<h4 id="4-线程安全"><a href="#4-线程安全" class="headerlink" title="4.线程安全"></a>4.线程安全</h4><p>String不可变性天生具备线程安全，可以在多个线程中安全的使用。</p>
+<h3 id="String，StringBuffer-and-StringBuilder"><a href="#String，StringBuffer-and-StringBuilder" class="headerlink" title="String，StringBuffer and StringBuilder"></a>String，StringBuffer and StringBuilder</h3><h4 id="1-可变性"><a href="#1-可变性" class="headerlink" title="1.可变性"></a>1.可变性</h4><p>String不可变<br>StringBuffer和StringBuilder可变</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>String不可变，因此线程是安全的<br>StringBuilder不是线程安全的<br>StringBuffer是线程安全的，内部使用synchronized进行同步</p>
+<h3 id="String-Pool"><a href="#String-Pool" class="headerlink" title="String Pool"></a>String Pool</h3><p>字符串常量池(String Pool)保存着所有字符串字面量，这些字面量在编译时期就确定。不仅如此，还可以使用String的intern()方法在运行过程中将字符串添加到String Pool中。</p>
+<p>当一个字符串调用intern()方法时如果String Pool中已经存在一个字符串和改字符串值相等(使用equals()方法进行确定)，那么就会返回String Pool中字符串的引用，否则，就会在String Pool中添加一个新的字符串，并返回这个新字符串的引用。</p>
+<p>下面示例中，s1和s2采用new String()的方式新建了两个不同字符串，而s3和s4是通过s1.intern()方法取得一个字符串的引用，intern()首先把s1引用的字符串放到String Pool中，然后返回这个字符串引用，因此s3和s4引用的是同一个字符串。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">Stirng s2 = <span class="keyword">new</span> String(<span class="string">"aaa"</span>);</span><br><span class="line">System.out.println(s1 == s2); <span class="comment">//false</span></span><br><span class="line">String s3 = s1.intern();</span><br><span class="line">Stirng s4 = s2.intern();</span><br><span class="line">System.out.println(s3 == s4); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<p>如果是采用”bbb”这种字面量的形式创建字符串，会自动地将字符串放入String Pool中</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s5 = <span class="string">"bbb"</span>;</span><br><span class="line">String s6 = <span class="string">"bbb"</span>;</span><br><span class="line">System.out.println(s5 == s6); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<p>在Java7之前，String Pool被放在运行时常量池中，它属于永久代。而在Java7，String Pool被移到堆中。这是因为永久代的空间有限，在大量使用字符串的场景下会导致OutOfMemoryError错误。</p>
+<h3 id="new-String-“abc”"><a href="#new-String-“abc”" class="headerlink" title="new String(“abc”)"></a>new String(“abc”)</h3><p>使用这种方式一共会创建两个字符串对象(前提是String Pool中还没有”abc”字符串对象)。</p>
+<p>“abc”属于字符串字面量，因此编译时期会在String Pool中创建一个字符串对象，指向这个”abc”字符串字面量。</p>
+<p>而使用new的方式会在堆中创建一个字符串对象。</p>
+<p>创建一个测试类，其main方法中使用这种方式来创建字符串对象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewStirngTest</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		Stirng s = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下是String构造函数的源码，可以看到，在将一个字符串对象作为另一个字符串对象的构造函数参数时，并不会完成复制value数组内容，而是都会指向同一个value数组</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.value = original.value;</span><br><span class="line">	<span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Java基础</tag>
+        <tag>String</tag>
       </tags>
   </entry>
   <entry>
@@ -490,71 +490,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-13</title>
-    <url>/2020/03/29/go-big-or-go-home-13/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>dismiss</td>
-<td>开除</td>
-<td>The boss was anrgy and dismissed the staff</td>
-</tr>
-<tr>
-<td>protection</td>
-<td>保护</td>
-<td>Everyone should get involved in enviromental protection</td>
-</tr>
-<tr>
-<td>feed</td>
-<td>喂养</td>
-<td>My mother would feed me when I was hungry</td>
-</tr>
-<tr>
-<td>ought to</td>
-<td>应该</td>
-<td>When you study，you ought to sit up straight</td>
-</tr>
-<tr>
-<td>rapid</td>
-<td>迅速的</td>
-<td>The rabbit ran at a rapid speed</td>
-</tr>
-<tr>
-<td>cure</td>
-<td>治愈</td>
-<td>These pills will cure your sickness</td>
-</tr>
-<tr>
-<td>outer</td>
-<td>外面的</td>
-<td>The outer part of this ball is green</td>
-</tr>
-<tr>
-<td>dinosaur</td>
-<td>恐龙</td>
-<td>Two dinosaurs are fighting against each other</td>
-</tr>
-<tr>
-<td>spicy</td>
-<td>辣的</td>
-<td>I like spicy hot pot</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-12</title>
     <url>/2020/03/27/go-big-or-go-home-12/</url>
     <content><![CDATA[<table>
@@ -704,6 +639,71 @@
 <td>hard boiled egg</td>
 <td>煮鸡蛋</td>
 <td>hard boiled egg</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-13</title>
+    <url>/2020/03/29/go-big-or-go-home-13/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dismiss</td>
+<td>开除</td>
+<td>The boss was anrgy and dismissed the staff</td>
+</tr>
+<tr>
+<td>protection</td>
+<td>保护</td>
+<td>Everyone should get involved in enviromental protection</td>
+</tr>
+<tr>
+<td>feed</td>
+<td>喂养</td>
+<td>My mother would feed me when I was hungry</td>
+</tr>
+<tr>
+<td>ought to</td>
+<td>应该</td>
+<td>When you study，you ought to sit up straight</td>
+</tr>
+<tr>
+<td>rapid</td>
+<td>迅速的</td>
+<td>The rabbit ran at a rapid speed</td>
+</tr>
+<tr>
+<td>cure</td>
+<td>治愈</td>
+<td>These pills will cure your sickness</td>
+</tr>
+<tr>
+<td>outer</td>
+<td>外面的</td>
+<td>The outer part of this ball is green</td>
+</tr>
+<tr>
+<td>dinosaur</td>
+<td>恐龙</td>
+<td>Two dinosaurs are fighting against each other</td>
+</tr>
+<tr>
+<td>spicy</td>
+<td>辣的</td>
+<td>I like spicy hot pot</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1120,6 +1120,91 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-2</title>
+    <url>/2020/03/17/go-big-or-go-home-2/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stadium</td>
+<td>体育场</td>
+<td>I often play football in the stadium</td>
+</tr>
+<tr>
+<td>reply</td>
+<td>回复</td>
+<td>I’m waiting for your reply</td>
+</tr>
+<tr>
+<td>standard</td>
+<td>标准</td>
+<td>Such a standard figure</td>
+</tr>
+<tr>
+<td>honour</td>
+<td>荣誉</td>
+<td>It’s an honour to graduate from this school</td>
+</tr>
+<tr>
+<td>village</td>
+<td>乡村</td>
+<td>I like village life</td>
+</tr>
+<tr>
+<td>ever since</td>
+<td>自从…时起</td>
+<td>They lived there ever since they married</td>
+</tr>
+<tr>
+<td>turn up</td>
+<td>调高</td>
+<td>Turn up the TV volume</td>
+</tr>
+<tr>
+<td>volume</td>
+<td>音量</td>
+<td>Turn on the volume</td>
+</tr>
+<tr>
+<td>get on with</td>
+<td>与…相处</td>
+<td>She likes get on with animals</td>
+</tr>
+<tr>
+<td>tourism</td>
+<td>旅游</td>
+<td>I like tourism around the world</td>
+</tr>
+<tr>
+<td>industry</td>
+<td>行业</td>
+<td>The tourism industry is getting worse</td>
+</tr>
+<tr>
+<td>experience</td>
+<td>经验</td>
+<td>He has five years of programming experience</td>
+</tr>
+<tr>
+<td>sorrows</td>
+<td>悲伤</td>
+<td>I often share happiness and sorrows with my friends</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-18</title>
     <url>/2020/04/02/go-big-or-go-home-18/</url>
     <content><![CDATA[<table>
@@ -1404,91 +1489,6 @@
 <td>shrimp</td>
 <td>虾肉</td>
 <td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-2</title>
-    <url>/2020/03/17/go-big-or-go-home-2/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stadium</td>
-<td>体育场</td>
-<td>I often play football in the stadium</td>
-</tr>
-<tr>
-<td>reply</td>
-<td>回复</td>
-<td>I’m waiting for your reply</td>
-</tr>
-<tr>
-<td>standard</td>
-<td>标准</td>
-<td>Such a standard figure</td>
-</tr>
-<tr>
-<td>honour</td>
-<td>荣誉</td>
-<td>It’s an honour to graduate from this school</td>
-</tr>
-<tr>
-<td>village</td>
-<td>乡村</td>
-<td>I like village life</td>
-</tr>
-<tr>
-<td>ever since</td>
-<td>自从…时起</td>
-<td>They lived there ever since they married</td>
-</tr>
-<tr>
-<td>turn up</td>
-<td>调高</td>
-<td>Turn up the TV volume</td>
-</tr>
-<tr>
-<td>volume</td>
-<td>音量</td>
-<td>Turn on the volume</td>
-</tr>
-<tr>
-<td>get on with</td>
-<td>与…相处</td>
-<td>She likes get on with animals</td>
-</tr>
-<tr>
-<td>tourism</td>
-<td>旅游</td>
-<td>I like tourism around the world</td>
-</tr>
-<tr>
-<td>industry</td>
-<td>行业</td>
-<td>The tourism industry is getting worse</td>
-</tr>
-<tr>
-<td>experience</td>
-<td>经验</td>
-<td>He has five years of programming experience</td>
-</tr>
-<tr>
-<td>sorrows</td>
-<td>悲伤</td>
-<td>I often share happiness and sorrows with my friends</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2070,86 +2070,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-23</title>
-    <url>/2020/04/07/go-big-or-go-home-23/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pure</td>
-<td>纯净的</td>
-<td>The water seems so pure and clean</td>
-</tr>
-<tr>
-<td>regulation</td>
-<td>法规</td>
-<td>The traffic police is introducing traffic rules and regulations to us</td>
-</tr>
-<tr>
-<td>Africa</td>
-<td>非洲</td>
-<td>Africa is home to some of the world’s oldest cultures</td>
-</tr>
-<tr>
-<td>motherland</td>
-<td>祖国</td>
-<td>Everyone has their own motherland</td>
-</tr>
-<tr>
-<td>liberty</td>
-<td>自由</td>
-<td>The bird flew from the cage and got liberty</td>
-</tr>
-<tr>
-<td>pair</td>
-<td>一对</td>
-<td>Here is a pair of black shoes</td>
-</tr>
-<tr>
-<td>irrigate</td>
-<td>灌溉</td>
-<td>This machine can irrigate the field</td>
-</tr>
-<tr>
-<td>accompany</td>
-<td>陪伴</td>
-<td>I always accompany my children to their school</td>
-</tr>
-<tr>
-<td>typist</td>
-<td>打字员</td>
-<td>The typist is finishing her documents</td>
-</tr>
-<tr>
-<td>barrier</td>
-<td>路障</td>
-<td>The road was closed by a barrier</td>
-</tr>
-<tr>
-<td>octopus</td>
-<td>章鱼</td>
-<td>-</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>切薄片</td>
-<td>-</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-24</title>
     <url>/2020/04/08/go-big-or-go-home-24/</url>
     <content><![CDATA[<table>
@@ -2445,8 +2365,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-26</title>
-    <url>/2020/04/10/go-big-or-go-home-26/</url>
+    <title>go big or go home-23</title>
+    <url>/2020/04/07/go-big-or-go-home-23/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2456,49 +2376,134 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>give in</td>
-<td>投降</td>
-<td>He finally gave in to me and admintted that I’m the winner</td>
+<td>pure</td>
+<td>纯净的</td>
+<td>The water seems so pure and clean</td>
 </tr>
 <tr>
-<td>transform</td>
-<td>改变</td>
-<td>You will transform into a beautiful butterfly one day</td>
+<td>regulation</td>
+<td>法规</td>
+<td>The traffic police is introducing traffic rules and regulations to us</td>
 </tr>
 <tr>
-<td>department</td>
-<td>部门</td>
-<td>Our company consists of financial department,sales department,and technical department</td>
+<td>Africa</td>
+<td>非洲</td>
+<td>Africa is home to some of the world’s oldest cultures</td>
 </tr>
 <tr>
-<td>put off</td>
-<td>推迟</td>
-<td>The sports meeting will be put off because of the rain</td>
+<td>motherland</td>
+<td>祖国</td>
+<td>Everyone has their own motherland</td>
 </tr>
 <tr>
-<td>mass</td>
-<td>众多</td>
-<td>A mass of people are waiting</td>
+<td>liberty</td>
+<td>自由</td>
+<td>The bird flew from the cage and got liberty</td>
 </tr>
 <tr>
-<td>allow</td>
-<td>允许</td>
-<td>The green light allows you to go</td>
+<td>pair</td>
+<td>一对</td>
+<td>Here is a pair of black shoes</td>
 </tr>
 <tr>
-<td>serious</td>
-<td>认真的</td>
-<td>He is always very serious while working</td>
+<td>irrigate</td>
+<td>灌溉</td>
+<td>This machine can irrigate the field</td>
 </tr>
 <tr>
-<td>seem</td>
-<td>看起来</td>
-<td>It seems his car has a serious problem</td>
+<td>accompany</td>
+<td>陪伴</td>
+<td>I always accompany my children to their school</td>
 </tr>
 <tr>
-<td>aboard</td>
-<td>在…上</td>
-<td>In Thailand,fishers often cook and have meals aboard their boats</td>
+<td>typist</td>
+<td>打字员</td>
+<td>The typist is finishing her documents</td>
+</tr>
+<tr>
+<td>barrier</td>
+<td>路障</td>
+<td>The road was closed by a barrier</td>
+</tr>
+<tr>
+<td>octopus</td>
+<td>章鱼</td>
+<td>-</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切薄片</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-27</title>
+    <url>/2020/04/11/go-big-or-go-home-27/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>emergency</td>
+<td>紧急情况</td>
+<td>It’s an emergency.Get her to the hospital now!</td>
+</tr>
+<tr>
+<td>do one’s best</td>
+<td>尽最大的努力</td>
+<td>Don’t worry so much about the exam.Just do your best</td>
+</tr>
+<tr>
+<td>absolute</td>
+<td>绝对的</td>
+<td>Motion is absolute,while stillness is relative</td>
+</tr>
+<tr>
+<td>tongue</td>
+<td>舌头</td>
+<td>The boy sticks out his tongue to make a face to me</td>
+</tr>
+<tr>
+<td>instruct</td>
+<td>指导</td>
+<td>My mom instructs me how to play golf</td>
+</tr>
+<tr>
+<td>nylon</td>
+<td>尼龙</td>
+<td>The socks,strap and cord are all made of nylon</td>
+</tr>
+<tr>
+<td>strange</td>
+<td>奇怪的</td>
+<td>I met a guy wearing strange clothes on the subway</td>
+</tr>
+<tr>
+<td>secondhand</td>
+<td>二手的</td>
+<td>The boy bought a secondhand book from the old man</td>
+</tr>
+<tr>
+<td>expand</td>
+<td>扩大</td>
+<td>Our business is expanding across the whole country</td>
+</tr>
+<tr>
+<td>forest</td>
+<td>森林</td>
+<td>The sun shines through the forest</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2580,8 +2585,8 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-27</title>
-    <url>/2020/04/11/go-big-or-go-home-27/</url>
+    <title>go big or go home-26</title>
+    <url>/2020/04/10/go-big-or-go-home-26/</url>
     <content><![CDATA[<table>
 <thead>
 <tr>
@@ -2591,54 +2596,284 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>emergency</td>
-<td>紧急情况</td>
-<td>It’s an emergency.Get her to the hospital now!</td>
+<td>give in</td>
+<td>投降</td>
+<td>He finally gave in to me and admintted that I’m the winner</td>
 </tr>
 <tr>
-<td>do one’s best</td>
-<td>尽最大的努力</td>
-<td>Don’t worry so much about the exam.Just do your best</td>
+<td>transform</td>
+<td>改变</td>
+<td>You will transform into a beautiful butterfly one day</td>
 </tr>
 <tr>
-<td>absolute</td>
-<td>绝对的</td>
-<td>Motion is absolute,while stillness is relative</td>
+<td>department</td>
+<td>部门</td>
+<td>Our company consists of financial department,sales department,and technical department</td>
 </tr>
 <tr>
-<td>tongue</td>
-<td>舌头</td>
-<td>The boy sticks out his tongue to make a face to me</td>
+<td>put off</td>
+<td>推迟</td>
+<td>The sports meeting will be put off because of the rain</td>
 </tr>
 <tr>
-<td>instruct</td>
-<td>指导</td>
-<td>My mom instructs me how to play golf</td>
+<td>mass</td>
+<td>众多</td>
+<td>A mass of people are waiting</td>
 </tr>
 <tr>
-<td>nylon</td>
-<td>尼龙</td>
-<td>The socks,strap and cord are all made of nylon</td>
+<td>allow</td>
+<td>允许</td>
+<td>The green light allows you to go</td>
 </tr>
 <tr>
-<td>strange</td>
-<td>奇怪的</td>
-<td>I met a guy wearing strange clothes on the subway</td>
+<td>serious</td>
+<td>认真的</td>
+<td>He is always very serious while working</td>
 </tr>
 <tr>
-<td>secondhand</td>
-<td>二手的</td>
-<td>The boy bought a secondhand book from the old man</td>
+<td>seem</td>
+<td>看起来</td>
+<td>It seems his car has a serious problem</td>
 </tr>
 <tr>
-<td>expand</td>
-<td>扩大</td>
-<td>Our business is expanding across the whole country</td>
+<td>aboard</td>
+<td>在…上</td>
+<td>In Thailand,fishers often cook and have meals aboard their boats</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-29</title>
+    <url>/2020/04/13/go-big-or-go-home-29/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>soil</td>
+<td>泥土</td>
+<td>He held some soil in his hand</td>
 </tr>
 <tr>
-<td>forest</td>
-<td>森林</td>
-<td>The sun shines through the forest</td>
+<td>appropriate</td>
+<td>合适的</td>
+<td>A gentle handshake is appropriate when greeting someone for the first time</td>
+</tr>
+<tr>
+<td>hook</td>
+<td>钩子</td>
+<td>We put a worm on the hook to catch a fish</td>
+</tr>
+<tr>
+<td>knot</td>
+<td>结</td>
+<td>Chinese knots are a traditional handicraft of China</td>
+</tr>
+<tr>
+<td>punishment</td>
+<td>惩罚</td>
+<td>The student was given punishment for doing something wrong</td>
+</tr>
+<tr>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversion was interrputed by a knock at the door</td>
+</tr>
+<tr>
+<td>bread</td>
+<td>面包</td>
+<td>There are different kinds of bread in the picture</td>
+</tr>
+<tr>
+<td>disgusting</td>
+<td>令人厌恶的</td>
+<td>He finds the smell of the sock disgusting</td>
+</tr>
+<tr>
+<td>non-violent</td>
+<td>非暴力的</td>
+<td>Every conflict has a non-violent solution</td>
+</tr>
+<tr>
+<td>Morning person</td>
+<td>习惯早起的人</td>
+<td>I hate waking up early for work,so I’m totally not a morning person</td>
+</tr>
+<tr>
+<td>early bird</td>
+<td>早起的鸟儿</td>
+<td>Tom is an early bird.He is always the first to arrive in school</td>
+</tr>
+<tr>
+<td>night person</td>
+<td>晚睡的人</td>
+<td>He is really a night person,he always stays up very late</td>
+</tr>
+<tr>
+<td>night owl</td>
+<td>夜晚的猫头鹰</td>
+<td>When the important exams come,Jack becomes a night owl</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-30</title>
+    <url>/2020/04/14/go-big-or-go-home-30/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>apartment</td>
+<td>公寓</td>
+<td>This apartment is so bright with these windows</td>
+</tr>
+<tr>
+<td>Ms</td>
+<td>/miz/</td>
+<td>you don’t know</td>
+</tr>
+<tr>
+<td>Miss</td>
+<td>/mis/</td>
+<td>unmarried</td>
+</tr>
+<tr>
+<td>Mrs</td>
+<td>/misiz/</td>
+<td>married</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>捕捉</td>
+<td>The goalkeeper caught the ball.What a save!</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
+</tr>
+<tr>
+<td>sparrow</td>
+<td>麻雀</td>
+<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
+</tr>
+<tr>
+<td>mud</td>
+<td>泥</td>
+<td>Oh no!I think our car is stuck in the mud!</td>
+</tr>
+<tr>
+<td>stuck</td>
+<td>不能动的</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>shapes</td>
+<td>形状</td>
+<td>I like collecting glasses of all shapes and sizes</td>
+</tr>
+<tr>
+<td>interrput</td>
+<td>打扰</td>
+<td>Their conversation was interrputed by a knock at the door</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-31</title>
+    <url>/2020/04/15/go-big-or-go-home-31/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>colleague</td>
+<td>同事</td>
+<td>I really learned a lot of discussing with my colleagues</td>
+</tr>
+<tr>
+<td>arrow</td>
+<td>箭</td>
+<td>Traditional hunters use arrows to catch animals</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>空的</td>
+<td>The man’s wallet is empty</td>
+</tr>
+<tr>
+<td>associate</td>
+<td>联想</td>
+<td>I associate this picture with a star</td>
+</tr>
+<tr>
+<td>easy-going</td>
+<td>随和</td>
+<td>My friend and I are easy-going</td>
+</tr>
+<tr>
+<td>carry off</td>
+<td>夺走</td>
+<td>He’s gonna carry off her bag!Stop him!</td>
+</tr>
+<tr>
+<td>lost</td>
+<td>迷路的</td>
+<td>The hikers are lost walking in the forest</td>
+</tr>
+<tr>
+<td>lock</td>
+<td>锁</td>
+<td>The door is locked;we can’t get in</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>切片</td>
+<td>The man thinly slices the beef</td>
+</tr>
+<tr>
+<td>might</td>
+<td>或许</td>
+<td>I think it might rain later,so I should take an umbrella</td>
+</tr>
+<tr>
+<td>dead</td>
+<td>死的</td>
+<td>The fish is dead</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2829,241 +3064,6 @@
 <td>How’s your business?</td>
 <td>最近怎么样</td>
 <td>Not so good</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-29</title>
-    <url>/2020/04/13/go-big-or-go-home-29/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>soil</td>
-<td>泥土</td>
-<td>He held some soil in his hand</td>
-</tr>
-<tr>
-<td>appropriate</td>
-<td>合适的</td>
-<td>A gentle handshake is appropriate when greeting someone for the first time</td>
-</tr>
-<tr>
-<td>hook</td>
-<td>钩子</td>
-<td>We put a worm on the hook to catch a fish</td>
-</tr>
-<tr>
-<td>knot</td>
-<td>结</td>
-<td>Chinese knots are a traditional handicraft of China</td>
-</tr>
-<tr>
-<td>punishment</td>
-<td>惩罚</td>
-<td>The student was given punishment for doing something wrong</td>
-</tr>
-<tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversion was interrputed by a knock at the door</td>
-</tr>
-<tr>
-<td>bread</td>
-<td>面包</td>
-<td>There are different kinds of bread in the picture</td>
-</tr>
-<tr>
-<td>disgusting</td>
-<td>令人厌恶的</td>
-<td>He finds the smell of the sock disgusting</td>
-</tr>
-<tr>
-<td>non-violent</td>
-<td>非暴力的</td>
-<td>Every conflict has a non-violent solution</td>
-</tr>
-<tr>
-<td>Morning person</td>
-<td>习惯早起的人</td>
-<td>I hate waking up early for work,so I’m totally not a morning person</td>
-</tr>
-<tr>
-<td>early bird</td>
-<td>早起的鸟儿</td>
-<td>Tom is an early bird.He is always the first to arrive in school</td>
-</tr>
-<tr>
-<td>night person</td>
-<td>晚睡的人</td>
-<td>He is really a night person,he always stays up very late</td>
-</tr>
-<tr>
-<td>night owl</td>
-<td>夜晚的猫头鹰</td>
-<td>When the important exams come,Jack becomes a night owl</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-31</title>
-    <url>/2020/04/15/go-big-or-go-home-31/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>colleague</td>
-<td>同事</td>
-<td>I really learned a lot of discussing with my colleagues</td>
-</tr>
-<tr>
-<td>arrow</td>
-<td>箭</td>
-<td>Traditional hunters use arrows to catch animals</td>
-</tr>
-<tr>
-<td>empty</td>
-<td>空的</td>
-<td>The man’s wallet is empty</td>
-</tr>
-<tr>
-<td>associate</td>
-<td>联想</td>
-<td>I associate this picture with a star</td>
-</tr>
-<tr>
-<td>easy-going</td>
-<td>随和</td>
-<td>My friend and I are easy-going</td>
-</tr>
-<tr>
-<td>carry off</td>
-<td>夺走</td>
-<td>He’s gonna carry off her bag!Stop him!</td>
-</tr>
-<tr>
-<td>lost</td>
-<td>迷路的</td>
-<td>The hikers are lost walking in the forest</td>
-</tr>
-<tr>
-<td>lock</td>
-<td>锁</td>
-<td>The door is locked;we can’t get in</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>切片</td>
-<td>The man thinly slices the beef</td>
-</tr>
-<tr>
-<td>might</td>
-<td>或许</td>
-<td>I think it might rain later,so I should take an umbrella</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-30</title>
-    <url>/2020/04/14/go-big-or-go-home-30/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>apartment</td>
-<td>公寓</td>
-<td>This apartment is so bright with these windows</td>
-</tr>
-<tr>
-<td>Ms</td>
-<td>/miz/</td>
-<td>you don’t know</td>
-</tr>
-<tr>
-<td>Miss</td>
-<td>/mis/</td>
-<td>unmarried</td>
-</tr>
-<tr>
-<td>Mrs</td>
-<td>/misiz/</td>
-<td>married</td>
-</tr>
-<tr>
-<td>catch</td>
-<td>捕捉</td>
-<td>The goalkeeper caught the ball.What a save!</td>
-</tr>
-<tr>
-<td>dead</td>
-<td>死的</td>
-<td>The fish is dead</td>
-</tr>
-<tr>
-<td>sparrow</td>
-<td>麻雀</td>
-<td>Sparrows are small brown and grey birds,and are common in many parts of the world</td>
-</tr>
-<tr>
-<td>mud</td>
-<td>泥</td>
-<td>Oh no!I think our car is stuck in the mud!</td>
-</tr>
-<tr>
-<td>stuck</td>
-<td>不能动的</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>shapes</td>
-<td>形状</td>
-<td>I like collecting glasses of all shapes and sizes</td>
-</tr>
-<tr>
-<td>interrput</td>
-<td>打扰</td>
-<td>Their conversation was interrputed by a knock at the door</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3365,6 +3365,111 @@
       </tags>
   </entry>
   <entry>
+    <title>go big or go home-36</title>
+    <url>/2020/04/20/go-big-or-go-home-36/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>marble</td>
+<td>大理石</td>
+<td>The floor is made of marble</td>
+</tr>
+<tr>
+<td>tortoise</td>
+<td>乌龟</td>
+<td>Look,the little tortoise is eating leaves</td>
+</tr>
+<tr>
+<td>belong</td>
+<td>属于</td>
+<td>This girl belongs to me!</td>
+</tr>
+<tr>
+<td>acknowledge</td>
+<td>告知收到</td>
+<td>Acknowledge,We will bake the bread soon</td>
+</tr>
+<tr>
+<td>radiation</td>
+<td>辐射物</td>
+<td>Don’t get closer to radiation if you are not in protective suit</td>
+</tr>
+<tr>
+<td>anyhow</td>
+<td>无论如何</td>
+<td>Someone has to wash the dishes anyhow,so I’ll do them</td>
+</tr>
+<tr>
+<td>altitude</td>
+<td>海拔</td>
+<td>The altitude of this mountain in 8844 meters</td>
+</tr>
+<tr>
+<td>make a toast</td>
+<td>敬酒</td>
+<td>-</td>
+</tr>
+<tr>
+<td>blush</td>
+<td>脸红</td>
+<td>-</td>
+</tr>
+<tr>
+<td>tequlia</td>
+<td>龙舌兰</td>
+<td>-</td>
+</tr>
+<tr>
+<td>raise</td>
+<td>举</td>
+<td>-</td>
+</tr>
+<tr>
+<td>mixologist</td>
+<td>调酒师</td>
+<td>-</td>
+</tr>
+<tr>
+<td>bartender</td>
+<td>调酒师</td>
+<td>-</td>
+</tr>
+<tr>
+<td>alcohol</td>
+<td>酒精</td>
+<td>-</td>
+</tr>
+<tr>
+<td>rum</td>
+<td>朗姆酒</td>
+<td>-</td>
+</tr>
+<tr>
+<td>gorgeous</td>
+<td>美丽动人的</td>
+<td>-</td>
+</tr>
+<tr>
+<td>sake</td>
+<td>日本清酒</td>
+<td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-37</title>
     <url>/2020/04/21/go-big-or-go-home-37/</url>
     <content><![CDATA[<table>
@@ -3479,111 +3584,6 @@
 <td>film</td>
 <td>电影</td>
 <td>The film has a happy ending</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go big or go home-36</title>
-    <url>/2020/04/20/go-big-or-go-home-36/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>marble</td>
-<td>大理石</td>
-<td>The floor is made of marble</td>
-</tr>
-<tr>
-<td>tortoise</td>
-<td>乌龟</td>
-<td>Look,the little tortoise is eating leaves</td>
-</tr>
-<tr>
-<td>belong</td>
-<td>属于</td>
-<td>This girl belongs to me!</td>
-</tr>
-<tr>
-<td>acknowledge</td>
-<td>告知收到</td>
-<td>Acknowledge,We will bake the bread soon</td>
-</tr>
-<tr>
-<td>radiation</td>
-<td>辐射物</td>
-<td>Don’t get closer to radiation if you are not in protective suit</td>
-</tr>
-<tr>
-<td>anyhow</td>
-<td>无论如何</td>
-<td>Someone has to wash the dishes anyhow,so I’ll do them</td>
-</tr>
-<tr>
-<td>altitude</td>
-<td>海拔</td>
-<td>The altitude of this mountain in 8844 meters</td>
-</tr>
-<tr>
-<td>make a toast</td>
-<td>敬酒</td>
-<td>-</td>
-</tr>
-<tr>
-<td>blush</td>
-<td>脸红</td>
-<td>-</td>
-</tr>
-<tr>
-<td>tequlia</td>
-<td>龙舌兰</td>
-<td>-</td>
-</tr>
-<tr>
-<td>raise</td>
-<td>举</td>
-<td>-</td>
-</tr>
-<tr>
-<td>mixologist</td>
-<td>调酒师</td>
-<td>-</td>
-</tr>
-<tr>
-<td>bartender</td>
-<td>调酒师</td>
-<td>-</td>
-</tr>
-<tr>
-<td>alcohol</td>
-<td>酒精</td>
-<td>-</td>
-</tr>
-<tr>
-<td>rum</td>
-<td>朗姆酒</td>
-<td>-</td>
-</tr>
-<tr>
-<td>gorgeous</td>
-<td>美丽动人的</td>
-<td>-</td>
-</tr>
-<tr>
-<td>sake</td>
-<td>日本清酒</td>
-<td>-</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3710,71 +3710,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go big or go home-4</title>
-    <url>/2020/03/19/go-big-or-go-home-4/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>desperate</td>
-<td>绝望的</td>
-<td>The unemployed man looks so desperate</td>
-</tr>
-<tr>
-<td>beyond</td>
-<td>更远的/超出…能力</td>
-<td>The birds flew far beyond the land’s edge</td>
-</tr>
-<tr>
-<td>in need of</td>
-<td>需要</td>
-<td>The dry field is in need of rain</td>
-</tr>
-<tr>
-<td>gesture</td>
-<td>手势</td>
-<td>This gesture means you are very good</td>
-</tr>
-<tr>
-<td>production</td>
-<td>生产</td>
-<td>Thousands of cars are under production</td>
-</tr>
-<tr>
-<td>pregnant</td>
-<td>怀孕的</td>
-<td>The pregnant woman is drinking water</td>
-</tr>
-<tr>
-<td>complain</td>
-<td>抱怨</td>
-<td>She complains that the homework is difficult</td>
-</tr>
-<tr>
-<td>unemployed</td>
-<td>失业</td>
-<td>Have you been unemployed for over six months?</td>
-</tr>
-<tr>
-<td>edge</td>
-<td>边缘</td>
-<td>He edged closer to the telephone, ready to grab it</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>English</category>
-      </categories>
-      <tags>
-        <tag>单词</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>go big or go home-40</title>
     <url>/2020/04/24/go-big-or-go-home-40/</url>
     <content><![CDATA[<table>
@@ -3849,6 +3784,71 @@
 <td>Third wheel</td>
 <td>”电灯泡“</td>
 <td>-</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>English</category>
+      </categories>
+      <tags>
+        <tag>单词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go big or go home-4</title>
+    <url>/2020/03/19/go-big-or-go-home-4/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>单词/短语</th>
+<th>中文</th>
+<th>句子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>desperate</td>
+<td>绝望的</td>
+<td>The unemployed man looks so desperate</td>
+</tr>
+<tr>
+<td>beyond</td>
+<td>更远的/超出…能力</td>
+<td>The birds flew far beyond the land’s edge</td>
+</tr>
+<tr>
+<td>in need of</td>
+<td>需要</td>
+<td>The dry field is in need of rain</td>
+</tr>
+<tr>
+<td>gesture</td>
+<td>手势</td>
+<td>This gesture means you are very good</td>
+</tr>
+<tr>
+<td>production</td>
+<td>生产</td>
+<td>Thousands of cars are under production</td>
+</tr>
+<tr>
+<td>pregnant</td>
+<td>怀孕的</td>
+<td>The pregnant woman is drinking water</td>
+</tr>
+<tr>
+<td>complain</td>
+<td>抱怨</td>
+<td>She complains that the homework is difficult</td>
+</tr>
+<tr>
+<td>unemployed</td>
+<td>失业</td>
+<td>Have you been unemployed for over six months?</td>
+</tr>
+<tr>
+<td>edge</td>
+<td>边缘</td>
+<td>He edged closer to the telephone, ready to grab it</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -4355,6 +4355,27 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode208</title>
+    <url>/2019/10/20/leetcode208/</url>
+    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
+<p>示例:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Trie trie = <span class="keyword">new</span> Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(<span class="string">"apple"</span>);</span><br><span class="line">trie.search(<span class="string">"apple"</span>);   <span class="comment">// 返回 true</span></span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 false</span></span><br><span class="line">trie.startsWith(<span class="string">"app"</span>); <span class="comment">// 返回 true</span></span><br><span class="line">trie.insert(<span class="string">"app"</span>);   </span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 true</span></span><br></pre></td></tr></table></figure>
+
+<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isWord;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">        TrieNode node = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Initialize your data structure here.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Trie</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        root = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        root.val = <span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Inserts a word into the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                t.children[c - <span class="string">'a'</span>] = <span class="keyword">new</span> TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if the word is in the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">search</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if there is any word in the trie that starts with the given prefix.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">startsWith</span><span class="params">(String prefix)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> c = prefix.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = <span class="keyword">new</span> Trie();</span><br><span class="line">        obj.insert(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_2 = obj.search(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_3 = obj.startsWith(<span class="string">"trie"</span>);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>Trie树</tag>
+        <tag>leetcode208</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go big or go home-9</title>
     <url>/2020/03/24/go-big-or-go-home-9/</url>
     <content><![CDATA[<table>
@@ -4420,27 +4441,6 @@
       </tags>
   </entry>
   <entry>
-    <title>leetcode208</title>
-    <url>/2019/10/20/leetcode208/</url>
-    <content><![CDATA[<p>实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。</p>
-<p>示例:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Trie trie = <span class="keyword">new</span> Trie();</span><br><span class="line"></span><br><span class="line">trie.insert(<span class="string">"apple"</span>);</span><br><span class="line">trie.search(<span class="string">"apple"</span>);   <span class="comment">// 返回 true</span></span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 false</span></span><br><span class="line">trie.startsWith(<span class="string">"app"</span>); <span class="comment">// 返回 true</span></span><br><span class="line">trie.insert(<span class="string">"app"</span>);   </span><br><span class="line">trie.search(<span class="string">"app"</span>);     <span class="comment">// 返回 true</span></span><br></pre></td></tr></table></figure>
-
-<p>说明:你可以假设所有的输入都是由小写字母 a-z 构成的。<br>保证所有输入均为非空字符串。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">char</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> TrieNode[] children = <span class="keyword">new</span> TrieNode[<span class="number">26</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> isWord;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">        TrieNode node = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        node.val = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trie</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> TrieNode root;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Initialize your data structure here.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Trie</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        root = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        root.val = <span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Inserts a word into the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                t.children[c - <span class="string">'a'</span>] = <span class="keyword">new</span> TrieNode(c);</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        t.isWord = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if the word is in the trie.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">search</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = word.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> t.isWord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns if there is any word in the trie that starts with the given prefix.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">startsWith</span><span class="params">(String prefix)</span> </span>&#123;</span><br><span class="line">        TrieNode t = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;prefix.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> c = prefix.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (t.children[c - <span class="string">'a'</span>] == <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t = t.children[c - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Trie obj = <span class="keyword">new</span> Trie();</span><br><span class="line">        obj.insert(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_2 = obj.search(<span class="string">"trie"</span>);</span><br><span class="line">        <span class="keyword">boolean</span> param_3 = obj.startsWith(<span class="string">"trie"</span>);</span><br><span class="line">        System.out.println(param_2);</span><br><span class="line">        System.out.println(param_3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>Trie树</tag>
-        <tag>leetcode208</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode338</title>
     <url>/2019/10/20/leetcode338/</url>
     <content><![CDATA[<p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
@@ -4457,6 +4457,32 @@
       <tags>
         <tag>leetcode338</tag>
         <tag>二进制数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode79</title>
+    <url>/2019/10/20/leetcode79/</url>
+    <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
+<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
+<p>示例:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [<span class="string">'A'</span>,<span class="string">'B'</span>,<span class="string">'C'</span>,<span class="string">'E'</span>],</span><br><span class="line">  [<span class="string">'S'</span>,<span class="string">'F'</span>,<span class="string">'C'</span>,<span class="string">'S'</span>],</span><br><span class="line">  [<span class="string">'A'</span>,<span class="string">'D'</span>,<span class="string">'E'</span>,<span class="string">'E'</span>]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = <span class="string">"ABCCED"</span>, 返回 <span class="keyword">true</span>.</span><br><span class="line">给定 word = <span class="string">"SEE"</span>, 返回 <span class="keyword">true</span>.</span><br><span class="line">给定 word = <span class="string">"ABCB"</span>, 返回 <span class="keyword">false</span>.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span>[] row = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>&#125;;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span>[] column = &#123;<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>,<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">boolean</span> <span class="title">exist</span><span class="params">(<span class="keyword">char</span>[][] board, String word)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">0</span>,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>,columnLen = board[<span class="number">0</span>].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (dfs(board,word,i,j,<span class="number">0</span>)) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dfs</span><span class="params">(<span class="keyword">char</span>[][] board,String word,<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (x&lt;<span class="number">0</span> || x&gt;=board.length || y&lt;<span class="number">0</span> || y&gt;=board[<span class="number">0</span>].length) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(board[x][y] != word.charAt(index)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(index == word.length() - <span class="number">1</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        board[x][y] = <span class="string">'#'</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (dfs(board,word,x+row[i],y+column[i],index+<span class="number">1</span>)) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span>[][] borad = &#123;&#123;<span class="string">'F'</span>,<span class="string">'Y'</span>,<span class="string">'C'</span>,<span class="string">'E'</span>,<span class="string">'N'</span>,<span class="string">'R'</span>,<span class="string">'D'</span>&#125;,&#123;<span class="string">'K'</span>,<span class="string">'L'</span>,<span class="string">'N'</span>,<span class="string">'F'</span>,<span class="string">'I'</span>,<span class="string">'N'</span>,<span class="string">'U'</span>&#125;,&#123;<span class="string">'A'</span>,<span class="string">'A'</span>,<span class="string">'A'</span>,<span class="string">'R'</span>,<span class="string">'A'</span>,<span class="string">'H'</span>,<span class="string">'R'</span>&#125;,&#123;<span class="string">'N'</span>,<span class="string">'D'</span>,<span class="string">'K'</span>,<span class="string">'L'</span>,<span class="string">'P'</span>,<span class="string">'N'</span>,<span class="string">'E'</span>&#125;,&#123;<span class="string">'A'</span>,<span class="string">'L'</span>,<span class="string">'A'</span>,<span class="string">'N'</span>,<span class="string">'S'</span>,<span class="string">'A'</span>,<span class="string">'P'</span>&#125;,&#123;<span class="string">'O'</span>,<span class="string">'O'</span>,<span class="string">'G'</span>,<span class="string">'O'</span>,<span class="string">'T'</span>,<span class="string">'P'</span>,<span class="string">'N'</span>&#125;,&#123;<span class="string">'H'</span>,<span class="string">'P'</span>,<span class="string">'O'</span>,<span class="string">'L'</span>,<span class="string">'A'</span>,<span class="string">'N'</span>,<span class="string">'O'</span>&#125;&#125;;</span><br><span class="line">        String word= <span class="string">"poland"</span>;</span><br><span class="line">        System.out.println(<span class="keyword">new</span> Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里主要说明一下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">board[x][y] = <span class="string">'#'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>是将已经查找过的做一个标记，以及</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span>[] row = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span>[] column = &#123;<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>,<span class="number">0</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>二维网格</tag>
+        <tag>leetcode79</tag>
       </tags>
   </entry>
   <entry>
@@ -4487,32 +4513,6 @@
       <tags>
         <tag>mysql查询语句执行</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode79</title>
-    <url>/2019/10/20/leetcode79/</url>
-    <content><![CDATA[<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
-<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
-<p>示例:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">board =</span><br><span class="line">[</span><br><span class="line">  [<span class="string">'A'</span>,<span class="string">'B'</span>,<span class="string">'C'</span>,<span class="string">'E'</span>],</span><br><span class="line">  [<span class="string">'S'</span>,<span class="string">'F'</span>,<span class="string">'C'</span>,<span class="string">'S'</span>],</span><br><span class="line">  [<span class="string">'A'</span>,<span class="string">'D'</span>,<span class="string">'E'</span>,<span class="string">'E'</span>]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">给定 word = <span class="string">"ABCCED"</span>, 返回 <span class="keyword">true</span>.</span><br><span class="line">给定 word = <span class="string">"SEE"</span>, 返回 <span class="keyword">true</span>.</span><br><span class="line">给定 word = <span class="string">"ABCB"</span>, 返回 <span class="keyword">false</span>.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span>[] row = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>&#125;;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span>[] column = &#123;<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>,<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">boolean</span> <span class="title">exist</span><span class="params">(<span class="keyword">char</span>[][] board, String word)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">0</span>,rowLen = board.length;i&lt;rowLen;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>,columnLen = board[<span class="number">0</span>].length;j&lt;columnLen;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (dfs(board,word,i,j,<span class="number">0</span>)) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dfs</span><span class="params">(<span class="keyword">char</span>[][] board,String word,<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (x&lt;<span class="number">0</span> || x&gt;=board.length || y&lt;<span class="number">0</span> || y&gt;=board[<span class="number">0</span>].length) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(board[x][y] != word.charAt(index)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(index == word.length() - <span class="number">1</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        board[x][y] = <span class="string">'#'</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (dfs(board,word,x+row[i],y+column[i],index+<span class="number">1</span>)) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        board[x][y] = word.charAt(index);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span>[][] borad = &#123;&#123;<span class="string">'F'</span>,<span class="string">'Y'</span>,<span class="string">'C'</span>,<span class="string">'E'</span>,<span class="string">'N'</span>,<span class="string">'R'</span>,<span class="string">'D'</span>&#125;,&#123;<span class="string">'K'</span>,<span class="string">'L'</span>,<span class="string">'N'</span>,<span class="string">'F'</span>,<span class="string">'I'</span>,<span class="string">'N'</span>,<span class="string">'U'</span>&#125;,&#123;<span class="string">'A'</span>,<span class="string">'A'</span>,<span class="string">'A'</span>,<span class="string">'R'</span>,<span class="string">'A'</span>,<span class="string">'H'</span>,<span class="string">'R'</span>&#125;,&#123;<span class="string">'N'</span>,<span class="string">'D'</span>,<span class="string">'K'</span>,<span class="string">'L'</span>,<span class="string">'P'</span>,<span class="string">'N'</span>,<span class="string">'E'</span>&#125;,&#123;<span class="string">'A'</span>,<span class="string">'L'</span>,<span class="string">'A'</span>,<span class="string">'N'</span>,<span class="string">'S'</span>,<span class="string">'A'</span>,<span class="string">'P'</span>&#125;,&#123;<span class="string">'O'</span>,<span class="string">'O'</span>,<span class="string">'G'</span>,<span class="string">'O'</span>,<span class="string">'T'</span>,<span class="string">'P'</span>,<span class="string">'N'</span>&#125;,&#123;<span class="string">'H'</span>,<span class="string">'P'</span>,<span class="string">'O'</span>,<span class="string">'L'</span>,<span class="string">'A'</span>,<span class="string">'N'</span>,<span class="string">'O'</span>&#125;&#125;;</span><br><span class="line">        String word= <span class="string">"poland"</span>;</span><br><span class="line">        System.out.println(<span class="keyword">new</span> Solution().exist(borad,word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里主要说明一下</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">board[x][y] = <span class="string">'#'</span>;</span><br></pre></td></tr></table></figure>
-
-<p>是将已经查找过的做一个标记，以及</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span>[] row = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span>[] column = &#123;<span class="number">1</span>,<span class="number">0</span>,-<span class="number">1</span>,<span class="number">0</span>&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>这段代码是指向四周遍历的坐标点。深度遍历的时候会经常用到，本道题用到了深度优先遍历和回溯。</p>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>二维网格</tag>
-        <tag>leetcode79</tag>
       </tags>
   </entry>
   <entry>
@@ -4621,6 +4621,20 @@
       </tags>
   </entry>
   <entry>
+    <title>博客模版</title>
+    <url>/2020/04/25/%E5%8D%9A%E5%AE%A2%E6%A8%A1%E7%89%88/</url>
+    <content><![CDATA[<p><font face="黑体">我是黑体字</font><br><font face="宋体">我是宋体字</font><br><font face="微软雅黑">我是微软雅黑字</font><br><font face="fantasy">我是fantasy字</font><br><font face="Helvetica">我是Helvetica字</font></p>
+<p><font face="微软雅黑"><h1 style="background:#50A2B8
+"><font color="#FFFFFF">1级标题</font><h1></h1></h1></font></p>
+]]></content>
+      <categories>
+        <category>模版</category>
+      </categories>
+      <tags>
+        <tag>博客模版</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>你看着是一坨，它也经历了很多</title>
     <url>/2020/04/15/%E4%BD%A0%E7%9C%8B%E7%9D%80%E6%98%AF%E4%B8%80%E5%9D%A8%EF%BC%8C%E5%AE%83%E4%B9%9F%E7%BB%8F%E5%8E%86%E4%BA%86%E5%BE%88%E5%A4%9A/</url>
     <content><![CDATA[<p>你看着它是一坨，它也经历了很多。</p>
@@ -4639,17 +4653,15 @@
       </tags>
   </entry>
   <entry>
-    <title>博客模版</title>
-    <url>/2020/04/25/%E5%8D%9A%E5%AE%A2%E6%A8%A1%E7%89%88/</url>
-    <content><![CDATA[<p><font face="黑体">我是黑体字</font><br><font face="宋体">我是宋体字</font><br><font face="微软雅黑">我是微软雅黑字</font><br><font face="fantasy">我是fantasy字</font><br><font face="Helvetica">我是Helvetica字</font></p>
-<p><font face="微软雅黑"><h1 style="background:#50A2B8
-"><font color="#FFFFFF">1级标题</font><h1></h1></h1></font></p>
+    <title>方向转变</title>
+    <url>/2020/05/10/%E6%96%B9%E5%90%91%E8%BD%AC%E5%8F%98/</url>
+    <content><![CDATA[<p>经历了五一假期，浮躁的心慢慢静了下来，有些东西只懂表面皮毛是万万不可的，要沉淀，以后要转变一下方向，打牢地基之后，万丈高楼平地起。</p>
 ]]></content>
       <categories>
-        <category>模版</category>
+        <category>个人经历</category>
       </categories>
       <tags>
-        <tag>博客模版</tag>
+        <tag>方向转变</tag>
       </tags>
   </entry>
   <entry>
@@ -4850,112 +4862,6 @@
         <tag>数据库</tag>
         <tag>bin log</tag>
         <tag>redo log</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>浅谈MVCC</title>
-    <url>/2020/03/23/%E6%B5%85%E8%B0%88MVCC/</url>
-    <content><![CDATA[<h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><h3 id="版本链"><a href="#版本链" class="headerlink" title="版本链"></a>版本链</h3><p>对于使用InnoDB存储引擎的表来说，它的聚簇索引记录中都包含两个必要的隐藏列（row_id并不是必要的，我们创建的表中有主键或者非NULL唯一键时都不会包含row_id列）：</p>
-<ol>
-<li>trx_id：每次对某条聚簇索引记录进行改动时，都会把对应的事务id赋值给trx_id隐藏列。</li>
-<li>roll_pointer：每次对某条聚簇索引记录进行改动时，都会把旧的版本写入到undo日志中，然后这个隐藏列就相当于一个指针，可以通过它来找到该记录修改前的信息。</li>
-</ol>
-<h4 id="比方说我们的表t现在只包含一条记录："><a href="#比方说我们的表t现在只包含一条记录：" class="headerlink" title="比方说我们的表t现在只包含一条记录："></a>比方说我们的表t现在只包含一条记录：</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM t;</span><br><span class="line">+<span class="comment">----+--------+</span></span><br><span class="line">| id | c      |</span><br><span class="line">+<span class="comment">----+--------+</span></span><br><span class="line">|  1 | 刘备   |</span><br><span class="line">+<span class="comment">----+--------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure>
-
-<p>复制代码假设插入该记录的事务id为80，那么此刻该条记录的示意图如下所示：</p>
-<p><img src="../image/MVCC1.png" alt="MVCC1.png" title="MVCC1"><br>假设之后两个id分别为100、200的事务对这条记录进行UPDATE操作，操作流程如下：</p>
-<p><img src="../image/MVCC2.png" alt="MVCC2.png" title="MVCC2">  </p>
-<ol>
-<li>小贴士： 能不能在两个事务中交叉更新同一条记录呢？哈哈，这是不可以滴，第一个事务更新了某条记录后，就会给这条记录加锁，另一个事务再次更新时就需要等待第一个事务提交了，把锁释放之后才可以继续更新。本篇文章不是讨论锁的，有关锁的更多细节我们之后再说。</li>
-</ol>
-<p>每次对记录进行改动，都会记录一条undo日志，每条undo日志也都有一个roll_pointer属性（INSERT操作对应的undo日志没有该属性，因为该记录并没有更早的版本），可以将这些undo日志都连起来，串成一个链表，所以现在的情况就像下图一样：</p>
-<p><img src="../image/MVCC3.png" alt="MVCC3.png" title="MVCC3">  </p>
-<p>对该记录每次更新后，都会将旧值放到一条undo日志中，就算是该记录的一个旧版本，随着更新次数的增多，所有的版本都会被roll_pointer属性连接成一个链表，我们把这个链表称之为版本链，版本链的头节点就是当前记录最新的值。另外，每个版本中还包含生成该版本时对应的事务id，这个信息很重要，我们稍后就会用到。</p>
-<h3 id="ReadView"><a href="#ReadView" class="headerlink" title="ReadView"></a>ReadView</h3><p>对于使用READ UNCOMMITTED隔离级别的事务来说，直接读取记录的最新版本就好了，对于使用SERIALIZABLE隔离级别的事务来说，使用加锁的方式来访问记录。对于使用READ COMMITTED和REPEATABLE READ隔离级别的事务来说，就需要用到我们上边所说的版本链了，核心问题就是：需要判断一下版本链中的哪个版本是当前事务可见的。所以设计InnoDB的大叔提出了一个ReadView的概念，这个ReadView中主要包含当前系统中还有哪些活跃的读写事务，把它们的事务id放到一个列表中，我们把这个列表命名为为m_ids。这样在访问某条记录时，只需要按照下边的步骤判断记录的某个版本是否可见：</p>
-<ol>
-<li>如果被访问版本的trx_id属性值小于m_ids列表中最小的事务id，表明生成该版本的事务在生成ReadView前已经提交，所以该版本可以被当前事务访问。</li>
-<li>如果被访问版本的trx_id属性值大于m_ids列表中最大的事务id，表明生成该版本的事务在生成ReadView后才生成，所以该版本不可以被当前事务访问。</li>
-<li>如果被访问版本的trx_id属性值在m_ids列表中最大的事务id和最小事务id之间，那就需要判断一下trx_id属性值是不是在m_ids列表中，如果在，说明创建ReadView时生成该版本的事务还是活跃的，该版本不可以被访问；如果不在，说明创建ReadView时生成该版本的事务已经被提交，该版本可以被访问。</li>
-</ol>
-<p>如果某个版本的数据对当前事务不可见的话，那就顺着版本链找到下一个版本的数据，继续按照上边的步骤判断可见性，依此类推，直到版本链中的最后一个版本，如果最后一个版本也不可见的话，那么就意味着该条记录对该事务不可见，查询结果就不包含该记录。</p>
-<p>在MySQL中，READ COMMITTED和REPEATABLE READ隔离级别的的一个非常大的区别就是它们生成ReadView的时机不同，我们来看一下。</p>
-<h3 id="READ-COMMITTED-—-每次读取数据前都生成一个ReadView"><a href="#READ-COMMITTED-—-每次读取数据前都生成一个ReadView" class="headerlink" title="READ COMMITTED — 每次读取数据前都生成一个ReadView"></a>READ COMMITTED — 每次读取数据前都生成一个ReadView</h3><p>比方说现在系统里有两个id分别为100、200的事务在执行：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 100</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'关羽'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'张飞'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Transaction 200</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># 更新了一些别的表的记录</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>小贴士： 事务执行过程中，只有在第一次真正修改记录时（比如使用INSERT、DELETE、UPDATE语句），才会被分配一个单独的事务id，这个事务id是递增的。</li>
-</ol>
-<p>此刻，表t中id为1的记录得到的版本链表如下所示：</p>
-<p><img src="../image/MVCC4.png" alt="MVCC4.png" title="MVCC4"></p>
-<p>假设现在有一个使用READ COMMITTED隔离级别的事务开始执行：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用READ COMMITTED隔离级别的事务</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT1：Transaction 100、200未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'刘备'</span></span><br></pre></td></tr></table></figure>
-
-<p>这个SELECT1的执行过程如下：</p>
-<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[100, 200]。</p>
-<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’张飞’，该版本的trx_id值为100，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’关羽’，该版本的trx_id值也为100，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
-<p>之后，我们把事务id为100的事务提交一下，就像这样：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># Transaction 100</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'关羽'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'张飞'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br></pre></td></tr></table></figure>
-
-<p>然后再到事务id为200的事务中更新一下表t中id为1的记录：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 200</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新了一些别的表的记录</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'赵云'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'诸葛亮'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>此刻，表t中id为1的记录的版本链就长这样：</p>
-<p><img src="../image/MVCC5.png" alt="MVCC5.png" title="MVCC5"></p>
-<p>然后再到刚才使用READ COMMITTED隔离级别的事务中继续查找这个id为1的记录，如下：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用READ COMMITTED隔离级别的事务</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT1：Transaction 100、200均未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'刘备'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT2：Transaction 100提交，Transaction 200未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'张飞'</span></span><br></pre></td></tr></table></figure>
-
-<p>这个SELECT2的执行过程如下：</p>
-<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[200]（事务id为100的那个事务已经提交了，所以生成快照时就没有它了）。</p>
-<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’诸葛亮’，该版本的trx_id值为200，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’赵云’，该版本的trx_id值为200，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’张飞’，该版本的trx_id值为100，比m_ids列表中最小的事务id200还要小，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’张飞’的记录。</p>
-<p>以此类推，如果之后事务id为200的记录也提交了，再此在使用READ COMMITTED隔离级别的事务中查询表t中id值为1的记录时，得到的结果就是’诸葛亮’了，具体流程我们就不分析了。总结一下就是：使用READ COMMITTED隔离级别的事务在每次查询开始时都会生成一个独立的ReadView。</p>
-<h3 id="REPEATABLE-READ-—在第一次读取数据时生成一个ReadView"><a href="#REPEATABLE-READ-—在第一次读取数据时生成一个ReadView" class="headerlink" title="REPEATABLE READ —在第一次读取数据时生成一个ReadView"></a>REPEATABLE READ —在第一次读取数据时生成一个ReadView</h3><p>对于使用REPEATABLE READ隔离级别的事务来说，只会在第一次执行查询语句时生成一个ReadView，之后的查询就不会重复生成了。我们还是用例子看一下是什么效果。</p>
-<p>比方说现在系统里有两个id分别为100、200的事务在执行：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 100</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'关羽'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'张飞'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Transaction 200</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># 更新了一些别的表的记录</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>此刻，表t中id为1的记录得到的版本链表如下所示：</p>
-<p><img src="../image/MVCC6.png" alt="MVCC6.png" title="MVCC6"></p>
-<p>假设现在有一个使用REPEATABLE READ隔离级别的事务开始执行：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用REPEATABLE READ隔离级别的事务</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT1：Transaction 100、200未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'刘备'</span></span><br></pre></td></tr></table></figure>
-
-<p>这个SELECT1的执行过程如下：</p>
-<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[100, 200]。</p>
-<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’张飞’，该版本的trx_id值为100，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’关羽’，该版本的trx_id值也为100，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
-<p>之后，我们把事务id为100的事务提交一下，就像这样：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 100</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'关羽'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'张飞'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br></pre></td></tr></table></figure>
-
-<p>然后再到事务id为200的事务中更新一下表t中id为1的记录：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 200</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新了一些别的表的记录</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'赵云'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'诸葛亮'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>此刻，表t中id为1的记录的版本链就长这样：</p>
-<p><img src="../image/MVCC7.png" alt="MVCC7.png" title="MVCC7"></p>
-<p>然后再到刚才使用REPEATABLE READ隔离级别的事务中继续查找这个id为1的记录，如下：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用REPEATABLE READ隔离级别的事务</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT1：Transaction 100、200均未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'刘备'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT2：Transaction 100提交，Transaction 200未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值仍为'刘备'</span></span><br></pre></td></tr></table></figure>
-
-<p>这个SELECT2的执行过程如下：</p>
-<p>因为之前已经生成过ReadView了，所以此时直接复用之前的ReadView，之前的ReadView中的m_ids列表就是[100, 200]。</p>
-<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’诸葛亮’，该版本的trx_id值为200，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’赵云’，该版本的trx_id值为200，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’张飞’，该版本的trx_id值为100，而m_ids列表中是包含值为100的事务id的，所以该版本也不符合要求，同理下一个列c的内容是’关羽’的版本也不符合要求。继续跳到下一个版本。</p>
-<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，80小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
-<p>也就是说两次SELECT查询得到的结果是重复的，记录的列c值都是’刘备’，这就是可重复读的含义。如果我们之后再把事务id为200的记录提交了，之后再到刚才使用REPEATABLE READ隔离级别的事务中继续查找这个id为1的记录，得到的结果还是’刘备’，具体执行过程大家可以自己分析一下。</p>
-<h3 id="MVCC总结"><a href="#MVCC总结" class="headerlink" title="MVCC总结"></a>MVCC总结</h3><p>从上边的描述中我们可以看出来，所谓的MVCC（Multi-Version Concurrency Control ，多版本并发控制）指的就是在使用READ COMMITTD、REPEATABLE READ这两种隔离级别的事务在执行普通的SEELCT操作时访问记录的版本链的过程，这样子可以使不同事务的读-写、写-读操作并发执行，从而提升系统性能。READ COMMITTD、REPEATABLE READ这两个隔离级别的一个很大不同就是生成ReadView的时机不同，READ COMMITTD在每一次进行普通SELECT操作前都会生成一个ReadView，而REPEATABLE READ只在第一次进行普通SELECT操作前生成一个ReadView，之后的查询操作都重复这个ReadView就好了。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>MVCC</tag>
       </tags>
   </entry>
   <entry>
@@ -5180,6 +5086,112 @@
       <tags>
         <tag>数据库</tag>
         <tag>索引</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浅谈MVCC</title>
+    <url>/2020/03/23/%E6%B5%85%E8%B0%88MVCC/</url>
+    <content><![CDATA[<h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><h3 id="版本链"><a href="#版本链" class="headerlink" title="版本链"></a>版本链</h3><p>对于使用InnoDB存储引擎的表来说，它的聚簇索引记录中都包含两个必要的隐藏列（row_id并不是必要的，我们创建的表中有主键或者非NULL唯一键时都不会包含row_id列）：</p>
+<ol>
+<li>trx_id：每次对某条聚簇索引记录进行改动时，都会把对应的事务id赋值给trx_id隐藏列。</li>
+<li>roll_pointer：每次对某条聚簇索引记录进行改动时，都会把旧的版本写入到undo日志中，然后这个隐藏列就相当于一个指针，可以通过它来找到该记录修改前的信息。</li>
+</ol>
+<h4 id="比方说我们的表t现在只包含一条记录："><a href="#比方说我们的表t现在只包含一条记录：" class="headerlink" title="比方说我们的表t现在只包含一条记录："></a>比方说我们的表t现在只包含一条记录：</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM t;</span><br><span class="line">+<span class="comment">----+--------+</span></span><br><span class="line">| id | c      |</span><br><span class="line">+<span class="comment">----+--------+</span></span><br><span class="line">|  1 | 刘备   |</span><br><span class="line">+<span class="comment">----+--------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p>复制代码假设插入该记录的事务id为80，那么此刻该条记录的示意图如下所示：</p>
+<p><img src="../image/MVCC1.png" alt="MVCC1.png" title="MVCC1"><br>假设之后两个id分别为100、200的事务对这条记录进行UPDATE操作，操作流程如下：</p>
+<p><img src="../image/MVCC2.png" alt="MVCC2.png" title="MVCC2">  </p>
+<ol>
+<li>小贴士： 能不能在两个事务中交叉更新同一条记录呢？哈哈，这是不可以滴，第一个事务更新了某条记录后，就会给这条记录加锁，另一个事务再次更新时就需要等待第一个事务提交了，把锁释放之后才可以继续更新。本篇文章不是讨论锁的，有关锁的更多细节我们之后再说。</li>
+</ol>
+<p>每次对记录进行改动，都会记录一条undo日志，每条undo日志也都有一个roll_pointer属性（INSERT操作对应的undo日志没有该属性，因为该记录并没有更早的版本），可以将这些undo日志都连起来，串成一个链表，所以现在的情况就像下图一样：</p>
+<p><img src="../image/MVCC3.png" alt="MVCC3.png" title="MVCC3">  </p>
+<p>对该记录每次更新后，都会将旧值放到一条undo日志中，就算是该记录的一个旧版本，随着更新次数的增多，所有的版本都会被roll_pointer属性连接成一个链表，我们把这个链表称之为版本链，版本链的头节点就是当前记录最新的值。另外，每个版本中还包含生成该版本时对应的事务id，这个信息很重要，我们稍后就会用到。</p>
+<h3 id="ReadView"><a href="#ReadView" class="headerlink" title="ReadView"></a>ReadView</h3><p>对于使用READ UNCOMMITTED隔离级别的事务来说，直接读取记录的最新版本就好了，对于使用SERIALIZABLE隔离级别的事务来说，使用加锁的方式来访问记录。对于使用READ COMMITTED和REPEATABLE READ隔离级别的事务来说，就需要用到我们上边所说的版本链了，核心问题就是：需要判断一下版本链中的哪个版本是当前事务可见的。所以设计InnoDB的大叔提出了一个ReadView的概念，这个ReadView中主要包含当前系统中还有哪些活跃的读写事务，把它们的事务id放到一个列表中，我们把这个列表命名为为m_ids。这样在访问某条记录时，只需要按照下边的步骤判断记录的某个版本是否可见：</p>
+<ol>
+<li>如果被访问版本的trx_id属性值小于m_ids列表中最小的事务id，表明生成该版本的事务在生成ReadView前已经提交，所以该版本可以被当前事务访问。</li>
+<li>如果被访问版本的trx_id属性值大于m_ids列表中最大的事务id，表明生成该版本的事务在生成ReadView后才生成，所以该版本不可以被当前事务访问。</li>
+<li>如果被访问版本的trx_id属性值在m_ids列表中最大的事务id和最小事务id之间，那就需要判断一下trx_id属性值是不是在m_ids列表中，如果在，说明创建ReadView时生成该版本的事务还是活跃的，该版本不可以被访问；如果不在，说明创建ReadView时生成该版本的事务已经被提交，该版本可以被访问。</li>
+</ol>
+<p>如果某个版本的数据对当前事务不可见的话，那就顺着版本链找到下一个版本的数据，继续按照上边的步骤判断可见性，依此类推，直到版本链中的最后一个版本，如果最后一个版本也不可见的话，那么就意味着该条记录对该事务不可见，查询结果就不包含该记录。</p>
+<p>在MySQL中，READ COMMITTED和REPEATABLE READ隔离级别的的一个非常大的区别就是它们生成ReadView的时机不同，我们来看一下。</p>
+<h3 id="READ-COMMITTED-—-每次读取数据前都生成一个ReadView"><a href="#READ-COMMITTED-—-每次读取数据前都生成一个ReadView" class="headerlink" title="READ COMMITTED — 每次读取数据前都生成一个ReadView"></a>READ COMMITTED — 每次读取数据前都生成一个ReadView</h3><p>比方说现在系统里有两个id分别为100、200的事务在执行：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 100</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'关羽'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'张飞'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Transaction 200</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># 更新了一些别的表的记录</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>小贴士： 事务执行过程中，只有在第一次真正修改记录时（比如使用INSERT、DELETE、UPDATE语句），才会被分配一个单独的事务id，这个事务id是递增的。</li>
+</ol>
+<p>此刻，表t中id为1的记录得到的版本链表如下所示：</p>
+<p><img src="../image/MVCC4.png" alt="MVCC4.png" title="MVCC4"></p>
+<p>假设现在有一个使用READ COMMITTED隔离级别的事务开始执行：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用READ COMMITTED隔离级别的事务</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT1：Transaction 100、200未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'刘备'</span></span><br></pre></td></tr></table></figure>
+
+<p>这个SELECT1的执行过程如下：</p>
+<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[100, 200]。</p>
+<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’张飞’，该版本的trx_id值为100，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’关羽’，该版本的trx_id值也为100，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
+<p>之后，我们把事务id为100的事务提交一下，就像这样：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># Transaction 100</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'关羽'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'张飞'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后再到事务id为200的事务中更新一下表t中id为1的记录：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 200</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新了一些别的表的记录</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'赵云'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'诸葛亮'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>此刻，表t中id为1的记录的版本链就长这样：</p>
+<p><img src="../image/MVCC5.png" alt="MVCC5.png" title="MVCC5"></p>
+<p>然后再到刚才使用READ COMMITTED隔离级别的事务中继续查找这个id为1的记录，如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用READ COMMITTED隔离级别的事务</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT1：Transaction 100、200均未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'刘备'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT2：Transaction 100提交，Transaction 200未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'张飞'</span></span><br></pre></td></tr></table></figure>
+
+<p>这个SELECT2的执行过程如下：</p>
+<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[200]（事务id为100的那个事务已经提交了，所以生成快照时就没有它了）。</p>
+<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’诸葛亮’，该版本的trx_id值为200，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’赵云’，该版本的trx_id值为200，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’张飞’，该版本的trx_id值为100，比m_ids列表中最小的事务id200还要小，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’张飞’的记录。</p>
+<p>以此类推，如果之后事务id为200的记录也提交了，再此在使用READ COMMITTED隔离级别的事务中查询表t中id值为1的记录时，得到的结果就是’诸葛亮’了，具体流程我们就不分析了。总结一下就是：使用READ COMMITTED隔离级别的事务在每次查询开始时都会生成一个独立的ReadView。</p>
+<h3 id="REPEATABLE-READ-—在第一次读取数据时生成一个ReadView"><a href="#REPEATABLE-READ-—在第一次读取数据时生成一个ReadView" class="headerlink" title="REPEATABLE READ —在第一次读取数据时生成一个ReadView"></a>REPEATABLE READ —在第一次读取数据时生成一个ReadView</h3><p>对于使用REPEATABLE READ隔离级别的事务来说，只会在第一次执行查询语句时生成一个ReadView，之后的查询就不会重复生成了。我们还是用例子看一下是什么效果。</p>
+<p>比方说现在系统里有两个id分别为100、200的事务在执行：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 100</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'关羽'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'张飞'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Transaction 200</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># 更新了一些别的表的记录</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>此刻，表t中id为1的记录得到的版本链表如下所示：</p>
+<p><img src="../image/MVCC6.png" alt="MVCC6.png" title="MVCC6"></p>
+<p>假设现在有一个使用REPEATABLE READ隔离级别的事务开始执行：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用REPEATABLE READ隔离级别的事务</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT1：Transaction 100、200未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'刘备'</span></span><br></pre></td></tr></table></figure>
+
+<p>这个SELECT1的执行过程如下：</p>
+<p>在执行SELECT语句时会先生成一个ReadView，ReadView的m_ids列表的内容就是[100, 200]。</p>
+<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’张飞’，该版本的trx_id值为100，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’关羽’，该版本的trx_id值也为100，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
+<p>之后，我们把事务id为100的事务提交一下，就像这样：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 100</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'关羽'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'张飞'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后再到事务id为200的事务中更新一下表t中id为1的记录：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Transaction 200</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新了一些别的表的记录</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'赵云'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> t <span class="keyword">SET</span> c = <span class="string">'诸葛亮'</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>此刻，表t中id为1的记录的版本链就长这样：</p>
+<p><img src="../image/MVCC7.png" alt="MVCC7.png" title="MVCC7"></p>
+<p>然后再到刚才使用REPEATABLE READ隔离级别的事务中继续查找这个id为1的记录，如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用REPEATABLE READ隔离级别的事务</span></span><br><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT1：Transaction 100、200均未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值为'刘备'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SELECT2：Transaction 100提交，Transaction 200未提交</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> <span class="keyword">id</span> = <span class="number">1</span>; <span class="comment"># 得到的列c的值仍为'刘备'</span></span><br></pre></td></tr></table></figure>
+
+<p>这个SELECT2的执行过程如下：</p>
+<p>因为之前已经生成过ReadView了，所以此时直接复用之前的ReadView，之前的ReadView中的m_ids列表就是[100, 200]。</p>
+<p>然后从版本链中挑选可见的记录，从图中可以看出，最新版本的列c的内容是’诸葛亮’，该版本的trx_id值为200，在m_ids列表内，所以不符合可见性要求，根据roll_pointer跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’赵云’，该版本的trx_id值为200，也在m_ids列表内，所以也不符合要求，继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’张飞’，该版本的trx_id值为100，而m_ids列表中是包含值为100的事务id的，所以该版本也不符合要求，同理下一个列c的内容是’关羽’的版本也不符合要求。继续跳到下一个版本。</p>
+<p>下一个版本的列c的内容是’刘备’，该版本的trx_id值为80，80小于m_ids列表中最小的事务id100，所以这个版本是符合要求的，最后返回给用户的版本就是这条列c为’刘备’的记录。</p>
+<p>也就是说两次SELECT查询得到的结果是重复的，记录的列c值都是’刘备’，这就是可重复读的含义。如果我们之后再把事务id为200的记录提交了，之后再到刚才使用REPEATABLE READ隔离级别的事务中继续查找这个id为1的记录，得到的结果还是’刘备’，具体执行过程大家可以自己分析一下。</p>
+<h3 id="MVCC总结"><a href="#MVCC总结" class="headerlink" title="MVCC总结"></a>MVCC总结</h3><p>从上边的描述中我们可以看出来，所谓的MVCC（Multi-Version Concurrency Control ，多版本并发控制）指的就是在使用READ COMMITTD、REPEATABLE READ这两种隔离级别的事务在执行普通的SEELCT操作时访问记录的版本链的过程，这样子可以使不同事务的读-写、写-读操作并发执行，从而提升系统性能。READ COMMITTD、REPEATABLE READ这两个隔离级别的一个很大不同就是生成ReadView的时机不同，READ COMMITTD在每一次进行普通SELECT操作前都会生成一个ReadView，而REPEATABLE READ只在第一次进行普通SELECT操作前生成一个ReadView，之后的查询操作都重复这个ReadView就好了。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MVCC</tag>
       </tags>
   </entry>
   <entry>

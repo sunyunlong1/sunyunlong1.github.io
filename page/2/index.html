@@ -67,6 +67,97 @@
     
     
     
+    <article id="blog-《深入理解Java虚拟机》第二章-Java内存区域与内存溢出异常" class="article article-type-blog" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2020/04/19/《深入理解Java虚拟机》第二章-Java内存区域与内存溢出异常/"
+    >《深入理解Java虚拟机》第二章 Java内存区域与内存溢出异常</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/04/19/《深入理解Java虚拟机》第二章-Java内存区域与内存溢出异常/" class="article-date">
+  <time datetime="2020-04-19T13:58:19.000Z" itemprop="datePublished">2020-04-19</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JVM/">JVM</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h3 id="此篇为第二章-Java内存区域与内存溢出异常，主要从两部分介绍"><a href="#此篇为第二章-Java内存区域与内存溢出异常，主要从两部分介绍" class="headerlink" title="此篇为第二章 Java内存区域与内存溢出异常，主要从两部分介绍"></a>此篇为第二章 Java内存区域与内存溢出异常，主要从两部分介绍</h3><h3 id="1-内存区域"><a href="#1-内存区域" class="headerlink" title="1.内存区域"></a>1.内存区域</h3><h3 id="话不多说，先上图"><a href="#话不多说，先上图" class="headerlink" title="话不多说，先上图"></a>话不多说，先上图</h3><p><img src="../image/%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F.png" alt="内存区域.png" title="内存区域"></p>
+<h4 id="1-1方法区"><a href="#1-1方法区" class="headerlink" title="1.1方法区"></a>1.1方法区</h4><p>方法区（Method Area）与Java堆一样，是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息，常量，静态变量，即时编译器编译后的代码等数据，它有一个名字叫Non-heap非堆，目的是为了与Java堆区分开来，也有人叫它永久代，是因为它可以选择不实现垃圾收集，但并不是绝对的，只是说发生垃圾回收的概率比较低。</p>
+<p>另：当方法区无法满足内存分配需求时，会抛出OutOfMemoryError异常。</p>
+<p><strong>JDK1.7之后版本的JVM将运行时常量池从方法区移了出来，在Java堆中开辟了一块区域存放运行时常量池，在JDK1.8开始，取消了方法区，取而代之的是位于直接内存的元空间</strong></p>
+<p><strong>使方法区内存溢出，可以死循环调用String.intern()方法，向常量池里无限添加常量，就会导致内存溢出</strong></p>
+<h4 id="1-2虚拟机栈"><a href="#1-2虚拟机栈" class="headerlink" title="1.2虚拟机栈"></a>1.2虚拟机栈</h4><p>线程私有的，它的生命周期和线程相同，虚拟机栈描述的是Java方法执行的内存模型：每个方法在执行的同时都会创建一个<strong>栈帧</strong>用于存储局部变量表，操作数栈，动态链接，方法出口等信息。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。局部变量表存放了编译期可知的各种基本类型,对象引用。</p>
+<p>另：一：虚拟机栈可能会抛出两种异常，如果线程请求的栈深度大于虚拟机所允许的深度，将抛出StackOverflowError异常；二：无法满足内存需求时，会抛出OutOfMemoryError异常。</p>
+<p><strong>栈溢出可以通过无线递归方式</strong></p>
+<h4 id="1-3本地方法栈"><a href="#1-3本地方法栈" class="headerlink" title="1.3本地方法栈"></a>1.3本地方法栈</h4><p>本地方法栈与虚拟机栈发挥的作用是非常相似的，他们之间的区别不过是虚拟机栈是为虚拟机执行Java服务的，而本地方法栈是为虚拟机使用到的native方法服务的。同样也会有两种异常。</p>
+<h4 id="1-4Java堆"><a href="#1-4Java堆" class="headerlink" title="1.4Java堆"></a>1.4Java堆</h4><p>对大多数应用来说，堆是内存最大的一块，是被所有线程共享的一块内存区域，所有new出来的对象都存放在这里，也是主要的垃圾回收场所。当然也会发生内存溢出</p>
+<p><strong>堆内存溢出只需要死循环创建对象即可</strong></p>
+<h4 id="1-5程序计数器"><a href="#1-5程序计数器" class="headerlink" title="1.5程序计数器"></a>1.5程序计数器</h4><p>可以看作是当前线程所执行的字节码的行号指示器，每条线程都有一个独立的程序计数器。如果线程执行的Java方法，这个计数器记录的是正在执行的虚拟机字节码指令的地址；如果正在执行的是Native方法，这个计数器为空（Undefined）。</p>
+<p><strong>此内存区域是唯一一个在Java虚拟机规范中没有规定任何OutOfMemoryError情况的区域</strong></p>
+<h4 id="1-6运行时常量池"><a href="#1-6运行时常量池" class="headerlink" title="1.6运行时常量池"></a>1.6运行时常量池</h4><p>运行时常量池在1.7之前都是存放在方法区中，之后就改为存放在堆中，这也导致intern()方法在判断时有些不同，这里可以自己尝试。</p>
+<p>常量池分为两种，运行时常量池和Class文件常量池，Class文件常量池主要存放一些类和接口的权限定名，字段名称和描述符，方法名称和描述符，但运行时常量池相对于Class文件常量池的另外一个重要特性就是具备动态性，比如：基本类型包装类（包装类不管理浮点型，整形只会管理-128到127）和String（也可以通过String.intern()方法可以强制将String放入常量池）</p>
+<h4 id="1-7直接内存"><a href="#1-7直接内存" class="headerlink" title="1.7直接内存"></a>1.7直接内存</h4><p>这部分虽然不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域，但是这部分内存被频繁的使用也会导致OutMemoryError异常的出现。</p>
+<h3 id="2-Java对象头"><a href="#2-Java对象头" class="headerlink" title="2.Java对象头"></a>2.Java对象头</h3><p>以Hotspot虚拟机为例，Hotspot的对象头主要包括两部分数据：Mark Word（标记字段）、Klass Pointer（类型指针）。</p>
+<p>Mark Word：默认存储对象的HashCode，分代年龄和锁标志位信息。这些信息都是与对象自身定义无关的数据，所以Mark Word被设计成一个非固定的数据结构以便在极小的空间内存存储尽量多的数据。它会根据对象的状态复用自己的存储空间，也就是说在运行期间Mark Word里存储的数据会随着锁标志位的变化而变化。</p>
+<p>Klass Point：对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。</p>
+<p><img src="../image/MarkWord.png" alt="MarkWord.png" title="MarkWord"></p>
+<h3 id="3-Monitor"><a href="#3-Monitor" class="headerlink" title="3.Monitor"></a>3.Monitor</h3><p>Monitor可以理解为一个同步工具或一种同步机制，通常被描述为一个对象。每一个Java对象就有一把看不见的锁，称为内部锁或者Monitor锁。</p>
+<p>Monitor是线程私有的数据结构，每一个线程都有一个可用monitor record列表，同时还有一个全局的可用列表。每一个被锁住的对象都会和一个monitor关联，同时monitor中有一个Owner字段存放拥有该锁的线程的唯一标识，表示该锁被这个线程占用。</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java内存区域与内存溢出异常/">Java内存区域与内存溢出异常</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深入理解Java虚拟机/">深入理解Java虚拟机</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="blog-《深入理解Java虚拟机》第一章" class="article article-type-blog" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
@@ -1117,134 +1208,6 @@
 <td>graduation</td>
 <td>毕业</td>
 <td>They stand in line and wait for their graduation ceremony</td>
-</tr>
-</tbody></table>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/单词/">单词</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-
-</article>
-    
-    <article id="blog-go-big-or-go-home-27" class="article article-type-blog" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2020/04/11/go-big-or-go-home-27/"
-    >go big or go home-27</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/2020/04/11/go-big-or-go-home-27/" class="article-date">
-  <time datetime="2020-04-11T15:15:56.000Z" itemprop="datePublished">2020-04-11</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/English/">English</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <table>
-<thead>
-<tr>
-<th>单词/短语</th>
-<th>中文</th>
-<th>句子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>emergency</td>
-<td>紧急情况</td>
-<td>It’s an emergency.Get her to the hospital now!</td>
-</tr>
-<tr>
-<td>do one’s best</td>
-<td>尽最大的努力</td>
-<td>Don’t worry so much about the exam.Just do your best</td>
-</tr>
-<tr>
-<td>absolute</td>
-<td>绝对的</td>
-<td>Motion is absolute,while stillness is relative</td>
-</tr>
-<tr>
-<td>tongue</td>
-<td>舌头</td>
-<td>The boy sticks out his tongue to make a face to me</td>
-</tr>
-<tr>
-<td>instruct</td>
-<td>指导</td>
-<td>My mom instructs me how to play golf</td>
-</tr>
-<tr>
-<td>nylon</td>
-<td>尼龙</td>
-<td>The socks,strap and cord are all made of nylon</td>
-</tr>
-<tr>
-<td>strange</td>
-<td>奇怪的</td>
-<td>I met a guy wearing strange clothes on the subway</td>
-</tr>
-<tr>
-<td>secondhand</td>
-<td>二手的</td>
-<td>The boy bought a secondhand book from the old man</td>
-</tr>
-<tr>
-<td>expand</td>
-<td>扩大</td>
-<td>Our business is expanding across the whole country</td>
-</tr>
-<tr>
-<td>forest</td>
-<td>森林</td>
-<td>The sun shines through the forest</td>
 </tr>
 </tbody></table>
 
